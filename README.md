@@ -15,6 +15,8 @@ or `deny`** — and controls how much ever reaches the person.
 
 📄 **[docs/ENS-VS-INTERCEPTA.md](docs/ENS-VS-INTERCEPTA.md) — prize-focused comparison from zero implementation, with a recommendation and validation gates (Japanese; decision pending)**
 
+📄 **[docs/ENSV2-DIFFERENTIATION.md](docs/ENSV2-DIFFERENTIATION.md) — official ENSv2 differentiators, v1 comparison, and a scoped agent-permissions demo proposal (Japanese; not implemented yet)**
+
 ---
 
 ## Status
