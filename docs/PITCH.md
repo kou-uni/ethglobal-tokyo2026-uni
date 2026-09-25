@@ -117,6 +117,25 @@ record the real count. **If we ask 11 people, we say 11.** See
 | "Today there were about fifty" | "Sellers receive 52 requests per day" — nothing was measured |
 | "These are demo figures" | Presenting any count as a finding |
 
+## The one thing to do at the booth ★
+
+**Run the seed twice in front of them.**
+
+```
+npm run seed -- 6      →  50 arrived · 36 auto · 12 deny ·  2 reached her
+npm run seed -- 17     →  52 arrived · 42 auto ·  8 deny ·  2 reached her
+npm run seed -- 1      →  51 arrived · 32 auto ·  8 deny ·  3 reached her
+```
+
+> **"Watch the left side move. Now watch the right side."**
+>
+> Across 20 runs the arrivals wander between 46 and 54.
+> **What reaches her is two or three. Every time.**
+> That is not a coincidence — **it is the daily cap she set.**
+
+**This answers "why 50?" better than any explanation.** The input is not our claim.
+The output is. And it takes ten seconds to show.
+
 ## Delivery notes
 
 - **The first twenty seconds carry the pitch.** If the counter climbing while she sleeps does
