@@ -63,9 +63,16 @@ try {
   process.exit(1);
 }
 
-const begin = await w.beginUrl({
-  state: 'example-state',
-  nonce: 'example-nonce',
-  redirectUri: process.env['WORLD_REDIRECT_URI'] ?? 'https://example.invalid/callback',
-});
+const redirectUri = process.env['WORLD_REDIRECT_URI'];
+if (!redirectUri) {
+  // No placeholder on purpose: a stand-in URL here would make an unconfigured setup look
+  // like a working one, and the portal will not accept http://localhost anyway.
+  console.log(
+    `\n  WORLD_REDIRECT_URI is not set, so the request cannot be shown.` +
+      `\n  It must be HTTPS — the portal rejects http://localhost.\n`,
+  );
+  process.exit(0);
+}
+
+const begin = await w.beginUrl({ state: 'example-state', nonce: 'example-nonce', redirectUri });
 console.log(`\n  the request we would send:\n\n    ${begin}\n`);
