@@ -64,6 +64,7 @@ things actually land — **if it is not checked here, it does not exist.**
 - [x] **Routing — ten ordered rules** (`auto` / `human` / `deny`) — `src/core/rules.ts`, 24 tests
 - [x] **Human queue control** — bundling, ranking, daily cap, deadline fallback — `src/core/queue.ts`, 8 tests
 - [x] **Fresh proof of personhood — port, OIDC adapter, 20 tests.** Issuer's discovery read live; `auth_time` + `acr` verified. **Client registration and the browser round-trip are not done yet**
+- [x] **HTTP surface** — `POST /requests`, `POST /approvals/:id`, `GET /ledger/:name`, `GET /health`. 12 tests, including **parity between HTTP and in-process**
 - [ ] Payment execution under the owner's constraints
 - [x] **Morning ledger** — `src/core/ledger.ts`, used by the console
 - [x] **Model on rule 9** — `claude-opus-5`, called for real. Transcript below
@@ -78,6 +79,45 @@ Kept deliberately, so that the method stays visible and not only the result.
 | `scripts/seed.ts` | Generates input; **does not decide anything**. Every count in the pitch comes out of `route()` |
 | Distribution in ASSUMPTIONS §2 | 20 seeds, run and recorded. Not estimated |
 | `docs/assets/overview.svg` | Hand-written SVG, rendered and inspected three times — an arrow was crossing a box, and two labels overlapped |
+
+## Running it
+
+```bash
+npm start
+#   yohaku — listening on http://127.0.0.1:8402
+#     classifier  claude / claude-opus-5
+#     identity    mock — approvals are not proving anything yet
+#     settlement  not wired
+```
+
+```bash
+curl -s localhost:8402/requests -X POST -H 'content-type: application/json' -d '{
+  "who":"market-research.acme.eth", "what":"health/symptoms",
+  "purpose":"market-research", "price":{"amount":2000,"currency":"JPYC"},
+  "deadline":"2026-09-27T00:00:00Z"}'
+```
+
+```json
+{
+  "verdict": "human",
+  "rule": 5,
+  "reason": "\"health/symptoms\" is a sensitive domain",
+  "held": true,
+  "deadline": "2026-09-27T00:00:00Z",
+  "note": "held for the owner. You will not be kept waiting on this connection."
+}
+```
+
+**A held request answers in the same breath.** `202`, with the deadline it will be judged
+against — an agent left holding a connection while a person sleeps is an agent that is stuck.
+
+`npm run night` posts an entire generated night over HTTP and prints what came back. **It
+produces the same 33 / 8 / 8 that `npm run seed -- 18` produces in process** — and a test
+asserts that, because a server and a script disagreeing about the same night would mean one
+of them is lying.
+
+`GET /health` states what is wired, including **`settlement: false`**. It is the one thing we
+would rather a judge heard from us than discovered.
 
 ## Proving a person is there, at the moment it matters
 
@@ -230,6 +270,8 @@ front of a person at all. Execution is someone else's layer, and we are not clai
 
 ```bash
 npm install
+npm start          # the server — agents post here
+npm run night      # throw a whole night at it, over HTTP
 npm run check      # typecheck + tests + verify
 npm run seed -- 18 # one night, run through the real router
 npm run models     # what your key can actually use

@@ -1,0 +1,158 @@
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import type { Server } from 'node:http';
+import { createApp } from './app.js';
+import { Store } from './state.js';
+import { DEMO_POLICY, KNOWN_PARTIES, NIGHT, generateNight } from '../core/night.js';
+import { MockScreening } from '../ports/screening.js';
+import { MockIdentity } from '../ports/identity.js';
+import { surface } from '../core/queue.js';
+import { route } from '../core/rules.js';
+import { demoContext } from '../core/night.js';
+import type { HeldRequest } from '../core/types.js';
+
+const FRESH = { maxAgeSeconds: 120, requiredAcr: 'test-acr' };
+let server: Server;
+let base: string;
+let store: Store;
+
+beforeAll(async () => {
+  store = new Store(KNOWN_PARTIES);
+  server = createApp({
+    policy: DEMO_POLICY,
+    store,
+    screening: new MockScreening(),
+    identity: new MockIdentity(FRESH),
+    now: () => NIGHT,
+  });
+  await new Promise<void>((r) => server.listen(0, '127.0.0.1', r));
+  const addr = server.address();
+  base = `http://127.0.0.1:${typeof addr === 'object' && addr ? addr.port : 0}`;
+});
+
+afterAll(() => new Promise<void>((r) => server.close(() => r())));
+
+const post = (path: string, body: unknown) =>
+  fetch(`${base}${path}`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+
+const ask = (over: Record<string, unknown> = {}) =>
+  post('/requests', {
+    who: 'market-research.acme.eth',
+    what: 'purchase-intent/groceries',
+    purpose: 'demand-estimation',
+    price: { amount: 80, currency: 'JPYC' },
+    deadline: '2026-09-27T00:00:00Z',
+    ...over,
+  });
+
+describe('an agent asks', () => {
+  it('says what is wired, without being asked twice', async () => {
+    const h = (await (await fetch(`${base}/health`)).json()) as { wired: Record<string, boolean> };
+    expect(h.wired['routing']).toBe(true);
+    expect(h.wired['settlement']).toBe(false); // never claimed
+  });
+
+  it('names every missing field rather than just refusing', async () => {
+    const res = await post('/requests', { who: 'x.eth' });
+    expect(res.status).toBe(400);
+    const b = (await res.json()) as { missing: string[] };
+    expect(b.missing).toEqual(['what', 'purpose', 'price', 'deadline']);
+  });
+
+  it('answers immediately when held — 202, with the deadline', async () => {
+    const res = await ask({ id: 'held-1', what: 'health/symptoms', price: { amount: 2000, currency: 'JPYC' } });
+    expect(res.status).toBe(202);
+    const b = (await res.json()) as { verdict: string; held: boolean; deadline: string };
+    expect(b).toMatchObject({ verdict: 'human', held: true });
+    expect(b.deadline).toBe('2026-09-27T00:00:00Z');
+  });
+
+  it('denies a delegate that reaches past its own key', async () => {
+    const res = await ask({ id: 'del-1', actingAs: 'delegate', writeTarget: 'permission' });
+    const b = (await res.json()) as { verdict: string; rule: number };
+    expect(b).toMatchObject({ verdict: 'deny', rule: 0 });
+  });
+
+  it('never reports a settlement it did not make', async () => {
+    const res = await ask({ id: 'auto-1' });
+    const b = (await res.json()) as { verdict: string; settlement?: string };
+    expect(b.verdict).toBe('auto');
+    expect(b.settlement).toBe('not-wired');
+  });
+});
+
+describe('the owner answers', () => {
+  it('records a refusal and settles nothing', async () => {
+    await ask({ id: 'ref-1', what: 'work/history', price: { amount: 4000, currency: 'JPYC' } });
+    const res = await post('/approvals/ref-1', { approve: false });
+    const b = (await res.json()) as { verdict: string; settled: boolean };
+    expect(b).toMatchObject({ verdict: 'deny', settled: false });
+  });
+
+  it('proves personhood at the moment of approval', async () => {
+    await ask({ id: 'app-1', what: 'health/symptoms', price: { amount: 2500, currency: 'JPYC' } });
+    const res = await post('/approvals/app-1', { approve: true });
+    const b = (await res.json()) as { verdict: string; identity: { acr: string } };
+    expect(b.verdict).toBe('approved');
+    expect(b.identity.acr).toBe(FRESH.requiredAcr);
+  });
+
+  it('refuses to answer something that was never held for her', async () => {
+    await ask({ id: 'auto-2' });
+    expect((await post('/approvals/auto-2', { approve: true })).status).toBe(409);
+  });
+
+  it('refuses a second answer', async () => {
+    expect((await post('/approvals/app-1', { approve: true })).status).toBe(409);
+  });
+
+  it('404s an unknown id rather than inventing one', async () => {
+    expect((await post('/approvals/nope', { approve: true })).status).toBe(404);
+  });
+});
+
+describe('the server and the seed script describe the same night', () => {
+  it('produces exactly the same split over HTTP as in process', async () => {
+    const fresh = new Store(KNOWN_PARTIES);
+    const s = createApp({
+      policy: DEMO_POLICY,
+      store: fresh,
+      screening: new MockScreening(),
+      now: () => NIGHT,
+    });
+    await new Promise<void>((r) => s.listen(0, '127.0.0.1', r));
+    const addr = s.address();
+    const url = `http://127.0.0.1:${typeof addr === 'object' && addr ? addr.port : 0}`;
+
+    const night = generateNight(18);
+    const overHttp = { auto: 0, human: 0, deny: 0 } as Record<string, number>;
+    for (const r of night) {
+      const res = await fetch(`${url}/requests`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(r),
+      });
+      const b = (await res.json()) as { verdict: string };
+      overHttp[b.verdict] = (overHttp[b.verdict] ?? 0) + 1;
+    }
+    await new Promise<void>((r) => s.close(() => r()));
+
+    const ctx = demoContext(NIGHT);
+    const inProcess = night.map((r) => route(r, DEMO_POLICY, ctx));
+    expect(overHttp['auto']).toBe(inProcess.filter((d) => d.verdict === 'auto').length);
+    expect(overHttp['deny']).toBe(inProcess.filter((d) => d.verdict === 'deny').length);
+    expect(overHttp['human']).toBe(inProcess.filter((d) => d.verdict === 'human').length);
+  }, 30_000);
+
+  it('surfaces the same number of bundles as the queue does', async () => {
+    const held: HeldRequest[] = store.outstanding();
+    const expected = surface(held, DEMO_POLICY, NIGHT).surfaced.length;
+    const led = (await (await fetch(`${base}/ledger/alice.yohaku.eth`)).json()) as {
+      needsYou: unknown[];
+    };
+    expect(led.needsYou).toHaveLength(expected);
+  });
+});

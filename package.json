@@ -20,7 +20,10 @@
     "models": "tsx scripts/models.ts",
     "verify": "tsx scripts/verify.ts",
     "check": "npm run typecheck && npm test && npm run verify",
-    "world:check": "tsx scripts/world-check.ts"
+    "world:check": "tsx scripts/world-check.ts",
+    "start": "tsx src/server/main.ts",
+    "dev": "tsx watch src/server/main.ts",
+    "night": "tsx scripts/demo-night.ts"
   },
   "devDependencies": {
     "@types/node": "^22.7.4",
