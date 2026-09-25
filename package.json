@@ -14,7 +14,8 @@
     "typecheck": "tsc --noEmit",
     "seed": "tsx scripts/seed.ts",
     "build:demo": "tsc -p tsconfig.build.json && node scripts/build-demo.mjs",
-    "demo": "npm run build:demo && open demo/index.html"
+    "demo": "npm run build:demo && open demo/index.html",
+    "classify": "tsx scripts/classify.ts"
   },
   "devDependencies": {
     "@types/node": "^22.7.4",
@@ -23,6 +24,7 @@
     "vitest": "^2.1.1"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.128.0",
     "viem": "^2.56.9"
   }
 }

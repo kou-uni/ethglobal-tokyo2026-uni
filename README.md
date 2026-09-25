@@ -65,6 +65,7 @@ things actually land — **if it is not checked here, it does not exist.**
 - [ ] Fresh proof of personhood at the moment of approval
 - [ ] Payment execution under the owner's constraints
 - [x] **Morning ledger** — `src/core/ledger.ts`, used by the console
+- [~] **Model on rule 9** — `src/adapters/claude-classifier.ts`, 11 tests. **Never run against the API yet — no key on this machine**
 
 ## How it is built
 
@@ -76,6 +77,31 @@ Kept deliberately, so that the method stays visible and not only the result.
 | `scripts/seed.ts` | Generates input; **does not decide anything**. Every count in the pitch comes out of `route()` |
 | Distribution in ASSUMPTIONS §2 | 20 seeds, run and recorded. Not estimated |
 | `docs/assets/overview.svg` | Hand-written SVG, rendered and inspected three times — an arrow was crossing a box, and two labels overlapped |
+
+## Where the model runs, and what it cannot do
+
+One place: **rule 9 — "nothing matched"**. That is the only point where judgement is
+genuinely required, so it is the only point a model is consulted.
+
+What it may answer is the whole safeguard:
+
+```ts
+type Suggestion = 'ask' | 'drop'
+```
+
+**There is no value meaning "let this through."** Not discouraged in a prompt — absent from
+the schema. A request's own text is data, never instruction, and **the most a successful
+prompt injection can achieve here is getting itself dropped.**
+
+`applyClassification` only ever moves `human` → `deny`, and only on rule 9. It cannot reopen
+a deny, cannot touch rules 0–7, and cannot produce `auto`. Tested both ways.
+
+> **The prompt is not the security policy.** The rules are, and the model answers into a
+> shape that cannot express permission.
+
+⚠️ **Not yet run against the API.** The adapter is written and tested against a mock; no
+model has been called from this machine. `npm run classify -- "<category>" <amount>` runs it
+for real once `ANTHROPIC_API_KEY` is set.
 
 ## Tech
 
