@@ -8,8 +8,9 @@
  * That is why the classifier sits behind a port. Swapping the model is one file; the
  * safety property lives in the schema and in `applyClassification`, not in the adapter.
  *
- * Model id comes from `OPENAI_MODEL` (default below) so it can be corrected without a code
- * change — model names move faster than this repository will.
+ * Model id comes from `OPENAI_MODEL`. **There is deliberately no default** — a hardcoded
+ * model name is a guess with a shelf life, and this one was already wrong once. Run
+ * `npm run setup` to see what a given key can use.
  */
 
 import OpenAI from 'openai';
@@ -45,7 +46,14 @@ export class OpenAIClassifier implements ClassifierPort {
   private readonly model: string;
 
   constructor(model?: string, client?: OpenAI) {
-    this.model = model ?? process.env['OPENAI_MODEL'] ?? 'gpt-4o-mini';
+    const chosen = model ?? process.env['OPENAI_MODEL'];
+    if (!chosen) {
+      throw new Error(
+        'OPENAI_MODEL is not set. Model names change faster than this code does, so there is ' +
+          'no default here — run `npm run setup` to list what your key can actually use.',
+      );
+    }
+    this.model = chosen;
     this.client = client ?? new OpenAI();
   }
 

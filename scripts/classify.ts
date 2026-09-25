@@ -7,6 +7,9 @@
  * the point: the model's answer is an input to a decision it does not get to make.
  */
 
+import { loadEnv } from '../src/core/env.js';
+loadEnv();
+
 import { route } from '../src/core/rules.js';
 import { DEMO_POLICY, NIGHT, demoContext } from '../src/core/night.js';
 import { applyClassification } from '../src/ports/classifier.js';

@@ -56,8 +56,9 @@ export function chooseProvider(env: NodeJS.ProcessEnv = process.env): ProviderCh
     return { provider: 'claude', model, live: true, create: () => new ClaudeClassifier(model) };
   }
   if (pick === 'openai') {
-    const model = env['OPENAI_MODEL'] ?? 'gpt-4o-mini';
-    return { provider: 'openai', model, live: true, create: () => new OpenAIClassifier(model) };
+    // No default: model names move faster than this repository. `npm run setup` lists them.
+    const model = env['OPENAI_MODEL'] ?? '(set OPENAI_MODEL — run npm run setup)';
+    return { provider: 'openai', model, live: true, create: () => new OpenAIClassifier(env['OPENAI_MODEL']) };
   }
   return { provider: 'mock', model: 'mock', live: false, create: () => new MockClassifier() };
 }

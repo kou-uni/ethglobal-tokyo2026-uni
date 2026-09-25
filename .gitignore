@@ -5,3 +5,4 @@ scripts/night.json
 .DS_Store
 *.log
 demo/lib/
+.models-*.txt

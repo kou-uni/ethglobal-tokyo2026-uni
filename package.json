@@ -15,7 +15,9 @@
     "seed": "tsx scripts/seed.ts",
     "build:demo": "tsc -p tsconfig.build.json && node scripts/build-demo.mjs",
     "demo": "npm run build:demo && open demo/index.html",
-    "classify": "tsx scripts/classify.ts"
+    "classify": "tsx scripts/classify.ts",
+    "setup": "tsx scripts/setup-key.ts",
+    "models": "tsx scripts/models.ts"
   },
   "devDependencies": {
     "@types/node": "^22.7.4",

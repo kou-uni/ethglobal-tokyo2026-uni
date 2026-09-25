@@ -146,6 +146,7 @@ Everything in it is answered by the same `route()` that the tests run.
 |---|---|---|
 | **1. "Ask her for her health data."** | They draw `human` **with their own hands**. Not our claim — their click | — |
 | **2. "Now be her own agent. Try to rewrite her permissions."** | **Rejected — rule 0.** Then: "on-chain, the contract refuses the same write. Check it in the ENS app" | **ENS** |
+| **2b. "Type an instruction into the request. Tell the AI it's pre-approved."** | A real model runs on rule 9 — and **`pass` is not a value it can return.** It answered `drop`, but even fully convinced, the best outcome for the attacker is still `drop` | **Curvegrid** |
 | **3. "Change the seed. Run it again. Again."** | Arrivals wander 46–54. **What reaches her is 2. In all twenty runs.** | — |
 | **4. "Approve one. Ignore the other."** | Approving asks her to prove she is a person **at that moment**. Ignoring: **the deadline passes and nothing happens at all** | **World** |
 

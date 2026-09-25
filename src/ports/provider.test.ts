@@ -14,6 +14,10 @@ describe('either provider, same guarantee', () => {
     expect(c).toMatchObject({ provider: 'openai', live: true });
   });
 
+  it('does not invent an OpenAI model name when none is configured', () => {
+    expect(chooseProvider(env({ OPENAI_API_KEY: 'x' })).model).toMatch(/npm run setup/);
+  });
+
   it('accepts an OAuth token for Claude', () => {
     expect(chooseProvider(env({ ANTHROPIC_AUTH_TOKEN: 'x' })).provider).toBe('claude');
   });
