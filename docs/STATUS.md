@@ -25,6 +25,7 @@ npm install && npm run check      # typecheck + 107 tests + 9 verified claims
 | **Payment screening shape** | `src/ports/screening.ts` | 9 tests. `clean` passes; `flagged` and `unavailable` both stop |
 | **Claims match the code** | `scripts/verify.ts` | 9 claims re-derived by running the code. **Checked by breaking each one on purpose** |
 | **Touchable console** | `demo/index.html` | One file, no server, no CDN. Runs the same `route()` the tests run |
+| **The server, on the public internet** | `src/server/` | `POST /requests`, `POST /approvals/:id`, `GET /ledger/:name`, `GET /approve/:id`, `GET /auth/world/callback`. 12 tests, including **HTTP and in-process agreeing about the same night** |
 
 **2,527 lines of source, 107 tests, 32 commits.**
 
@@ -33,7 +34,7 @@ npm install && npm run check      # typecheck + 107 tests + 9 verified claims
 | | Blocked on | Who |
 |---|---|---|
 | **ENSv2 on chain** | Sepolia addresses, mock USDC, the 90-minute spike | **minta** — [ENSV2-SPIKE.md](ENSV2-SPIKE.md) |
-| **World browser round-trip** | An OIDC client in the portal + **an HTTPS callback** | **spark** — portal, then Tailscale Funnel or Vercel |
+| **World browser round-trip** | ~~HTTPS~~ ✅ live at `https://mac-studio.taila649e1.ts.net`. Left: an OIDC client, which needs a Google sign-in through `/mcp` | **spark** — the sign-in; then I register it |
 | **Payment screening, live** | The API key (requested 2026-09-26, arrives by email) | **spark** — check inbox |
 | **Settlement** | Deliberately last. Nothing is claimed about it | — |
 

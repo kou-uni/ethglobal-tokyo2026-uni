@@ -23,7 +23,19 @@ That sequence is World's stated requirement, word for word:
 
 ## Left to do — two steps, both yours
 
-### 1. Put the server somewhere with HTTPS
+### ✅ Done — the server is public
+
+```
+https://mac-studio.taila649e1.ts.net   →   127.0.0.1:8402
+```
+
+Confirmed from outside: `/health` answers, and a posted request came back
+`human · rule 5 · "health/symptoms" is a sensitive domain`. Close it later with
+`tailscale funnel --https=443 off`.
+
+**Callback URL to register:** `https://mac-studio.taila649e1.ts.net/auth/world/callback`
+
+### 1. Put the server somewhere with HTTPS *(done — kept for the next machine)*
 
 The portal will not accept `http://localhost`. Tailscale Funnel is the shortest route
 because the URL is already stable:
@@ -44,13 +56,25 @@ curl -s https://<machine>.<tailnet>.ts.net/health | jq .wired
 
 ### 2. Register the OIDC client
 
-```bash
-claude plugin marketplace add worldcoin/world-id-agent-plugin
-claude plugin install world-id-sandbox@world-id-demo
+The plugin is installed. It exposes an MCP server at `https://sandbox.auth.world.org/mcp`,
+and registration happens through its tools — **but they need a Google sign-in first**
+(scope `developer-portal:manage`), which has to be done by a person:
+
+```
+/mcp   →   world-id-sandbox   →   sign in
 ```
 
-Then ask it to register, giving **the callback URL from step 1**. It returns a client id
-and secret. Put all four in `.env`:
+Then: `list_oidc_clients` to check for an existing one, and
+`request_oidc_client_registration` with the callback URL and
+`tokenEndpointAuthMethod: client_secret_basic` — which is what this server already speaks.
+
+From the plugin's own docs, and worth knowing before registering:
+
+- **callbacks must be HTTPS and match exactly** — no wildcards, no `http://localhost`
+- **the auth method cannot be changed after registration**
+- a logo is optional (public HTTPS PNG/JPEG, ≤512×512, ≤256 KiB)
+
+It returns a client id and secret. Put all four in `.env`:
 
 ```
 WORLD_ISSUER=https://sandbox.auth.world.org
