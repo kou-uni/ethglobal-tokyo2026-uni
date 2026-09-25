@@ -62,7 +62,7 @@ things actually land — **if it is not checked here, it does not exist.**
 - [ ] Permission policy written to / read from ENS **on chain** — see [ENSV2-SPIKE.md](docs/ENSV2-SPIKE.md)
 - [x] **Routing — ten ordered rules** (`auto` / `human` / `deny`) — `src/core/rules.ts`, 24 tests
 - [x] **Human queue control** — bundling, ranking, daily cap, deadline fallback — `src/core/queue.ts`, 8 tests
-- [ ] Fresh proof of personhood at the moment of approval
+- [x] **Fresh proof of personhood — port, OIDC adapter, 20 tests.** Issuer's discovery read live; `auth_time` + `acr` verified. **Client registration and the browser round-trip are not done yet**
 - [ ] Payment execution under the owner's constraints
 - [x] **Morning ledger** — `src/core/ledger.ts`, used by the console
 - [x] **Model on rule 9** — `claude-opus-5`, called for real. Transcript below
@@ -77,6 +77,44 @@ Kept deliberately, so that the method stays visible and not only the result.
 | `scripts/seed.ts` | Generates input; **does not decide anything**. Every count in the pitch comes out of `route()` |
 | Distribution in ASSUMPTIONS §2 | 20 seeds, run and recorded. Not estimated |
 | `docs/assets/overview.svg` | Hand-written SVG, rendered and inspected three times — an arrow was crossing a box, and two labels overlapped |
+
+## Proving a person is there, at the moment it matters
+
+She approves one request in the morning. **The verification happens then** — not at signup.
+That distinction is checkable rather than asserted, because an OIDC `id_token` carries
+`auth_time`.
+
+Three things are checked, and any failure means **the protected action does not happen**:
+
+| | |
+|---|---|
+| verifies against the issuer's JWKS | it is genuinely from them |
+| `acr` is the level we asked for | a person, not an account |
+| `auth_time` is inside the window | **now, not previously** |
+
+Freshness is enforced **twice**: `max_age` on the request tells the issuer to
+re-authenticate, and `auth_time` on the returned token is compared against the clock here.
+Asking alone would be trusting a parameter was honoured; checking alone would let a stale
+session through.
+
+**No endpoint is written in this repository.** They come from the issuer's discovery
+document at run time — `npm run world:check` prints what it currently offers:
+
+```
+$ npm run world:check
+
+  authorization_endpoint   https://sandbox.auth.world.org/api/v1/authorize
+  token_endpoint           https://sandbox.auth.world.org/api/v1/token
+  jwks_uri                 https://sandbox.auth.world.org/.well-known/jwks.json
+  acr_values_supported     https://world.org/oidc/acr/orb-v3
+  claims_supported         iss, sub, aud, exp, iat, jti, nonce, auth_time, acr, amr
+
+  freshness can be checked: yes — auth_time is published
+  our required acr is offered:  yes
+```
+
+⚠️ **Still missing:** an OIDC client registered in the portal, and an HTTPS callback. The
+verification and refusal logic is written and tested; the browser round-trip is not wired.
 
 ## Where the model runs, and what it cannot do
 

@@ -19,7 +19,8 @@
     "setup": "tsx scripts/setup-key.ts",
     "models": "tsx scripts/models.ts",
     "verify": "tsx scripts/verify.ts",
-    "check": "npm run typecheck && npm test && npm run verify"
+    "check": "npm run typecheck && npm test && npm run verify",
+    "world:check": "tsx scripts/world-check.ts"
   },
   "devDependencies": {
     "@types/node": "^22.7.4",
@@ -29,6 +30,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.128.0",
+    "jose": "^6.2.12",
     "openai": "^7.23.0",
     "viem": "^2.56.9"
   }
