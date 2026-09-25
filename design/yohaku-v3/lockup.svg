@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 256" fill="#242329">
+  <title>yohaku — symbol and wordmark</title>
+  <defs><path id="quarter" d="M112 92C100 92 92 100 92 112H62C38 112 20 94 20 70V62C20 38 38 20 62 20H70C94 20 112 38 112 62Z"/></defs>
+  <g transform="translate(0 19) scale(.85)">
+    <use href="#quarter"/>
+    <use href="#quarter" transform="rotate(90 128 128)"/>
+    <use href="#quarter" transform="rotate(180 128 128)"/>
+    <use href="#quarter" transform="rotate(270 128 128)"/>
+  </g>
+  <text x="253" y="179" font-family="'Avenir Next',Avenir,Arial,sans-serif" font-size="160" font-weight="700" letter-spacing="-10">yohaku</text>
+</svg>

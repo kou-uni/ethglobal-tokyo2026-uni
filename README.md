@@ -16,6 +16,8 @@ or `deny`** — and what it produces is not decisions. It is **empty space in so
 
 📄 **[docs/CONCEPT.md](docs/CONCEPT.md) — product design (request schema, routing, queue control)**
 
+🎨 **[Yohaku identity v3](design/yohaku-v3/README.md) — selected logo, brand narrative, SVG assets, and previews**
+
 📄 **[docs/INTERCEPTA.md](docs/INTERCEPTA.md) — seller-side payment screening: evidence, prize requirements, and integration proposal (Japanese; not implemented yet)**
 
 📄 **[docs/ENS-VS-INTERCEPTA.md](docs/ENS-VS-INTERCEPTA.md) — prize-focused comparison from zero implementation, with a recommendation and validation gates (Japanese; decision pending)**
