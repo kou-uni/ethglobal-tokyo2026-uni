@@ -161,7 +161,7 @@ The console (`demo/index.html`) is one page with five things a judge can touch.
 |---|---|---|---|
 | 1 | Policy | The person, once | Category rules, amount threshold, expiry |
 | 2 | **Morning inbox** ⭐ | The person, daily | **Bundled escalations. Top 3. Approve** |
-| 3 | Ledger | The person | daily counts, income, the escalation trend |
+| 3 | Ledger | The person | daily counts, income, the escalation trend. **Not necessarily a list** — the useful shape may be an answer to *"which payments need me today?"* rather than a table |
 | 4 | **Agent side** | **Judges, at the booth** | Submit a request, watch the verdict come back |
 | 5 | **Delegate** | **Judges, at the booth** | Try to widen a delegate's rights — and be refused |
 

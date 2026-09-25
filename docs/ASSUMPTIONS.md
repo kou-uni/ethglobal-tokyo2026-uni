@@ -110,6 +110,25 @@ run the seed again with a different number and watch the input move while the ou
 | D6 | Permissioned-resolver key permissions span **every name in that instance** | 🟢 From ENS docs via `ENSV2-DIFFERENTIATION.md`. Sellers must be scoped, not pooled |
 | D7 | The third slot is decided by a timeboxed spike | 🟡 **Re-weighted 9/26:** ENS requires *"built on ENSv2 (Sepolia)"*, *"not just hard-coded values"* and *"a live demo"* — **a mock does not qualify**. intercepta keys are now self-serve (intercepta.io/ethglobal, hours). The fallback became cheap and the favourite became expensive |
 
+## 4-B. Open problems raised by our own research
+
+From `knowledge/CURVEGRID-NEO.md` (minta, from the Curvegrid talk transcript). **These are
+not resolved. They are recorded here so they cannot be quietly forgotten.**
+
+| # | The problem | Where we stand |
+|---|---|---|
+| **P1** 🔴 | *"Do not describe an AI agent as having acted when the demo is deterministic rules only. To go for the AI prize, you must show, for real, which operation the AI performed and the mechanism that constrained its result."* | **`route()` is fully deterministic. No model runs anywhere.** We are entered for **Best AI Agent Project** with no AI in the loop |
+| **P2** | *"A transaction being absent from the explorer does not by itself prove the screening stopped it. What matters is showing the screening result decided the branch and that it never proceeded to signing."* | Our console shows "nothing happened". **It does not show a trace of the decision that prevented signing** |
+| **P3** | *"Show not only why it was stopped, but why it was let through."* | We give a reason for every deny. **For `auto` we do not surface the grant, the screening result and the execution together** |
+| **P4** | *"Putting the key on a server is not in itself proof of safe separation of powers."* | Our L4 plan signs server-side. **Whether a signing request can bypass screening is unverified** |
+| **P5** | *"A list screen is not necessarily required — Jeff uses 'dashboard' broadly, including something you ask questions of."* | We assumed a dashboard is a list. **"Which payments need me today?" may be the better shape** |
+| **P6** | *"Jeff referred to Jev in the talk, so 'the judges do not know TypeSafe' cannot be applied across the board."* | Our v1 reasoning for sidelining Jev **rested on a premise that is now false** — though this is not a reason to adopt it either |
+
+**P1 is the one that decides a prize.** Either a model genuinely performs a step and we show
+what constrained it, or we should not be describing this as an AI agent project.
+
+---
+
 ## 5. Claims we deliberately do **not** make
 
 | Claim | Why we avoid it |
