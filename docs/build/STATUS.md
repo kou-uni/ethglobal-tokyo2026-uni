@@ -6,7 +6,7 @@ nothing here is inferred from the code looking right.
 Reproduce all of it with one command:
 
 ```bash
-npm install && npm run check      # typecheck + 107 tests + 9 verified claims
+npm install && npm run check      # typecheck + 133 tests + 10 verified claims
 ```
 
 ---
@@ -23,18 +23,20 @@ npm install && npm run check      # typecheck + 107 tests + 9 verified claims
 | **A model on rule 9** | `src/ports/classifier.ts` + 2 adapters | 19 tests, and **called for real**: `claude-opus-5` and `gpt-6-astra`. They disagreed; neither could produce `auto` |
 | **Proof of personhood** | `src/ports/identity.ts`, `adapters/world-oidc.ts` | 18 tests. **Issuer discovery fetched live** — `auth_time` and `acr` confirmed available |
 | **Payment screening shape** | `src/ports/screening.ts` | 9 tests. `clean` passes; `flagged` and `unavailable` both stop |
-| **Claims match the code** | `scripts/verify.ts` | 9 claims re-derived by running the code. **Checked by breaking each one on purpose** |
+| **Claims match the code** | `scripts/verify.ts` | **10** claims re-derived by running the code. **Checked by breaking each one on purpose** |
 | **Touchable console** | `demo/index.html` | One file, no server, no CDN. Runs the same `route()` the tests run |
+| **World ID, end to end** ⭐ | `src/adapters/world-oidc.ts` | **A person pressed it on a phone and it came back.** Discovery read live, ID token verified against the issuer's JWKS with `jose`, `acr = orb-v3` required, `auth_time` ≤ 120s checked against the server clock. **PKCE turned out to be mandatory and undocumented** — found by probing 8 combinations ([knowledge/WORLD-SANDBOX.md](../knowledge/WORLD-SANDBOX.md)) |
+| **The two screens a person sees** | `src/server/pages.ts` | Today's offer count, the one being asked about, and a fold with what was handled without her. Service copy and demo tutorial are **separate surfaces** |
+| **Past nights, replayed not typed** | `src/core/history.ts` | 8 tests. Each night runs through the real `route()` + `surface()`. **Across 14 nights arrivals move and what reaches her is the cap, every time** |
 | **The server, on the public internet** | `src/server/` | `POST /requests`, `POST /approvals/:id`, `GET /ledger/:name`, `GET /approve/:id`, `GET /auth/world/callback`. 12 tests, including **HTTP and in-process agreeing about the same night** |
 
-**2,527 lines of source, 107 tests, 32 commits.**
+**3,960 lines of source, 133 tests, 38 commits.**
 
 ## ❌ Not running
 
 | | Blocked on | Who |
 |---|---|---|
-| **ENSv2 on chain** | Sepolia addresses, mock USDC, the 90-minute spike | **minta** — [ENSV2-SPIKE.md](ENSV2-SPIKE.md) |
-| **World browser round-trip** | ~~HTTPS~~ ✅ live at `https://mac-studio.taila649e1.ts.net`. Left: an OIDC client, which needs a Google sign-in through `/mcp` | **spark** — the sign-in; then I register it |
+| **ENSv2 on chain** | ~~Sepolia addresses~~ ~~role bits~~ ~~grant function~~ ~~resolver scoping~~ **all four resolved 9/26** ([knowledge/ENSV2-ONCHAIN.md](../knowledge/ENSV2-ONCHAIN.md)). Left: **testnet USDC/DAI and the registration price**, then the 90-minute spike | **minta / spark** — [ENSV2-SPIKE.md](ENSV2-SPIKE.md) |
 | **Payment screening, live** | The API key (requested 2026-09-26, arrives by email) | **spark** — check inbox |
 | **Settlement** | Deliberately last. Nothing is claimed about it | — |
 
@@ -44,18 +46,20 @@ npm install && npm run check      # typecheck + 107 tests + 9 verified claims
 Say it out loud at the booth before a judge finds it. Every other claim on the screen is
 checkable, and volunteering the two that are not is what buys them.
 
-## Next, in order
+## Next, in order — 2026-09-26 08:00 時点、締切まで約25時間
 
-1. **spark — register the OIDC client** (`claude plugin install world-id-sandbox@world-id-demo`),
-   get an HTTPS callback up, finish the round-trip. **World is the largest slot and has no
-   external dependency left.**
-2. **spark — booth round** (ENS re-visit, intercepta, World). Ask each one what they are
-   *looking for*, not whether they like it — that single question changed our whole framing
-   with Curvegrid
-3. **minta — the ENSv2 spike, timeboxed to 90 minutes.** The third prize slot is decided by
-   whether it lands
-4. **both — stop adding.** The product argument is complete; what is missing is proof on
-   chain, not more surface
+1. **ENSv2 を Sepolia に乗せる。** 未確認4点は潰れた。**着手前に決めるのは1つだけ:
+   testnet USDC/DAI をどう手に入れるか**（ENSv2 の登録は ETH では払えない。金額が未確認）。
+   付与は `@ensdomains/ensjs@5.0.0-sepolia-fix.1` の `grantResolverRoles`。
+   **検証は `hasRoles` でガス無しに読める**
+2. **ブース巡回。** 各スポンサーに「何を探しているか」を聞く。気に入ったかではない。
+   **この1問が Curvegrid に対する我々の枠組みを丸ごと変えた。**答えは逐語で記録する
+3. **intercepta を叩く。** ENS が落ちたときの差し替え先。鍵待ち（kou@texx.io）
+4. **足すのをやめる。** 製品の主張は揃っている。足りないのはチェーンの証拠で、
+   画面の数ではない
+
+**World は終わった。** 実機で人が押して往復し、`auth_time` が返った。残りは本番 issuer に
+するかどうかだけで、sandbox でも賞の要件は満たす。
 
 ## What changed today, and why it is written down
 

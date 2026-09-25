@@ -18,12 +18,12 @@ or `deny`** — and what it produces is not decisions. It is **empty space in so
 The question that decides everything is not how much, but **where a person still has to be
 involved.** Yohaku is that involvement point — not a wallet, not a treasury dashboard, not
 an execution layer. **It decides which of an agent's money movements a human has to see at
-all.** See [CONCEPT §0-B](docs/CONCEPT.md).
+all.** See [CONCEPT §0-B](docs/product/CONCEPT.md).
 
 **Why an agent pays a person at all:** scraping is free and **contaminated** — an agent cannot
 tell what a human wrote. So the scarce thing is not information, it is *information provably
 from a person*. **Only humans register here, and a name can be revoked** when someone poisons
-the well. See [CONCEPT §0](docs/CONCEPT.md).
+the well. See [CONCEPT §0](docs/product/CONCEPT.md).
 
 ![Architecture overview](docs/assets/overview.svg)
 
@@ -35,19 +35,21 @@ the well. See [CONCEPT §0](docs/CONCEPT.md).
 
 | | |
 |---|---|
-| 📍 **[STATUS.md](docs/STATUS.md)** | **Where we are right now** — what runs, what does not, who does what next |
+| 🗺️ **[docs/README.md](docs/README.md)** | **全体の俯瞰** — 何が動いていて何が動いていないか、貫いている考え方、次にやること |
+| 📍 **[STATUS.md](docs/build/STATUS.md)** | **Where we are right now** — what runs, what does not, who does what next |
 | 🎨 **[Yohaku identity v3](design/yohaku-v3/README.md)** | **Selected logo, brand narrative, SVG assets, previews** — *Make room. For being human.* |
-| 📄 **[CONCEPT.md](docs/CONCEPT.md)** | **Product design** — request schema, routing, queue control |
-| 📐 **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** | **Layers, components, rules, failure paths, state machines, sequence** |
-| 📈 **[MARKET.md](docs/MARKET.md)** | **Why this is a market** — supply exhaustion, buyer growth, and what an agent saves |
-| 📋 **[ASSUMPTIONS.md](docs/ASSUMPTIONS.md)** | **Every number, and where it came from.** Nothing here is a measurement |
-| 🌍 **[WORLD-SETUP.md](docs/WORLD-SETUP.md)** | **The two steps left to finish the browser round-trip** — HTTPS host, then the OIDC client |
-| 🔧 **[ENSV2-SPIKE.md](docs/ENSV2-SPIKE.md)** | **What already runs offline, what is unconfirmed, and the 90-minute spike** |
-| 🎤 **[PITCH.md](docs/PITCH.md)** | Pitch script |
-| 💬 **[FEEDBACK.md](docs/FEEDBACK.md)** | Integration feedback to sponsors *(filled in as we build)* |
-| 🔎 [INTERCEPTA.md](docs/INTERCEPTA.md) | Seller-side payment screening: evidence and integration proposal *(JA)* |
-| 🔎 [ENS-VS-INTERCEPTA.md](docs/ENS-VS-INTERCEPTA.md) | Prize-focused comparison, recommendation, validation gates *(JA)* |
-| 🔎 [ENSV2-DIFFERENTIATION.md](docs/ENSV2-DIFFERENTIATION.md) | Official ENSv2 differentiators and a scoped agent-permissions demo *(JA)* |
+| 📄 **[CONCEPT.md](docs/product/CONCEPT.md)** | **Product design** — request schema, routing, queue control |
+| 📐 **[ARCHITECTURE.md](docs/product/ARCHITECTURE.md)** | **Layers, components, rules, failure paths, state machines, sequence** |
+| 📈 **[MARKET.md](docs/product/MARKET.md)** | **Why this is a market** — supply exhaustion, buyer growth, and what an agent saves |
+| 📋 **[ASSUMPTIONS.md](docs/product/ASSUMPTIONS.md)** | **Every number, and where it came from.** Nothing here is a measurement |
+| 🌍 **[WORLD-SETUP.md](docs/build/WORLD-SETUP.md)** | **The two steps left to finish the browser round-trip** — HTTPS host, then the OIDC client |
+| 🔧 **[ENSV2-SPIKE.md](docs/build/ENSV2-SPIKE.md)** | **What already runs offline, what is unconfirmed, and the 90-minute spike** |
+| 🎤 **[PITCH.md](docs/product/PITCH.md)** | Pitch script |
+| 💬 **[FEEDBACK.md](docs/build/FEEDBACK.md)** | Integration feedback to sponsors *(filled in as we build)* |
+| 🔬 **[knowledge/](docs/knowledge/)** | **外から確かめたこと。** ENSv2 の Sepolia 現物・World sandbox。全ファイルに出典と日付 |
+| 🔎 [INTERCEPTA.md](docs/decisions/INTERCEPTA.md) | Seller-side payment screening: evidence and integration proposal *(JA)* |
+| 🔎 [ENS-VS-INTERCEPTA.md](docs/decisions/ENS-VS-INTERCEPTA.md) | Prize-focused comparison, recommendation, validation gates *(JA)* |
+| 🔎 [ENSV2-DIFFERENTIATION.md](docs/decisions/ENSV2-DIFFERENTIATION.md) | Official ENSv2 differentiators and a scoped agent-permissions demo *(JA)* |
 
 ---
 
@@ -61,7 +63,7 @@ things actually land — **if it is not checked here, it does not exist.**
 
 - [x] **Policy model and evaluation** — `src/core/types.ts`
 - [x] **Delegation boundary — modelled, mocked and tested** (`src/ports/permissions.ts`, 13 tests)
-- [ ] Permission policy written to / read from ENS **on chain** — see [ENSV2-SPIKE.md](docs/ENSV2-SPIKE.md)
+- [ ] Permission policy written to / read from ENS **on chain** — see [ENSV2-SPIKE.md](docs/build/ENSV2-SPIKE.md)
 - [x] **Routing — ten ordered rules** (`auto` / `human` / `deny`) — `src/core/rules.ts`, 24 tests
 - [x] **Human queue control** — bundling, ranking, daily cap, deadline fallback — `src/core/queue.ts`, 8 tests
 - [x] **Fresh proof of personhood — done, end to end.** A real person pressed Approve on a phone; `auth_time` came back seconds old, `acr = orb-v3`. The declined path ran too
@@ -176,7 +178,7 @@ A second request was declined: *"Left alone. Nothing was sent, and nothing moved
 **PKCE turned out to be mandatory and undocumented.** Every authorization request without
 `code_challenge` returns a bare `invalid_request`. Found by probing eight parameter
 combinations against the live endpoint — written up in
-[FEEDBACK.md](docs/FEEDBACK.md), since that is exactly what the integration debrief is for.
+[FEEDBACK.md](docs/build/FEEDBACK.md), since that is exactly what the integration debrief is for.
 
 ## Where the model runs, and what it cannot do
 
@@ -276,7 +278,7 @@ Stack: Hardhat · Next.js · TypeScript · Vercel · npm.
 
 **What we claim about ENSv2 is narrow**: not that revocation is unique to it, but that
 **a delegated agent can propose without being able to rewrite what it is allowed to do.**
-See [ARCHITECTURE.md §6](docs/ARCHITECTURE.md).
+See [ARCHITECTURE.md §6](docs/product/ARCHITECTURE.md).
 
 ## MultiBaas usage
 
@@ -316,7 +318,7 @@ fail.
 **`npm run seed -- 18` is the night used in the pitch** — 49 arrive, 33 settle, 8 are dropped,
 **2 reach her**. Change the seed and the arrivals wander between 46 and 54; **across all 20 runs,
 the number that reaches her is 2. Every time.** That is her cap, not our claim.
-See [ASSUMPTIONS.md §2](docs/ASSUMPTIONS.md).
+See [ASSUMPTIONS.md §2](docs/product/ASSUMPTIONS.md).
 
 Copy `.env.example` to `.env` before touching chain or sponsor APIs. *(UI and chain
 integration not yet wired.)*
@@ -332,7 +334,7 @@ integration not yet wired.)*
 
 ## Feedback to sponsors
 
-See **[docs/FEEDBACK.md](docs/FEEDBACK.md)** — time to first success, friction, missing
+See **[docs/FEEDBACK.md](docs/build/FEEDBACK.md)** — time to first success, friction, missing
 capabilities, and the single change that would help most, per sponsor SDK.
 
 ## License

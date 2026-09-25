@@ -4,7 +4,7 @@
 > **Nothing stands between an agent's request and a person's attention.**
 > Yohaku is that layer.
 
-![Overview](assets/overview.svg)
+![Overview](../assets/overview.svg)
 
 ---
 

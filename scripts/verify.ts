@@ -82,7 +82,7 @@ check(
   `measured ${[...new Set(reached)].join(', ')} against a cap of ${DEMO_POLICY.dailyCap}`,
 );
 
-const assumptions = read('docs/ASSUMPTIONS.md');
+const assumptions = read('docs/product/ASSUMPTIONS.md');
 check(
   'ASSUMPTIONS quotes the same range as the code produces',
   assumptions.includes(`${lo}–${hi}`),

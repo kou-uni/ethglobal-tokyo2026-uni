@@ -166,4 +166,4 @@ Interceptaの受取側検査は公式要件に明記されており、Norenへ�
 - **[S1]** [ETHGlobal Tokyo 2026 — ENS賞の正式要件](https://ethglobal.com/events/tokyo2026/prizes/ens)
 - **[S2]** [ETHGlobal Tokyo 2026 — Intercepta賞の正式要件](https://ethglobal.com/events/tokyo2026/prizes/intercepta)
 - **関連する一次資料**：[ENSv2 Permissioned Registry](https://docs.ens.domains/ensv2/permissioned-registry)、[Enhanced Access Control](https://docs.ens.domains/ensv2/enhanced-access-control/)。実装時は現行版を再確認する。
-- **プロジェクト内資料**：[作るもの](CONCEPT.md)、[Interceptaの根拠と統合案](INTERCEPTA.md)。
+- **プロジェクト内資料**：[作るもの](../product/CONCEPT.md)、[Interceptaの根拠と統合案](INTERCEPTA.md)。
