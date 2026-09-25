@@ -13,6 +13,8 @@ or `deny`** — and controls how much ever reaches the person.
 
 📄 **[docs/INTERCEPTA.md](docs/INTERCEPTA.md) — seller-side payment screening: evidence, prize requirements, and integration proposal (Japanese; not implemented yet)**
 
+📄 **[docs/ENS-VS-INTERCEPTA.md](docs/ENS-VS-INTERCEPTA.md) — prize-focused comparison from zero implementation, with a recommendation and validation gates (Japanese; decision pending)**
+
 ---
 
 ## Status
