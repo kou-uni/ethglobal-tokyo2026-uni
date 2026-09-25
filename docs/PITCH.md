@@ -117,24 +117,29 @@ record the real count. **If we ask 11 people, we say 11.** See
 | "Today there were about fifty" | "Sellers receive 52 requests per day" — nothing was measured |
 | "These are demo figures" | Presenting any count as a finding |
 
-## The one thing to do at the booth ★
+## At the booth — hand them the keyboard ★
 
-**Run the seed twice in front of them.**
+**`demo/index.html` is one file. It opens from a USB stick on a dead wifi.**
+Everything in it is answered by the same `route()` that the tests run.
 
-```
-npm run seed -- 6      →  50 arrived · 36 auto · 12 deny ·  2 reached her
-npm run seed -- 17     →  52 arrived · 42 auto ·  8 deny ·  2 reached her
-npm run seed -- 1      →  51 arrived · 32 auto ·  8 deny ·  3 reached her
-```
+**Do not walk them through it. Give them these four in order and stop talking.**
+
+| Ask them to | What they find out | Sponsor |
+|---|---|---|
+| **1. "Ask her for her health data."** | They draw `human` **with their own hands**. Not our claim — their click | — |
+| **2. "Now be her own agent. Try to rewrite her permissions."** | **Rejected — rule 0.** Then: "on-chain, the contract refuses the same write. Check it in the ENS app" | **ENS** |
+| **3. "Change the seed. Run it again. Again."** | Arrivals wander 46–54. **What reaches her stays 2–3.** Every time | — |
+| **4. "Approve one. Ignore the other."** | Approving asks her to prove she is a person **at that moment**. Ignoring: **the deadline passes and nothing happens at all** | **World** |
+
+**Then point at the ledger and stop.** That is Curvegrid's screen: what moved overnight,
+inside limits she set, and what still needs her.
 
 > **"Watch the left side move. Now watch the right side."**
->
-> Across 20 runs the arrivals wander between 46 and 54.
-> **What reaches her is two or three. Every time.**
-> That is not a coincidence — **it is the daily cap she set.**
+> That answers *"why 50?"* better than any explanation, and it takes ten seconds.
 
-**This answers "why 50?" better than any explanation.** The input is not our claim.
-The output is. And it takes ten seconds to show.
+**The console says what it cannot do.** Where a signature or a settlement would happen it
+prints `identity: mocked · settlement: not wired` instead of pretending. **Say that out loud
+before they find it** — it buys every other claim on the screen.
 
 ## Delivery notes
 

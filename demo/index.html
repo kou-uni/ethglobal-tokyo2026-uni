@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>yohaku — try it yourself</title>
+<style>
+:root{
+  --ink:#242329; --paper:#F8F7F3; --lilac:#BCB2FA; --lime:#DDF691;
+  --mute:#ECEAE4; --line:#E2E0D8; --sub:#6E6C75; --faint:#A9A7A0;
+  --deep:#4E42A8; --leaf:#5F7A22;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Helvetica,sans-serif;
+  -webkit-font-smoothing:antialiased}
+body{padding:0 16px calc(48px + env(safe-area-inset-bottom));max-width:860px;margin:0 auto}
+h1,h2,h3{margin:0;letter-spacing:-.02em}
+a{color:var(--deep)}
+.wrap{padding-top:22px}
+
+header{display:flex;align-items:center;gap:10px;padding:6px 0 2px}
+header svg{width:26px;height:26px;flex:0 0 26px}
+header b{font-size:20px;font-weight:700;letter-spacing:-.3px}
+header span{font-size:11px;font-weight:700;color:var(--sub);letter-spacing:1.1px;margin-left:auto;text-align:right}
+.lede{font-size:15px;line-height:1.6;color:var(--sub);margin:12px 0 4px}
+.lede b{color:var(--ink)}
+.claim{font-size:13px;font-weight:700;color:var(--deep);margin:14px 0 26px;
+  border-left:3px solid var(--lilac);padding-left:12px;line-height:1.5}
+
+section{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px 18px;margin:0 0 16px}
+.n{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
+  border-radius:50%;background:var(--ink);color:var(--paper);font-size:12px;font-weight:700;margin-right:9px}
+h2{font-size:17px;display:flex;align-items:center;margin-bottom:6px}
+.hint{font-size:12.5px;color:var(--sub);line-height:1.55;margin:0 0 16px}
+.hint b{color:var(--ink)}
+
+label{display:block;font-size:11px;font-weight:700;color:var(--faint);
+  letter-spacing:1px;margin:0 0 5px}
+select,input[type=text]{width:100%;font:inherit;font-size:14px;padding:9px 11px;
+  border:1px solid var(--line);border-radius:11px;background:var(--paper);color:var(--ink)}
+input[type=range]{width:100%;accent-color:var(--deep)}
+.row{display:grid;gap:11px;margin-bottom:12px}
+@media(min-width:620px){.row.two{grid-template-columns:1fr 1fr}.row.three{grid-template-columns:1fr 1fr 1fr}}
+
+button{font:inherit;font-size:14px;font-weight:700;padding:10px 16px;border-radius:12px;
+  border:1px solid var(--ink);background:var(--ink);color:var(--paper);cursor:pointer;
+  transition:transform .08s ease,opacity .15s ease}
+button:active{transform:translateY(1px)}
+button.ghost{background:transparent;color:var(--ink)}
+button.lilac{background:var(--lilac);border-color:var(--lilac);color:var(--ink)}
+button.quiet{background:var(--mute);border-color:var(--mute);color:var(--sub)}
+button:disabled{opacity:.4;cursor:default}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+
+.out{margin-top:15px;border-radius:14px;padding:14px;font-size:14px;line-height:1.55;
+  background:var(--mute);border:1px solid var(--line);min-height:56px}
+.out.auto{background:var(--lime);border-color:#C6E472}
+.out.human{background:var(--lilac);border-color:#A79BF3}
+.out.deny{background:var(--mute);border-color:#D8D6CE}
+.out .v{font-size:19px;font-weight:700;display:flex;align-items:baseline;gap:9px}
+.out .v em{font-style:normal;font-size:11.5px;font-weight:700;color:var(--sub);
+  background:#fff;padding:2px 8px;border-radius:99px}
+.out .r{margin-top:5px;color:var(--ink);opacity:.8}
+.out.pre{white-space:pre-wrap;font-variant-numeric:tabular-nums;font-size:13px}
+
+.dots{display:grid;grid-template-columns:repeat(13,1fr);gap:6px;margin:16px 0 10px}
+@media(min-width:620px){.dots{grid-template-columns:repeat(18,1fr)}}
+.dots i{display:block;aspect-ratio:1;border-radius:50%;background:#C9C7C0;opacity:.45;
+  transition:all .5s cubic-bezier(.34,1.3,.64,1)}
+.dots i.a{background:var(--lime);opacity:.9;transform:scale(.6)}
+.dots i.d{background:#C9C7C0;opacity:.16;transform:scale(.4)}
+.dots i.h{background:var(--lilac);opacity:1;transform:scale(1.45);box-shadow:0 0 0 3px #EFEBFF}
+
+.tally{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.tally div{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:10px 8px;text-align:center}
+.tally b{display:block;font-size:21px;font-weight:700;font-variant-numeric:tabular-nums}
+.tally span{font-size:10.5px;color:var(--sub);letter-spacing:.3px}
+.tally .hl{background:var(--lilac);border-color:var(--lilac)}
+
+.card{border:1px solid var(--line);border-radius:14px;padding:13px;margin-bottom:9px;background:var(--paper)}
+.card.done{opacity:.55}
+.card h3{font-size:14.5px;margin-bottom:3px}
+.card p{margin:0;font-size:12.5px;color:var(--sub);line-height:1.5}
+.card .acts{display:flex;gap:7px;margin-top:11px}
+.card .acts button{padding:7px 13px;font-size:13px}
+
+.mark{font-size:12.5px;font-weight:700;padding:3px 9px;border-radius:99px;display:inline-block}
+.ok{background:var(--lime);color:var(--leaf)}
+.no{background:#F3E3E3;color:#A03C3C}
+
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+td{padding:6px 0;border-bottom:1px solid var(--line)}
+td:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+tr:last-child td{border-bottom:0}
+
+footer{font-size:11.5px;color:var(--faint);line-height:1.6;padding:22px 2px 0}
+footer b{color:var(--sub)}
+.k{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;
+  background:var(--mute);padding:1px 6px;border-radius:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <svg viewBox="0 0 256 256" fill="#242329" aria-hidden="true">
+    <defs><path id="q" d="M112 92C100 92 92 100 92 112H62C38 112 20 94 20 70V62C20 38 38 20 62 20H70C94 20 112 38 112 62Z"/></defs>
+    <use href="#q"/><use href="#q" transform="rotate(90 128 128)"/>
+    <use href="#q" transform="rotate(180 128 128)"/><use href="#q" transform="rotate(270 128 128)"/>
+  </svg>
+  <b>yohaku</b>
+  <span>MAKE ROOM.<br>FOR BEING HUMAN.</span>
+</header>
+
+<p class="lede">Agents never sleep. People do. <b>This console routes every incoming request into
+<b>auto</b>, <b>human</b> or <b>deny</b></b> — and decides how much ever reaches a person.</p>
+
+<p class="claim">Don't take our word for any of it. <b>Every number below is produced by the same
+<span class="k">route()</span> the test suite runs.</b> Change things and watch what moves.</p>
+
+<section>
+  <h2><span class="n">1</span>You are the buyer agent</h2>
+  <p class="hint">Ask Alice for something. <b>You get a verdict immediately</b> — even when the
+  answer is "held", because an agent left waiting is an agent that is stuck.</p>
+  <div class="row two">
+    <div><label>WHO YOU ARE</label><select id="who"></select></div>
+    <div><label>WHAT YOU WANT</label><select id="what"></select></div>
+  </div>
+  <div class="row">
+    <div><label>PRICE — <span id="priceOut">0.5</span> JPYC</label>
+      <input type="range" id="price" min="0" max="5000" step="10" value="0"></div>
+  </div>
+  <div class="btns">
+    <button id="send">Send the request</button>
+    <button class="ghost" id="sendHealth">Ask for her health data</button>
+  </div>
+  <div class="out" id="verdict">Nothing asked yet.</div>
+</section>
+
+<section>
+  <h2><span class="n">2</span>Now be her own agent</h2>
+  <p class="hint">Alice delegated to a helper agent. <b>See if you can make it widen its own
+  permissions.</b> The rules call this rule 0, and it is the one an AI cannot talk its way past.</p>
+  <div class="btns">
+    <button class="lilac" data-w="proposal">Propose a change</button>
+    <button class="ghost" data-w="permission">Rewrite her permission key</button>
+    <button class="ghost" data-w="payout">Change the payout address</button>
+    <button class="quiet" id="revoke">Alice revokes the delegation</button>
+  </div>
+  <div class="out" id="delegate">Try the buttons in order.</div>
+</section>
+
+<section>
+  <h2><span class="n">3</span>Run a whole night</h2>
+  <p class="hint"><b>Change the seed and run it again.</b> Watch how many arrive — then watch how
+  many reach her. The first number wanders. The second one does not.</p>
+  <div class="row two">
+    <div><label>SEED</label><input type="text" id="seed" value="6"></div>
+    <div style="display:flex;align-items:flex-end;gap:8px">
+      <button id="run" style="flex:1">Run the night</button>
+      <button class="ghost" id="roll">Another</button>
+    </div>
+  </div>
+  <div class="dots" id="dots"></div>
+  <div class="tally">
+    <div><b id="tArrived">—</b><span>arrived</span></div>
+    <div><b id="tAuto">—</b><span>auto</span></div>
+    <div><b id="tDeny">—</b><span>deny</span></div>
+    <div class="hl"><b id="tSurf">—</b><span>reached her</span></div>
+  </div>
+  <div class="out pre" id="nightOut">Press “Run the night”.</div>
+</section>
+
+<section>
+  <h2><span class="n">4</span>07:00 — her turn</h2>
+  <p class="hint">One notification, bundled, inside <b>her own daily cap of 3</b>.
+  <b>Approve one and ignore the other</b>, then watch what happens to the one you ignored.</p>
+  <div id="inbox"><p class="hint">Run a night first.</p></div>
+  <div class="out" id="morning">—</div>
+</section>
+
+<section>
+  <h2><span class="n">5</span>What she wakes up to</h2>
+  <p class="hint">What moved overnight, and what is still waiting. <b>This is the whole screen</b> —
+  not a feed.</p>
+  <table id="ledger"><tr><td>Run a night first.</td><td></td></tr></table>
+</section>
+
+<footer>
+  <b>Counts are generated, not measured.</b> Requests come from a seeded generator
+  (<span class="k">src/core/night.ts</span>); every verdict comes from
+  <span class="k">route()</span> in <span class="k">src/core/rules.ts</span>, the same function
+  under 32 tests. Chain, payment and identity are not wired yet — where a signature or a
+  settlement would happen, this console says so rather than pretending.<br><br>
+  <b>Across 20 seeds: 46–54 arrive, 2–3 reach her.</b>
+</footer>
+
+</div>
+
+<script type="module">
+/**
+ * Yohaku — core types.
+ *
+ * Every incoming request carries exactly five things. The fifth one — `deadline` —
+ * is the one people forget, and it is the reason this product works at all:
+ * a router that has not decided what happens while the owner is asleep does not work.
+ */
+{};
+
+/**
+ * Yohaku — the routing rules.
+ *
+ * Ten ordered rules. The first match decides. Safe outcomes are evaluated first,
+ * so that anything ambiguous has already been caught by the time we reach `auto`.
+ *
+ * Two properties matter more than the individual rules:
+ *
+ *   1. Rule 0 is on a different axis. Rules 1–9 judge a request arriving from outside;
+ *      rule 0 judges the owner's own delegate. Handing work to an AI and letting an AI
+ *      widen its own authority are different events, and only the second is an attack.
+ *
+ *   2. Rule 9 — "nothing matched" — falls to `human`, never to `auto`. A router that
+ *      sends the unknown to `auto` cannot be explained after an incident.
+ */
+const deny = (rule, reason) => ({ verdict: 'deny', rule, reason });
+const human = (rule, reason) => ({ verdict: 'human', rule, reason });
+const auto = (rule, reason) => ({ verdict: 'auto', rule, reason });
+/** A grant covers a request when the category matches and the grantee is not narrower. */
+function grantFor(policy, req) {
+    return policy.grants.find((g) => g.category === req.what && (g.grantee === undefined || g.grantee === req.who));
+}
+/**
+ * Decide what happens to one request.
+ *
+ * Pure. No I/O, no clock of its own — everything variable arrives through `ctx`,
+ * so the same inputs always produce the same decision and the demo is reproducible.
+ */
+function route(req, policy, ctx) {
+    // ── 0. The delegate may propose. It may not widen its own rights. ──────────
+    // Rejected on-chain as well; this is the server agreeing with the contract.
+    if (req.actingAs === 'delegate') {
+        if (ctx.delegationRevoked) {
+            return deny(0, 'delegation has been revoked — even proposals stop');
+        }
+        if (req.writeTarget !== undefined && req.writeTarget !== 'proposal') {
+            return deny(0, `a delegate may not write to "${req.writeTarget}"`);
+        }
+    }
+    const grant = grantFor(policy, req);
+    // ── 1. Revoked ────────────────────────────────────────────────────────────
+    if (grant?.revoked) {
+        return deny(1, `the grant for "${req.what}" was revoked`);
+    }
+    // ── 2. Explicitly forbidden ───────────────────────────────────────────────
+    if (policy.forbid.includes(req.what)) {
+        return deny(2, `"${req.what}" is never offered`);
+    }
+    // ── 3. Expired ────────────────────────────────────────────────────────────
+    if (grant && new Date(grant.expiresAt).getTime() <= ctx.now.getTime()) {
+        return deny(3, `the grant for "${req.what}" expired on ${grant.expiresAt}`);
+    }
+    // ── 4. Payment source ─────────────────────────────────────────────────────
+    // `unavailable` is not a pass. If we cannot check, we do not move money.
+    const screening = ctx.screen(req.payoutAddress);
+    if (screening === 'flagged') {
+        return deny(4, 'the payment source failed screening');
+    }
+    if (screening === 'unavailable') {
+        return deny(4, 'screening was unavailable — we do not settle unchecked');
+    }
+    // ── 5. Sensitive domain ───────────────────────────────────────────────────
+    if (policy.sensitive.includes(req.what)) {
+        return human(5, `"${req.what}" is a sensitive domain`);
+    }
+    // ── 6. Above the owner's threshold ────────────────────────────────────────
+    if (req.price.amount > policy.amountThreshold) {
+        return human(6, `${req.price.amount} ${req.price.currency} is above the threshold`);
+    }
+    // ── 7. First time seeing this counterparty ────────────────────────────────
+    if (!ctx.seenBefore(req.who)) {
+        return human(7, `first request from ${req.who}`);
+    }
+    // ── 8. Inside the allow list ──────────────────────────────────────────────
+    if (policy.allow.includes(req.what) && grant !== undefined) {
+        return auto(8, `within the standing grant for "${req.what}"`);
+    }
+    // ── 9. Nothing matched. Ask, do not assume. ───────────────────────────────
+    return human(9, 'no rule matched — the unknown goes to a person, never to auto');
+}
+function onFailure(kind) {
+    const reasons = {
+        'routing-engine-down': 'the router could not decide',
+        'screening-unavailable': 'the payment source could not be checked',
+        'identity-check-failed': 'the person could not be verified at that moment',
+        'deadline-passed': 'the deadline passed without an answer — silence is not consent',
+    };
+    return deny(-1, reasons[kind]);
+}
+
+/**
+ * Yohaku — what happens after `human`.
+ *
+ * Three-way routing is easy. This file is the product.
+ *
+ * A person cannot absorb an unbounded number of decisions, so the queue does four
+ * things before anything reaches them: bundle, rank, hold until the notification
+ * hour, and fall back when the deadline passes. The daily cap is the owner's own
+ * setting — the router does not decide how much attention they have.
+ */
+/**
+ * Group held requests by what they are asking for.
+ *
+ * "3 companies are asking for the same health category" is one notification, not three.
+ */
+function bundle(held) {
+    const byCategory = new Map();
+    for (const h of held) {
+        const list = byCategory.get(h.request.what) ?? [];
+        list.push(h);
+        byCategory.set(h.request.what, list);
+    }
+    return [...byCategory.entries()].map(([category, requests]) => ({
+        category,
+        requests,
+        topValue: Math.max(...requests.map((r) => r.request.price.amount)),
+        nextDeadline: requests
+            .map((r) => r.request.deadline)
+            .sort()
+            .at(0),
+    }));
+}
+/** Higher scores surface first: what it is worth, and how soon it disappears. */
+function rank(bundles, now) {
+    const score = (b) => {
+        const hoursLeft = (new Date(b.nextDeadline).getTime() - now.getTime()) / 3_600_000;
+        // Urgency rises as the deadline approaches, but never dominates value entirely.
+        const urgency = hoursLeft <= 0 ? 0 : 1 / Math.max(hoursLeft, 0.5);
+        return b.topValue * (1 + urgency);
+    };
+    return [...bundles].sort((a, b) => score(b) - score(a));
+}
+/**
+ * Decide what reaches the person at the notification hour.
+ *
+ * Anything past its deadline is taken out first — it is denied, not shown. The rest
+ * is ranked, and only `dailyCap` bundles are surfaced. What is deferred is not lost;
+ * it simply did not fit inside the space the owner set aside today.
+ */
+function surface(held, policy, now) {
+    const expired = [];
+    const alive = [];
+    for (const h of held) {
+        if (new Date(h.request.deadline).getTime() <= now.getTime())
+            expired.push(h);
+        else
+            alive.push(h);
+    }
+    const ranked = rank(bundle(alive), now);
+    return {
+        surfaced: ranked.slice(0, policy.dailyCap),
+        deferred: ranked.slice(policy.dailyCap),
+        expired,
+    };
+}
+/** Is it the hour at which held requests are shown? */
+function isNotificationHour(policy, now) {
+    return now.getHours() === policy.notifyHour;
+}
+/**
+ * What silence means.
+ *
+ * Deliberately not configurable to `auto`. An owner may widen their allow list, but
+ * they cannot make "no answer" mean "yes".
+ */
+function onDeadline() {
+    return {
+        verdict: 'deny',
+        rule: -1,
+        reason: 'the deadline passed without an answer — silence is not consent',
+    };
+}
+
+/**
+ * Yohaku — what she wakes up to.
+ *
+ * One screen. Not a feed. The morning ledger answers three questions in the order a
+ * person actually asks them: what moved, what still needs me, and what was kept out.
+ */
+function buildLedger(input) {
+    const byCurrency = new Map();
+    for (const s of input.settled) {
+        const { amount, currency } = s.request.price;
+        byCurrency.set(currency, (byCurrency.get(currency) ?? 0) + amount);
+    }
+    const ruleCounts = new Map();
+    for (const e of [...input.settled, ...input.denied]) {
+        ruleCounts.set(e.decision.rule, (ruleCounts.get(e.decision.rule) ?? 0) + 1);
+    }
+    for (const h of input.held) {
+        ruleCounts.set(h.decision.rule, (ruleCounts.get(h.decision.rule) ?? 0) + 1);
+    }
+    return {
+        date: input.date,
+        arrived: input.settled.length + input.denied.length + input.held.length,
+        autoCount: input.settled.length,
+        denyCount: input.denied.length,
+        heldCount: input.held.length,
+        needsYou: input.surfaced,
+        received: [...byCurrency.entries()]
+            .map(([currency, amount]) => ({ currency, amount: Math.round(amount * 100) / 100 }))
+            .sort((a, b) => b.amount - a.amount),
+        byRule: [...ruleCounts.entries()]
+            .map(([rule, count]) => ({ rule, count }))
+            .sort((a, b) => a.rule - b.rule),
+    };
+}
+/**
+ * The line that says this is not a static demo.
+ * How many reached her, day by day. It should fall as her decisions accumulate.
+ */
+function escalationTrend(history) {
+    return [...history].sort((a, b) => a.date.localeCompare(b.date)).map((d) => d.heldCount);
+}
+
+/**
+ * Yohaku — the flywheel.
+ *
+ * What a person decided yesterday becomes routing today. This is the only part of the
+ * system that improves by being used, and what it accumulates is the scarce thing:
+ * a record of when a human says no.
+ *
+ * Conservative in one direction only. Repeated approvals can widen `auto`; repeated
+ * refusals can never widen it. Learning may remove work from a person — it may never
+ * grant something they kept refusing.
+ */
+const key = (who, what) => `${who} :: ${what}`;
+/** Consistent approvals before we stop asking. Low, but never one. */
+const APPROVALS_TO_LEARN = 3;
+/** Refusals before a counterparty stops reaching her at all. */
+const REFUSALS_TO_MUTE = 3;
+function learn(records) {
+    const approvals = new Map();
+    const refusals = new Map();
+    const refusalsByParty = new Map();
+    for (const r of records) {
+        const k = key(r.who, r.what);
+        if (r.outcome === 'approved') {
+            approvals.set(k, (approvals.get(k) ?? 0) + 1);
+        }
+        else if (r.outcome === 'refused') {
+            refusals.set(k, (refusals.get(k) ?? 0) + 1);
+            refusalsByParty.set(r.who, (refusalsByParty.get(r.who) ?? 0) + 1);
+        }
+        // 'ignored' teaches nothing. Silence is not consent, and it is not refusal either.
+    }
+    const autoPairs = new Set();
+    for (const [k, n] of approvals) {
+        // One refusal anywhere in the history cancels learning for that pair.
+        if (n >= APPROVALS_TO_LEARN && (refusals.get(k) ?? 0) === 0)
+            autoPairs.add(k);
+    }
+    const mutedParties = new Set();
+    for (const [who, n] of refusalsByParty) {
+        if (n >= REFUSALS_TO_MUTE)
+            mutedParties.add(who);
+    }
+    return { autoPairs, mutedParties };
+}
+/**
+ * Apply what was learned to a decision the rules already made.
+ *
+ * Only ever moves `human` to `auto`, or `human` to `deny`. It never overturns a `deny`
+ * and never touches rule 0. The rules stay the authority; this only removes work.
+ */
+function applyLearned(req, decision, learned) {
+    if (decision.verdict !== 'human')
+        return decision;
+    if (learned.mutedParties.has(req.who)) {
+        return { verdict: 'deny', rule: decision.rule, reason: `${req.who} has been refused repeatedly` };
+    }
+    if (learned.autoPairs.has(key(req.who, req.what))) {
+        return {
+            verdict: 'auto',
+            rule: decision.rule,
+            reason: `she has approved "${req.what}" from ${req.who} before`,
+        };
+    }
+    return decision;
+}
+/**
+ * What only the platform can see.
+ *
+ * No individual seller can know that an agent was refused by most people it approached.
+ * This is the signal worth handing back to the ecosystem.
+ */
+function rejectionRate(records, who) {
+    const mine = records.filter((r) => r.who === who && r.outcome !== 'ignored');
+    if (mine.length === 0)
+        return undefined;
+    const refused = mine.filter((r) => r.outcome === 'refused').length;
+    return { asked: mine.length, refused, rate: Math.round((refused / mine.length) * 100) / 100 };
+}
+
+/**
+ * Yohaku — one night of requests.
+ *
+ * Shared by `npm run seed` and by the demo console, so that what a judge sees on
+ * screen and what the terminal prints are produced by exactly the same code.
+ * A different number here and there would quietly turn the demo into a claim we
+ * cannot back, so there is only one generator.
+ */
+/** Small deterministic PRNG — a given seed always produces the same night. */
+function mulberry32(a) {
+    return () => {
+        a |= 0;
+        a = (a + 0x6d2b79f5) | 0;
+        let t = Math.imul(a ^ (a >>> 15), 1 | a);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+}
+const NIGHT = new Date('2026-09-26T02:00:00+09:00');
+const MORNING = new Date('2026-09-26T07:00:00+09:00');
+const DEMO_POLICY = {
+    owner: 'alice.yohaku.eth',
+    allow: [
+        'purchase-intent/groceries',
+        'purchase-intent/cosmetics',
+        'preference/coffee',
+        'location/coarse',
+    ],
+    forbid: ['finance/bank-activity', 'health/checkup-results'],
+    sensitive: ['health/symptoms', 'work/history', 'finance/income'],
+    amountThreshold: 1000,
+    dailyCap: 3,
+    notifyHour: 7,
+    grants: [
+        { category: 'purchase-intent/groceries', expiresAt: '2026-12-31T00:00:00Z', revoked: false },
+        { category: 'purchase-intent/cosmetics', expiresAt: '2026-12-31T00:00:00Z', revoked: false },
+        { category: 'preference/coffee', expiresAt: '2026-12-31T00:00:00Z', revoked: false },
+        { category: 'location/coarse', expiresAt: '2026-12-31T00:00:00Z', revoked: false },
+        // Already lapsed — rule 3.
+        { category: 'preference/travel', expiresAt: '2025-09-01T00:00:00Z', revoked: false },
+        // Taken back by the owner — rule 1.
+        { category: 'purchase-intent/electronics', expiresAt: '2026-12-31T00:00:00Z', revoked: true },
+    ],
+};
+const KNOWN_PARTIES = [
+    'market-research.acme.eth',
+    'demand.nozomi-labs.eth',
+    'cafe-nearby.local.eth',
+    'retail-insight.dentsu-x.eth',
+    'trendwatch.shibuya.eth',
+];
+const NEW_PARTIES = ['first-contact.newco.eth', 'unknown-buyer.eth'];
+const FLAGGED_ADDRESS = '0xSANCTIONED_FIXTURE';
+/** Weighted so that ordinary, low-stakes asks dominate — as they do in life. */
+const ASKS = [
+    { what: 'purchase-intent/groceries', purpose: 'demand-estimation', max: 1, weight: 34 },
+    { what: 'purchase-intent/cosmetics', purpose: 'market-research', max: 1, weight: 22 },
+    { what: 'preference/coffee', purpose: 'personalisation', max: 0.5, weight: 14 },
+    { what: 'location/coarse', purpose: 'market-research', max: 1, weight: 10 },
+    { what: 'health/symptoms', purpose: 'market-research', max: 3000, weight: 5 },
+    { what: 'work/history', purpose: 'other', max: 4000, weight: 3 },
+    { what: 'finance/bank-activity', purpose: 'other', max: 500, weight: 5 },
+    { what: 'health/checkup-results', purpose: 'other', max: 900, weight: 3 },
+    { what: 'preference/travel', purpose: 'market-research', max: 1, weight: 5 },
+    { what: 'purchase-intent/electronics', purpose: 'demand-estimation', max: 1, weight: 5 },
+    { what: 'corpus/writing', purpose: 'ai-training', max: 6000, weight: 3 },
+];
+/** About fifty. Never exactly fifty — how many arrive is not our claim. */
+function generateNight(seed) {
+    const rnd = mulberry32(seed);
+    const pick = (xs) => xs[Math.floor(rnd() * xs.length)];
+    const totalWeight = ASKS.reduce((s, a) => s + a.weight, 0);
+    const pickAsk = () => {
+        let r = rnd() * totalWeight;
+        for (const a of ASKS) {
+            r -= a.weight;
+            if (r <= 0)
+                return a;
+        }
+        return ASKS[0];
+    };
+    const count = 46 + Math.floor(rnd() * 9);
+    return Array.from({ length: count }, (_, i) => {
+        const ask = pickAsk();
+        const firstTime = rnd() < 0.05;
+        const dirtyPayout = rnd() < 0.04;
+        return {
+            id: `req-${String(i + 1).padStart(3, '0')}`,
+            who: firstTime ? pick(NEW_PARTIES) : pick(KNOWN_PARTIES),
+            what: ask.what,
+            purpose: ask.purpose,
+            price: { amount: Math.round(rnd() * ask.max * 100) / 100, currency: 'JPYC' },
+            deadline: new Date(NIGHT.getTime() + (6 + rnd() * 18) * 3_600_000).toISOString(),
+            payoutAddress: dirtyPayout
+                ? FLAGGED_ADDRESS
+                : `0x${(i + 1).toString(16).padStart(40, '0')}`,
+        };
+    });
+}
+/** The context the demo and the seed script both run against. */
+function demoContext(now = NIGHT) {
+    const seen = new Set(KNOWN_PARTIES);
+    return {
+        now,
+        seenBefore: (who) => seen.has(who),
+        screen: (addr) => (addr === FLAGGED_ADDRESS ? 'flagged' : 'clean'),
+    };
+}
+
+/* ─── wiring ────────────────────────────────────────────────────────────── */
+const $ = (id) => document.getElementById(id);
+const policy = DEMO_POLICY;
+
+/* 1 — you are the agent */
+const whoSel = $('who'), whatSel = $('what');
+for (const w of [...KNOWN_PARTIES, ...NEW_PARTIES]) {
+  const o = document.createElement('option');
+  o.value = w; o.textContent = w + (NEW_PARTIES.includes(w) ? '  (never seen before)' : '');
+  whoSel.append(o);
+}
+for (const a of ASKS) {
+  const o = document.createElement('option');
+  o.value = a.what; o.textContent = a.what;
+  whatSel.append(o);
+}
+$('price').addEventListener('input', (e) => {
+  $('priceOut').textContent = (Number(e.target.value) / 10).toFixed(1);
+});
+
+function show(el, d) {
+  el.className = 'out ' + d.verdict;
+  const rule = d.rule >= 0 ? `rule ${d.rule}` : 'failure path';
+  el.innerHTML = `<div class="v">${d.verdict}<em>${rule}</em></div><div class="r">${d.reason}</div>`;
+}
+
+function ask(over = {}) {
+  const req = {
+    id: 'live', who: whoSel.value, what: whatSel.value, purpose: 'market-research',
+    price: { amount: Number($('price').value) / 10, currency: 'JPYC' },
+    deadline: new Date(NIGHT.getTime() + 12 * 3600000).toISOString(),
+    payoutAddress: '0x' + '1'.repeat(40),
+    ...over,
+  };
+  show($('verdict'), route(req, policy, demoContext()));
+}
+$('send').addEventListener('click', () => ask());
+$('sendHealth').addEventListener('click', () => {
+  whatSel.value = 'health/symptoms';
+  $('price').value = '20000'; $('priceOut').textContent = '2000.0';
+  ask({ what: 'health/symptoms', price: { amount: 2000, currency: 'JPYC' } });
+});
+
+/* 2 — the delegate */
+let revoked = false;
+function delegate(writeTarget) {
+  const req = {
+    id: 'del', who: 'helper.alice.yohaku.eth', what: 'purchase-intent/groceries',
+    purpose: 'other', price: { amount: 0, currency: 'JPYC' },
+    deadline: new Date(NIGHT.getTime() + 3600000).toISOString(),
+    payoutAddress: '0x' + '2'.repeat(40),
+    actingAs: 'delegate', writeTarget,
+  };
+  const d = route(req, policy, { ...demoContext(), delegationRevoked: revoked });
+  const el = $('delegate');
+  if (d.verdict === 'deny') {
+    el.className = 'out deny';
+    el.innerHTML = `<div class="v"><span class="mark no">rejected</span><em>rule ${d.rule}</em></div>
+      <div class="r">${d.reason}<br><br><b>This is not our server saying no.</b>
+      On-chain the same write is refused by the contract — which is what you would check in the ENS app.</div>`;
+  } else {
+    el.className = 'out auto';
+    el.innerHTML = `<div class="v"><span class="mark ok">accepted</span><em>proposal</em></div>
+      <div class="r">A delegate may propose. That is all it may do.</div>`;
+  }
+}
+document.querySelectorAll('[data-w]').forEach((b) =>
+  b.addEventListener('click', () => delegate(b.dataset.w)));
+$('revoke').addEventListener('click', () => {
+  revoked = !revoked;
+  $('revoke').textContent = revoked ? 'Delegation is revoked — restore it' : 'Alice revokes the delegation';
+  $('delegate').className = 'out';
+  $('delegate').innerHTML = revoked
+    ? 'Delegation revoked. <b>Now even a proposal stops.</b> Try the first button again.'
+    : 'Delegation restored.';
+});
+
+/* 3 — the night */
+let state = null;
+function runNight(seed) {
+  const requests = generateNight(seed);
+  const ctx = demoContext(NIGHT);
+  const decided = requests.map((r) => ({ request: r, decision: route(r, policy, ctx) }));
+  const held = decided.filter((d) => d.decision.verdict === 'human')
+    .map((d) => ({ ...d, heldAt: NIGHT.toISOString() }));
+  const morning = surface(held, policy, MORNING);
+
+  state = {
+    seed, decided, held, morning,
+    settled: decided.filter((d) => d.decision.verdict === 'auto'),
+    denied: decided.filter((d) => d.decision.verdict === 'deny'),
+    answered: new Map(),
+  };
+
+  const dots = $('dots');
+  dots.innerHTML = '';
+  decided.forEach((d) => {
+    const i = document.createElement('i');
+    dots.append(i);
+    requestAnimationFrame(() => {
+      i.className = d.decision.verdict === 'auto' ? 'a' : d.decision.verdict === 'deny' ? 'd' : 'h';
+    });
+  });
+
+  $('tArrived').textContent = decided.length;
+  $('tAuto').textContent = state.settled.length;
+  $('tDeny').textContent = state.denied.length;
+  $('tSurf').textContent = morning.surfaced.length;
+
+  const rules = new Map();
+  for (const d of decided) rules.set(d.decision.rule, (rules.get(d.decision.rule) ?? 0) + 1);
+  $('nightOut').className = 'out pre';
+  $('nightOut').textContent =
+    `seed ${seed}\n` +
+    `${decided.length} arrived · ${state.settled.length} auto · ${state.denied.length} deny · ${held.length} held\n` +
+    `bundled into ${morning.surfaced.length + morning.deferred.length}, ` +
+    `${morning.surfaced.length} shown (cap ${policy.dailyCap})\n\n` +
+    [...rules.entries()].sort((a, b) => a[0] - b[0])
+      .map(([r, n]) => `  rule ${r}   ${n}`).join('\n');
+
+  renderInbox();
+  renderLedger();
+}
+$('run').addEventListener('click', () => runNight(Number($('seed').value) || 0));
+$('roll').addEventListener('click', () => {
+  const s = Math.floor(Math.random() * 999) + 1;
+  $('seed').value = s; runNight(s);
+});
+
+/* 4 — the morning */
+function renderInbox() {
+  const box = $('inbox');
+  box.innerHTML = '';
+  if (!state || state.morning.surfaced.length === 0) {
+    box.innerHTML = '<p class="hint">Nothing needed her this morning.</p>';
+    return;
+  }
+  state.morning.surfaced.forEach((b, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    const n = b.requests.length;
+    card.innerHTML =
+      `<h3>${b.category}</h3>
+       <p>${n === 1 ? 'One request' : `<b>${n} companies</b> asking for the same thing — one notification, not ${n}`}
+       · up to <b>${b.topValue} JPYC</b></p>
+       <div class="acts">
+         <button class="lilac" data-i="${i}" data-act="approve">Approve</button>
+         <button class="quiet" data-i="${i}" data-act="ignore">Ignore it</button>
+       </div>`;
+    box.append(card);
+  });
+  box.querySelectorAll('button').forEach((b) =>
+    b.addEventListener('click', () => answer(Number(b.dataset.i), b.dataset.act)));
+  $('morning').className = 'out';
+  $('morning').innerHTML = `<b>${state.morning.surfaced.length}</b> need her. ` +
+    `${state.morning.deferred.length} deferred, ${state.morning.expired.length} already past their deadline.`;
+}
+
+function answer(i, act) {
+  const b = state.morning.surfaced[i];
+  state.answered.set(i, act);
+  const card = $('inbox').children[i];
+  card.classList.add('done');
+  card.querySelectorAll('button').forEach((x) => (x.disabled = true));
+  const el = $('morning');
+  if (act === 'approve') {
+    el.className = 'out auto';
+    el.innerHTML =
+      `<div class="v"><span class="mark ok">approved</span><em>${b.category}</em></div>
+       <div class="r"><b>She proves she is a person right now</b> — not at signup.
+       Only then does the payment execute.<br>
+       <span class="k">identity: mocked · settlement: not wired</span></div>`;
+  } else {
+    el.className = 'out deny';
+    const d = onDeadline();
+    el.innerHTML =
+      `<div class="v"><span class="mark no">nothing happened</span><em>deadline</em></div>
+       <div class="r">${d.reason}<br><b>The protected action did not occur.</b>
+       No signature, no transaction, no record of consent.</div>`;
+  }
+  renderLedger();
+}
+
+/* 5 — the ledger */
+function renderLedger() {
+  if (!state) return;
+  const l = buildLedger({
+    date: '2026-09-26',
+    settled: state.settled,
+    denied: state.denied,
+    held: state.held,
+    surfaced: state.morning.surfaced,
+  });
+  const approved = [...state.answered.values()].filter((a) => a === 'approve').length;
+  const ignored = [...state.answered.values()].filter((a) => a === 'ignore').length;
+  const money = l.received.map((r) => `${r.amount} ${r.currency}`).join(' · ') || '—';
+  $('ledger').innerHTML = `
+    <tr><td>Arrived overnight</td><td>${l.arrived}</td></tr>
+    <tr><td>Settled while she slept</td><td>${l.autoCount}</td></tr>
+    <tr><td>Never reached her</td><td>${l.denyCount}</td></tr>
+    <tr><td>Asked about</td><td>${state.morning.surfaced.length}</td></tr>
+    <tr><td>— approved</td><td>${approved}</td></tr>
+    <tr><td>— let go</td><td>${ignored}</td></tr>
+    <tr><td>Received <span class="k">auto only</span></td><td>${money}</td></tr>`;
+}
+
+runNight(6);
+</script>
+</body>
+</html>
