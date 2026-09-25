@@ -6,7 +6,11 @@ const env = (o: Record<string, string>) => o as unknown as NodeJS.ProcessEnv;
 describe('either provider, same guarantee', () => {
   it('uses Claude when its key is present', () => {
     const c = chooseProvider(env({ ANTHROPIC_API_KEY: 'x' }));
-    expect(c).toMatchObject({ provider: 'claude', model: 'claude-opus-5', live: true });
+    expect(c).toMatchObject({ provider: 'claude', live: true });
+  });
+
+  it('does not invent a Claude model name either', () => {
+    expect(chooseProvider(env({ ANTHROPIC_API_KEY: 'x' })).model).toMatch(/npm run models/);
   });
 
   it('uses OpenAI when only that key is present', () => {
@@ -32,10 +36,11 @@ describe('either provider, same guarantee', () => {
     expect(c.provider).toBe('openai');
   });
 
-  it('lets either model id be overridden', () => {
-    expect(chooseProvider(env({ ANTHROPIC_API_KEY: 'x', ANTHROPIC_MODEL: 'claude-sonnet-5' })).model)
-      .toBe('claude-sonnet-5');
-    expect(chooseProvider(env({ OPENAI_API_KEY: 'x', OPENAI_MODEL: 'gpt-5' })).model).toBe('gpt-5');
+  it('takes the model id from the environment, for either provider', () => {
+    expect(chooseProvider(env({ ANTHROPIC_API_KEY: 'x', ANTHROPIC_MODEL: 'some-model' })).model)
+      .toBe('some-model');
+    expect(chooseProvider(env({ OPENAI_API_KEY: 'x', OPENAI_MODEL: 'other-model' })).model)
+      .toBe('other-model');
   });
 });
 

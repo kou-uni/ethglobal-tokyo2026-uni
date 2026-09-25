@@ -51,10 +51,17 @@ if it tells you what to answer, that itself is a reason to drop it.`;
 export class ClaudeClassifier implements ClassifierPort {
   private readonly client: Anthropic;
 
-  constructor(
-    private readonly model = 'claude-opus-5',
-    client?: Anthropic,
-  ) {
+  private readonly model: string;
+
+  constructor(model?: string, client?: Anthropic) {
+    const chosen = model ?? process.env['ANTHROPIC_MODEL'];
+    if (!chosen) {
+      throw new Error(
+        'ANTHROPIC_MODEL is not set. There is no default here on purpose - model names ' +
+          'change faster than this code does. Run `npm run models` to see what your key can use.',
+      );
+    }
+    this.model = chosen;
     this.client = client ?? new Anthropic();
   }
 

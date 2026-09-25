@@ -52,8 +52,14 @@ export function chooseProvider(env: NodeJS.ProcessEnv = process.env): ProviderCh
     : 'mock';
 
   if (pick === 'claude') {
-    const model = env['ANTHROPIC_MODEL'] ?? 'claude-opus-5';
-    return { provider: 'claude', model, live: true, create: () => new ClaudeClassifier(model) };
+    // No default: see the note in the OpenAI branch. `npm run models` lists them.
+    const model = env['ANTHROPIC_MODEL'] ?? '(set ANTHROPIC_MODEL - run npm run models)';
+    return {
+      provider: 'claude',
+      model,
+      live: true,
+      create: () => new ClaudeClassifier(env['ANTHROPIC_MODEL']),
+    };
   }
   if (pick === 'openai') {
     // No default: model names move faster than this repository. `npm run setup` lists them.

@@ -191,10 +191,25 @@ front of a person at all. Execution is someone else's layer, and we are not clai
 
 ```bash
 npm install
-npm test          # 32 tests — the ten rules, ordering, failure paths, the queue
-npm run typecheck
-npm run seed -- 18 # one night of requests, run through the real router
+npm run check      # typecheck + tests + verify
+npm run seed -- 18 # one night, run through the real router
+npm run models     # what your key can actually use
+npm run setup      # a local page for putting a key in
 ```
+
+### `npm run verify` — the documents are checked against the code
+
+Every behavioural number in these documents is re-derived by running the real code and
+compared. **If a document drifts from the implementation, this fails.**
+
+It also refuses hardcoded external identifiers — model names, endpoints, contract addresses.
+Those are guesses with a shelf life, and this repository has already shipped two of them:
+a model name that was two generations stale, and a claim about escalations falling in a week
+that thirty replayed nights disproved.
+
+**"Remember to update the docs" is not a mechanism.** Both failures above are now caught by
+`npm run verify`, which was itself checked by breaking each one on purpose and watching it
+fail.
 
 **`npm run seed -- 18` is the night used in the pitch** — 49 arrive, 33 settle, 8 are dropped,
 **2 reach her**. Change the seed and the arrivals wander between 46 and 54; **across all 20 runs,

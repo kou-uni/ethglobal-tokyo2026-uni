@@ -17,7 +17,9 @@
     "demo": "npm run build:demo && open demo/index.html",
     "classify": "tsx scripts/classify.ts",
     "setup": "tsx scripts/setup-key.ts",
-    "models": "tsx scripts/models.ts"
+    "models": "tsx scripts/models.ts",
+    "verify": "tsx scripts/verify.ts",
+    "check": "npm run typecheck && npm test && npm run verify"
   },
   "devDependencies": {
     "@types/node": "^22.7.4",
