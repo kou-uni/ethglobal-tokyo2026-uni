@@ -85,13 +85,12 @@ See [ARCHITECTURE.md §6](docs/ARCHITECTURE.md).
 
 ## MultiBaas usage
 
-*Not yet integrated.* Planned use, from [ARCHITECTURE.md §1](docs/ARCHITECTURE.md):
+**Not used.** Curvegrid state plainly that *"Using our blockchain development platform
+MultiBaas is not a requirement to apply for this prize"*, and we confirmed the same directly
+with them at the event.
 
-- **Policy-aware execution (L4)** — settle an approved request only inside the owner's
-  constraints: spending limit, approved counterparties, required human approval
-- **Ledger (L5)** — one morning view of what moved overnight and what still needs attention
-
-This section is rewritten with what was actually used once the integration lands.
+What we built instead sits **before** execution: deciding whether a payment should be put in
+front of a person at all. Execution is someone else's layer, and we are not claiming it.
 
 ## Setup
 
