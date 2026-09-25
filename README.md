@@ -35,6 +35,7 @@ the well. See [CONCEPT §0](docs/CONCEPT.md).
 
 | | |
 |---|---|
+| 📍 **[STATUS.md](docs/STATUS.md)** | **Where we are right now** — what runs, what does not, who does what next |
 | 🎨 **[Yohaku identity v3](design/yohaku-v3/README.md)** | **Selected logo, brand narrative, SVG assets, previews** — *Make room. For being human.* |
 | 📄 **[CONCEPT.md](docs/CONCEPT.md)** | **Product design** — request schema, routing, queue control |
 | 📐 **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** | **Layers, components, rules, failure paths, state machines, sequence** |
