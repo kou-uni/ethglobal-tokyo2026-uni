@@ -43,17 +43,22 @@ the hackathon kickoff. Nothing is carried over from before the event.
 things actually land — **if it is not checked here, it does not exist.**
 
 - [ ] Permission policy (ENS name space)
-- [ ] Routing — ten ordered rules (`auto` / `human` / `deny`)
-- [ ] Human queue control — bundling, ranking, daily cap, deadline fallback
+- [x] **Routing — ten ordered rules** (`auto` / `human` / `deny`) — `src/core/rules.ts`, 24 tests
+- [x] **Human queue control** — bundling, ranking, daily cap, deadline fallback — `src/core/queue.ts`, 8 tests
 - [ ] Fresh proof of personhood at the moment of approval
 - [ ] Payment execution under the owner's constraints
 - [ ] Morning ledger
 
 ## How it is built
 
-*To be recorded here as work happens: which parts were generated, which were hand-written,
-and how many iterations each took.* Kept deliberately, so that the method stays visible and
-not only the result.
+Kept deliberately, so that the method stays visible and not only the result.
+
+| | |
+|---|---|
+| `src/core/rules.ts`, `queue.ts` | Written once, then driven by the tests. Pure functions — no I/O, no clock of their own, so a night is reproducible |
+| `scripts/seed.ts` | Generates input; **does not decide anything**. Every count in the pitch comes out of `route()` |
+| Distribution in ASSUMPTIONS §2 | 20 seeds, run and recorded. Not estimated |
+| `docs/assets/overview.svg` | Hand-written SVG, rendered and inspected three times — an arrow was crossing a box, and two labels overlapped |
 
 ## Tech
 
@@ -82,8 +87,19 @@ This section is rewritten with what was actually used once the integration lands
 
 ## Setup
 
-*Not yet available.* Will cover: prerequisites (Node 22), environment variables, install,
-run, and how to reproduce the demo scenario end to end.
+```bash
+npm install
+npm test          # 32 tests — the ten rules, ordering, failure paths, the queue
+npm run typecheck
+npm run seed -- 6 # one night of requests, run through the real router
+```
+
+**`npm run seed -- 6` reproduces every number in the pitch** — 50 arrive, 36 settle, 12 are
+dropped, 2 reach her. Any other seed gives a different night: the input moves, the output
+does not. See [ASSUMPTIONS.md §2](docs/ASSUMPTIONS.md).
+
+Copy `.env.example` to `.env` before touching chain or sponsor APIs. *(UI and chain
+integration not yet wired.)*
 
 ## Team
 
