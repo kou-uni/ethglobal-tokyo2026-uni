@@ -10,22 +10,26 @@
 
 |  | Today | **Agent economy** |
 |---|---|---|
-| Requests reaching one person | **A few a year.** A human thinks of you, a human contacts you | **52 a day. ~20,000 a year** |
-| Missed opportunity | Small — there was not much to miss | **Anyone without an open counter loses all 20,000** |
+| Requests reaching one person | **A few a year.** A human thinks of you, a human contacts you | **~50 a day** |
+| Missed opportunity | Small — there was not much to miss | **Anyone without an open counter loses every one of them** |
 | How you handle it | Read every one | **Read 2. The rest pass or drop by themselves** |
 
+<sub>Where ~50 comes from: standard survey sample size (n≈400) × research tasks run per day ÷ registered sellers in that category. **The fewer the sellers, the more each one receives.** The input varies with all three — what this product fixes is the **output**.</sub>
+
 **Yohaku is not a way to close the door. It is what makes opening it possible.**
-Open a counter in the agent economy and 52 requests arrive overnight — so only those
+Open a counter in the agent economy and some 50 requests arrive overnight — so only those
 who can triage them can take the business.
 
 ## 2. What it sells is empty space
 
 The value is not what you did. It is **what you never had to look at.**
-52 requests, 2 seen — **50 requests worth of empty space.**
+~50 requests, 2 seen — **48 requests worth of empty space.**
+
+**The interesting number is 2, not 50.** How many arrive is not ours to control; how many reach a person is.
 
 | | Action | In terms of *yohaku* |
 |---|---|---|
-| **`auto`** | 38 pass automatically | **Creates space** — she is never asked |
+| **`auto`** | 36 pass automatically | **Creates space** — she is never asked |
 | **`human`** | 2 are raised | **Occupies space** — worth her attention |
 | **`deny`** | 12 are dropped | **Protects space** — never reaches her |
 
@@ -105,6 +109,7 @@ Three-way routing is easy. **The product is what happens after `human`.**
 | **Bundle** | "**3 companies are asking for the same health category**" — one notification, not three |
 | **Rank** | value × counterparty reputation × deadline. **Only the top 3 are shown** |
 | **Time** | Hold overnight. **Surface once, at 07:00** |
+| **Cap** | **The owner sets how many may reach them per day. Default 3** |
 | **Fall back on deadline** | **Decide in advance what silence means. Default is `deny`** |
 
 ## 6. Surface
@@ -126,7 +131,7 @@ Four screens.
 |---|---|---|---|
 | 1 | Policy | The person, once | Category rules, amount threshold, expiry |
 | 2 | **Morning inbox** ⭐ | The person, daily | **Bundled escalations. Top 3. Approve** |
-| 3 | Ledger | The person | 52/38/12/2, income, 12→5→2 |
+| 3 | Ledger | The person | daily counts, income, 12→5→2 |
 | 4 | **Agent side** | **Judges, at the booth** | Submit a request, watch the verdict come back |
 
 ## 7. Permission model
@@ -165,12 +170,12 @@ Independent sellers must not be pooled into one resolver instance without scopin
 ## 8. Demo walkthrough
 
 ```
-02:00   agent requests keep arriving           52
+02:00   agent requests keep arriving           50 today
 
         Yohaku handles them
-          auto   38   settle immediately, executed under constraints
+          auto   36   settle immediately, executed under constraints
           deny   12   revoked / out of scope — never reaches her
-          human   2   bundled, held
+          human   2   bundled, held  (owner's cap: 3/day)
 
         she is asleep
 
@@ -186,7 +191,7 @@ Independent sellers must not be pooled into one resolver instance without scopin
 
 **Opening line:**
 
-> **"52 came in. She was asked about 2."**
+> **"Some 50 came in overnight. She saw 2."**
 
 ### Design rule
 
@@ -196,9 +201,9 @@ Independent sellers must not be pooled into one resolver instance without scopin
 > app, in a block explorer. Judging happens one person at a time at the booth;
 > **what matters is whether they can touch it.**
 
-**Do not push 52 real transactions first.** Get *pass / ask / stop* genuinely working on a
+**Do not push 50 real transactions first.** Get *pass / ask / stop* genuinely working on a
 handful of requests. Volume and the learning curve come after.
 
 ---
 
-*Numbers in this document (52 / 38 / 12 / 2) are the demo scenario, not measurements.*
+*Counts in this document are a demo scenario, not measurements. Show them as a number that **varies by day** — never burn a fixed figure into the UI.*

@@ -10,7 +10,7 @@ every request. Answering all of them by hand does not scale; approving all of th
 automatically is not safe. **Yohaku routes each incoming agent request into `auto`, `human`,
 or `deny`** — and what it produces is not decisions. It is **empty space in someone's day.**
 
-> 52 requests arrived overnight. **She was asked about 2.**
+> **Some 50 requests arrived overnight. She saw 2.**
 
 **It is not a way to close the door — it is what makes opening it possible.**
 
