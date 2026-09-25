@@ -33,8 +33,17 @@ if (openaiKey) {
     const ids = page.data.map((m) => m.id).sort();
     console.log(`\n  OPENAI — ${ids.length} models\n`);
     for (const id of ids) console.log(`    ${id}`);
-  } catch (e) {
-    console.log(`\n  OPENAI — failed: ${e instanceof Error ? e.message : String(e)}`);
+  } catch (err) {
+    const e = err as { status?: number; message?: string; error?: unknown };
+    console.log(`\n  OPENAI — failed`);
+    if (e.status) console.log(`    status:  ${e.status}`);
+    console.log(`    message: ${e.message ?? String(err)}`);
+    if (e.error) console.log(`    body:    ${JSON.stringify(e.error)}`);
+    if (e.status === 403) {
+      console.log(`\n    403 on /v1/models usually means a restricted key.`);
+      console.log(`    The key may still work for inference — set OPENAI_MODEL by hand and try:`);
+      console.log(`      npm run classify -- "sleep/tracking-logs" 300`);
+    }
   }
 } else {
   console.log('\n  OPENAI — no key');

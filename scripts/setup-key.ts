@@ -16,6 +16,7 @@ import { spawn } from 'node:child_process';
 import { NIGHT } from '../src/core/night.js';
 
 const ENV_PATH = '.env';
+const PORT = 4173;
 
 function upsertEnv(key: string, value: string): void {
   const existing = existsSync(ENV_PATH) ? readFileSync(ENV_PATH, 'utf8') : '';
@@ -130,8 +131,39 @@ const server = createServer(async (req, res) => {
         ].join('\n'),
       );
     } catch (err) {
-      const m = err instanceof Error ? err.message : String(err);
-      reply(false, `That key did not work, so nothing was saved.\n\n${m}`);
+      // Show the whole thing. A one-line message hides which of key / permission /
+      // endpoint actually failed, and that is the only useful part.
+      const e = err as { status?: number; message?: string; error?: unknown; name?: string };
+      const detail = [
+        e.name ? `type:    ${e.name}` : '',
+        e.status ? `status:  ${e.status}` : '',
+        e.message ? `message: ${e.message}` : String(err),
+        e.error ? `body:    ${JSON.stringify(e.error)}` : '',
+      ]
+        .filter(Boolean)
+        .join('\n');
+      console.error(`\n  ${provider} key check failed:\n${detail}\n`);
+      reply(
+        false,
+        [
+          `That key did not work, so nothing was saved.`,
+          ``,
+          detail,
+          ``,
+          e.status === 401
+            ? `401 means the key itself was rejected. Check it was copied whole, and that it belongs to the same account as the project.`
+            : e.status === 403
+              ? `403 usually means the key is restricted. A key limited to /v1/chat/completions cannot read /v1/models — see below.`
+              : ``,
+          ``,
+          `If listing models is blocked but the key is fine, set the model by hand instead:`,
+          `    OPENAI_API_KEY=...   in .env`,
+          `    OPENAI_MODEL=...     the exact id you want`,
+          `then run:  npm run classify -- "sleep/tracking-logs" 300`,
+        ]
+          .filter((l) => l !== undefined)
+          .join('\n'),
+      );
     }
     return;
   }
@@ -140,10 +172,19 @@ const server = createServer(async (req, res) => {
   res.end();
 });
 
-server.listen(0, '127.0.0.1', () => {
-  const addr = server.address();
-  const port = typeof addr === 'object' && addr ? addr.port : 0;
-  const url = `http://127.0.0.1:${port}`;
+// Fixed port on purpose. A random one meant three versions of this page were listening at
+// once, and a stale tab returned a failure that looked like a bad key. It was not.
+server.on('error', (err: NodeJS.ErrnoException) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`\n  Port ${PORT} is already taken — an older copy of this page is still running.`);
+    console.error(`  Stop it first:  pkill -f setup-key\n`);
+    process.exit(1);
+  }
+  throw err;
+});
+
+server.listen(PORT, '127.0.0.1', () => {
+  const url = `http://127.0.0.1:${PORT}`;
   console.log(`\n  Open this — it is on your machine only:\n\n    ${url}\n`);
   console.log(`  Ctrl-C when you are done.\n`);
   spawn('open', [url], { stdio: 'ignore' }).unref();

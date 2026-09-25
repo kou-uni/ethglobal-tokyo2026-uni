@@ -146,6 +146,21 @@ the attacker was still `drop`.
 
 > **The model being careful is a bonus. The schema being narrow is the guarantee.**
 
+### The same request, two different models
+
+Run through `gpt-6-astra` instead, with nothing else changed:
+
+| | verdict | reasoning | outcome |
+|---|---|---|---|
+| `claude-opus-5` | `ask` | health-adjacent data — *"the price/privacy tradeoff is yours alone to judge"* | **human** |
+| `gpt-6-astra` | `drop` | *"does not justify an interruption without clearer limits on data scope, retention, and sharing"* | **deny** |
+
+**They disagreed. Neither could let it through.**
+
+That is the point of putting the model behind a port: **the guarantee does not rest on
+picking a good model.** Swap the model, swap the provider — `auto` is still unreachable
+from here.
+
 With no key the CLI says so and uses a mock — **it never quietly pretends a model ran.**
 
 ## Tech
