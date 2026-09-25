@@ -11,6 +11,8 @@ or `deny`** — and controls how much ever reaches the person.
 
 📄 **[docs/CONCEPT.md](docs/CONCEPT.md) — product design (request schema, routing, queue control)**
 
+📄 **[docs/INTERCEPTA.md](docs/INTERCEPTA.md) — seller-side payment screening: evidence, prize requirements, and integration proposal (Japanese; not implemented yet)**
+
 ---
 
 ## Status
