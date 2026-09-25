@@ -35,11 +35,15 @@ const worldConfigured = Boolean(
     freshness.requiredAcr,
 );
 
+const redirectUri = process.env['WORLD_REDIRECT_URI'];
+
 const app = createApp({
   policy: DEMO_POLICY,
   store: new Store(KNOWN_PARTIES),
   screening: new MockScreening(),
   ...(provider.live ? { classifier: provider.create() } : {}),
+  ...(redirectUri ? { redirectUri } : {}),
+  identityWired: worldConfigured && Boolean(redirectUri),
   identity: worldConfigured
     ? new WorldIdentity({
         issuer: process.env['WORLD_ISSUER']!,
@@ -55,9 +59,10 @@ app.listen(PORT, () => {
   console.log(`    owner       ${DEMO_POLICY.owner}`);
   console.log(`    daily cap   ${DEMO_POLICY.dailyCap}`);
   console.log(`    classifier  ${provider.live ? `${provider.provider} / ${provider.model}` : 'not configured — rule 9 stays with the owner'}`);
-  console.log(`    identity    ${worldConfigured ? 'World ID' : 'mock — approvals are not proving anything yet'}`);
+  console.log(`    identity    ${worldConfigured && redirectUri ? `World ID → ${redirectUri}` : 'mock — approvals are not proving anything yet'}`);
   console.log(`    screening   mock`);
   console.log(`    settlement  not wired`);
+  console.log(`\n  the page she opens:   ${redirectUri ? redirectUri.replace(/\/auth\/world\/callback$/, '') : `http://127.0.0.1:${PORT}`}/approve/<id>`);
   console.log(`\n  try it:\n`);
   console.log(`    curl -s localhost:${PORT}/health | jq`);
   console.log(`    curl -s localhost:${PORT}/requests -X POST -H 'content-type: application/json' \\`);

@@ -23,6 +23,8 @@ import { applyClassification, type ClassifierPort } from '../ports/classifier.js
 import { mayProceed, type IdentityPort, type VerificationOutcome } from '../ports/identity.js';
 import { mayMoveMoney, type ScreeningPort } from '../ports/screening.js';
 import { Store, verdictBody, type Entry } from './state.js';
+import { PendingVerifications } from './pending.js';
+import { approvalPage, resultPage } from './pages.js';
 
 export interface AppDeps {
   policy: Policy;
@@ -32,6 +34,10 @@ export interface AppDeps {
   classifier?: ClassifierPort;
   /** Optional: required before an approval can settle. */
   identity?: IdentityPort;
+  /** Where the issuer sends her back. Must be HTTPS and registered with them. */
+  redirectUri?: string;
+  /** True only when a real issuer is configured — the page says which. */
+  identityWired?: boolean;
   now?: () => Date;
 }
 
@@ -83,6 +89,31 @@ function validate(body: Record<string, unknown>): { ok: true; request: AgentRequ
 
 export function createApp(deps: AppDeps): Server {
   const now = deps.now ?? (() => new Date());
+  const pending = new PendingVerifications();
+
+  const html = (res: ServerResponse, status: number, body: string): void => {
+    res.writeHead(status, { 'content-type': 'text/html; charset=utf-8' });
+    res.end(body);
+  };
+
+  /** Everything that ends an approval without settling looks the same from here. */
+  const refuse = (
+    res: ServerResponse,
+    entry: Entry,
+    outcome: 'declined' | 'expired' | 'refused',
+    detail: string,
+    record: 'refused' | 'ignored',
+  ): void => {
+    entry.resolution = outcome === 'declined' ? 'ignored' : 'expired';
+    deps.store.remember({
+      who: entry.request.who,
+      what: entry.request.what,
+      outcome: record,
+      decidedAt: now().toISOString(),
+      escalatedBy: entry.decision.rule,
+    });
+    html(res, 200, resultPage({ outcome, detail }));
+  };
 
   return createServer(async (req, res) => {
     const url = new URL(req.url ?? '/', 'http://localhost');
@@ -258,7 +289,124 @@ export function createApp(deps: AppDeps): Server {
         });
       }
 
-      json(res, 404, { error: 'not found', endpoints: ['GET /health', 'POST /requests', 'POST /approvals/:id', 'GET /ledger/:name'] });
+      /* ── the page she opens ─────────────────────────────────────────────── */
+      if (req.method === 'GET' && /^\/approve\/[^/]+$/.test(path)) {
+        const id = decodeURIComponent(path.slice('/approve/'.length));
+        const entry = deps.store.get(id);
+        if (!entry) return html(res, 404, resultPage({ outcome: 'refused', detail: 'No such request.' }));
+        if (entry.resolution) {
+          return html(res, 200, resultPage({
+            outcome: entry.resolution === 'approved' ? 'approved' : 'declined',
+            detail: 'You already answered this one.',
+          }));
+        }
+        if (new Date(entry.request.deadline).getTime() <= now().getTime()) {
+          return html(res, 200, resultPage({
+            outcome: 'expired',
+            detail: onDeadline().reason,
+          }));
+        }
+        return html(res, 200, approvalPage({
+          id,
+          who: entry.request.who,
+          what: entry.request.what,
+          purpose: entry.request.purpose,
+          amount: entry.request.price.amount,
+          currency: entry.request.price.currency,
+          deadline: entry.request.deadline,
+          reason: entry.decision.reason,
+          identityWired: Boolean(deps.identityWired),
+        }));
+      }
+
+      /* ── she presses approve: go and prove it ───────────────────────────── */
+      if (req.method === 'GET' && /^\/approve\/[^/]+\/verify$/.test(path)) {
+        const id = decodeURIComponent(path.slice('/approve/'.length, -'/verify'.length));
+        const entry = deps.store.get(id);
+        if (!entry || entry.resolution) {
+          return html(res, 404, resultPage({ outcome: 'refused', detail: 'Nothing to approve.' }));
+        }
+        if (!deps.identity || !deps.redirectUri) {
+          return html(res, 500, resultPage({
+            outcome: 'refused',
+            detail: 'Identity is not configured, so this cannot ask you to prove anything.',
+          }));
+        }
+        const { state, nonce } = pending.begin(id);
+        const url = await deps.identity.beginUrl({ state, nonce, redirectUri: deps.redirectUri });
+        res.writeHead(302, { location: url });
+        return res.end();
+      }
+
+      /* ── she presses "not this one" ─────────────────────────────────────── */
+      if (req.method === 'POST' && /^\/approve\/[^/]+\/decline$/.test(path)) {
+        const id = decodeURIComponent(path.slice('/approve/'.length, -'/decline'.length));
+        const entry = deps.store.get(id);
+        if (!entry || entry.resolution) {
+          return html(res, 404, resultPage({ outcome: 'refused', detail: 'Nothing to answer.' }));
+        }
+        return refuse(res, entry, 'declined', 'Nothing was sent, and nothing moved.', 'refused');
+      }
+
+      /* ── she comes back from the issuer ─────────────────────────────────── */
+      if (req.method === 'GET' && path === '/auth/world/callback') {
+        const state = url.searchParams.get('state') ?? '';
+        const p = pending.take(state);
+        if (!p) {
+          return html(res, 400, resultPage({
+            outcome: 'refused',
+            detail: 'That reply did not match anything we are waiting for.',
+          }));
+        }
+        const entry = deps.store.get(p.requestId);
+        if (!entry || entry.resolution) {
+          return html(res, 404, resultPage({ outcome: 'refused', detail: 'Nothing to approve.' }));
+        }
+        if (new Date(entry.request.deadline).getTime() <= now().getTime()) {
+          return refuse(res, entry, 'expired', onDeadline().reason, 'ignored');
+        }
+        if (!deps.identity || !deps.redirectUri) {
+          return html(res, 500, resultPage({ outcome: 'refused', detail: 'Identity is not configured.' }));
+        }
+
+        const outcome = await deps.identity.complete({
+          ...(url.searchParams.get('code') ? { code: url.searchParams.get('code')! } : {}),
+          ...(url.searchParams.get('error') ? { error: url.searchParams.get('error')! } : {}),
+          redirectUri: deps.redirectUri,
+          nonce: p.nonce,
+          at: now(),
+        });
+
+        if (outcome.status !== 'verified') {
+          // Refusal, staleness and an unreachable issuer all end the same way.
+          return refuse(res, entry, 'refused', `${outcome.status}: ${outcome.reason}`, 'ignored');
+        }
+
+        entry.resolution = 'approved';
+        entry.settlement = 'not-wired';
+        deps.store.remember({
+          who: entry.request.who,
+          what: entry.request.what,
+          outcome: 'approved',
+          decidedAt: now().toISOString(),
+          escalatedBy: entry.decision.rule,
+        });
+        return html(res, 200, resultPage({
+          outcome: 'approved',
+          detail: `${entry.request.what} — ${entry.request.price.amount} ${entry.request.price.currency}`,
+          verifiedAt: outcome.identity.authTime.toISOString(),
+          acr: outcome.identity.acr,
+        }));
+      }
+
+      json(res, 404, { error: 'not found', endpoints: [
+        'GET /health',
+        'POST /requests',
+        'POST /approvals/:id',
+        'GET /ledger/:name',
+        'GET /approve/:id',
+        'GET /auth/world/callback',
+      ] });
     } catch (err) {
       // Anything unexpected denies rather than passing. Failing open here would undo
       // every other guarantee in the system.
