@@ -1,149 +1,133 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 660" width="980" height="660" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 680" width="980" height="680" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Helvetica, sans-serif">
+  <title>Yohaku — architecture overview</title>
   <defs>
-    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0 0 L10 5 L0 10 z" fill="#5B7A91"/>
+    <path id="q" d="M112 92C100 92 92 100 92 112H62C38 112 20 94 20 70V62C20 38 38 20 62 20H70C94 20 112 38 112 62Z"/>
+    <g id="mark">
+      <use href="#q"/><use href="#q" transform="rotate(90 128 128)"/>
+      <use href="#q" transform="rotate(180 128 128)"/><use href="#q" transform="rotate(270 128 128)"/>
+    </g>
+    <marker id="mi" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#242329"/>
     </marker>
-    <marker id="aw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M0 0 L10 5 L0 10 z" fill="#B37C00"/>
+    <marker id="mm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#A9A7A0"/>
     </marker>
-    <marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M0 0 L10 5 L0 10 z" fill="#9B7BF0"/>
+    <marker id="ml" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#8F80E8"/>
     </marker>
-    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M0 0 L10 5 L0 10 z" fill="#2E8B44"/>
+    <marker id="mg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#7C9B32"/>
     </marker>
-    <marker id="ao" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M0 0 L10 5 L0 10 z" fill="#E8922B"/>
-    </marker>
-    <filter id="s" x="-20%" y="-20%" width="140%" height="160%">
-      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#173A54" flood-opacity="0.13"/>
-    </filter>
   </defs>
 
-  <rect width="980" height="660" fill="#FDFCF8"/>
+  <rect width="980" height="680" fill="#F8F7F3"/>
 
-  <!-- title -->
-  <text x="36" y="42" font-size="24" font-weight="800" fill="#173A54">Yohaku — the layer that was missing</text>
-  <text x="36" y="66" font-size="13.5" fill="#5B7A91">Everything else already exists. Nothing stood between an agent's request and a person's attention.</text>
+  <g transform="translate(36,26) scale(0.105)"><use href="#mark" fill="#242329"/></g>
+  <text x="72" y="45" font-size="21" font-weight="700" fill="#242329" letter-spacing="-0.3">yohaku</text>
+  <text x="152" y="45" font-size="13" fill="#6E6C75">— the layer that was missing</text>
+  <text x="36" y="72" font-size="13" fill="#6E6C75">Identity, permission, settlement and ledger already exist. <tspan fill="#242329" font-weight="600">Nothing stood between an agent's request and a person's attention.</tspan></text>
+  <text x="944" y="45" font-size="11" font-weight="700" fill="#6E6C75" text-anchor="end" letter-spacing="1.3">MAKE ROOM. FOR BEING HUMAN.</text>
 
-  <!-- ── L1 / L2 : referenced ── -->
-  <g filter="url(#s)">
-    <rect x="236" y="100" width="222" height="74" rx="15" fill="#F3EEFF" stroke="#9B7BF0" stroke-width="2"/>
-    <rect x="480" y="100" width="222" height="74" rx="15" fill="#E8F2FF" stroke="#2E6BC4" stroke-width="2"/>
+  <rect x="236" y="108" width="222" height="76" rx="18" fill="#FFFFFF" stroke="#E2E0D8" stroke-width="1.5"/>
+  <rect x="480" y="108" width="222" height="76" rx="18" fill="#FFFFFF" stroke="#E2E0D8" stroke-width="1.5"/>
+  <text x="256" y="132" font-size="10" font-weight="700" fill="#A9A7A0" letter-spacing="1.3">L1 · IDENTITY</text>
+  <text x="256" y="155" font-size="16" font-weight="700" fill="#242329">World ID</text>
+  <text x="256" y="173" font-size="11.5" fill="#6E6C75">Is this a real person?</text>
+  <rect x="396" y="118" width="46" height="18" rx="9" fill="#242329"/>
+  <text x="419" y="131" font-size="9.5" font-weight="700" fill="#F8F7F3" text-anchor="middle">World</text>
+
+  <text x="500" y="132" font-size="10" font-weight="700" fill="#A9A7A0" letter-spacing="1.3">L2 · PERMISSION</text>
+  <text x="500" y="155" font-size="16" font-weight="700" fill="#242329">ENSv2 + EAC</text>
+  <text x="500" y="173" font-size="11.5" fill="#6E6C75">What may this party ask for?</text>
+  <rect x="654" y="118" width="34" height="18" rx="9" fill="#242329"/>
+  <text x="671" y="131" font-size="9.5" font-weight="700" fill="#F8F7F3" text-anchor="middle">ENS</text>
+
+  <rect x="26" y="214" width="162" height="118" rx="18" fill="#FFFFFF" stroke="#E2E0D8" stroke-width="1.5"/>
+  <text x="44" y="238" font-size="10" font-weight="700" fill="#A9A7A0" letter-spacing="1.3">UNTRUSTED</text>
+  <text x="44" y="261" font-size="15" font-weight="700" fill="#242329">Buyer agents</text>
+  <text x="44" y="279" font-size="11.5" fill="#6E6C75">they never sleep</text>
+  <g fill="#C9C7C0">
+    <circle cx="50" cy="298" r="3.4"/><circle cx="63" cy="298" r="3.4"/><circle cx="76" cy="298" r="3.4"/>
+    <circle cx="89" cy="298" r="3.4"/><circle cx="102" cy="298" r="3.4"/><circle cx="115" cy="298" r="3.4"/>
+    <circle cx="128" cy="298" r="3.4"/><circle cx="141" cy="298" r="3.4"/><circle cx="154" cy="298" r="3.4"/>
   </g>
-  <text x="252" y="124" font-size="11" font-weight="800" fill="#7A5BD0" letter-spacing="1.1">L1 · IDENTITY</text>
-  <text x="252" y="147" font-size="16.5" font-weight="800" fill="#173A54">World ID</text>
-  <text x="252" y="165" font-size="12" fill="#5B7A91">Is this a real person?</text>
-  <rect x="396" y="110" width="48" height="19" rx="9.5" fill="#9B7BF0"/>
-  <text x="420" y="123.5" font-size="10.5" font-weight="800" fill="#fff" text-anchor="middle">World</text>
+  <text x="44" y="318" font-size="10.5" fill="#A9A7A0">~50 a day · verdict returns at once</text>
 
-  <text x="496" y="124" font-size="11" font-weight="800" fill="#2E6BC4" letter-spacing="1.1">L2 · PERMISSION</text>
-  <text x="496" y="147" font-size="16.5" font-weight="800" fill="#173A54">ENSv2 + EAC</text>
-  <text x="496" y="165" font-size="12" fill="#5B7A91">What may this party ask for?</text>
-  <rect x="654" y="110" width="34" height="19" rx="9.5" fill="#2E6BC4"/>
-  <text x="671" y="123.5" font-size="10.5" font-weight="800" fill="#fff" text-anchor="middle">ENS</text>
+  <path d="M192 254 H228" stroke="#242329" stroke-width="2" marker-end="url(#mi)" fill="none"/>
+  <text x="192" y="246" font-size="9.5" fill="#6E6C75">5 fields</text>
+  <path d="M228 284 H194" stroke="#A9A7A0" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#mm)" fill="none"/>
 
-  <!-- ── buyer agents ── -->
-  <g filter="url(#s)">
-    <rect x="26" y="206" width="160" height="104" rx="15" fill="#FFFFFF" stroke="#C6D6E1" stroke-width="2"/>
-  </g>
-  <text x="42" y="230" font-size="11" font-weight="800" fill="#87A6BC" letter-spacing="1.1">UNTRUSTED</text>
-  <text x="42" y="252" font-size="15" font-weight="800" fill="#173A54">Buyer agents</text>
-  <text x="42" y="270" font-size="11.5" fill="#5B7A91">they never sleep</text>
-  <g fill="#87A6BC">
-    <circle cx="48" cy="288" r="3.6"/><circle cx="61" cy="288" r="3.6"/><circle cx="74" cy="288" r="3.6"/>
-    <circle cx="87" cy="288" r="3.6"/><circle cx="100" cy="288" r="3.6"/><circle cx="113" cy="288" r="3.6"/>
-    <circle cx="126" cy="288" r="3.6"/><circle cx="139" cy="288" r="3.6"/><circle cx="152" cy="288" r="3.6"/>
-  </g>
-  <text x="42" y="304" font-size="10.5" fill="#87A6BC">~50 a day, per person</text>
-  <text x="42" y="330" font-size="10" fill="#5B7A91">→ sends 5 fields</text>
-  <text x="42" y="345" font-size="10" fill="#87A6BC">← verdict, synchronously</text>
+  <rect x="236" y="214" width="466" height="128" rx="22" fill="#BCB2FA"/>
+  <text x="258" y="240" font-size="10" font-weight="700" fill="#4E42A8" letter-spacing="1.3">L3 · ROUTING</text>
+  <text x="258" y="274" font-size="29" font-weight="700" fill="#242329" letter-spacing="-0.6">yohaku</text>
+  <text x="258" y="298" font-size="12.5" fill="#3D3A52">10 ordered rules · bundle · rank · daily cap · deadline</text>
+  <text x="258" y="322" font-size="12.5" font-weight="700" fill="#242329">Pass it, ask her, or drop it — and how much reaches her</text>
+  <rect x="558" y="228" width="126" height="21" rx="10.5" fill="#F8F7F3"/>
+  <text x="621" y="242.5" font-size="9.5" font-weight="700" fill="#4E42A8" text-anchor="middle">the gap nobody filled</text>
+  <g transform="translate(646,278) scale(0.17)" opacity="0.45"><use href="#mark" fill="#4E42A8"/></g>
 
-  <!-- ── L3 core ── -->
-  <g filter="url(#s)">
-    <rect x="236" y="206" width="466" height="124" rx="18" fill="#FFF6DC" stroke="#B37C00" stroke-width="3.5"/>
-  </g>
-  <text x="258" y="232" font-size="11" font-weight="800" fill="#B37C00" letter-spacing="1.1">L3 · ROUTING</text>
-  <text x="258" y="263" font-size="26" font-weight="800" fill="#173A54">Yohaku</text>
-  <text x="258" y="288" font-size="13" fill="#5B7A91">10 ordered rules · bundle · rank · daily cap · deadline</text>
-  <text x="258" y="311" font-size="12.5" font-weight="700" fill="#B37C00">Pass it, ask her, or drop it — and how much reaches her</text>
-  <rect x="546" y="218" width="140" height="22" rx="11" fill="#FFFFFF" stroke="#B37C00" stroke-width="1.5"/>
-  <text x="616" y="233.5" font-size="10.5" font-weight="800" fill="#B37C00" text-anchor="middle">the gap nobody filled</text>
+  <path d="M330 210 V190" stroke="#8F80E8" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ml)" fill="none"/>
+  <path d="M580 210 V190" stroke="#8F80E8" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ml)" fill="none"/>
+  <text x="338" y="204" font-size="9.5" fill="#6E6C75">verifies a person</text>
+  <text x="588" y="204" font-size="9.5" fill="#6E6C75">reads scope, expiry, delegation</text>
 
-  <path d="M190 246 H228" stroke="#5B7A91" stroke-width="2.4" marker-end="url(#a)" fill="none"/>
-  <path d="M228 274 H192" stroke="#5B7A91" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#a)" fill="none"/>
+  <path d="M312 346 V374" stroke="#7C9B32" stroke-width="2" marker-end="url(#mg)" fill="none"/>
+  <path d="M469 346 V374" stroke="#A9A7A0" stroke-width="2" marker-end="url(#mm)" fill="none"/>
+  <path d="M626 346 V374" stroke="#8F80E8" stroke-width="2.2" marker-end="url(#ml)" fill="none"/>
 
-  <path d="M330 202 V180" stroke="#9B7BF0" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#ap)" fill="none"/>
-  <path d="M580 202 V180" stroke="#2E6BC4" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#a)" fill="none"/>
-  <text x="338" y="195" font-size="10" fill="#7A5BD0">verifies a person</text>
-  <text x="588" y="195" font-size="10" fill="#2E6BC4">reads scope, expiry, delegation</text>
+  <rect x="236" y="378" width="152" height="72" rx="18" fill="#DDF691"/>
+  <rect x="393" y="378" width="152" height="72" rx="18" fill="#ECEAE4"/>
+  <rect x="550" y="378" width="152" height="72" rx="18" fill="#BCB2FA"/>
 
-  <!-- ── three outcomes : auto / deny / human (human on the right) ── -->
-  <path d="M312 334 V362" stroke="#2E8B44" stroke-width="2.2" marker-end="url(#ag)" fill="none"/>
-  <path d="M469 334 V362" stroke="#C94141" stroke-width="2.2" marker-end="url(#a)" fill="none"/>
-  <path d="M626 334 V362" stroke="#B37C00" stroke-width="2.4" marker-end="url(#aw)" fill="none"/>
+  <text x="312" y="404" font-size="15" font-weight="700" fill="#242329" text-anchor="middle">auto · 36</text>
+  <text x="312" y="424" font-size="11.5" font-weight="600" fill="#4A5C1E" text-anchor="middle">creates space</text>
+  <text x="312" y="440" font-size="10.5" fill="#6E7C46" text-anchor="middle">she is never asked</text>
 
-  <g filter="url(#s)">
-    <rect x="236" y="366" width="152" height="68" rx="13" fill="#E4F7E8" stroke="#2E8B44" stroke-width="2"/>
-    <rect x="393" y="366" width="152" height="68" rx="13" fill="#FFE7E7" stroke="#C94141" stroke-width="2"/>
-    <rect x="550" y="366" width="152" height="68" rx="13" fill="#FFF2CC" stroke="#B37C00" stroke-width="3"/>
-  </g>
-  <text x="312" y="391" font-size="15.5" font-weight="800" fill="#2E8B44" text-anchor="middle">auto · 36</text>
-  <text x="312" y="411" font-size="11.5" fill="#3F6B4E" text-anchor="middle">creates space</text>
-  <text x="312" y="427" font-size="10.5" fill="#6E9179" text-anchor="middle">she is never asked</text>
+  <text x="469" y="404" font-size="15" font-weight="700" fill="#6E6C75" text-anchor="middle">deny · 12</text>
+  <text x="469" y="424" font-size="11.5" font-weight="600" fill="#8A8880" text-anchor="middle">protects space</text>
+  <text x="469" y="440" font-size="10.5" fill="#A9A7A0" text-anchor="middle">never reaches her</text>
 
-  <text x="469" y="391" font-size="15.5" font-weight="800" fill="#C94141" text-anchor="middle">deny · 12</text>
-  <text x="469" y="411" font-size="11.5" fill="#A33B3B" text-anchor="middle">protects space</text>
-  <text x="469" y="427" font-size="10.5" fill="#C08080" text-anchor="middle">never reaches her</text>
+  <text x="626" y="404" font-size="15" font-weight="700" fill="#242329" text-anchor="middle">human · 2</text>
+  <text x="626" y="424" font-size="11.5" font-weight="600" fill="#4E42A8" text-anchor="middle">occupies space</text>
+  <text x="626" y="440" font-size="10.5" fill="#6257B8" text-anchor="middle">within her daily cap</text>
 
-  <text x="626" y="391" font-size="15.5" font-weight="800" fill="#B37C00" text-anchor="middle">human · 2</text>
-  <text x="626" y="411" font-size="11.5" fill="#8A6410" text-anchor="middle">occupies space</text>
-  <text x="626" y="427" font-size="10.5" fill="#A98A44" text-anchor="middle">within her daily cap</text>
+  <rect x="786" y="214" width="164" height="236" rx="18" fill="#FFFFFF" stroke="#E2E0D8" stroke-width="1.5"/>
+  <text x="806" y="238" font-size="10" font-weight="700" fill="#A9A7A0" letter-spacing="1.3">THE OWNER</text>
+  <text x="806" y="261" font-size="15" font-weight="700" fill="#242329">A person</text>
+  <text x="806" y="281" font-size="11.5" fill="#6E6C75">proven human</text>
+  <text x="806" y="299" font-size="11.5" fill="#6E6C75">writes the policy</text>
+  <text x="806" y="317" font-size="11.5" fill="#6E6C75">sets the daily cap</text>
+  <line x1="806" y1="333" x2="930" y2="333" stroke="#ECEAE4" stroke-width="1.5"/>
+  <text x="806" y="356" font-size="12.5" font-weight="700" fill="#4E42A8">she is asleep</text>
+  <text x="806" y="380" font-size="11.5" fill="#6E6C75">07:00 — one notification</text>
+  <text x="806" y="424" font-size="30" font-weight="700" fill="#242329">2<tspan font-size="12" font-weight="500" fill="#A9A7A0" dx="7">of ~50</tspan></text>
 
-  <!-- ── the person ── -->
-  <g filter="url(#s)">
-    <rect x="786" y="206" width="164" height="228" rx="15" fill="#FFFFFF" stroke="#C6D6E1" stroke-width="2"/>
-  </g>
-  <text x="802" y="230" font-size="11" font-weight="800" fill="#87A6BC" letter-spacing="1.1">THE OWNER</text>
-  <text x="802" y="253" font-size="15" font-weight="800" fill="#173A54">A person</text>
-  <text x="802" y="273" font-size="11.5" fill="#5B7A91">proven human</text>
-  <text x="802" y="291" font-size="11.5" fill="#5B7A91">writes the policy</text>
-  <text x="802" y="309" font-size="11.5" fill="#5B7A91">sets the daily cap</text>
-  <line x1="802" y1="324" x2="934" y2="324" stroke="#E2ECF3" stroke-width="1.5"/>
-  <text x="802" y="346" font-size="12.5" font-weight="800" fill="#B37C00">she is asleep</text>
-  <text x="802" y="370" font-size="11.5" fill="#5B7A91">07:00 — one notification</text>
-  <text x="802" y="412" font-size="26" font-weight="800" fill="#173A54">2<tspan font-size="12" font-weight="600" fill="#87A6BC" dx="6">of ~50</tspan></text>
+  <path d="M708 412 H778" stroke="#8F80E8" stroke-width="2.2" marker-end="url(#ml)" fill="none"/>
+  <text x="722" y="404" font-size="9.5" fill="#6257B8">07:00</text>
 
-  <path d="M708 400 H778" stroke="#B37C00" stroke-width="2.4" marker-end="url(#aw)" fill="none"/>
-  <text x="712" y="392" font-size="10" fill="#B37C00">at 07:00, bundled</text>
+  <rect x="236" y="488" width="222" height="78" rx="18" fill="#FFFFFF" stroke="#E2E0D8" stroke-width="1.5"/>
+  <rect x="480" y="488" width="222" height="78" rx="18" fill="#FFFFFF" stroke="#E2E0D8" stroke-width="1.5"/>
+  <text x="256" y="512" font-size="10" font-weight="700" fill="#A9A7A0" letter-spacing="1.3">L4 · SETTLEMENT</text>
+  <text x="256" y="535" font-size="16" font-weight="700" fill="#242329">x402 + MultiBaas</text>
+  <text x="256" y="553" font-size="11.5" fill="#6E6C75">inside her constraints</text>
+  <rect x="386" y="498" width="58" height="18" rx="9" fill="#242329"/>
+  <text x="415" y="511" font-size="9.5" font-weight="700" fill="#F8F7F3" text-anchor="middle">Curvegrid</text>
 
-  <!-- ── L4 / L5 ── -->
-  <g filter="url(#s)">
-    <rect x="236" y="474" width="222" height="76" rx="15" fill="#FFF0DF" stroke="#E8922B" stroke-width="2"/>
-    <rect x="480" y="474" width="222" height="76" rx="15" fill="#FFF0DF" stroke="#E8922B" stroke-width="2"/>
-  </g>
-  <text x="252" y="498" font-size="11" font-weight="800" fill="#C97A16" letter-spacing="1.1">L4 · SETTLEMENT</text>
-  <text x="252" y="521" font-size="16.5" font-weight="800" fill="#173A54">x402 + MultiBaas</text>
-  <text x="252" y="539" font-size="12" fill="#5B7A91">inside her constraints</text>
-  <rect x="386" y="484" width="60" height="19" rx="9.5" fill="#E8922B"/>
-  <text x="416" y="497.5" font-size="10" font-weight="800" fill="#fff" text-anchor="middle">Curvegrid</text>
+  <text x="500" y="512" font-size="10" font-weight="700" fill="#A9A7A0" letter-spacing="1.3">L5 · LEDGER</text>
+  <text x="500" y="535" font-size="16" font-weight="700" fill="#242329">what happened overnight</text>
+  <text x="500" y="553" font-size="11.5" fill="#6E6C75">escalations 12 → 5 → 2</text>
+  <rect x="630" y="498" width="58" height="18" rx="9" fill="#242329"/>
+  <text x="659" y="511" font-size="9.5" font-weight="700" fill="#F8F7F3" text-anchor="middle">Curvegrid</text>
 
-  <text x="496" y="498" font-size="11" font-weight="800" fill="#C97A16" letter-spacing="1.1">L5 · LEDGER</text>
-  <text x="496" y="521" font-size="16.5" font-weight="800" fill="#173A54">what happened overnight</text>
-  <text x="496" y="539" font-size="12" fill="#5B7A91">escalations 12 → 5 → 2</text>
-  <rect x="630" y="484" width="60" height="19" rx="9.5" fill="#E8922B"/>
-  <text x="660" y="497.5" font-size="10" font-weight="800" fill="#fff" text-anchor="middle">Curvegrid</text>
+  <path d="M312 454 V484" stroke="#7C9B32" stroke-width="2" marker-end="url(#mg)" fill="none"/>
+  <path d="M458 526 H476" stroke="#A9A7A0" stroke-width="2" marker-end="url(#mm)" fill="none"/>
+  <path d="M868 454 V526 H708" stroke="#8F80E8" stroke-width="2" marker-end="url(#ml)" fill="none"/>
+  <text x="726" y="519" font-size="9.5" fill="#6257B8">approved → settle</text>
 
-  <path d="M312 438 V470" stroke="#2E8B44" stroke-width="2.2" marker-end="url(#ag)" fill="none"/>
-  <path d="M458 512 H476" stroke="#E8922B" stroke-width="2.2" marker-end="url(#ao)" fill="none"/>
-  <path d="M868 438 V512 H708" stroke="#B37C00" stroke-width="2" marker-end="url(#aw)" fill="none"/>
-  <text x="724" y="505" font-size="10" fill="#B37C00">approved → settle</text>
+  <path d="M496 570 Q 360 606 236 572 Q 206 558 210 408 Q 214 300 230 290" stroke="#8F80E8" stroke-width="1.6" stroke-dasharray="6 5" marker-end="url(#ml)" fill="none" opacity="0.75"/>
+  <text x="286" y="596" font-size="10.5" font-weight="600" fill="#6257B8">her past decisions become tomorrow's routing</text>
 
-  <!-- flywheel -->
-  <path d="M496 554 Q 360 592 236 556 Q 206 542 210 400 Q 214 296 230 284" stroke="#9B7BF0" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#ap)" fill="none"/>
-  <text x="286" y="582" font-size="11" font-weight="700" fill="#7A5BD0">her past decisions become tomorrow's routing</text>
-
-  <!-- footnote -->
-  <text x="36" y="620" font-size="11" fill="#87A6BC">Counts are a demo scenario, not measurements — see ASSUMPTIONS.md. The input varies; what this product fixes is the output.</text>
-  <text x="36" y="640" font-size="11" font-weight="700" fill="#5B7A91">"The missing layer decides whether money should move." — Jeff Wentworth, Curvegrid, ETHGlobal Tokyo 2026</text>
+  <line x1="36" y1="622" x2="944" y2="622" stroke="#E2E0D8" stroke-width="1.5"/>
+  <text x="36" y="644" font-size="10.5" fill="#A9A7A0">Counts are a demo scenario, not measurements — see ASSUMPTIONS.md. The input varies; what this product fixes is the output.</text>
+  <text x="36" y="663" font-size="10.5" font-weight="600" fill="#6E6C75">"The missing layer decides whether money should move." — Jeff Wentworth, Curvegrid, ETHGlobal Tokyo 2026</text>
 </svg>
