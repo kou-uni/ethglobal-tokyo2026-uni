@@ -27,6 +27,8 @@ the well. See [CONCEPT §0](docs/CONCEPT.md).
 
 ![Architecture overview](docs/assets/overview.svg)
 
+![Market](docs/assets/market.svg)
+
 ---
 
 ## Documents
@@ -36,6 +38,7 @@ the well. See [CONCEPT §0](docs/CONCEPT.md).
 | 🎨 **[Yohaku identity v3](design/yohaku-v3/README.md)** | **Selected logo, brand narrative, SVG assets, previews** — *Make room. For being human.* |
 | 📄 **[CONCEPT.md](docs/CONCEPT.md)** | **Product design** — request schema, routing, queue control |
 | 📐 **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** | **Layers, components, rules, failure paths, state machines, sequence** |
+| 📈 **[MARKET.md](docs/MARKET.md)** | **Why this is a market** — supply exhaustion, buyer growth, and what an agent saves |
 | 📋 **[ASSUMPTIONS.md](docs/ASSUMPTIONS.md)** | **Every number, and where it came from.** Nothing here is a measurement |
 | 🔧 **[ENSV2-SPIKE.md](docs/ENSV2-SPIKE.md)** | **What already runs offline, what is unconfirmed, and the 90-minute spike** |
 | 🎤 **[PITCH.md](docs/PITCH.md)** | Pitch script |

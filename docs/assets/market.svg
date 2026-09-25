@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 600" width="980" height="600" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Helvetica, sans-serif">
+  <title>Yohaku — market</title>
+  <defs>
+    <path id="q" d="M112 92C100 92 92 100 92 112H62C38 112 20 94 20 70V62C20 38 38 20 62 20H70C94 20 112 38 112 62Z"/>
+    <g id="mark"><use href="#q"/><use href="#q" transform="rotate(90 128 128)"/><use href="#q" transform="rotate(180 128 128)"/><use href="#q" transform="rotate(270 128 128)"/></g>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8F80E8"/></marker>
+  </defs>
+  <rect width="980" height="600" fill="#F8F7F3"/>
+
+  <g transform="translate(36,24) scale(0.1)"><use href="#mark" fill="#242329"/></g>
+  <text x="68" y="42" font-size="20" font-weight="700" fill="#242329" letter-spacing="-0.3">yohaku</text>
+  <text x="140" y="42" font-size="13" fill="#6E6C75">— the supply runs out, and the buyers arrive</text>
+
+  <!-- 1. supply exhaustion -->
+  <rect x="36" y="70" width="908" height="96" rx="18" fill="#242329"/>
+  <text x="58" y="98" font-size="10" font-weight="700" fill="#BCB2FA" letter-spacing="1.3">THE PREMISE — NOT OURS</text>
+  <text x="58" y="126" font-size="19" font-weight="700" fill="#F8F7F3">Publicly available human-generated data is fully utilised between 2026 and 2032.</text>
+  <text x="58" y="150" font-size="12.5" fill="#A9A7A0">Epoch AI, 80% confidence — “frontier models consume data faster than the internet produces it.”</text>
+  <text x="922" y="150" font-size="11" fill="#6E6C75" text-anchor="end">after that, the only source is a person, asked directly</text>
+
+  <!-- 2. buyers -->
+  <text x="36" y="200" font-size="10" font-weight="700" fill="#A9A7A0" letter-spacing="1.3">THE BUYERS ARRIVE</text>
+  <rect x="36" y="212" width="440" height="150" rx="18" fill="#FFFFFF" stroke="#E2E0D8" stroke-width="1.5"/>
+  <text x="58" y="240" font-size="13" font-weight="700" fill="#242329">AI agents</text>
+  <text x="58" y="286" font-size="34" font-weight="700" fill="#242329">$10.9B<tspan font-size="14" font-weight="500" fill="#A9A7A0" dx="8">2026</tspan></text>
+  <path d="M232 276 H286" stroke="#8F80E8" stroke-width="2" marker-end="url(#ar)" fill="none"/>
+  <text x="300" y="286" font-size="34" font-weight="700" fill="#4E42A8">$183B<tspan font-size="14" font-weight="500" fill="#A9A7A0" dx="8">2033</tspan></text>
+  <rect x="58" y="304" width="118" height="24" rx="12" fill="#DDF691"/>
+  <text x="117" y="320" font-size="12.5" font-weight="700" fill="#4A5C1E" text-anchor="middle">CAGR 49.6%</text>
+  <text x="188" y="320" font-size="11" fill="#6E6C75">Grand View · 3 houses agree on 35–50%</text>
+  <text x="58" y="346" font-size="11.5" fill="#6E6C75">Dataset licensing alongside it: $4.8B (2025) → <tspan font-weight="700" fill="#242329">$22.6B (2034)</tspan></text>
+
+  <!-- 3. already paid -->
+  <rect x="504" y="212" width="440" height="150" rx="18" fill="#FFFFFF" stroke="#E2E0D8" stroke-width="1.5"/>
+  <text x="526" y="240" font-size="13" font-weight="700" fill="#242329">Human text already has a price</text>
+  <text x="526" y="272" font-size="27" font-weight="700" fill="#242329">$60M<tspan font-size="13" font-weight="500" fill="#A9A7A0" dx="7">/ year</tspan></text>
+  <text x="526" y="294" font-size="12.5" fill="#6E6C75">Google → Reddit. For things people wrote.</text>
+  <rect x="526" y="306" width="396" height="38" rx="12" fill="#ECEAE4"/>
+  <text x="542" y="330" font-size="12.5" font-weight="700" fill="#242329">And not one cent of it reaches the people who wrote it.</text>
+  <text x="526" y="356" font-size="10.5" fill="#A9A7A0">News Corp $250M/5yr · NYT $20–25M/yr · FT $5–10M/yr</text>
+
+  <!-- 4. ROI -->
+  <text x="36" y="398" font-size="10" font-weight="700" fill="#A9A7A0" letter-spacing="1.3">WHAT AN AGENT SAVES — 400 SCREENED ANSWERS</text>
+  <rect x="36" y="410" width="440" height="132" rx="18" fill="#FFFFFF" stroke="#E2E0D8" stroke-width="1.5"/>
+  <text x="58" y="436" font-size="12" font-weight="700" fill="#6E6C75">Incumbent panel</text>
+  <text x="58" y="476" font-size="30" font-weight="700" fill="#6E6C75">$16k–32k</text>
+  <text x="58" y="500" font-size="13" fill="#6E6C75">2–4 weeks · $40–80 per response</text>
+  <text x="58" y="524" font-size="11.5" fill="#A9A7A0">paid to the panel company</text>
+
+  <rect x="504" y="410" width="440" height="132" rx="18" fill="#BCB2FA"/>
+  <text x="526" y="436" font-size="12" font-weight="700" fill="#4E42A8">Through yohaku</text>
+  <text x="526" y="476" font-size="30" font-weight="700" fill="#242329">~$400</text>
+  <text x="526" y="500" font-size="13" fill="#3D3A52">seconds to hours · ~$1 per response</text>
+  <text x="526" y="524" font-size="11.5" font-weight="700" fill="#4E42A8">paid to the four hundred people</text>
+
+  <line x1="36" y1="560" x2="944" y2="560" stroke="#E2E0D8" stroke-width="1.5"/>
+  <text x="36" y="580" font-size="11.5" font-weight="700" fill="#242329">Most of what a research firm sells is design, fieldwork, analysis and reporting. <tspan fill="#4E42A8">An agent does all of that itself.</tspan> It needs to buy one thing: a genuine human answer.</text>
+  <text x="36" y="596" font-size="10" fill="#A9A7A0">Third-party estimates, sourced in MARKET.md. The $400 figure and the comparison are our extrapolation.</text>
+</svg>
