@@ -64,7 +64,7 @@ things actually land — **if it is not checked here, it does not exist.**
 - [ ] Permission policy written to / read from ENS **on chain** — see [ENSV2-SPIKE.md](docs/ENSV2-SPIKE.md)
 - [x] **Routing — ten ordered rules** (`auto` / `human` / `deny`) — `src/core/rules.ts`, 24 tests
 - [x] **Human queue control** — bundling, ranking, daily cap, deadline fallback — `src/core/queue.ts`, 8 tests
-- [x] **Fresh proof of personhood — port, OIDC adapter, 20 tests.** Issuer's discovery read live; `auth_time` + `acr` verified. **Client registration and the browser round-trip are not done yet**
+- [x] **Fresh proof of personhood — done, end to end.** A real person pressed Approve on a phone; `auth_time` came back seconds old, `acr = orb-v3`. The declined path ran too
 - [x] **HTTP surface** — `POST /requests`, `POST /approvals/:id`, `GET /ledger/:name`, `GET /health`. 12 tests, including **parity between HTTP and in-process**
 - [ ] Payment execution under the owner's constraints
 - [x] **Morning ledger** — `src/core/ledger.ts`, used by the console
@@ -155,8 +155,28 @@ $ npm run world:check
   our required acr is offered:  yes
 ```
 
-⚠️ **Still missing:** an OIDC client registered in the portal, and an HTTPS callback. The
-verification and refusal logic is written and tested; the browser round-trip is not wired.
+### It ran, 2026-09-26
+
+A request was held. A person opened the page **on a phone**, pressed Approve, completed the
+World flow, and came back to:
+
+```
+Approved.
+health/symptoms — 2400 JPYC
+
+You proved you are a person at 2026-09-25T22:11:30.000Z
+https://world.org/oidc/acr/orb-v3
+```
+
+**The button was pressed at 22:11.** That timestamp is not our claim — it is a signed value
+from the issuer, checked against our clock.
+
+A second request was declined: *"Left alone. Nothing was sent, and nothing moved."*
+
+**PKCE turned out to be mandatory and undocumented.** Every authorization request without
+`code_challenge` returns a bare `invalid_request`. Found by probing eight parameter
+combinations against the live endpoint — written up in
+[FEEDBACK.md](docs/FEEDBACK.md), since that is exactly what the integration debrief is for.
 
 ## Where the model runs, and what it cannot do
 

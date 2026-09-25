@@ -16,7 +16,11 @@ const DISCOVERY = {
   token_endpoint: 'https://sandbox.auth.world.org/api/v1/token',
   jwks_uri: 'https://sandbox.auth.world.org/.well-known/jwks.json',
   acr_values_supported: ['https://world.org/oidc/acr/orb-v3'],
+  prompt_values_supported: ['none', 'login'],
+  code_challenge_methods_supported: ['S256'],
 };
+
+const VERIFIER = 'dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk';
 
 const stubFetch = (over: Partial<Record<string, unknown>> = {}) =>
   (async (input: string | URL | Request) => {
@@ -68,21 +72,52 @@ describe('freshness is a comparison, not a claim', () => {
 });
 
 describe('the authorization request asks for a fresh one', () => {
+  const begin = () =>
+    world().beginUrl({
+      state: 'st',
+      nonce: 'no',
+      redirectUri: 'https://x.example/cb',
+      codeVerifier: VERIFIER,
+    });
+
   it('is built from the issuer, never from a URL written in here', async () => {
-    const url = new URL(
-      await world().beginUrl({ state: 'st', nonce: 'no', redirectUri: 'https://x.example/cb' }),
-    );
+    const url = new URL(await begin());
     expect(url.origin + url.pathname).toBe(DISCOVERY.authorization_endpoint);
   });
 
-  it('sets max_age and acr_values so the issuer re-authenticates', async () => {
-    const url = new URL(
-      await world().beginUrl({ state: 'st', nonce: 'no', redirectUri: 'https://x.example/cb' }),
+  it('carries PKCE — without it this issuer refuses every request', async () => {
+    const url = new URL(await begin());
+    expect(url.searchParams.get('code_challenge_method')).toBe('S256');
+    // RFC 7636 A.1/A.2 test vector: challenge for this verifier.
+    expect(url.searchParams.get('code_challenge')).toBe(
+      'E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM',
     );
-    expect(url.searchParams.get('max_age')).toBe('120');
+  });
+
+  it('refuses to build a request without a verifier rather than sending one that fails', async () => {
+    await expect(
+      world().beginUrl({ state: 'st', nonce: 'no', redirectUri: 'https://x.example/cb' }),
+    ).rejects.toThrow(/PKCE/);
+  });
+
+  it('asks for re-authentication the way this issuer advertises', async () => {
+    const url = new URL(await begin());
+    expect(url.searchParams.get('prompt')).toBe('login');
     expect(url.searchParams.get('acr_values')).toBe(POLICY.requiredAcr);
     expect(url.searchParams.get('nonce')).toBe('no');
     expect(url.searchParams.get('response_type')).toBe('code');
+  });
+
+  it('does not send prompt=login to an issuer that does not advertise it', async () => {
+    const url = new URL(
+      await world({ prompt_values_supported: ['none'] }).beginUrl({
+        state: 'st',
+        nonce: 'no',
+        redirectUri: 'https://x.example/cb',
+        codeVerifier: VERIFIER,
+      }),
+    );
+    expect(url.searchParams.get('prompt')).toBeNull();
   });
 
   it('refuses to proceed if the issuer does not offer the level we require', async () => {

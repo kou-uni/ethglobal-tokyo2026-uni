@@ -332,8 +332,13 @@ export function createApp(deps: AppDeps): Server {
             detail: 'Identity is not configured, so this cannot ask you to prove anything.',
           }));
         }
-        const { state, nonce } = pending.begin(id);
-        const url = await deps.identity.beginUrl({ state, nonce, redirectUri: deps.redirectUri });
+        const { state, nonce, codeVerifier } = pending.begin(id);
+        const url = await deps.identity.beginUrl({
+          state,
+          nonce,
+          redirectUri: deps.redirectUri,
+          codeVerifier,
+        });
         res.writeHead(302, { location: url });
         return res.end();
       }
@@ -374,6 +379,7 @@ export function createApp(deps: AppDeps): Server {
           ...(url.searchParams.get('error') ? { error: url.searchParams.get('error')! } : {}),
           redirectUri: deps.redirectUri,
           nonce: p.nonce,
+          codeVerifier: p.codeVerifier,
           at: now(),
         });
 

@@ -23,7 +23,8 @@
     "world:check": "tsx scripts/world-check.ts",
     "start": "tsx src/server/main.ts",
     "dev": "tsx watch src/server/main.ts",
-    "night": "tsx scripts/demo-night.ts"
+    "night": "tsx scripts/demo-night.ts",
+    "setup:world": "tsx scripts/setup-world.ts"
   },
   "devDependencies": {
     "@types/node": "^22.7.4",

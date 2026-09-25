@@ -7,15 +7,21 @@
  *
  * The freshness requirement is enforced twice on purpose:
  *
- *   - **asking**: `max_age` on the authorization request tells the issuer to re-authenticate
- *     rather than reuse a session
+ *   - **asking**: `prompt=login` tells the issuer to re-authenticate rather than reuse a
+ *     session. (`max_age` is the other way to ask, but this issuer does not advertise it —
+ *     `prompt_values_supported` does list `login`, so that is what we send.)
  *   - **checking**: `auth_time` on the returned token is compared against the clock here
  *
  * Asking alone would be trusting the issuer to have honoured a parameter. Checking alone
  * would let a stale session through. Both together is what makes "she proved it just now"
  * something a judge can verify instead of take on faith.
+ *
+ * **PKCE is required here**, which is not obvious from the documentation — every
+ * authorization request without `code_challenge` comes back `invalid_request`, whatever
+ * else is on it. Found by probing the endpoint rather than by reading about it.
  */
 
+import { createHash } from 'node:crypto';
 import { createRemoteJWKSet, jwtVerify } from 'jose';
 import type {
   FreshnessPolicy,
@@ -30,6 +36,13 @@ interface Discovery {
   token_endpoint: string;
   jwks_uri: string;
   acr_values_supported?: string[];
+  prompt_values_supported?: string[];
+  code_challenge_methods_supported?: string[];
+}
+
+/** RFC 7636 S256: base64url(sha256(verifier)). */
+export function codeChallenge(verifier: string): string {
+  return createHash('sha256').update(verifier).digest('base64url');
 }
 
 export class WorldIdentity implements IdentityPort {
@@ -76,8 +89,16 @@ export class WorldIdentity implements IdentityPort {
     }
   }
 
-  async beginUrl(p: { state: string; nonce: string; redirectUri: string }): Promise<string> {
+  async beginUrl(p: {
+    state: string;
+    nonce: string;
+    redirectUri: string;
+    codeVerifier?: string;
+  }): Promise<string> {
     const d = await this.discover();
+    if (!p.codeVerifier) {
+      throw new Error('this issuer requires PKCE — a code verifier must be supplied');
+    }
     const url = new URL(d.authorization_endpoint);
     url.searchParams.set('response_type', 'code');
     url.searchParams.set('client_id', this.config.clientId);
@@ -85,8 +106,12 @@ export class WorldIdentity implements IdentityPort {
     url.searchParams.set('scope', 'openid');
     url.searchParams.set('state', p.state);
     url.searchParams.set('nonce', p.nonce);
+    url.searchParams.set('code_challenge', codeChallenge(p.codeVerifier));
+    url.searchParams.set('code_challenge_method', 'S256');
     // Re-authenticate rather than reuse a session: this is the "at the moment" part.
-    url.searchParams.set('max_age', String(this.config.policy.maxAgeSeconds));
+    if ((d.prompt_values_supported ?? []).includes('login')) {
+      url.searchParams.set('prompt', 'login');
+    }
     url.searchParams.set('acr_values', this.config.policy.requiredAcr);
     return url.toString();
   }
@@ -96,6 +121,7 @@ export class WorldIdentity implements IdentityPort {
     error?: string;
     redirectUri: string;
     nonce: string;
+    codeVerifier?: string;
     at?: Date;
   }): Promise<VerificationOutcome> {
     const now = p.at ?? new Date();
@@ -125,10 +151,16 @@ export class WorldIdentity implements IdentityPort {
           grant_type: 'authorization_code',
           code: p.code,
           redirect_uri: p.redirectUri,
+          ...(p.codeVerifier ? { code_verifier: p.codeVerifier } : {}),
         }),
       });
       if (!res.ok) {
-        return { status: 'unavailable', reason: `token endpoint returned ${res.status}` };
+        // The body carries why, and "400" alone is not debuggable at a booth.
+        const text = await res.text().catch(() => '');
+        return {
+          status: 'unavailable',
+          reason: `token endpoint returned ${res.status}${text ? `: ${text.slice(0, 200)}` : ''}`,
+        };
       }
       const body = (await res.json()) as { id_token?: string };
       if (!body.id_token) return { status: 'unavailable', reason: 'no id_token in the response' };

@@ -14,6 +14,8 @@ import { randomBytes } from 'node:crypto';
 export interface Pending {
   requestId: string;
   nonce: string;
+  /** PKCE: kept here, sent only at token exchange, never in the browser redirect. */
+  codeVerifier: string;
   startedAt: number;
 }
 
@@ -22,11 +24,13 @@ export class PendingVerifications {
 
   constructor(private readonly ttlMs = 10 * 60 * 1000) {}
 
-  begin(requestId: string): { state: string; nonce: string } {
+  begin(requestId: string): { state: string; nonce: string; codeVerifier: string } {
     const state = randomBytes(16).toString('hex');
     const nonce = randomBytes(16).toString('hex');
-    this.map.set(state, { requestId, nonce, startedAt: Date.now() });
-    return { state, nonce };
+    // RFC 7636: 43-128 chars of unreserved characters. 32 random bytes, base64url.
+    const codeVerifier = randomBytes(32).toString('base64url');
+    this.map.set(state, { requestId, nonce, codeVerifier, startedAt: Date.now() });
+    return { state, nonce, codeVerifier };
   }
 
   /** One use only. A state that comes back twice is not a second chance. */

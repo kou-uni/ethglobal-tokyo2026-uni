@@ -6,6 +6,9 @@ polite and useless.
 
 > ⚠️ **Nothing below is written in advance.** Empty sections mean that integration has not
 > been done yet. They are never filled from imagination.
+>
+> **World ID is done and written from the actual run.** The others are still empty because
+> they have not happened.
 
 **Required by sponsors**
 
@@ -22,17 +25,62 @@ the time. One improvement only: the single change that would have saved the most
 
 ## World ID for Agents
 
-- **What we integrated:**
-- **Time to first success:** *(from opening the docs to a verified result in our backend)*
-- **Friction:** *(where we got stuck, in the order it happened)*
-- **Missing capabilities:** *(what we wanted and could not do)*
-- **Top improvement:** *(one change, the one that would have saved the most time)*
+**Integrated:** OIDC authorization-code flow with PKCE, against the sandbox issuer. The
+approval step in our product is the high-stakes action, so that is where the verification
+runs — `prompt=login` on the request, and `auth_time` + `acr` checked on the returned
+`id_token` against our own clock. Token verified through the published JWKS; the client
+secret stays server-side and never reaches the browser.
 
-**Note to fill in honestly:** proofs are mocked during the event
-(*"Proofs are using fake identities, DO NOT rely in them for production"*), so anything about
-production behaviour is out of scope for this feedback — say so rather than guessing.
+**Time to first success:** about 90 minutes end to end, of which **roughly 40 were spent on
+one undocumented requirement** (below). Discovery, adapter, tests and the approval pages
+were the fast part.
 
----
+**Friction, in the order it happened:**
+
+1. **The docs page does not list the endpoints.** `sandbox.auth.world.org/docs` explains the
+   model — pairwise `sub`, OIDC federation, RFC 9470 for freshness — but not
+   `authorization_endpoint`, `token_endpoint` or the acr value. We got all of it from
+   `/.well-known/openid-configuration`, which is the right answer, but the docs could say
+   "start here" in one line and save the guessing.
+
+2. **PKCE is mandatory and nothing says so.** Every authorization request without
+   `code_challenge` returns `invalid_request` — with no `error_description`. We only found
+   it by probing eight parameter combinations against the endpoint:
+
+   ```
+   bare / max_age / acr_values / prompt=login   →  invalid_request
+   + code_challenge + code_challenge_method     →  accepted
+   ```
+
+   `code_challenge_methods_supported` is in the discovery document, but per OIDC that
+   advertises support, not a requirement. **An `error_description` saying "PKCE required"
+   would have turned 40 minutes into 40 seconds.** This is the single highest-impact fix.
+
+3. **`max_age` is not advertised, so we could not tell whether it was honoured.**
+   `claims_supported` includes `auth_time` and `prompt_values_supported` includes `login`,
+   so we switched to `prompt=login` and kept verifying `auth_time` ourselves. That works,
+   but the requirement wording ("a fresh verification at the moment") points builders at
+   `max_age`, and the issuer does not list it.
+
+**Missing capabilities / documentation:**
+
+- No `error_description` on authorization failures. Every refusal looks identical
+- The docs and the discovery document disagree about where to start; the docs win on
+  concepts, discovery wins on facts, and nothing links the two
+- A minimal working request — one line of query string with every required parameter —
+  would have replaced all of the above
+
+**Highest-impact improvement:** **return `error_description` on `invalid_request`.** One
+string. It is the difference between a builder shipping the integration and a builder
+guessing at parameters during a hackathon.
+
+**What worked well, honestly:** the discovery document is complete and accurate, the
+pairwise `sub` and `auth_time`/`acr` claims are exactly what a "prove it now" flow needs,
+and once PKCE was in, the round-trip worked first time with no other surprises.
+
+**Verified on 2026-09-26:** approval returned `auth_time` 22:11:30Z for a button pressed at
+22:11, with `acr = https://world.org/oidc/acr/orb-v3`. The declined path completed with the
+protected action not running.
 
 ## Curvegrid MultiBaas
 

@@ -42,13 +42,20 @@ export type VerificationOutcome =
 
 export interface IdentityPort {
   /** Where to send the person, asking for a *fresh* verification. */
-  beginUrl(params: { state: string; nonce: string; redirectUri: string }): Promise<string>;
+  beginUrl(params: {
+    state: string;
+    nonce: string;
+    redirectUri: string;
+    /** PKCE verifier; the challenge derived from it goes in the URL. */
+    codeVerifier?: string;
+  }): Promise<string>;
   /** Turn what came back into an outcome. Never throws for a normal refusal. */
   complete(params: {
     code?: string;
     error?: string;
     redirectUri: string;
     nonce: string;
+    codeVerifier?: string;
     at?: Date;
   }): Promise<VerificationOutcome>;
 }
