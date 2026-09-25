@@ -102,13 +102,13 @@ run the seed again with a different number and watch the input move while the ou
 
 | # | Assumption | Status |
 |---|---|---|
-| D1 | World ID proofs are **mocked** during the hackathon | 🟢 Official: *"We are mocking proofs now… Proofs are using fake identities, DO NOT rely in them for production"* |
+| D1 | World ID proofs are **mocked** during the hackathon | 🟢 Official. A dev sandbox is published: `sandbox.auth.world.org/portal`, plugin at `worldcoin/world-id-agent-plugin` — **we can start without waiting for the booth** |
 | D2 | Policy body stays **off-chain**; only its hash goes on-chain | 🟡 Design decision — writing full policies on-chain would consume the event |
 | D3 | JPYC is not available on the testnet; a mock ERC-20 stands in | 🟡 Must be stated plainly in the README |
 | D4 | ENSv2 Sepolia contracts were **redeployed 2026-09-15**; published articles are stale | 🟡 Take addresses from `ens-contracts` / docs at build time |
 | D5 | ENSv2 registration is paid in **USDC/DAI, not ETH** | 🟡 Need mock USDC; ETH alone will not register a name |
 | D6 | Permissioned-resolver key permissions span **every name in that instance** | 🟢 From ENS docs via `ENSV2-DIFFERENTIATION.md`. Sellers must be scoped, not pooled |
-| D7 | The third prize slot is **ENS-first, decided by a timeboxed spike** | 🟡 See `ENS-VS-INTERCEPTA.md`. Not yet run |
+| D7 | The third slot is decided by a timeboxed spike | 🟡 **Re-weighted 9/26:** ENS requires *"built on ENSv2 (Sepolia)"*, *"not just hard-coded values"* and *"a live demo"* — **a mock does not qualify**. intercepta keys are now self-serve (intercepta.io/ethglobal, hours). The fallback became cheap and the favourite became expensive |
 
 ## 5. Claims we deliberately do **not** make
 

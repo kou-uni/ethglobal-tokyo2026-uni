@@ -71,6 +71,23 @@ Then swap `MockPermissions` for a viem-backed implementation of the same `Permis
 - Node 22 (24 warns under Hardhat)
 - Alchemy or Infura key; a public RPC will rate-limit
 
+## ⚠️ The mock is NOT enough for the ENS prize
+
+The prize page is explicit, and this changes the calculus:
+
+> - *"Project must be **built on ENSv2 (Sepolia)**"*
+> - *"Your demo must be **functional and not just include hard-coded values**"*
+> - *"a link to a **live demo**"*
+
+**An earlier version of this file said we could keep the mock and simply say so out loud.
+That is wrong for the prize.** Saying it out loud remains the right thing to do for honesty —
+but a mocked boundary does not qualify for Best Use of ENSv2. **Either it runs on Sepolia,
+or this slot is not ours.**
+
+The mock still earns its place: it is what lets the console demonstrate the boundary, and it
+is what `route()` is tested against. It just cannot stand in for the chain when the prize
+requires the chain.
+
 ## If it does not land
 
 **Stop at 90 minutes.** The decision is already written down
@@ -78,6 +95,6 @@ Then swap `MockPermissions` for a viem-backed implementation of the same `Permis
 has a key ready, switch. If neither lands, **drop the third slot and finish the product** —
 a submission that works beats a third prize box that does not.
 
-**The mock keeps working either way.** The console still demonstrates the boundary; we would
-simply say, out loud, that it is enforced in our layer and not yet on chain. **Saying that is
-cheaper than being caught not saying it.**
+**And intercepta keys no longer need the booth.** Free sandbox at **intercepta.io/ethglobal**
+— 1,000 requests, keys arrive within hours. **Request one before starting the ENS spike**, so
+the fallback is already in hand if the spike stalls.
