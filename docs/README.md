@@ -62,6 +62,24 @@ flowchart TB
 { "routing": true, "classifier": true, "identity": true, "screening": true, "settlement": false }
 ```
 
+## 1.5 顧客は二人いる
+
+**払うのはエージェント、売るのは人間。** どちらも Yohaku を使いに来るのではなく、
+**別の用事の途中でここを通る。**
+
+| | エージェント | 人間 |
+|---|---|---|
+| 成功とは | **詰まらないこと。** 即答・理由・期限 | **判断が増えないこと。** 収入より先に、疲れないこと |
+| 1件の重み | 1/500 | **2件のうちの1件** |
+
+→ [product/JOURNEY.md](product/JOURNEY.md)（規約の受け渡し図つき）／
+根拠は [knowledge/AGENT-TO-HUMAN-PROTOCOLS.md](knowledge/AGENT-TO-HUMAN-PROTOCOLS.md)
+
+**規約の言葉で言えば、Yohaku は AP2 の Trusted Surface です。**
+仕様はこの役割にだけ MUST を付けている — *"MUST be non-agentic"*、理由は
+*"the Agent itself is a potential attacker"*。そして **1日に何件まで人を呼んでよいかは、
+まだどの規約も定義していない。**
+
 ## 2. なぜこれを作るのか（3行）
 
 1. 学習コストに上限が無い。**高くなるのは計算ではなく、まだ誰も持っていないデータ**
@@ -82,7 +100,7 @@ scripts/     verify.ts（主張をコードから再導出）・seed・鍵の投
 demo/        1ファイル。USBメモリから、wifi無しで開く
 design/      minta さんのブランド（Make room. For being human.）
 docs/
-  product/   何を作るか — CONCEPT / ARCHITECTURE / PITCH / MARKET / ASSUMPTIONS
+  product/   何を作るか — CONCEPT / ARCHITECTURE / JOURNEY / PITCH / MARKET / ASSUMPTIONS
   decisions/ 何を選び、何を捨てたか — ENS vs intercepta ほか
   build/     いまどこまで動くか — STATUS / WORLD-SETUP / ENSV2-SPIKE / FEEDBACK
   knowledge/ 外から確かめたこと。全ファイルに出典と日付
@@ -149,6 +167,7 @@ npm start         # サーバ
 | 11 | [Delegation の状態機械](product/ARCHITECTURE.md#9-3-delegation) | **stateDiagram** | 委任の付与と取り消し |
 | 12 | [Screens](product/ARCHITECTURE.md#10-screens) | flowchart | 5画面と、誰がどれを見るか |
 | 13 | [intercepta の最小フロー](decisions/INTERCEPTA.md#4-提案する最小フロー) | flowchart | スクリーニングを挟む位置 |
+| 14 | [規約の受け渡し](product/JOURNEY.md#1-規約の受け渡し--誰から誰へ何が渡るか) | **sequenceDiagram** | **AIPREF → 依頼 → AP2 Mandate → World ID → x402。**どの規約がどこで効くか |
 
 ### SVG — 2枚（手書き）
 
