@@ -39,6 +39,7 @@ the well. See [CONCEPT §0](docs/product/CONCEPT.md).
 | 📍 **[STATUS.md](docs/build/STATUS.md)** | **Where we are right now** — what runs, what does not, who does what next |
 | 🎨 **[Yohaku identity v3](design/yohaku-v3/README.md)** | **Selected logo, brand narrative, SVG assets, previews** — *Make room. For being human.* |
 | 📄 **[CONCEPT.md](docs/product/CONCEPT.md)** | **Product design** — request schema, routing, queue control |
+| 📖 **[STORY.md](docs/product/STORY.md)** | **通しの物語** — 思想 → 市場 → ジャーニー → 権威づけ → 穴 → 価値 → 層。**図14枚と文の両方** |
 | 🧭 **[JOURNEY.md](docs/product/JOURNEY.md)** | **二人の顧客のジャーニー** — エージェントと人間。規約がどこで受け渡されるか |
 | 📐 **[ARCHITECTURE.md](docs/product/ARCHITECTURE.md)** | **Layers, components, rules, failure paths, state machines, sequence** |
 | 📈 **[MARKET.md](docs/product/MARKET.md)** | **Why this is a market** — supply exhaustion, buyer growth, and what an agent saves |

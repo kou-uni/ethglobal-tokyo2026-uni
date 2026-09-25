@@ -62,6 +62,11 @@ flowchart TB
 { "routing": true, "classifier": true, "identity": true, "screening": true, "settlement": false }
 ```
 
+## 1.4 通しで読むなら
+
+**[product/STORY.md](product/STORY.md) — 思想 → 反転 → 市場 → ジャーニー → 権威づけ → 穴 → 価値 → 層**を、
+**図14枚と文の両方**で1本にしたもの。初めての人はここから。
+
 ## 1.5 顧客は二人いる
 
 **払うのはエージェント、売るのは人間。** どちらも Yohaku を使いに来るのではなく、
@@ -100,7 +105,7 @@ scripts/     verify.ts（主張をコードから再導出）・seed・鍵の投
 demo/        1ファイル。USBメモリから、wifi無しで開く
 design/      minta さんのブランド（Make room. For being human.）
 docs/
-  product/   何を作るか — CONCEPT / ARCHITECTURE / JOURNEY / PITCH / MARKET / ASSUMPTIONS
+  product/   何を作るか — STORY / CONCEPT / ARCHITECTURE / JOURNEY / PITCH / MARKET / ASSUMPTIONS
   decisions/ 何を選び、何を捨てたか — ENS vs intercepta ほか
   build/     いまどこまで動くか — STATUS / WORLD-SETUP / ENSV2-SPIKE / FEEDBACK
   knowledge/ 外から確かめたこと。全ファイルに出典と日付
@@ -168,6 +173,19 @@ npm start         # サーバ
 | 12 | [Screens](product/ARCHITECTURE.md#10-screens) | flowchart | 5画面と、誰がどれを見るか |
 | 13 | [intercepta の最小フロー](decisions/INTERCEPTA.md#4-提案する最小フロー) | flowchart | スクリーニングを挟む位置 |
 | 14 | [規約の受け渡し](product/JOURNEY.md#1-規約の受け渡し--誰から誰へ何が渡るか) | **sequenceDiagram** | **AIPREF → 依頼 → AP2 Mandate → World ID → x402。**どの規約がどこで効くか |
+
+### 通しの物語 — [product/STORY.md](product/STORY.md) に **mermaid 14枚**
+
+| 節 | 図 | 何が見えるか |
+|---|---|---|
+| ① 思想 | 余白の概念図／3分岐が全部「余白」 | **生む・守る・使う** |
+| ② 反転 | 希少性の反転／人間証明だけでは足りない理由 | なぜ剥奪が要るか |
+| ③ 市場 | 供給側と需要側 | **払う経路はもう通っている** |
+| ④ ジャーニー | 二人の顧客／**プロセス図**／**状態遷移図**／**情報フロー図** | **各段で何が渡るか** |
+| ⑤ 権威づけ | ジャーニーに規約を重ねた図 | どの段が誰の仕様に載っているか |
+| ⑥ 穴 | 層の図。**埋まっている所と、赤い破線** | 相手が Merchant 前提であること |
+| ⑦ 価値 | before / after | 埋めると何が起きるか |
+| ⑧ 層 | 誰が何を持っているか | **持ち主がいないのは真ん中の1つ** |
 
 ### SVG — 2枚（手書き）
 
