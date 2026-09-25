@@ -14,15 +14,23 @@ or `deny`** — and what it produces is not decisions. It is **empty space in so
 
 **It is not a way to close the door — it is what makes opening it possible.**
 
-📄 **[docs/CONCEPT.md](docs/CONCEPT.md) — product design (request schema, routing, queue control)**
+![Architecture overview](docs/assets/overview.svg)
 
-🎨 **[Yohaku identity v3](design/yohaku-v3/README.md) — selected logo, brand narrative, SVG assets, and previews**
+---
 
-📄 **[docs/INTERCEPTA.md](docs/INTERCEPTA.md) — seller-side payment screening: evidence, prize requirements, and integration proposal (Japanese; not implemented yet)**
+## Documents
 
-📄 **[docs/ENS-VS-INTERCEPTA.md](docs/ENS-VS-INTERCEPTA.md) — prize-focused comparison from zero implementation, with a recommendation and validation gates (Japanese; decision pending)**
-
-📄 **[docs/ENSV2-DIFFERENTIATION.md](docs/ENSV2-DIFFERENTIATION.md) — official ENSv2 differentiators, v1 comparison, and a scoped agent-permissions demo proposal (Japanese; not implemented yet)**
+| | |
+|---|---|
+| 🎨 **[Yohaku identity v3](design/yohaku-v3/README.md)** | **Selected logo, brand narrative, SVG assets, previews** — *Make room. For being human.* |
+| 📄 **[CONCEPT.md](docs/CONCEPT.md)** | **Product design** — request schema, routing, queue control |
+| 📐 **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** | **Layers, components, rules, failure paths, state machines, sequence** |
+| 📋 **[ASSUMPTIONS.md](docs/ASSUMPTIONS.md)** | **Every number, and where it came from.** Nothing here is a measurement |
+| 🎤 **[PITCH.md](docs/PITCH.md)** | Pitch script |
+| 💬 **[FEEDBACK.md](docs/FEEDBACK.md)** | Integration feedback to sponsors *(filled in as we build)* |
+| 🔎 [INTERCEPTA.md](docs/INTERCEPTA.md) | Seller-side payment screening: evidence and integration proposal *(JA)* |
+| 🔎 [ENS-VS-INTERCEPTA.md](docs/ENS-VS-INTERCEPTA.md) | Prize-focused comparison, recommendation, validation gates *(JA)* |
+| 🔎 [ENSV2-DIFFERENTIATION.md](docs/ENSV2-DIFFERENTIATION.md) | Official ENSv2 differentiators and a scoped agent-permissions demo *(JA)* |
 
 ---
 
@@ -31,50 +39,65 @@ or `deny`** — and what it produces is not decisions. It is **empty space in so
 **Built from scratch during ETHGlobal Tokyo 2026 (Sept 25–27).** This repository starts at
 the hackathon kickoff. Nothing is carried over from before the event.
 
-🚧 **Work in progress.** Sections marked TODO are not implemented yet. This README is
-updated as things actually land — **if it is not checked here, it does not exist.**
+🚧 **Work in progress.** Unchecked items are not implemented. This README is updated as
+things actually land — **if it is not checked here, it does not exist.**
 
 - [ ] Permission policy (ENS name space)
-- [ ] Routing (`auto` / `human` / `deny`)
-- [ ] Human queue control (bundling, ranking, deadline fallback)
-- [ ] Fresh human verification at the moment of approval (World ID)
-- [ ] Payment execution under constraints (MultiBaas)
+- [ ] Routing — ten ordered rules (`auto` / `human` / `deny`)
+- [ ] Human queue control — bundling, ranking, daily cap, deadline fallback
+- [ ] Fresh proof of personhood at the moment of approval
+- [ ] Payment execution under the owner's constraints
 - [ ] Morning ledger
 
 ## How it is built
 
-TODO — record here how each part was produced (generated, hand-written, number of
-iterations). Kept deliberately, so the method stays visible and not just the result.
+*To be recorded here as work happens: which parts were generated, which were hand-written,
+and how many iterations each took.* Kept deliberately, so that the method stays visible and
+not only the result.
 
 ## Tech
 
 | Layer | What it answers | Using |
 |---|---|---|
 | **Who** | Is this a real person? | **World ID** |
-| **What is allowed** | Scope, expiry, revocation, cascading revocation | **ENSv2** |
+| **What is allowed** | Scope, expiry, **delegation boundary** | **ENSv2 + EAC** |
 | **How much moved** | Execution under constraints, ledger | **Curvegrid MultiBaas** |
-| **Payment rail** | Agent pays for what it buys | **x402** |
+| **Payment rail** | An agent pays for what it buys | **x402** |
+
+Stack: Hardhat · Next.js · TypeScript · Vercel · npm.
+
+**What we claim about ENSv2 is narrow**: not that revocation is unique to it, but that
+**a delegated agent can propose without being able to rewrite what it is allowed to do.**
+See [ARCHITECTURE.md §6](docs/ARCHITECTURE.md).
 
 ## MultiBaas usage
 
-TODO — which MultiBaas features are used and what friction they removed.
+*Not yet integrated.* Planned use, from [ARCHITECTURE.md §1](docs/ARCHITECTURE.md):
+
+- **Policy-aware execution (L4)** — settle an approved request only inside the owner's
+  constraints: spending limit, approved counterparties, required human approval
+- **Ledger (L5)** — one morning view of what moved overnight and what still needs attention
+
+This section is rewritten with what was actually used once the integration lands.
 
 ## Setup
 
-TODO — prerequisites, environment variables, install, run, test.
+*Not yet available.* Will cover: prerequisites (Node 22), environment variables, install,
+run, and how to reproduce the demo scenario end to end.
 
 ## Team
 
 | | Role | GitHub |
 |---|---|---|
-| **minta** | CEO / CTO / CDO — implementation & design lead | [@mintannn](https://github.com/mintannn) |
+| **minta** | CEO / CTO / CDO — implementation and design lead | [@mintannn](https://github.com/mintannn) |
 | **kou (spark)** | CSO / architect — structure, infrastructure, strategy | [@kou-uni](https://github.com/kou-uni) |
 
-TODO — social handles.
+*Social handles to be added before submission.*
 
 ## Feedback to sponsors
 
-TODO — time to first success, friction, missing capabilities, top improvement.
+See **[docs/FEEDBACK.md](docs/FEEDBACK.md)** — time to first success, friction, missing
+capabilities, and the single change that would help most, per sponsor SDK.
 
 ## License
 
