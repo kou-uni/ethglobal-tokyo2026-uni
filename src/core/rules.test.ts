@@ -10,7 +10,7 @@ const policy = (over: Partial<Policy> = {}): Policy => ({
   forbid: ['finance/bank-activity'],
   sensitive: ['health/symptoms'],
   amountThreshold: 1000,
-  dailyCap: 3,
+  dailyCap: 2,
   notifyHour: 7,
   grants: [
     { category: 'purchase-intent/groceries', expiresAt: '2026-12-31T00:00:00Z', revoked: false },

@@ -10,7 +10,7 @@ every request. Answering all of them by hand does not scale; approving all of th
 automatically is not safe. **Yohaku routes each incoming agent request into `auto`, `human`,
 or `deny`** — and what it produces is not decisions. It is **empty space in someone's day.**
 
-> **Some fifty requests arrived overnight. She saw three.**
+> **Some fifty requests arrived overnight. She saw two.**
 
 **It is not a way to close the door — it is what makes opening it possible.**
 
@@ -103,8 +103,9 @@ npm run seed -- 18 # one night of requests, run through the real router
 ```
 
 **`npm run seed -- 18` is the night used in the pitch** — 49 arrive, 33 settle, 8 are dropped,
-**3 reach her**. Any other seed gives a different night: **across 20 runs, 46–54 arrive and
-2–3 reach her.** The input moves; the output does not. See [ASSUMPTIONS.md §2](docs/ASSUMPTIONS.md).
+**2 reach her**. Change the seed and the arrivals wander between 46 and 54; **across all 20 runs,
+the number that reaches her is 2. Every time.** That is her cap, not our claim.
+See [ASSUMPTIONS.md §2](docs/ASSUMPTIONS.md).
 
 Copy `.env.example` to `.env` before touching chain or sponsor APIs. *(UI and chain
 integration not yet wired.)*

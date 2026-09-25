@@ -174,7 +174,7 @@ footer b{color:var(--sub)}
 
 <section>
   <h2><span class="n">4</span>07:00 — her turn</h2>
-  <p class="hint">One notification, bundled, inside <b>her own daily cap of 3</b>.
+  <p class="hint">One notification, bundled, inside <b>her own daily cap of 2</b>.
   <b>Approve one and ignore the other</b>, then watch what happens to the one you ignored.</p>
   <div id="inbox"><p class="hint">Run a night first.</p></div>
   <div class="out" id="morning">—</div>
@@ -204,7 +204,7 @@ footer b{color:var(--sub)}
   <span class="k">route()</span> in <span class="k">src/core/rules.ts</span>, the same function
   under 32 tests. Chain, payment and identity are not wired yet — where a signature or a
   settlement would happen, this console says so rather than pretending.<br><br>
-  <b>Across 20 seeds: 46–54 arrive, 2–3 reach her.</b> Over 30 replayed nights the mornings that need her fall from 3.0 to 0.7 a day — <b>but not in the first week.</b>
+  <b>Across 20 seeds: 46–54 arrive — and 2 reach her, every single time.</b> Over 30 replayed nights what grows is how many she is <b>never asked about</b> (0.1 → 6.3 a day); the mornings themselves only go quiet in week four.
 </footer>
 
 </div>
@@ -559,7 +559,7 @@ const DEMO_POLICY = {
     forbid: ['finance/bank-activity', 'health/checkup-results'],
     sensitive: ['health/symptoms', 'work/history', 'finance/income'],
     amountThreshold: 1000,
-    dailyCap: 3,
+    dailyCap: 2,
     notifyHour: 7,
     grants: [
         { category: 'purchase-intent/groceries', expiresAt: '2026-12-31T00:00:00Z', revoked: false },
@@ -932,13 +932,17 @@ $('month').addEventListener('click', () => {
     return (s.reduce((t, d) => t + d.surfaced, 0) / s.length).toFixed(1);
   };
   $('weeks').className = 'out pre';
+  const sp = (a, b) => (days.slice(a, b).reduce((t, d) => t + d.learnedAway, 0) / (b - a)).toFixed(1);
   $('weeks').textContent =
-    `mornings that needed her, weekly mean\n\n` +
-    `  week 1   ${wk(0, 7)}\n  week 2   ${wk(7, 14)}\n` +
-    `  week 3   ${wk(14, 21)}\n  week 4   ${wk(21, 30)}\n\n` +
-    `per day\n  ${days.map((d) => d.surfaced).join(' ')}\n\n` +
-    `Seven days changes nothing. It takes about a month\n` +
-    `before her judgement can stand in for her.`;
+    `              reached her    never had to ask\n\n` +
+    `  week 1         ${wk(0, 7)}             ${sp(0, 7)}\n` +
+    `  week 2         ${wk(7, 14)}             ${sp(7, 14)}\n` +
+    `  week 3         ${wk(14, 21)}             ${sp(14, 21)}\n` +
+    `  week 4         ${wk(21, 30)}             ${sp(21, 30)}\n\n` +
+    `Her cap already holds the mornings at two, so for two\n` +
+    `weeks nothing she can see changes. What grows is the\n` +
+    `right-hand column. Only in week four do the mornings\n` +
+    `themselves go quiet.`;
 
   const parties = [...new Set(records.map((r) => r.who))]
     .map((w) => ({ w, r: rejectionRate(records, w) }))

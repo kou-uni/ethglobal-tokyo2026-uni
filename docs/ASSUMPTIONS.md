@@ -44,8 +44,8 @@ npm run seed -- 18
     auto             33   settled while she slept
     deny              8   never reached her
     human             8   held
-  07:00 — daily cap 3
-    surfaced          3
+  07:00 — daily cap 2
+    surfaced          2
   settled            2,291 JPYC
 ```
 
@@ -61,11 +61,12 @@ night, which is the point.
 | auto | 32.5 | 26–37 |
 | deny | 9.8 | 5–14 |
 | human (held) | 7.5 | 4–11 |
-| **surfaced at 07:00** | **2.9** | **2–3** |
+| **surfaced at 07:00** | **2.00** | **2 — in all twenty runs** |
 | settled | 2,617 JPYC | 1,445–4,324 |
 
-**"About fifty arrive; she sees two or three" holds across every run.** Arrivals wander by
-±8 and settlements by ±6; **what reaches her does not**, because the daily cap is what fixes it.
+**"About fifty arrive; she sees two" held in twenty runs out of twenty.** Arrivals wander by
+±8 and settlements by ±6; **what reaches her does not move at all**, because the cap is what
+fixes it — and the cap is hers, not ours.
 
 ⚠️ **What this measured, and what it did not.** These are our rules running against our own
 generated input. **It is not a measurement of real demand** — A3 and A4 remain assumptions.
@@ -74,8 +75,8 @@ What it establishes is that *the router behaves as claimed*, which is the part w
 | # | Value | Basis | Confidence |
 |---|---|---|---|
 | B1 | ~50 requests in one night | Generator output; 20 runs, mean 49.9 (46–54) | 🟡 |
-| B2 | auto ~33 / deny ~8 / **3 reach her** | **`npm run seed -- 18`**, chosen as closest to the mean. Reproducible | 🟡 |
-| B3 | Escalations fall **3.0 → 2.4 → 2.3 → 0.7** (weekly means over 30 days) | **Measured.** `runWeek()` replays 30 nights, feeding each morning's answers back in. **Seven days changes nothing** — the earlier "12 → 5 → 2 in a week" was wrong and has been withdrawn | 🟡 |
+| B2 | auto ~33 / deny ~8 / **2 reach her** | **`npm run seed -- 18`**, chosen as closest to the mean. Reproducible | 🟡 |
+| B3 | **Spared** (never had to be asked) rises **0.1 → 2.6 → 4.3 → 6.3** a day; mornings themselves only fall in week four (**2.0 → 2.0 → 1.9 → 0.9**) | **Measured.** `runWeek()` replays 30 nights, feeding each morning's answers back in. **The cap binds before learning does**, so what moves first is how much she is spared — not what she sees. The earlier "12 → 5 → 2 in a week" was wrong and has been withdrawn | 🟡 |
 | B4 | Amount received overnight | **Not a figure any more — the console sums what actually settled.** Any stated number must come from a run | 🟡 |
 | B5 | "Rejected by 87 of 100 people" | Illustrative reputation signal | 🔴 |
 | B6 | "Demand is 12× supply" | Illustrative pricing signal | 🔴 |
@@ -89,7 +90,7 @@ run the seed again with a different number and watch the input move while the ou
 
 | # | Default | Reasoning |
 |---|---|---|
-| C1 | **Daily escalation cap = 3** | A person cannot absorb an unbounded number of decisions. **The owner sets this; 3 is only the starting value** |
+| C1 | **Daily escalation cap = 2** | A person cannot absorb an unbounded number of decisions. **The owner sets this; 2 is only the starting value.** It is also what makes the output constant: in 20 runs the number reaching her was 2 every time |
 | C2 | Notification time = 07:00 | One batch, in the morning. Chosen to make "she was asleep" legible in the demo |
 | C3 | Request deadline = 12h | Long enough for a night to pass, short enough that an agent is not stuck |
 | C4 | Prices: routine asks 80–200 JPYC, sensitive 3,000–6,000, occasional bulk ×12 | **Anchored to real survey incentives** (a respondent is typically paid ¥100–1,000). At 0.5 JPYC the ledger came to ¥17 a night, which is not a business and would not have survived a judge opening the console |

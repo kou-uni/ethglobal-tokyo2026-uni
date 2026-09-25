@@ -88,25 +88,40 @@ describe('what only the platform can see', () => {
   });
 });
 
-describe('a week — the fall in escalations is an outcome, not a drawing', () => {
-  const { days } = runWeek({ seeds: [11, 12, 13, 14, 15, 16, 17], answerer: defaultAnswerer });
-
-  it('runs seven nights', () => {
-    expect(days).toHaveLength(7);
+describe('a month — what actually moves, and what does not', () => {
+  const { days } = runWeek({
+    seeds: Array.from({ length: 30 }, (_, i) => 101 + i),
+    answerer: defaultAnswerer,
   });
 
-  it('asks her less by the end of the week than at the start', () => {
-    const first = days.slice(0, 2).reduce((s, d) => s + d.surfaced, 0);
-    const last = days.slice(-2).reduce((s, d) => s + d.surfaced, 0);
-    expect(last).toBeLessThan(first);
-  });
-
-  it('starts removing work only after she has decided a few times', () => {
-    expect(days[0]!.learnedAway).toBe(0);
-    expect(days.at(-1)!.learnedAway).toBeGreaterThan(0);
+  it('runs thirty nights', () => {
+    expect(days).toHaveLength(30);
   });
 
   it('never exceeds her daily cap on any day', () => {
-    for (const d of days) expect(d.surfaced).toBeLessThanOrEqual(3);
+    for (const d of days) expect(d.surfaced).toBeLessThanOrEqual(2);
+  });
+
+  it('holds the number she sees steady for the first two weeks — the cap binds first', () => {
+    const wk1 = days.slice(0, 7).reduce((s, d) => s + d.surfaced, 0) / 7;
+    const wk2 = days.slice(7, 14).reduce((s, d) => s + d.surfaced, 0) / 7;
+    expect(wk1).toBeCloseTo(2, 1);
+    expect(wk2).toBeCloseTo(2, 1);
+  });
+
+  it('spares her more and more — that is the part that moves from day one', () => {
+    const wk1 = days.slice(0, 7).reduce((s, d) => s + d.learnedAway, 0) / 7;
+    const wk4 = days.slice(21, 30).reduce((s, d) => s + d.learnedAway, 0) / 9;
+    expect(wk1).toBeLessThan(1);
+    expect(wk4).toBeGreaterThan(4);
+  });
+
+  it('eventually the mornings themselves get quieter', () => {
+    const wk4 = days.slice(21, 30).reduce((s, d) => s + d.surfaced, 0) / 9;
+    expect(wk4).toBeLessThan(1.5);
+  });
+
+  it('learns nothing on the first night — she has decided nothing yet', () => {
+    expect(days[0]!.learnedAway).toBe(0);
   });
 });

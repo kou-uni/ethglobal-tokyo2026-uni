@@ -34,7 +34,7 @@ export const DEMO_POLICY: Policy = {
   forbid: ['finance/bank-activity', 'health/checkup-results'],
   sensitive: ['health/symptoms', 'work/history', 'finance/income'],
   amountThreshold: 1000,
-  dailyCap: 3,
+  dailyCap: 2,
   notifyHour: 7,
   grants: [
     { category: 'purchase-intent/groceries', expiresAt: '2026-12-31T00:00:00Z', revoked: false },

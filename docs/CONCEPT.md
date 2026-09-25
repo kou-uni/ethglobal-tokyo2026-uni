@@ -50,22 +50,24 @@ who can triage them can take the business.
 ## 2. What it sells is empty space
 
 The value is not what you did. It is **what you never had to look at.**
-~50 requests, 3 seen — **47 requests worth of empty space.**
+~50 requests, 2 seen — **48 requests worth of empty space.**
 
-**The interesting number is 3, not 50.** How many arrive is not ours to control; how many reach a person is.
+**The interesting number is 2, not 50.** How many arrive is not ours to control; how many reach a person is.
 
 | | Action | In terms of *yohaku* |
 |---|---|---|
 | **`auto`** | ~33 pass automatically | **Creates space** — she is never asked |
-| **`human`** | **3 are raised** — her daily cap | **Occupies space** — worth her attention |
+| **`human`** | **2 are raised** — her daily cap | **Occupies space** — worth her attention |
 | **`deny`** | ~8 are dropped | **Protects space** — never reaches her |
 
 The rest of the design says the same thing in other words:
 
 - **Bundling** (3 companies → 1 notification) — does not eat into the space
 - **Deadline fallback** (silence → `deny`) — pending items never pile up. **The space holds**
-- **Accumulated decisions** — **the space widens, but slowly.** Week one: three a morning.
-  Week four: most mornings, none at all. *(measured: 3.0 → 2.4 → 2.3 → 0.7)*
+- **Accumulated decisions** — **what moves first is not what she sees.** The cap holds her
+  mornings at two from day one; what grows is **how many she never had to be asked about**:
+  0.1 a day in week one, **6.3 a day by week four**. Only then do the mornings themselves
+  get quieter *(2.0 → 2.0 → 1.9 → 0.9)*
 
 ## 3. Request schema
 
@@ -135,9 +137,9 @@ Three-way routing is easy. **The product is what happens after `human`.**
 | Behaviour | Detail |
 |---|---|
 | **Bundle** | "**3 companies are asking for the same health category**" — one notification, not three |
-| **Rank** | value × counterparty reputation × deadline. **Only the top 3 are shown** |
+| **Rank** | value × counterparty reputation × deadline. **Only the top few are shown** |
 | **Time** | Hold overnight. **Surface once, at 07:00** |
-| **Cap** | **The owner sets how many may reach them per day. Default 3** |
+| **Cap** | **The owner sets how many may reach them per day. Default 2** |
 | **Fall back on deadline** | **Decide in advance what silence means. Default is `deny`** |
 
 ## 6. Surface
@@ -204,7 +206,7 @@ Independent sellers must not be pooled into one resolver instance without scopin
         Yohaku handles them
           auto   33   settle immediately, executed under constraints
           deny    8   revoked / out of scope — never reaches her
-          human   8   bundled — 3 will surface, her daily cap
+          human   8   bundled — 2 will surface, her daily cap
 
         she is asleep
 
@@ -215,12 +217,12 @@ Independent sellers must not be pooled into one resolver instance without scopin
           1 ignored   → deadline passes → auto-denied
 
         ledger:  2,291 JPYC arrived overnight
-        trend:   week 1 three a morning · week 4 mostly none
+        spared:  never had to ask — 0.1/day in week 1, 6.3/day by week 4
 ```
 
 **Opening line:**
 
-> **"Fifty came in overnight. She saw three."**
+> **"Fifty came in overnight. She saw two."**
 
 ### Design rule
 

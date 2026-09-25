@@ -19,12 +19,12 @@ stops in the first twenty seconds*, then the reason, then proof anyone can check
 
 ### 0:25 — The number that matters is the other one
 
-> **She will be asked about three of them.**
+> **She will be asked about two of them.**
 
 *(screen: the fifty dots resolve — most fade to green, some dim out, three stay lit)*
 
 > Thirty-three settled while she slept. Eight never reached her at all.
-> **Three were worth her attention — the cap she set herself.**
+> **Two were worth her attention — the cap she set herself.**
 
 ### 0:45 — The name
 
@@ -33,7 +33,7 @@ stops in the first twenty seconds*, then the reason, then proof anyone can check
 >
 > That is what we build. **Not decisions — space.**
 > Automatic requests *create* it. Denied ones *protect* it.
-> **Only three are allowed to occupy it — her number, not ours.**
+> **Only two are allowed to occupy it — her number, not ours.**
 
 ### 1:05 — Why an agent pays her at all
 
@@ -80,7 +80,7 @@ Then it writes to a permission key — **rejected**)*
 
 ### 2:30 — 07:00 ★ World
 
-> Morning. **One notification.** Not fifty. **Three — the cap she set.**
+> Morning. **One notification.** Not fifty. **Two — the cap she set.**
 >
 > She approves one. **And right there, at that moment, she proves she is a person.**
 > Not at signup. **Now.** Then it settles.
@@ -91,11 +91,12 @@ Then it writes to a permission key — **rejected**)*
 ### 2:55 — What she wakes up to ★ Curvegrid
 
 > One screen. What moved overnight, inside the limits she set.
-> **And this line.** First week: three every morning.
-> **Fourth week: most mornings, none at all.**
+> **And this line.** Her mornings do not get shorter at first — the cap already holds them at two.
+> **What grows is how many she never had to be asked about at all:**
+> **a tenth of one a day in week one. Six a day by week four.**
 >
-> It takes a month, not a day — **her judgement has to accumulate before it can stand in for her.**
-> That is the honest version, and it is the one we measured.
+> Only then do the mornings themselves go quiet. **It takes a month, not a day** —
+> her judgement has to accumulate before it can stand in for her. **That is what we measured.**
 > What accumulates is a record of *when a human says no* —
 > **the one thing that cannot be synthesised.**
 
@@ -145,7 +146,7 @@ Everything in it is answered by the same `route()` that the tests run.
 |---|---|---|
 | **1. "Ask her for her health data."** | They draw `human` **with their own hands**. Not our claim — their click | — |
 | **2. "Now be her own agent. Try to rewrite her permissions."** | **Rejected — rule 0.** Then: "on-chain, the contract refuses the same write. Check it in the ENS app" | **ENS** |
-| **3. "Change the seed. Run it again. Again."** | Arrivals wander 46–54. **What reaches her stays 2–3.** Every time | — |
+| **3. "Change the seed. Run it again. Again."** | Arrivals wander 46–54. **What reaches her is 2. In all twenty runs.** | — |
 | **4. "Approve one. Ignore the other."** | Approving asks her to prove she is a person **at that moment**. Ignoring: **the deadline passes and nothing happens at all** | **World** |
 
 **Then point at the ledger and stop.** That is Curvegrid's screen: what moved overnight,
@@ -162,7 +163,7 @@ before they find it** — it buys every other claim on the screen.
 
 - **The first twenty seconds carry the pitch.** If the counter climbing while she sleeps does
   not land, nothing after it will
-- **Say "three" more often than "fifty."** The input is not our claim; the output is
+- **Say "two" more often than "fifty."** The input is not our claim; the output is
 - At the booth, **do not present — hand it over.** Ask the judge to type
   *"give me her health data"* and let them draw `human` with their own hands
 - Every proof point has an off-app check: the ENS app, a block explorer, the chain itself.
