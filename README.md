@@ -1,13 +1,18 @@
-# Noren — an escalation router for the agent economy
+# Yohaku — an escalation router for the agent economy
 
-**Agents never sleep. People do.** Noren sits between them.
+> In Japanese painting, *yohaku* — the empty space — is not what's left over.
+> **It is what the painter decided not to draw.**
+
+**Agents never sleep. People do.** Yohaku stands in that gap.
 
 When AI agents start buying information from people 24/7, a human seller cannot answer
 every request. Answering all of them by hand does not scale; approving all of them
-automatically is not safe. **Noren routes each incoming agent request into `auto`, `human`,
-or `deny`** — and controls how much ever reaches the person.
+automatically is not safe. **Yohaku routes each incoming agent request into `auto`, `human`,
+or `deny`** — and what it produces is not decisions. It is **empty space in someone's day.**
 
 > 52 requests arrived overnight. **She was asked about 2.**
+
+**It is not a way to close the door — it is what makes opening it possible.**
 
 📄 **[docs/CONCEPT.md](docs/CONCEPT.md) — product design (request schema, routing, queue control)**
 

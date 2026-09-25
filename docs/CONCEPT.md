@@ -1,7 +1,10 @@
-# Noren — product design
+# Yohaku — product design
 
-> **Agents never sleep. People do.**
-> Noren stands in that gap.
+> In Japanese painting, *yohaku* — the empty space — is not what's left over.
+> **It is what the painter decided not to draw.**
+>
+> **Agents never sleep. They will fill every hour you have.**
+> **Yohaku decides what not to show you.**
 
 ## 1. The asymmetry this exists for
 
@@ -11,14 +14,28 @@
 | Missed opportunity | Small — there was not much to miss | **Anyone without an open counter loses all 20,000** |
 | How you handle it | Read every one | **Read 2. The rest pass or drop by themselves** |
 
-*Noren* (暖簾) is the cloth shop curtain hung at a Japanese storefront: **it means the shop
-is open.** Until now, hanging one brought a handful of customers. In the agent economy,
-**customers arrive all night** — and only those who can triage them can take the business.
+**Yohaku is not a way to close the door. It is what makes opening it possible.**
+Open a counter in the agent economy and 52 requests arrive overnight — so only those
+who can triage them can take the business.
 
-You duck under it (`auto`), you get called to the counter (`human`), or the curtain is
-down (`deny`).
+## 2. What it sells is empty space
 
-## 2. Request schema
+The value is not what you did. It is **what you never had to look at.**
+52 requests, 2 seen — **50 requests worth of empty space.**
+
+| | Action | In terms of *yohaku* |
+|---|---|---|
+| **`auto`** | 38 pass automatically | **Creates space** — she is never asked |
+| **`human`** | 2 are raised | **Occupies space** — worth her attention |
+| **`deny`** | 12 are dropped | **Protects space** — never reaches her |
+
+The rest of the design says the same thing in other words:
+
+- **Bundling** (3 companies → 1 notification) — does not eat into the space
+- **Deadline fallback** (silence → `deny`) — pending items never pile up. **The space holds**
+- **Accumulated decisions** (12 → 5 → 2) — **the space widens day by day**
+
+## 3. Request schema
 
 Every agent request carries exactly five things.
 
@@ -33,41 +50,53 @@ Every agent request carries exactly five things.
 **`deadline` is the one people forget.** Agents cannot wait. A product that has not decided
 **what happens while the person is asleep** does not work at all.
 
-## 3. Routing
+## 4. Routing
 
-### `auto` — 38 of 52
+Rules are evaluated top-down. **The first match decides.**
 
-| Example | Why it passes |
+```
+0. A delegated agent tried to rewrite the owner's own permissions  → deny   ★
+1. The grant has been revoked                                      → deny
+2. Category explicitly forbidden by the owner                      → deny
+3. The grant expired                                               → deny
+4. Payment source failed screening                                 → deny
+5. Sensitive domain (health / finance / employment)                → human
+6. Amount above the owner's threshold                              → human
+7. First-time counterparty                                         → human  (once)
+8. Matches the allow list                                          → auto
+9. Nothing matched                                                 → human  ← not auto
+```
+
+**Rule 0 is on a different axis.** Rules 1–9 judge requests arriving from outside;
+**rule 0 judges the delegate on the inside.** Handing work to an AI and letting an AI widen
+its own authority are different things — **separating them is what ENSv2 is for here.**
+
+**Rule 9 matters as much.** Routing the unknown to `auto` is how a system becomes
+impossible to explain after an incident.
+
+### Defaults when something breaks — all `deny`
+
+| Situation | Result |
 |---|---|
-| "Purchase intent, groceries, this week" — 0.5 JPYC | Within the stated policy, low value, already aggregated |
-| "A nearby café wants to know your coffee preference" — 0.2 JPYC | Low risk, **this counterparty passed before** |
-| "Weekend activity range, coarse granularity" — 0.8 JPYC | Category allowed, **granularity is coarse** |
+| Routing engine down | **deny** |
+| Screening API down | **deny** |
+| **The person does not answer before the deadline** | **deny** — silence is not consent |
+| Identity verification fails | **deny** |
 
-**She is asleep. She is never asked about these.**
+### What is actually new here
 
-### `human` — 2 of 52
+Ten rules are too many to narrate. **Only three of them are new to the agent economy.**
 
-| Example | Why it escalates |
-|---|---|
-| "Hay fever symptoms and OTC medication history" — 2,000 JPYC | **Sensitive category (health).** Large amount |
-| "We want to use your writing for AI training" — 5,000 JPYC | **Unusual purpose.** Hard to take back once granted |
-| "A company is interested in your work history" | **Affects a life, not a balance** |
-| A first-time counterparty, otherwise in scope | **No precedent. Ask once** |
+| | The shift | Rules |
+|---|---|---|
+| 1 | **"I stopped" does not propagate.** A person says it once and is done. **Agents keep arriving, unaware** | 0, 1, 3 |
+| 2 | **First-time counterparties never stop arriving.** A person meets a few strangers a year; **new agents are born daily** | 7, 9 |
+| 3 | **You must decide in advance what silence means.** People sleep. Agents cannot wait | defaults |
 
-**07:00 — one notification. "2 requests need you."**
+The other rules are needed to run, but they are not the story. Rule 6 (amount threshold) is
+the same approval workflow enterprises have always had. Rule 2 is ordinary access control.
 
-### `deny` — 12 of 52
-
-| Example | Why it drops |
-|---|---|
-| "Bank account usage patterns" | **Category explicitly forbidden by the owner** |
-| "Medical check-up results" | **The `health` subname has been revoked** |
-| A counterparty granted access a year ago, asking again | **The grant expired** |
-| Payment source linked to a sanctioned address | **Stopped by payment screening** |
-
-**These 12 never reach her.** That is how "nothing was sold behind my back" becomes visible.
-
-## 4. Human queue control
+## 5. Human queue control
 
 Three-way routing is easy. **The product is what happens after `human`.**
 
@@ -78,62 +107,67 @@ Three-way routing is easy. **The product is what happens after `human`.**
 | **Time** | Hold overnight. **Surface once, at 07:00** |
 | **Fall back on deadline** | **Decide in advance what silence means. Default is `deny`** |
 
-**Silence is not consent.** A signal that cannot distinguish "quiet" from "dead" is not a signal.
+## 6. Surface
 
-## 5. The flywheel
+Three endpoints.
 
-Decisions made in `human` accumulate, and the same pattern lands in `auto` next time.
+| | Purpose | Returns |
+|---|---|---|
+| `POST /requests` | An agent submits the five fields | **Synchronously** `auto` / `human` / `deny` + reason |
+| `POST /approvals/:id` | The person answers, with a proof of personhood | Execution result |
+| `GET /ledger/:name` | Ledger | Counts, income, escalation trend |
 
-```
-day 1    human 12    the router does not know her yet
-day 3    human  5
-day 7    human  2    her judgment has moved into the router
-```
+**`POST /requests` answers synchronously even when the verdict is `human`** — it returns
+"held, deadline at T". An agent that is left hanging is an agent that is stuck.
 
-**The workload shrinks over time.** And what accumulates is this:
+Four screens.
 
-> **A database of when a human says no.**
-> In an age of synthetic everything, **how a person decided** is the scarce part.
+| # | Screen | For | Contents |
+|---|---|---|---|
+| 1 | Policy | The person, once | Category rules, amount threshold, expiry |
+| 2 | **Morning inbox** ⭐ | The person, daily | **Bundled escalations. Top 3. Approve** |
+| 3 | Ledger | The person | 52/38/12/2, income, 12→5→2 |
+| 4 | **Agent side** | **Judges, at the booth** | Submit a request, watch the verdict come back |
 
-### What only the platform can see
-
-| Signal | Where it goes |
-|---|---|
-| "This agent was **rejected by 87 of 100 people**" | **Reputation network** — feed back into payment screening |
-| "Requests phrased this way are **rejected far above baseline**" | Early detection of abuse patterns |
-| "Demand in this category is **12× supply**" | **Price discovery** → §6 |
-
-No individual can see any of this. **The platform can.**
-
-## 6. Turning volume into price
-
-> Categories in demand **raise their own price.**
-> She is asleep while **her information gets more expensive.**
-> 07:00 — "12 companies asked for your purchase intent this week. Unit price raised 0.5 → 0.8 JPYC."
-
-**A flood of requests becomes price discovery.** Hand-priced markets cannot do this;
-it only exists because agents ask constantly.
-
-## 7. Name space
+## 7. Permission model
 
 ```
-alice.human.noren.eth              a person, proven human via World ID
-├─ needs.alice.human.noren.eth        the bundle of grants (parent)
-│  ├─ purchase.needs.alice…              purchase intent → granted to agent A, 30 days
-│  └─ health.needs.alice…                health → granted to no one
-└─ device.alice.human.noren.eth       her own delegated agent
+alice.yohaku.eth
+  text "yh:policy"     hash of the policy (the body stays off-chain)
+  text "yh:price"      0.5 JPYC per record
+  text "yh:license"    commercial-ok, no-training
+  text "avatar"        on-chain SVG — visible in the ENS app, without going through us
+
+  health.alice.yohaku.eth      not offered
+  purchase.alice.yohaku.eth    active, 30 days
 ```
 
-**Revoke the parent and everything under it falls at once.** Inheritance in the name space
-*is* the permission model — which is why it can be managed by intuition rather than by a
-policy language.
+**Only the hash goes on-chain.** Putting the whole policy on-chain would spend the hackathon
+on writes.
+
+### What we claim, and what we do not
+
+**We do not claim that revocation itself is unique to ENSv2** — comparable setups exist in v1.
+The claim is narrower and stronger:
+
+> **You can delegate to an AI without letting the AI rewrite what it is allowed to do.**
+
+| Actor | May | May not |
+|---|---|---|
+| The owner's admin account | Update the policy, grant and revoke delegation | — |
+| **A delegated agent** | **Update the proposal key only** | **Update permission keys or the payout address** |
+
+That boundary is what rule 0 enforces, and it is verifiable on-chain by anyone.
+
+⚠️ Key permissions on a permissioned resolver apply across every name in that instance.
+Independent sellers must not be pooled into one resolver instance without scoping.
 
 ## 8. Demo walkthrough
 
 ```
 02:00   agent requests keep arriving           52
 
-        the router handles them
+        Yohaku handles them
           auto   38   settle immediately, executed under constraints
           deny   12   revoked / out of scope — never reaches her
           human   2   bundled, held
@@ -143,7 +177,7 @@ policy language.
 07:00   one notification
         "2 requests need you."
 
-          1 approved  → fresh human verification → payment executes
+          1 approved  → fresh proof of personhood → payment executes
           1 ignored   → deadline passes → auto-denied
 
         ledger:  ¥42,300 arrived overnight
@@ -161,6 +195,9 @@ policy language.
 > Everything should be verifiable **without going through our app** — on-chain, in the ENS
 > app, in a block explorer. Judging happens one person at a time at the booth;
 > **what matters is whether they can touch it.**
+
+**Do not push 52 real transactions first.** Get *pass / ask / stop* genuinely working on a
+handful of requests. Volume and the learning curve come after.
 
 ---
 
