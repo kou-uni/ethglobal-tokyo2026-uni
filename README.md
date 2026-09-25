@@ -31,6 +31,7 @@ the well. See [CONCEPT §0](docs/CONCEPT.md).
 | 📄 **[CONCEPT.md](docs/CONCEPT.md)** | **Product design** — request schema, routing, queue control |
 | 📐 **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** | **Layers, components, rules, failure paths, state machines, sequence** |
 | 📋 **[ASSUMPTIONS.md](docs/ASSUMPTIONS.md)** | **Every number, and where it came from.** Nothing here is a measurement |
+| 🔧 **[ENSV2-SPIKE.md](docs/ENSV2-SPIKE.md)** | **What already runs offline, what is unconfirmed, and the 90-minute spike** |
 | 🎤 **[PITCH.md](docs/PITCH.md)** | Pitch script |
 | 💬 **[FEEDBACK.md](docs/FEEDBACK.md)** | Integration feedback to sponsors *(filled in as we build)* |
 | 🔎 [INTERCEPTA.md](docs/INTERCEPTA.md) | Seller-side payment screening: evidence and integration proposal *(JA)* |
@@ -48,7 +49,8 @@ the hackathon kickoff. Nothing is carried over from before the event.
 things actually land — **if it is not checked here, it does not exist.**
 
 - [x] **Policy model and evaluation** — `src/core/types.ts`
-- [ ] Permission policy written to / read from ENS
+- [x] **Delegation boundary — modelled, mocked and tested** (`src/ports/permissions.ts`, 13 tests)
+- [ ] Permission policy written to / read from ENS **on chain** — see [ENSV2-SPIKE.md](docs/ENSV2-SPIKE.md)
 - [x] **Routing — ten ordered rules** (`auto` / `human` / `deny`) — `src/core/rules.ts`, 24 tests
 - [x] **Human queue control** — bundling, ranking, daily cap, deadline fallback — `src/core/queue.ts`, 8 tests
 - [ ] Fresh proof of personhood at the moment of approval
