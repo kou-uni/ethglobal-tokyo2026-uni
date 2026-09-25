@@ -25,7 +25,14 @@ export interface DecisionRecord {
 export interface Learned {
   /** (who, what) pairs approved often enough that she stops being asked. */
   autoPairs: Set<string>;
-  /** Counterparties refused often enough that they stop reaching her. */
+  /** (who, what) pairs refused often enough that they stop arriving. */
+  mutedPairs: Set<string>;
+  /**
+   * Counterparties she has refused repeatedly *and never once accepted*.
+   *
+   * Deliberately narrow. A party she buys from every week does not get cut off for
+   * asking one thing she dislikes — that pair gets muted instead.
+   */
   mutedParties: Set<string>;
 }
 
@@ -40,11 +47,13 @@ export function learn(records: DecisionRecord[]): Learned {
   const approvals = new Map<string, number>();
   const refusals = new Map<string, number>();
   const refusalsByParty = new Map<string, number>();
+  const approvalsByParty = new Map<string, number>();
 
   for (const r of records) {
     const k = key(r.who, r.what);
     if (r.outcome === 'approved') {
       approvals.set(k, (approvals.get(k) ?? 0) + 1);
+      approvalsByParty.set(r.who, (approvalsByParty.get(r.who) ?? 0) + 1);
     } else if (r.outcome === 'refused') {
       refusals.set(k, (refusals.get(k) ?? 0) + 1);
       refusalsByParty.set(r.who, (refusalsByParty.get(r.who) ?? 0) + 1);
@@ -58,12 +67,18 @@ export function learn(records: DecisionRecord[]): Learned {
     if (n >= APPROVALS_TO_LEARN && (refusals.get(k) ?? 0) === 0) autoPairs.add(k);
   }
 
-  const mutedParties = new Set<string>();
-  for (const [who, n] of refusalsByParty) {
-    if (n >= REFUSALS_TO_MUTE) mutedParties.add(who);
+  const mutedPairs = new Set<string>();
+  for (const [k, n] of refusals) {
+    if (n >= REFUSALS_TO_MUTE) mutedPairs.add(k);
   }
 
-  return { autoPairs, mutedParties };
+  const mutedParties = new Set<string>();
+  for (const [who, n] of refusalsByParty) {
+    // Only someone she has never once said yes to gets cut off entirely.
+    if (n >= REFUSALS_TO_MUTE && (approvalsByParty.get(who) ?? 0) === 0) mutedParties.add(who);
+  }
+
+  return { autoPairs, mutedPairs, mutedParties };
 }
 
 /**
@@ -80,7 +95,14 @@ export function applyLearned(
   if (decision.verdict !== 'human') return decision;
 
   if (learned.mutedParties.has(req.who)) {
-    return { verdict: 'deny', rule: decision.rule, reason: `${req.who} has been refused repeatedly` };
+    return { verdict: 'deny', rule: decision.rule, reason: `${req.who} has been refused every time` };
+  }
+  if (learned.mutedPairs.has(key(req.who, req.what))) {
+    return {
+      verdict: 'deny',
+      rule: decision.rule,
+      reason: `she has refused "${req.what}" from ${req.who} before`,
+    };
   }
   if (learned.autoPairs.has(key(req.who, req.what))) {
     return {

@@ -128,8 +128,8 @@ footer b{color:var(--sub)}
     <div><label>WHAT YOU WANT</label><select id="what"></select></div>
   </div>
   <div class="row">
-    <div><label>PRICE — <span id="priceOut">0.5</span> JPYC</label>
-      <input type="range" id="price" min="0" max="5000" step="10" value="0"></div>
+    <div><label>PRICE — <span id="priceOut">150</span> JPYC</label>
+      <input type="range" id="price" min="0" max="6000" step="10" value="150"></div>
   </div>
   <div class="btns">
     <button id="send">Send the request</button>
@@ -156,7 +156,7 @@ footer b{color:var(--sub)}
   <p class="hint"><b>Change the seed and run it again.</b> Watch how many arrive — then watch how
   many reach her. The first number wanders. The second one does not.</p>
   <div class="row two">
-    <div><label>SEED</label><input type="text" id="seed" value="6"></div>
+    <div><label>SEED</label><input type="text" id="seed" value="18"></div>
     <div style="display:flex;align-items:flex-end;gap:8px">
       <button id="run" style="flex:1">Run the night</button>
       <button class="ghost" id="roll">Another</button>
@@ -187,13 +187,24 @@ footer b{color:var(--sub)}
   <table id="ledger"><tr><td>Run a night first.</td><td></td></tr></table>
 </section>
 
+<section>
+  <h2><span class="n">6</span>A month, not a day</h2>
+  <p class="hint">Her answers feed back in, so she stops being asked the same thing twice.
+  <b>Run a month and watch — then notice how little happens in the first week.</b></p>
+  <div class="btns">
+    <button id="month">Replay 30 nights</button>
+  </div>
+  <div class="out pre" id="weeks">Not run yet.</div>
+  <div class="out" id="rep" style="margin-top:10px">—</div>
+</section>
+
 <footer>
   <b>Counts are generated, not measured.</b> Requests come from a seeded generator
   (<span class="k">src/core/night.ts</span>); every verdict comes from
   <span class="k">route()</span> in <span class="k">src/core/rules.ts</span>, the same function
   under 32 tests. Chain, payment and identity are not wired yet — where a signature or a
   settlement would happen, this console says so rather than pretending.<br><br>
-  <b>Across 20 seeds: 46–54 arrive, 2–3 reach her.</b>
+  <b>Across 20 seeds: 46–54 arrive, 2–3 reach her.</b> Over 30 replayed nights the mornings that need her fall from 3.0 to 0.7 a day — <b>but not in the first week.</b>
 </footer>
 
 </div>
@@ -443,10 +454,12 @@ function learn(records) {
     const approvals = new Map();
     const refusals = new Map();
     const refusalsByParty = new Map();
+    const approvalsByParty = new Map();
     for (const r of records) {
         const k = key(r.who, r.what);
         if (r.outcome === 'approved') {
             approvals.set(k, (approvals.get(k) ?? 0) + 1);
+            approvalsByParty.set(r.who, (approvalsByParty.get(r.who) ?? 0) + 1);
         }
         else if (r.outcome === 'refused') {
             refusals.set(k, (refusals.get(k) ?? 0) + 1);
@@ -460,12 +473,18 @@ function learn(records) {
         if (n >= APPROVALS_TO_LEARN && (refusals.get(k) ?? 0) === 0)
             autoPairs.add(k);
     }
+    const mutedPairs = new Set();
+    for (const [k, n] of refusals) {
+        if (n >= REFUSALS_TO_MUTE)
+            mutedPairs.add(k);
+    }
     const mutedParties = new Set();
     for (const [who, n] of refusalsByParty) {
-        if (n >= REFUSALS_TO_MUTE)
+        // Only someone she has never once said yes to gets cut off entirely.
+        if (n >= REFUSALS_TO_MUTE && (approvalsByParty.get(who) ?? 0) === 0)
             mutedParties.add(who);
     }
-    return { autoPairs, mutedParties };
+    return { autoPairs, mutedPairs, mutedParties };
 }
 /**
  * Apply what was learned to a decision the rules already made.
@@ -477,7 +496,14 @@ function applyLearned(req, decision, learned) {
     if (decision.verdict !== 'human')
         return decision;
     if (learned.mutedParties.has(req.who)) {
-        return { verdict: 'deny', rule: decision.rule, reason: `${req.who} has been refused repeatedly` };
+        return { verdict: 'deny', rule: decision.rule, reason: `${req.who} has been refused every time` };
+    }
+    if (learned.mutedPairs.has(key(req.who, req.what))) {
+        return {
+            verdict: 'deny',
+            rule: decision.rule,
+            reason: `she has refused "${req.what}" from ${req.who} before`,
+        };
     }
     if (learned.autoPairs.has(key(req.who, req.what))) {
         return {
@@ -557,18 +583,25 @@ const NEW_PARTIES = ['first-contact.newco.eth', 'unknown-buyer.eth'];
 const FLAGGED_ADDRESS = '0xSANCTIONED_FIXTURE';
 /** Weighted so that ordinary, low-stakes asks dominate — as they do in life. */
 const ASKS = [
-    { what: 'purchase-intent/groceries', purpose: 'demand-estimation', max: 1, weight: 34 },
-    { what: 'purchase-intent/cosmetics', purpose: 'market-research', max: 1, weight: 22 },
-    { what: 'preference/coffee', purpose: 'personalisation', max: 0.5, weight: 14 },
-    { what: 'location/coarse', purpose: 'market-research', max: 1, weight: 10 },
+    { what: 'purchase-intent/groceries', purpose: 'demand-estimation', max: 120, weight: 34 },
+    { what: 'purchase-intent/cosmetics', purpose: 'market-research', max: 200, weight: 22 },
+    { what: 'preference/coffee', purpose: 'personalisation', max: 80, weight: 14 },
+    { what: 'location/coarse', purpose: 'market-research', max: 150, weight: 10 },
     { what: 'health/symptoms', purpose: 'market-research', max: 3000, weight: 5 },
     { what: 'work/history', purpose: 'other', max: 4000, weight: 3 },
     { what: 'finance/bank-activity', purpose: 'other', max: 500, weight: 5 },
     { what: 'health/checkup-results', purpose: 'other', max: 900, weight: 3 },
-    { what: 'preference/travel', purpose: 'market-research', max: 1, weight: 5 },
-    { what: 'purchase-intent/electronics', purpose: 'demand-estimation', max: 1, weight: 5 },
+    { what: 'preference/travel', purpose: 'market-research', max: 150, weight: 5 },
+    { what: 'purchase-intent/electronics', purpose: 'demand-estimation', max: 180, weight: 5 },
     { what: 'corpus/writing', purpose: 'ai-training', max: 6000, weight: 3 },
 ];
+/**
+ * A few asks each night are bulk commissions — a whole panel rather than one answer.
+ * Those are what push an ordinary category past the owner's threshold, which is how
+ * rule 6 ever fires on something that is otherwise routine.
+ */
+const BULK_MULTIPLIER = 12;
+const BULK_CHANCE = 0.06;
 /** About fifty. Never exactly fifty — how many arrive is not our claim. */
 function generateNight(seed) {
     const rnd = mulberry32(seed);
@@ -588,12 +621,16 @@ function generateNight(seed) {
         const ask = pickAsk();
         const firstTime = rnd() < 0.05;
         const dirtyPayout = rnd() < 0.04;
+        const bulk = rnd() < BULK_CHANCE;
         return {
             id: `req-${String(i + 1).padStart(3, '0')}`,
             who: firstTime ? pick(NEW_PARTIES) : pick(KNOWN_PARTIES),
             what: ask.what,
             purpose: ask.purpose,
-            price: { amount: Math.round(rnd() * ask.max * 100) / 100, currency: 'JPYC' },
+            price: {
+                amount: Math.round(rnd() * ask.max * (bulk ? BULK_MULTIPLIER : 1)),
+                currency: 'JPYC',
+            },
             deadline: new Date(NIGHT.getTime() + (6 + rnd() * 18) * 3_600_000).toISOString(),
             payoutAddress: dirtyPayout
                 ? FLAGGED_ADDRESS
@@ -609,6 +646,76 @@ function demoContext(now = NIGHT) {
         seenBefore: (who) => seen.has(who),
         screen: (addr) => (addr === FLAGGED_ADDRESS ? 'flagged' : 'clean'),
     };
+}
+
+/**
+ * Yohaku — seven nights in a row.
+ *
+ * The claim "her judgement moves into the router" is only worth making if it can be run.
+ * This replays several nights, feeding each day's answers back in, so the fall in
+ * escalations is an outcome rather than a drawing.
+ */
+
+
+
+
+/**
+ * A plausible owner: happy to license her writing and her work history, never willing
+ * to sell anything about her health. The point is not which way she leans — it is that
+ * whichever way she leans, she stops being asked about it.
+ */
+const defaultAnswerer = (req) => {
+    if (req.what.startsWith('health/'))
+        return 'refused';
+    if (req.what.startsWith('finance/'))
+        return 'refused';
+    return 'approved';
+};
+function runWeek(opts) {
+    const policy = opts.policy ?? DEMO_POLICY;
+    const answer = opts.answerer ?? defaultAnswerer;
+    const records = [];
+    const days = [];
+    opts.seeds.forEach((seed, i) => {
+        const ctx = demoContext(NIGHT);
+        const learned = learn(records);
+        let learnedAway = 0;
+        const decided = generateNight(seed).map((request) => {
+            const raw = route(request, policy, ctx);
+            const final = applyLearned(request, raw, learned);
+            if (raw.verdict === 'human' && final.verdict !== 'human')
+                learnedAway++;
+            return { request, decision: final };
+        });
+        const auto = decided.filter((d) => d.decision.verdict === 'auto');
+        const held = decided
+            .filter((d) => d.decision.verdict === 'human')
+            .map((d) => ({ ...d, heldAt: NIGHT.toISOString() }));
+        const morning = surface(held, policy, MORNING);
+        // She answers what actually reached her. Everything else she never saw.
+        for (const b of morning.surfaced) {
+            for (const h of b.requests) {
+                records.push({
+                    who: h.request.who,
+                    what: h.request.what,
+                    outcome: answer(h.request),
+                    decidedAt: `day-${i + 1}`,
+                    escalatedBy: h.decision.rule,
+                });
+            }
+        }
+        days.push({
+            day: i + 1,
+            seed,
+            arrived: decided.length,
+            auto: auto.length,
+            deny: decided.filter((d) => d.decision.verdict === 'deny').length,
+            surfaced: morning.surfaced.length,
+            settled: Math.round(auto.reduce((t, d) => t + d.request.price.amount, 0)),
+            learnedAway,
+        });
+    });
+    return { days, records };
 }
 
 /* ─── wiring ────────────────────────────────────────────────────────────── */
@@ -628,7 +735,7 @@ for (const a of ASKS) {
   whatSel.append(o);
 }
 $('price').addEventListener('input', (e) => {
-  $('priceOut').textContent = (Number(e.target.value) / 10).toFixed(1);
+  $('priceOut').textContent = e.target.value;
 });
 
 function show(el, d) {
@@ -640,7 +747,7 @@ function show(el, d) {
 function ask(over = {}) {
   const req = {
     id: 'live', who: whoSel.value, what: whatSel.value, purpose: 'market-research',
-    price: { amount: Number($('price').value) / 10, currency: 'JPYC' },
+    price: { amount: Number($('price').value), currency: 'JPYC' },
     deadline: new Date(NIGHT.getTime() + 12 * 3600000).toISOString(),
     payoutAddress: '0x' + '1'.repeat(40),
     ...over,
@@ -650,8 +757,8 @@ function ask(over = {}) {
 $('send').addEventListener('click', () => ask());
 $('sendHealth').addEventListener('click', () => {
   whatSel.value = 'health/symptoms';
-  $('price').value = '20000'; $('priceOut').textContent = '2000.0';
-  ask({ what: 'health/symptoms', price: { amount: 2000, currency: 'JPYC' } });
+  $('price').value = '2600'; $('priceOut').textContent = '2600';
+  ask({ what: 'health/symptoms', price: { amount: 2600, currency: 'JPYC' } });
 });
 
 /* 2 — the delegate */
@@ -817,7 +924,34 @@ function renderLedger() {
     <tr><td>Received <span class="k">auto only</span></td><td>${money}</td></tr>`;
 }
 
-runNight(6);
+$('month').addEventListener('click', () => {
+  const seeds = Array.from({ length: 30 }, (_, i) => 101 + i);
+  const { days, records } = runWeek({ seeds });
+  const wk = (a, b) => {
+    const s = days.slice(a, b);
+    return (s.reduce((t, d) => t + d.surfaced, 0) / s.length).toFixed(1);
+  };
+  $('weeks').className = 'out pre';
+  $('weeks').textContent =
+    `mornings that needed her, weekly mean\n\n` +
+    `  week 1   ${wk(0, 7)}\n  week 2   ${wk(7, 14)}\n` +
+    `  week 3   ${wk(14, 21)}\n  week 4   ${wk(21, 30)}\n\n` +
+    `per day\n  ${days.map((d) => d.surfaced).join(' ')}\n\n` +
+    `Seven days changes nothing. It takes about a month\n` +
+    `before her judgement can stand in for her.`;
+
+  const parties = [...new Set(records.map((r) => r.who))]
+    .map((w) => ({ w, r: rejectionRate(records, w) }))
+    .filter((x) => x.r && x.r.asked >= 3)
+    .sort((a, b) => b.r.rate - a.r.rate);
+  $('rep').className = 'out';
+  $('rep').innerHTML =
+    `<b>What no single seller can see.</b><br><span class="k">rejection rate, across everyone</span><br><br>` +
+    parties.map((p) => `${p.w} — <b>${Math.round(p.r.rate * 100)}%</b> <span style="color:var(--faint)">(${p.r.refused}/${p.r.asked})</span>`).join('<br>') +
+    `<br><br>This is the signal worth handing back to payment screening. <b>It only exists because the platform sees every seller at once.</b>`;
+});
+
+runNight(18);
 </script>
 </body>
 </html>

@@ -10,9 +10,14 @@ every request. Answering all of them by hand does not scale; approving all of th
 automatically is not safe. **Yohaku routes each incoming agent request into `auto`, `human`,
 or `deny`** — and what it produces is not decisions. It is **empty space in someone's day.**
 
-> **Some 50 requests arrived overnight. She saw 2.**
+> **Some fifty requests arrived overnight. She saw three.**
 
 **It is not a way to close the door — it is what makes opening it possible.**
+
+**Why an agent pays a person at all:** scraping is free and **contaminated** — an agent cannot
+tell what a human wrote. So the scarce thing is not information, it is *information provably
+from a person*. **Only humans register here, and a name can be revoked** when someone poisons
+the well. See [CONCEPT §0](docs/CONCEPT.md).
 
 ![Architecture overview](docs/assets/overview.svg)
 
@@ -42,12 +47,13 @@ the hackathon kickoff. Nothing is carried over from before the event.
 🚧 **Work in progress.** Unchecked items are not implemented. This README is updated as
 things actually land — **if it is not checked here, it does not exist.**
 
-- [ ] Permission policy (ENS name space)
+- [x] **Policy model and evaluation** — `src/core/types.ts`
+- [ ] Permission policy written to / read from ENS
 - [x] **Routing — ten ordered rules** (`auto` / `human` / `deny`) — `src/core/rules.ts`, 24 tests
 - [x] **Human queue control** — bundling, ranking, daily cap, deadline fallback — `src/core/queue.ts`, 8 tests
 - [ ] Fresh proof of personhood at the moment of approval
 - [ ] Payment execution under the owner's constraints
-- [ ] Morning ledger
+- [x] **Morning ledger** — `src/core/ledger.ts`, used by the console
 
 ## How it is built
 
@@ -91,12 +97,12 @@ This section is rewritten with what was actually used once the integration lands
 npm install
 npm test          # 32 tests — the ten rules, ordering, failure paths, the queue
 npm run typecheck
-npm run seed -- 6 # one night of requests, run through the real router
+npm run seed -- 18 # one night of requests, run through the real router
 ```
 
-**`npm run seed -- 6` reproduces every number in the pitch** — 50 arrive, 36 settle, 12 are
-dropped, 2 reach her. Any other seed gives a different night: the input moves, the output
-does not. See [ASSUMPTIONS.md §2](docs/ASSUMPTIONS.md).
+**`npm run seed -- 18` is the night used in the pitch** — 49 arrive, 33 settle, 8 are dropped,
+**3 reach her**. Any other seed gives a different night: **across 20 runs, 46–54 arrive and
+2–3 reach her.** The input moves; the output does not. See [ASSUMPTIONS.md §2](docs/ASSUMPTIONS.md).
 
 Copy `.env.example` to `.env` before touching chain or sponsor APIs. *(UI and chain
 integration not yet wired.)*

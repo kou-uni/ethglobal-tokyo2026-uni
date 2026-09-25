@@ -20,7 +20,7 @@ If a figure appears in the README, the pitch or the UI, it is listed here with i
 | # | Value | Basis | Confidence |
 |---|---|---|---|
 | A1 | **Standard survey sample size n ≈ 385–400** (95% confidence, 5% margin) | Standard sample-size calculation. Universal in market research | 🟢 |
-| A2 | Cosmetics-related companies in Japan ≈ 4,000 | **From memory. Not yet checked against a public statistic.** Intended source: MHLW cosmetics manufacture/sale licence counts | 🔴 **Verify or drop before submission** |
+| A2 | Cosmetics **manufacture-and-sale** licences in Japan: **4,324** (March 2024) | [Japan Cosmetic Industry Association](https://www.jcia.org/user/statistics/industry), compiled from MHLW and other government statistics | 🟢 |
 | A3 | Each company commissions research ~once a month | Deliberately conservative guess | 🔴 |
 | A4 | Registered sellers in one category ≈ 1,000 | Early-stage scale, assumed | 🔴 |
 | A5 | **→ ~50 requests per seller per day** | A1 × (A2 ÷ 30 days) ÷ A4 = 400 × 133 ÷ 1000 ≈ 53 | 🟡 |
@@ -38,42 +38,45 @@ not the input.** If A2–A4 are wrong, the product's argument does not change.
 them through the real `route()`. The split is whatever the rules produce.
 
 ```
-npm run seed -- 6
+npm run seed -- 18
 
-  arrived            50
-    auto             36   settled while she slept
-    deny             12   never reached her
-    human             2   held
+  arrived            49
+    auto             33   settled while she slept
+    deny              8   never reached her
+    human             8   held
   07:00 — daily cap 3
-    surfaced          2
+    surfaced          3
+  settled            2,291 JPYC
 ```
 
-**`npm run seed -- 6` reproduces every number used in the pitch.** Any other seed gives a
-different night, which is the point.
+**`npm run seed -- 18` is the night quoted in the pitch.** It was chosen as *the run closest
+to the 20-seed mean* — not as the prettiest set of numbers. Any other seed gives a different
+night, which is the point.
 
 ### Measured across 20 seeds
 
 | | mean | range |
 |---|---|---|
 | arrived | **49.9** | 46–54 |
-| auto | 34.4 | 29–42 |
-| deny | 9.3 | 6–13 |
-| human (held) | 6.2 | 2–11 |
-| **surfaced at 07:00** | **2.8** | **2–3** |
+| auto | 32.5 | 26–37 |
+| deny | 9.8 | 5–14 |
+| human (held) | 7.5 | 4–11 |
+| **surfaced at 07:00** | **2.9** | **2–3** |
+| settled | 2,617 JPYC | 1,445–4,324 |
 
-**"About fifty arrive; she sees two or three" holds across every run.** The input wanders by
-±8; **the output does not**, because the daily cap is what fixes it.
+**"About fifty arrive; she sees two or three" holds across every run.** Arrivals wander by
+±8 and settlements by ±6; **what reaches her does not**, because the daily cap is what fixes it.
 
-⚠️ **What this measured, and what it did not.** This is our rules running against our own
-generated input. **It is not a measurement of real demand** — A2–A4 remain assumptions. What
-it does establish is that *the router behaves as claimed*, which is the part we control.
+⚠️ **What this measured, and what it did not.** These are our rules running against our own
+generated input. **It is not a measurement of real demand** — A3 and A4 remain assumptions.
+What it establishes is that *the router behaves as claimed*, which is the part we control.
 
 | # | Value | Basis | Confidence |
 |---|---|---|---|
-| B1 | ~50 requests in one night | Generator output; 20 runs, mean 49.9 | 🟡 |
-| B2 | auto 36 / deny 12 / human 2 | **`npm run seed -- 6`.** Reproducible | 🟡 |
-| B3 | Escalations 12 → 5 → 2 over 7 days | Illustrates the flywheel. **Not measured — the decision store is not implemented** | 🔴 |
-| B4 | ¥42,300 received overnight | Arbitrary. Kept non-round so it reads as a sum of transactions | 🔴 |
+| B1 | ~50 requests in one night | Generator output; 20 runs, mean 49.9 (46–54) | 🟡 |
+| B2 | auto ~33 / deny ~8 / **3 reach her** | **`npm run seed -- 18`**, chosen as closest to the mean. Reproducible | 🟡 |
+| B3 | Escalations fall **3.0 → 2.4 → 2.3 → 0.7** (weekly means over 30 days) | **Measured.** `runWeek()` replays 30 nights, feeding each morning's answers back in. **Seven days changes nothing** — the earlier "12 → 5 → 2 in a week" was wrong and has been withdrawn | 🟡 |
+| B4 | Amount received overnight | **Not a figure any more — the console sums what actually settled.** Any stated number must come from a run | 🟡 |
 | B5 | "Rejected by 87 of 100 people" | Illustrative reputation signal | 🔴 |
 | B6 | "Demand is 12× supply" | Illustrative pricing signal | 🔴 |
 
@@ -89,7 +92,7 @@ run the seed again with a different number and watch the input move while the ou
 | C1 | **Daily escalation cap = 3** | A person cannot absorb an unbounded number of decisions. **The owner sets this; 3 is only the starting value** |
 | C2 | Notification time = 07:00 | One batch, in the morning. Chosen to make "she was asleep" legible in the demo |
 | C3 | Request deadline = 12h | Long enough for a night to pass, short enough that an agent is not stuck |
-| C4 | Unit price = 0.5 JPYC / record | Illustrative. Real pricing is out of scope for the hackathon |
+| C4 | Prices: routine asks 80–200 JPYC, sensitive 3,000–6,000, occasional bulk ×12 | **Anchored to real survey incentives** (a respondent is typically paid ¥100–1,000). At 0.5 JPYC the ledger came to ¥17 a night, which is not a business and would not have survived a judge opening the console |
 | C5 | **Everything fails to `deny`** | Safety choice, not a measurement. Silence is not consent |
 | C6 | Sensitive domains = health / finance / employment | Chosen as domains where a wrong automatic answer is hard to undo |
 | C7 | One category only: **purchase intent** | Scope control for 36 hours |

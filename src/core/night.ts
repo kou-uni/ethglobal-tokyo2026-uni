@@ -61,18 +61,26 @@ export const FLAGGED_ADDRESS = '0xSANCTIONED_FIXTURE';
 
 /** Weighted so that ordinary, low-stakes asks dominate — as they do in life. */
 export const ASKS: { what: string; purpose: Purpose; max: number; weight: number }[] = [
-  { what: 'purchase-intent/groceries', purpose: 'demand-estimation', max: 1, weight: 34 },
-  { what: 'purchase-intent/cosmetics', purpose: 'market-research', max: 1, weight: 22 },
-  { what: 'preference/coffee', purpose: 'personalisation', max: 0.5, weight: 14 },
-  { what: 'location/coarse', purpose: 'market-research', max: 1, weight: 10 },
+  { what: 'purchase-intent/groceries', purpose: 'demand-estimation', max: 120, weight: 34 },
+  { what: 'purchase-intent/cosmetics', purpose: 'market-research', max: 200, weight: 22 },
+  { what: 'preference/coffee', purpose: 'personalisation', max: 80, weight: 14 },
+  { what: 'location/coarse', purpose: 'market-research', max: 150, weight: 10 },
   { what: 'health/symptoms', purpose: 'market-research', max: 3000, weight: 5 },
   { what: 'work/history', purpose: 'other', max: 4000, weight: 3 },
   { what: 'finance/bank-activity', purpose: 'other', max: 500, weight: 5 },
   { what: 'health/checkup-results', purpose: 'other', max: 900, weight: 3 },
-  { what: 'preference/travel', purpose: 'market-research', max: 1, weight: 5 },
-  { what: 'purchase-intent/electronics', purpose: 'demand-estimation', max: 1, weight: 5 },
+  { what: 'preference/travel', purpose: 'market-research', max: 150, weight: 5 },
+  { what: 'purchase-intent/electronics', purpose: 'demand-estimation', max: 180, weight: 5 },
   { what: 'corpus/writing', purpose: 'ai-training', max: 6000, weight: 3 },
 ];
+
+/**
+ * A few asks each night are bulk commissions — a whole panel rather than one answer.
+ * Those are what push an ordinary category past the owner's threshold, which is how
+ * rule 6 ever fires on something that is otherwise routine.
+ */
+export const BULK_MULTIPLIER = 12;
+export const BULK_CHANCE = 0.06;
 
 /** About fifty. Never exactly fifty — how many arrive is not our claim. */
 export function generateNight(seed: number): AgentRequest[] {
@@ -95,12 +103,16 @@ export function generateNight(seed: number): AgentRequest[] {
     const ask = pickAsk();
     const firstTime = rnd() < 0.05;
     const dirtyPayout = rnd() < 0.04;
+    const bulk = rnd() < BULK_CHANCE;
     return {
       id: `req-${String(i + 1).padStart(3, '0')}`,
       who: firstTime ? pick(NEW_PARTIES) : pick(KNOWN_PARTIES),
       what: ask.what,
       purpose: ask.purpose,
-      price: { amount: Math.round(rnd() * ask.max * 100) / 100, currency: 'JPYC' as const },
+      price: {
+        amount: Math.round(rnd() * ask.max * (bulk ? BULK_MULTIPLIER : 1)),
+        currency: 'JPYC' as const,
+      },
       deadline: new Date(NIGHT.getTime() + (6 + rnd() * 18) * 3_600_000).toISOString(),
       payoutAddress: dirtyPayout
         ? FLAGGED_ADDRESS

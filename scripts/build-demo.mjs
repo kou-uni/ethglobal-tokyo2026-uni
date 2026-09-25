@@ -8,7 +8,7 @@
 
 import { readFileSync, writeFileSync } from 'node:fs';
 
-const ORDER = ['types', 'rules', 'queue', 'ledger', 'decisions', 'night'];
+const ORDER = ['types', 'rules', 'queue', 'ledger', 'decisions', 'night', 'week'];
 
 const core = ORDER.map((name) => {
   const src = readFileSync(`demo/lib/core/${name}.js`, 'utf8');

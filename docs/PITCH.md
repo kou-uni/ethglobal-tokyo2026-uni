@@ -1,6 +1,6 @@
 # Pitch
 
-**Target: 3:00.** Structure follows what actually reaches finalists — *something visibly
+**Target: 3:30.** Structure follows what actually reaches finalists — *something visibly
 stops in the first twenty seconds*, then the reason, then proof anyone can check themselves.
 
 ---
@@ -19,12 +19,12 @@ stops in the first twenty seconds*, then the reason, then proof anyone can check
 
 ### 0:25 — The number that matters is the other one
 
-> **She will be asked about two of them.**
+> **She will be asked about three of them.**
 
-*(screen: the 50 dots resolve — 36 fade, 12 dim out, 2 stay lit)*
+*(screen: the fifty dots resolve — most fade to green, some dim out, three stay lit)*
 
-> Thirty-six settled while she slept. Twelve never reached her at all.
-> **Two were worth her attention.**
+> Thirty-three settled while she slept. Eight never reached her at all.
+> **Three were worth her attention — the cap she set herself.**
 
 ### 0:45 — The name
 
@@ -33,9 +33,24 @@ stops in the first twenty seconds*, then the reason, then proof anyone can check
 >
 > That is what we build. **Not decisions — space.**
 > Automatic requests *create* it. Denied ones *protect* it.
-> **Only two are allowed to occupy it.**
+> **Only three are allowed to occupy it — her number, not ours.**
 
-### 1:05 — Why nothing does this today
+### 1:05 — Why an agent pays her at all
+
+> Training costs have no ceiling. **What gets expensive is not compute — it is data nobody
+> already has.**
+>
+> And an agent scraping the open web **cannot tell what a human wrote.**
+> Synthetic text is free, everywhere, and indistinguishable at scale.
+>
+> **So scraping is free, and contaminated.**
+> **An agent will pay for something it can prove was not generated.**
+>
+> That is why **only humans can register here** — and why **a name can be taken away.**
+> Proof of personhood at the door does not prove the *content* is human.
+> **What keeps this clean is that we can revoke.**
+
+### 1:25 — Why nothing does this today
 
 > Identity exists. Permissions exist. Settlement exists. Ledgers exist.
 > **Nothing stands between an agent's request and a person's attention.**
@@ -43,7 +58,7 @@ stops in the first twenty seconds*, then the reason, then proof anyone can check
 > Approving everything by hand breaks at fifty a day.
 > Approving everything automatically is how you lose control of your own data.
 
-### 1:25 — The rules, in one sentence
+### 1:45 — The rules, in one sentence
 
 > Ten ordered rules. **The first match decides.**
 > And when anything breaks — our engine, the screening API, the network —
@@ -51,7 +66,7 @@ stops in the first twenty seconds*, then the reason, then proof anyone can check
 
 *(screen: rule list, the failure paths all converging on `deny`)*
 
-### 1:45 — The one an AI cannot get around ★ ENS
+### 2:05 — The one an AI cannot get around ★ ENS
 
 > She has a delegate — **her own agent**, helping her keep up.
 > Watch what happens when it tries to widen its own permissions.
@@ -63,9 +78,9 @@ Then it writes to a permission key — **rejected**)*
 > That is not our server saying no. **That is the contract.**
 > Open the ENS app yourself — **you do not have to trust our demo.**
 
-### 2:10 — 07:00 ★ World
+### 2:30 — 07:00 ★ World
 
-> Morning. **One notification.** Not fifty. Two — her own daily cap is three.
+> Morning. **One notification.** Not fifty. **Three — the cap she set.**
 >
 > She approves one. **And right there, at that moment, she proves she is a person.**
 > Not at signup. **Now.** Then it settles.
@@ -73,16 +88,18 @@ Then it writes to a permission key — **rejected**)*
 > The other one she ignores. The deadline passes. **It is denied.**
 > *(screen: the protected action does not happen)*
 
-### 2:35 — What she wakes up to ★ Curvegrid
+### 2:55 — What she wakes up to ★ Curvegrid
 
 > One screen. What moved overnight, inside the limits she set.
-> **And this line** — escalations, day one to day seven: **twelve, five, two.**
+> **And this line.** First week: three every morning.
+> **Fourth week: most mornings, none at all.**
 >
-> **Her judgement is moving into the router. The space widens.**
+> It takes a month, not a day — **her judgement has to accumulate before it can stand in for her.**
+> That is the honest version, and it is the one we measured.
 > What accumulates is a record of *when a human says no* —
 > **the one thing that cannot be synthesised.**
 
-### 2:55 — Close
+### 3:15 — Close
 
 > Yesterday, on this stage, Curvegrid said:
 > ***"The missing layer decides whether money should move."***
@@ -114,7 +131,7 @@ record the real count. **If we ask 11 people, we say 11.** See
 |---|---|
 | "A delegate can propose but cannot rewrite its own permissions" | "Revocation is unique to ENSv2" — it is not |
 | "Curvegrid described this missing layer on stage; we built it" | "Curvegrid NEO already ships this" |
-| "Today there were about fifty" | "Sellers receive 52 requests per day" — nothing was measured |
+| "Tonight there were about fifty" | "Sellers receive 50 requests per day" — nothing real was measured |
 | "These are demo figures" | Presenting any count as a finding |
 
 ## At the booth — hand them the keyboard ★
@@ -145,7 +162,7 @@ before they find it** — it buys every other claim on the screen.
 
 - **The first twenty seconds carry the pitch.** If the counter climbing while she sleeps does
   not land, nothing after it will
-- **Say "two" more often than "fifty."** The input is not our claim; the output is
+- **Say "three" more often than "fifty."** The input is not our claim; the output is
 - At the booth, **do not present — hand it over.** Ask the judge to type
   *"give me her health data"* and let them draw `human` with their own hands
 - Every proof point has an off-app check: the ENS app, a block explorer, the chain itself.

@@ -79,17 +79,17 @@
   <rect x="393" y="378" width="152" height="72" rx="18" fill="#ECEAE4"/>
   <rect x="550" y="378" width="152" height="72" rx="18" fill="#BCB2FA"/>
 
-  <text x="312" y="404" font-size="15" font-weight="700" fill="#242329" text-anchor="middle">auto · 36</text>
+  <text x="312" y="404" font-size="15" font-weight="700" fill="#242329" text-anchor="middle">auto · ~33</text>
   <text x="312" y="424" font-size="11.5" font-weight="600" fill="#4A5C1E" text-anchor="middle">creates space</text>
   <text x="312" y="440" font-size="10.5" fill="#6E7C46" text-anchor="middle">she is never asked</text>
 
-  <text x="469" y="404" font-size="15" font-weight="700" fill="#6E6C75" text-anchor="middle">deny · 12</text>
+  <text x="469" y="404" font-size="15" font-weight="700" fill="#6E6C75" text-anchor="middle">deny · ~8</text>
   <text x="469" y="424" font-size="11.5" font-weight="600" fill="#8A8880" text-anchor="middle">protects space</text>
   <text x="469" y="440" font-size="10.5" fill="#A9A7A0" text-anchor="middle">never reaches her</text>
 
-  <text x="626" y="404" font-size="15" font-weight="700" fill="#242329" text-anchor="middle">human · 2</text>
+  <text x="626" y="404" font-size="15" font-weight="700" fill="#242329" text-anchor="middle">human · 3</text>
   <text x="626" y="424" font-size="11.5" font-weight="600" fill="#4E42A8" text-anchor="middle">occupies space</text>
-  <text x="626" y="440" font-size="10.5" fill="#6257B8" text-anchor="middle">within her daily cap</text>
+  <text x="626" y="440" font-size="10.5" fill="#6257B8" text-anchor="middle">her daily cap</text>
 
   <rect x="786" y="214" width="164" height="236" rx="18" fill="#FFFFFF" stroke="#E2E0D8" stroke-width="1.5"/>
   <text x="806" y="238" font-size="10" font-weight="700" fill="#A9A7A0" letter-spacing="1.3">THE OWNER</text>
@@ -100,7 +100,7 @@
   <line x1="806" y1="333" x2="930" y2="333" stroke="#ECEAE4" stroke-width="1.5"/>
   <text x="806" y="356" font-size="12.5" font-weight="700" fill="#4E42A8">she is asleep</text>
   <text x="806" y="380" font-size="11.5" fill="#6E6C75">07:00 — one notification</text>
-  <text x="806" y="424" font-size="30" font-weight="700" fill="#242329">2<tspan font-size="12" font-weight="500" fill="#A9A7A0" dx="7">of ~50</tspan></text>
+  <text x="806" y="424" font-size="30" font-weight="700" fill="#242329">3<tspan font-size="12" font-weight="500" fill="#A9A7A0" dx="7">of ~50</tspan></text>
 
   <path d="M708 412 H778" stroke="#8F80E8" stroke-width="2.2" marker-end="url(#ml)" fill="none"/>
   <text x="722" y="404" font-size="9.5" fill="#6257B8">07:00</text>
@@ -115,7 +115,7 @@
 
   <text x="500" y="512" font-size="10" font-weight="700" fill="#A9A7A0" letter-spacing="1.3">L5 · LEDGER</text>
   <text x="500" y="535" font-size="16" font-weight="700" fill="#242329">what happened overnight</text>
-  <text x="500" y="553" font-size="11.5" fill="#6E6C75">escalations 12 → 5 → 2</text>
+  <text x="500" y="553" font-size="11.5" fill="#6E6C75">wk1 three a morning · wk4 mostly none</text>
   <rect x="630" y="498" width="58" height="18" rx="9" fill="#242329"/>
   <text x="659" y="511" font-size="9.5" font-weight="700" fill="#F8F7F3" text-anchor="middle">Curvegrid</text>
 

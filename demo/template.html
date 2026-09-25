@@ -128,8 +128,8 @@ footer b{color:var(--sub)}
     <div><label>WHAT YOU WANT</label><select id="what"></select></div>
   </div>
   <div class="row">
-    <div><label>PRICE — <span id="priceOut">0.5</span> JPYC</label>
-      <input type="range" id="price" min="0" max="5000" step="10" value="0"></div>
+    <div><label>PRICE — <span id="priceOut">150</span> JPYC</label>
+      <input type="range" id="price" min="0" max="6000" step="10" value="150"></div>
   </div>
   <div class="btns">
     <button id="send">Send the request</button>
@@ -156,7 +156,7 @@ footer b{color:var(--sub)}
   <p class="hint"><b>Change the seed and run it again.</b> Watch how many arrive — then watch how
   many reach her. The first number wanders. The second one does not.</p>
   <div class="row two">
-    <div><label>SEED</label><input type="text" id="seed" value="6"></div>
+    <div><label>SEED</label><input type="text" id="seed" value="18"></div>
     <div style="display:flex;align-items:flex-end;gap:8px">
       <button id="run" style="flex:1">Run the night</button>
       <button class="ghost" id="roll">Another</button>
@@ -187,13 +187,24 @@ footer b{color:var(--sub)}
   <table id="ledger"><tr><td>Run a night first.</td><td></td></tr></table>
 </section>
 
+<section>
+  <h2><span class="n">6</span>A month, not a day</h2>
+  <p class="hint">Her answers feed back in, so she stops being asked the same thing twice.
+  <b>Run a month and watch — then notice how little happens in the first week.</b></p>
+  <div class="btns">
+    <button id="month">Replay 30 nights</button>
+  </div>
+  <div class="out pre" id="weeks">Not run yet.</div>
+  <div class="out" id="rep" style="margin-top:10px">—</div>
+</section>
+
 <footer>
   <b>Counts are generated, not measured.</b> Requests come from a seeded generator
   (<span class="k">src/core/night.ts</span>); every verdict comes from
   <span class="k">route()</span> in <span class="k">src/core/rules.ts</span>, the same function
   under 32 tests. Chain, payment and identity are not wired yet — where a signature or a
   settlement would happen, this console says so rather than pretending.<br><br>
-  <b>Across 20 seeds: 46–54 arrive, 2–3 reach her.</b>
+  <b>Across 20 seeds: 46–54 arrive, 2–3 reach her.</b> Over 30 replayed nights the mornings that need her fall from 3.0 to 0.7 a day — <b>but not in the first week.</b>
 </footer>
 
 </div>
@@ -218,7 +229,7 @@ for (const a of ASKS) {
   whatSel.append(o);
 }
 $('price').addEventListener('input', (e) => {
-  $('priceOut').textContent = (Number(e.target.value) / 10).toFixed(1);
+  $('priceOut').textContent = e.target.value;
 });
 
 function show(el, d) {
@@ -230,7 +241,7 @@ function show(el, d) {
 function ask(over = {}) {
   const req = {
     id: 'live', who: whoSel.value, what: whatSel.value, purpose: 'market-research',
-    price: { amount: Number($('price').value) / 10, currency: 'JPYC' },
+    price: { amount: Number($('price').value), currency: 'JPYC' },
     deadline: new Date(NIGHT.getTime() + 12 * 3600000).toISOString(),
     payoutAddress: '0x' + '1'.repeat(40),
     ...over,
@@ -240,8 +251,8 @@ function ask(over = {}) {
 $('send').addEventListener('click', () => ask());
 $('sendHealth').addEventListener('click', () => {
   whatSel.value = 'health/symptoms';
-  $('price').value = '20000'; $('priceOut').textContent = '2000.0';
-  ask({ what: 'health/symptoms', price: { amount: 2000, currency: 'JPYC' } });
+  $('price').value = '2600'; $('priceOut').textContent = '2600';
+  ask({ what: 'health/symptoms', price: { amount: 2600, currency: 'JPYC' } });
 });
 
 /* 2 — the delegate */
@@ -407,7 +418,34 @@ function renderLedger() {
     <tr><td>Received <span class="k">auto only</span></td><td>${money}</td></tr>`;
 }
 
-runNight(6);
+$('month').addEventListener('click', () => {
+  const seeds = Array.from({ length: 30 }, (_, i) => 101 + i);
+  const { days, records } = runWeek({ seeds });
+  const wk = (a, b) => {
+    const s = days.slice(a, b);
+    return (s.reduce((t, d) => t + d.surfaced, 0) / s.length).toFixed(1);
+  };
+  $('weeks').className = 'out pre';
+  $('weeks').textContent =
+    `mornings that needed her, weekly mean\n\n` +
+    `  week 1   ${wk(0, 7)}\n  week 2   ${wk(7, 14)}\n` +
+    `  week 3   ${wk(14, 21)}\n  week 4   ${wk(21, 30)}\n\n` +
+    `per day\n  ${days.map((d) => d.surfaced).join(' ')}\n\n` +
+    `Seven days changes nothing. It takes about a month\n` +
+    `before her judgement can stand in for her.`;
+
+  const parties = [...new Set(records.map((r) => r.who))]
+    .map((w) => ({ w, r: rejectionRate(records, w) }))
+    .filter((x) => x.r && x.r.asked >= 3)
+    .sort((a, b) => b.r.rate - a.r.rate);
+  $('rep').className = 'out';
+  $('rep').innerHTML =
+    `<b>What no single seller can see.</b><br><span class="k">rejection rate, across everyone</span><br><br>` +
+    parties.map((p) => `${p.w} — <b>${Math.round(p.r.rate * 100)}%</b> <span style="color:var(--faint)">(${p.r.refused}/${p.r.asked})</span>`).join('<br>') +
+    `<br><br>This is the signal worth handing back to payment screening. <b>It only exists because the platform sees every seller at once.</b>`;
+});
+
+runNight(18);
 </script>
 </body>
 </html>

@@ -6,6 +6,33 @@
 > **Agents never sleep. They will fill every hour you have.**
 > **Yohaku decides what not to show you.**
 
+## 0. Why anyone pays a person for this
+
+Training costs have no ceiling. As models get better, **what gets expensive is not compute —
+it is data nobody already has.** And the open web stopped being that some time ago.
+
+**An agent scraping the web cannot tell what a human wrote.** Synthetic text is free,
+abundant, and indistinguishable at scale. So the scarce thing is no longer *information*.
+It is **information you can prove came from a person.**
+
+That is the whole reason this market exists:
+
+> **Scraping is free, and contaminated.**
+> **So an agent will pay — for something it can prove was not generated.**
+
+Which makes one property the entire product:
+
+> **Only humans can register here.** Proof of personhood at the door, and
+> **the ability to take a name away** when someone poisons the well.
+
+Note what that second half is doing. Proof-of-personhood shows *the account holder* is a
+person; it does not show *the content* is. **The guarantee is not the signup — it is that a
+name can be revoked.** Personhood here is maintained, not certified once.
+
+And there is a second scarcity underneath, which is what §5 is about: as agents do more of
+the deciding, **a record of when a human said no** becomes the thing that cannot be
+synthesised either.
+
 ## 1. The asymmetry this exists for
 
 |  | Today | **Agent economy** |
@@ -23,21 +50,22 @@ who can triage them can take the business.
 ## 2. What it sells is empty space
 
 The value is not what you did. It is **what you never had to look at.**
-~50 requests, 2 seen — **48 requests worth of empty space.**
+~50 requests, 3 seen — **47 requests worth of empty space.**
 
-**The interesting number is 2, not 50.** How many arrive is not ours to control; how many reach a person is.
+**The interesting number is 3, not 50.** How many arrive is not ours to control; how many reach a person is.
 
 | | Action | In terms of *yohaku* |
 |---|---|---|
-| **`auto`** | 36 pass automatically | **Creates space** — she is never asked |
-| **`human`** | 2 are raised | **Occupies space** — worth her attention |
-| **`deny`** | 12 are dropped | **Protects space** — never reaches her |
+| **`auto`** | ~33 pass automatically | **Creates space** — she is never asked |
+| **`human`** | **3 are raised** — her daily cap | **Occupies space** — worth her attention |
+| **`deny`** | ~8 are dropped | **Protects space** — never reaches her |
 
 The rest of the design says the same thing in other words:
 
 - **Bundling** (3 companies → 1 notification) — does not eat into the space
 - **Deadline fallback** (silence → `deny`) — pending items never pile up. **The space holds**
-- **Accumulated decisions** (12 → 5 → 2) — **the space widens day by day**
+- **Accumulated decisions** — **the space widens, but slowly.** Week one: three a morning.
+  Week four: most mornings, none at all. *(measured: 3.0 → 2.4 → 2.3 → 0.7)*
 
 ## 3. Request schema
 
@@ -125,14 +153,15 @@ Three endpoints.
 **`POST /requests` answers synchronously even when the verdict is `human`** — it returns
 "held, deadline at T". An agent that is left hanging is an agent that is stuck.
 
-Four screens.
+The console (`demo/index.html`) is one page with five things a judge can touch.
 
 | # | Screen | For | Contents |
 |---|---|---|---|
 | 1 | Policy | The person, once | Category rules, amount threshold, expiry |
 | 2 | **Morning inbox** ⭐ | The person, daily | **Bundled escalations. Top 3. Approve** |
-| 3 | Ledger | The person | daily counts, income, 12→5→2 |
+| 3 | Ledger | The person | daily counts, income, the escalation trend |
 | 4 | **Agent side** | **Judges, at the booth** | Submit a request, watch the verdict come back |
+| 5 | **Delegate** | **Judges, at the booth** | Try to widen a delegate's rights — and be refused |
 
 ## 7. Permission model
 
@@ -170,12 +199,12 @@ Independent sellers must not be pooled into one resolver instance without scopin
 ## 8. Demo walkthrough
 
 ```
-02:00   agent requests keep arriving           50 today
+02:00   agent requests keep arriving           49 tonight
 
         Yohaku handles them
-          auto   36   settle immediately, executed under constraints
-          deny   12   revoked / out of scope — never reaches her
-          human   2   bundled, held  (owner's cap: 3/day)
+          auto   33   settle immediately, executed under constraints
+          deny    8   revoked / out of scope — never reaches her
+          human   8   bundled — 3 will surface, her daily cap
 
         she is asleep
 
@@ -185,13 +214,13 @@ Independent sellers must not be pooled into one resolver instance without scopin
           1 approved  → fresh proof of personhood → payment executes
           1 ignored   → deadline passes → auto-denied
 
-        ledger:  ¥42,300 arrived overnight
-        graph:   escalations  12 → 5 → 2
+        ledger:  2,291 JPYC arrived overnight
+        trend:   week 1 three a morning · week 4 mostly none
 ```
 
 **Opening line:**
 
-> **"Some 50 came in overnight. She saw 2."**
+> **"Fifty came in overnight. She saw three."**
 
 ### Design rule
 
@@ -201,7 +230,7 @@ Independent sellers must not be pooled into one resolver instance without scopin
 > app, in a block explorer. Judging happens one person at a time at the booth;
 > **what matters is whether they can touch it.**
 
-**Do not push 50 real transactions first.** Get *pass / ask / stop* genuinely working on a
+**Do not push fifty real transactions first.** Get *pass / ask / stop* genuinely working on a
 handful of requests. Volume and the learning curve come after.
 
 ---
