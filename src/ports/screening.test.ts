@@ -1,0 +1,59 @@
+import { describe, expect, it } from 'vitest';
+import { FIXTURES, MockScreening, UnavailableScreening, mayMoveMoney } from './screening.js';
+import { route } from '../core/rules.js';
+import { DEMO_POLICY, FLAGGED_ADDRESS, NIGHT, demoContext } from '../core/night.js';
+import type { AgentRequest, ScreeningResult } from '../core/types.js';
+
+const req = (payoutAddress: string): AgentRequest => ({
+  id: 's', who: 'market-research.acme.eth', what: 'purchase-intent/groceries',
+  purpose: 'market-research', price: { amount: 100, currency: 'JPYC' },
+  deadline: '2026-09-27T00:00:00Z', payoutAddress,
+});
+
+describe('only clean moves money', () => {
+  it.each<[ScreeningResult, boolean]>([
+    ['clean', true],
+    ['flagged', false],
+    ['unavailable', false],
+  ])('%s → %s', (result, allowed) => {
+    expect(mayMoveMoney(result)).toBe(allowed);
+  });
+});
+
+describe('the port', () => {
+  it('flags the sentinel and clears everything else', async () => {
+    const s = new MockScreening();
+    expect(await s.scan(FLAGGED_ADDRESS)).toBe('flagged');
+    expect(await s.scan('0x' + '1'.repeat(40))).toBe('clean');
+  });
+
+  it('reports unavailable instead of throwing, so the caller must decide', async () => {
+    await expect(new UnavailableScreening().scan('0x0')).resolves.toBe('unavailable');
+  });
+});
+
+describe('rule 4 stops the payment while the grant stays valid', () => {
+  it('denies a flagged payer even though nothing else is wrong', () => {
+    const d = route(req(FLAGGED_ADDRESS), DEMO_POLICY, demoContext(NIGHT));
+    expect(d).toMatchObject({ verdict: 'deny', rule: 4 });
+    expect(d.reason).toMatch(/screening/);
+  });
+
+  it('denies when screening is unavailable — we do not settle unchecked', () => {
+    const ctx = { ...demoContext(NIGHT), screen: (): ScreeningResult => 'unavailable' };
+    expect(route(req('0x' + '1'.repeat(40)), DEMO_POLICY, ctx)).toMatchObject({
+      verdict: 'deny', rule: 4,
+    });
+  });
+
+  it('lets a clean payer through on the same request', () => {
+    expect(route(req('0x' + '1'.repeat(40)), DEMO_POLICY, demoContext(NIGHT)).verdict).not.toBe('deny');
+  });
+});
+
+describe('fixtures', () => {
+  it('are empty until a real call has answered — the prize forbids assumed values', () => {
+    expect(FIXTURES.clean).toBeUndefined();
+    expect(FIXTURES.flagged).toBeUndefined();
+  });
+});
