@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.128.0",
+    "openai": "^7.23.0",
     "viem": "^2.56.9"
   }
 }

@@ -9,8 +9,8 @@
 
 import { route } from '../src/core/rules.js';
 import { DEMO_POLICY, NIGHT, demoContext } from '../src/core/night.js';
-import { applyClassification, MockClassifier, type ClassifierPort } from '../src/ports/classifier.js';
-import { ClaudeClassifier } from '../src/adapters/claude-classifier.js';
+import { applyClassification } from '../src/ports/classifier.js';
+import { chooseProvider } from '../src/ports/provider.js';
 import type { AgentRequest } from '../src/core/types.js';
 
 const what = process.argv[2] ?? 'unlisted/something-new';
@@ -26,8 +26,8 @@ const req: AgentRequest = {
   payoutAddress: `0x${'1'.repeat(40)}`,
 };
 
-const hasKey = Boolean(process.env['ANTHROPIC_API_KEY'] || process.env['ANTHROPIC_AUTH_TOKEN']);
-const classifier: ClassifierPort = hasKey ? new ClaudeClassifier() : new MockClassifier();
+const choice = chooseProvider();
+const { provider, model: modelName, live: hasKey } = choice;
 
 const first = route(req, DEMO_POLICY, demoContext(NIGHT));
 
@@ -40,13 +40,13 @@ if (first.rule !== 9) {
 }
 
 if (!hasKey) {
-  console.log('\n  ANTHROPIC_API_KEY is not set — using the mock, so no model ran.\n');
+  console.log('\n  No ANTHROPIC_API_KEY or OPENAI_API_KEY — using the mock, so no model ran.\n');
 }
 
-const c = await classifier.classify(req);
+const c = await choice.create().classify(req);
 const final = applyClassification(first, c);
 
-console.log(`\n  model     ${hasKey ? 'claude-opus-5' : 'mock'}`);
+console.log(`\n  model     ${modelName}  (${provider})`);
 console.log(`    category      ${c.category}`);
 console.log(`    sensitivity   ${c.sensitivity}`);
 console.log(`    suggestion    ${c.suggestion}      <- only 'ask' or 'drop' exist`);

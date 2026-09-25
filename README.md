@@ -99,9 +99,18 @@ a deny, cannot touch rules 0–7, and cannot produce `auto`. Tested both ways.
 > **The prompt is not the security policy.** The rules are, and the model answers into a
 > shape that cannot express permission.
 
-⚠️ **Not yet run against the API.** The adapter is written and tested against a mock; no
-model has been called from this machine. `npm run classify -- "<category>" <amount>` runs it
-for real once `ANTHROPIC_API_KEY` is set.
+**Either provider runs it.** Whichever key is present is used — Claude or OpenAI — because
+the guarantee lives in the schema and in `applyClassification`, not in an adapter. Swapping
+the model cannot weaken it, which is the reason there is a port here at all.
+
+```bash
+export ANTHROPIC_API_KEY=...   # or OPENAI_API_KEY=...
+npm run classify -- "sleep/tracking-logs" 300
+```
+
+⚠️ **Not yet run against either API.** Both adapters are written and tested against a mock;
+no model has been called from this machine. With no key the CLI says so and uses the mock —
+**it never quietly pretends a model ran.**
 
 ## Tech
 
