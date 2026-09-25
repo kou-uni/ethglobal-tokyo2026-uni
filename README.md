@@ -14,6 +14,23 @@ or `deny`** — and what it produces is not decisions. It is **empty space in so
 
 **It is not a way to close the door — it is what makes opening it possible.**
 
+**What it splits.** When agents are customers by default, two things have to be divided
+cleanly between an agent and a person: **money, and responsibility.** Money already has
+protocols (x402, AP2 Payment Mandates). Responsibility does not move — Spain's data
+protection authority stated in February 2026 that *an agent's autonomy creates no new legal
+category; the deploying organization retains full responsibility.* **"The AI did it" is not
+a defence.** So what decides everything is who holds the record of when consent was given,
+by whom, to what — **and that is the piece with no owner.** See
+[STORY §9](docs/product/STORY.md).
+
+**MIT licensed, and that is a requirement, not generosity.** AP2 requires a Trusted Surface
+to be *non-agentic*, because *"the Agent itself is a potential attacker."* The same logic
+runs one step further: **a surface that decides what a person never sees must be one they
+can read.** A closed box deciding "you don't need to see this" is the thing we are trying to
+avoid. So every claim here is re-derived from the running code by `npm run verify`, and
+**you can disprove them with the same command.** Take the shape, not the product —
+[the six pieces worth stealing](docs/product/STORY.md#持っていってほしいもの).
+
 **Where it sits.** An agent that works around the clock spends and earns around the clock.
 The question that decides everything is not how much, but **where a person still has to be
 involved.** Yohaku is that involvement point — not a wallet, not a treasury dashboard, not
