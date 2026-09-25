@@ -14,6 +14,12 @@ or `deny`** — and what it produces is not decisions. It is **empty space in so
 
 **It is not a way to close the door — it is what makes opening it possible.**
 
+**Where it sits.** An agent that works around the clock spends and earns around the clock.
+The question that decides everything is not how much, but **where a person still has to be
+involved.** Yohaku is that involvement point — not a wallet, not a treasury dashboard, not
+an execution layer. **It decides which of an agent's money movements a human has to see at
+all.** See [CONCEPT §0-B](docs/CONCEPT.md).
+
 **Why an agent pays a person at all:** scraping is free and **contaminated** — an agent cannot
 tell what a human wrote. So the scarce thing is not information, it is *information provably
 from a person*. **Only humans register here, and a name can be revoked** when someone poisons

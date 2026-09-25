@@ -33,6 +33,28 @@ And there is a second scarcity underneath, which is what §5 is about: as agents
 the deciding, **a record of when a human said no** becomes the thing that cannot be
 synthesised either.
 
+## 0-B. Where this sits: the finances of an AI agent
+
+**An agent's finances are not a balance to be watched.** An agent that works around the
+clock is spending and earning around the clock, and the question that decides everything is
+not *how much* — it is **where a person still has to be involved.**
+
+Yohaku is that involvement point.
+
+| | |
+|---|---|
+| **Not** | a wallet, a treasury dashboard, or an execution layer |
+| **Is** | the layer that decides **which of an agent's money movements a human has to see at all** — and holds that number to what the person can actually absorb |
+
+The morning ledger is the smallest possible form of it: **one screen of what an agent moved
+overnight, and the two things that needed a person.** Scale that from one seller to a team
+to a company and the shape does not change — only the number of people whose attention is
+being spent.
+
+**That is the part nobody has built.** Identity, permissions, execution and custody all
+exist. *"The missing layer decides whether money should move"* — and deciding whether money
+should move means deciding, first, whether to ask.
+
 ## 1. The asymmetry this exists for
 
 |  | Today | **Agent economy** |
