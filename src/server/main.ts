@@ -12,6 +12,7 @@ import { loadEnv } from '../core/env.js';
 loadEnv();
 
 import { DEMO_POLICY, KNOWN_PARTIES } from '../core/night.js';
+import { pastNights } from '../core/history.js';
 import { chooseProvider } from '../ports/provider.js';
 import { MockScreening } from '../ports/screening.js';
 import { MockIdentity, type FreshnessPolicy } from '../ports/identity.js';
@@ -41,6 +42,8 @@ const app = createApp({
   policy: DEMO_POLICY,
   store: new Store(KNOWN_PARTIES),
   screening: new MockScreening(),
+  // Replayed through the same route(), so the fold shows the router's output, not a fixture.
+  nights: pastNights(new Date()),
   ...(provider.live ? { classifier: provider.create() } : {}),
   ...(redirectUri ? { redirectUri } : {}),
   identityWired: worldConfigured && Boolean(redirectUri),

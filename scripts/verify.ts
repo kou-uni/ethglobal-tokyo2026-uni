@@ -124,24 +124,58 @@ function sources(dir: string): string[] {
 
 /** Things that change outside this repository and must never be written into it. */
 const GUESSES: { name: string; re: RegExp }[] = [
-  { name: 'model id', re: /['"`](?:gpt-[\w.-]+|claude-[\w.-]+|o\d-[\w.-]+)['"`]/ },
-  { name: 'api endpoint', re: /['"`]https?:\/\/(?!127\.0\.0\.1|localhost)[^'"`]+['"`]/ },
-  { name: 'contract address', re: /['"`]0x[0-9a-fA-F]{40}['"`]/ },
+  { name: 'model id', re: /['"`](?:gpt-[\w.-]+|claude-[\w.-]+|o\d-[\w.-]+)['"`]/g },
+  { name: 'api endpoint', re: /['"`]https?:\/\/(?!127\.0\.0\.1|localhost)[^'"`]+['"`]/g },
+  { name: 'contract address', re: /['"`]0x[0-9a-fA-F]{40}['"`]/g },
 ];
+
+/**
+ * Hosts that serve assets rather than answers.
+ *
+ * **This narrowing was added 2026-09-26, and it is a change to the check.** The rule it
+ * loosens exists to catch an endpoint or model id somebody *guessed*. A stylesheet from a
+ * published font CDN is neither guessed nor credentialed — but it is still a dependency on
+ * someone else's network, so it is allowed only alongside `local font fallback` below,
+ * which fails if the page would look broken when that host is unreachable.
+ */
+const ASSET_HOSTS = [/^['"`]https:\/\/fonts\.(?:googleapis|gstatic)\.com\//];
 
 for (const file of sources('src').concat(sources('scripts'))) {
   const body = read(file);
   for (const { name, re } of GUESSES) {
-    const hit = body.match(re);
-    if (!hit) continue;
-    // Repeated characters are fixtures, not real addresses.
-    if (name === 'contract address' && /^['"`]0x(.)\1{39}['"`]$/.test(hit[0])) continue;
-    check(
-      `${file} has no hardcoded ${name}`,
-      false,
-      `found ${hit[0]} — read it from the environment, or list it from the provider`,
-    );
+    // Every hit, not just the first: one permitted URL must not hide a real one behind it.
+    for (const hit of body.match(re) ?? []) {
+      // Repeated characters are fixtures, not real addresses.
+      if (name === 'contract address' && /^['"`]0x(.)\1{39}['"`]$/.test(hit)) continue;
+      if (name === 'api endpoint' && ASSET_HOSTS.some((h) => h.test(hit))) continue;
+      check(
+        `${file} has no hardcoded ${name}`,
+        false,
+        `found ${hit} — read it from the environment, or list it from the provider`,
+      );
+    }
   }
+}
+
+/*
+ * The price of allowing a font CDN: the page must not depend on it.
+ *
+ * "Looks fine on my machine with the font cached" is exactly the failure that shows up at
+ * a booth on venue wifi, so the fallback is checked rather than assumed.
+ */
+{
+  const pages = read('src/server/pages.ts');
+  const stack = pages.match(/font-family:([^;]+);/)?.[1] ?? '';
+  const remote = /fonts\.googleapis\.com/.test(pages);
+  const localRounded = /Hiragino Maru Gothic ProN/.test(stack);
+  const systemFallback = /-apple-system|sans-serif/.test(stack);
+  check(
+    'local font fallback',
+    !remote || (localRounded && systemFallback),
+    remote
+      ? 'pages.ts loads a font over the network with no local rounded fallback in the same stack'
+      : '',
+  );
 }
 if (!failures.some((f) => f.includes('hardcoded'))) {
   check('no hardcoded model ids, endpoints or addresses anywhere in src/ or scripts/', true, '');

@@ -156,3 +156,51 @@ describe('the server and the seed script describe the same night', () => {
     expect(led.needsYou).toHaveLength(expected);
   });
 });
+
+/**
+ * The approval page shows a money figure in its fold. Settlement is not wired, so that
+ * figure is what accepted offers are *worth* — and the page must say so on the same
+ * screen. This is here because the failure is silent: the sum renders perfectly either
+ * way, and only the label decides whether the screen is lying.
+ */
+describe('the fold never shows money without saying nothing moved', () => {
+  it('labels the sum as worth and names the missing payment', async () => {
+    for (const r of generateNight(18).slice(0, 30)) await post('/requests', r);
+    const held = store.outstanding();
+    expect(held.length).toBeGreaterThan(0);
+
+    const page = await (await fetch(`${base}/approve/${held[0]!.request.id}`)).text();
+    const sum = page.match(/class="amt">([\d,]+) JPYC([^<]*)</);
+    expect(sum, 'the fold should show what was accepted').not.toBeNull();
+    expect(sum![2]).toContain('worth');
+    expect(page).toContain('Payment is not connected yet');
+    expect(page).not.toMatch(/class="amt">\+/);
+  });
+
+  it('tells her how many arrived and how many need her', async () => {
+    const held = store.outstanding();
+    const page = await (await fetch(`${base}/approve/${held[0]!.request.id}`)).text();
+    expect(page).toContain('OFFERS FROM AGENTS');
+    expect(page).toMatch(/class="count">\d+</);
+    const arrived = Number(page.match(/class="count">(\d+)</)![1]);
+    expect(arrived).toBe(store.all().length);
+  });
+
+  it('renders with no past nights at all', async () => {
+    const bare = createApp({
+      policy: DEMO_POLICY,
+      store,
+      screening: new MockScreening(),
+      identity: new MockIdentity(FRESH),
+      now: () => NIGHT,
+    });
+    await new Promise<void>((r) => bare.listen(0, '127.0.0.1', r));
+    const addr = bare.address();
+    const b = `http://127.0.0.1:${typeof addr === 'object' && addr ? addr.port : 0}`;
+    const held = store.outstanding();
+    const page = await (await fetch(`${b}/approve/${held[0]!.request.id}`)).text();
+    expect(page).toContain('OVERNIGHT, FOR YOU');
+    expect(page).not.toContain('THE NIGHTS BEFORE');
+    await new Promise<void>((r) => bare.close(() => r()));
+  });
+});

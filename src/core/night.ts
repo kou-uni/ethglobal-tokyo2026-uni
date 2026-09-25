@@ -83,7 +83,7 @@ export const BULK_MULTIPLIER = 12;
 export const BULK_CHANCE = 0.06;
 
 /** About fifty. Never exactly fifty — how many arrive is not our claim. */
-export function generateNight(seed: number): AgentRequest[] {
+export function generateNight(seed: number, night: Date = NIGHT): AgentRequest[] {
   const rnd = mulberry32(seed);
   const pick = <T>(xs: readonly T[]): T => xs[Math.floor(rnd() * xs.length)]!;
   const totalWeight = ASKS.reduce((s, a) => s + a.weight, 0);
@@ -113,7 +113,7 @@ export function generateNight(seed: number): AgentRequest[] {
         amount: Math.round(rnd() * ask.max * (bulk ? BULK_MULTIPLIER : 1)),
         currency: 'JPYC' as const,
       },
-      deadline: new Date(NIGHT.getTime() + (6 + rnd() * 18) * 3_600_000).toISOString(),
+      deadline: new Date(night.getTime() + (6 + rnd() * 18) * 3_600_000).toISOString(),
       payoutAddress: dirtyPayout
         ? FLAGGED_ADDRESS
         : `0x${(i + 1).toString(16).padStart(40, '0')}`,
