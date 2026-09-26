@@ -170,6 +170,26 @@ Four things worth saying to the people who built it:
 One ask: the auth header was not in the material we had. `x-api-key` works, everything else
 answers 403, and we found that by trying rather than by reading.
 
+## The team, and what we did not use
+
+**kou** ([@kou-uni](https://github.com/kou-uni)) &middot; **minta** ([@mintannn](https://github.com/mintannn)).
+Two people, one repository, MIT licensed.
+
+**We do not use MultiBaas.** Curvegrid's categories do not require it, and saying we used it
+because a prize mentions it is the kind of claim this repository exists to avoid. Execution,
+custody and record-keeping are somebody's product already &mdash; what we built is the half-step
+before them: **deciding whether money should move means deciding, first, whether to ask.** Our
+read of where that boundary sits, and the questions we would rather ask than guess at, are on
+[the Curvegrid page](https://kou-uni.github.io/ethglobal-tokyo2026-uni/curvegrid.html).
+
+Sponsor-by-sponsor notes, including what cost us time and what we would ask each of them to
+change, are in [FEEDBACK.md](docs/build/FEEDBACK.md).
+
+```sh
+npm install
+npm run check     # typecheck + 342 tests + 12 claims re-derived by running the code
+```
+
 ## What we will not claim
 
 | We say | We do not say |
