@@ -36,8 +36,11 @@ import { decodePaymentSignatureHeader, encodePaymentRequiredHeader } from '@x402
 import { isAddress, signAuthorization } from '../adapters/eip3009.js';
 import { delegationDisabled } from '../ports/delegation.js';
 import type { PermissionsPort } from '../ports/permissions.js';
+import type { ProductionProbeHandler } from './world-production-probe.js';
 
 export interface AppDeps {
+  /** Standalone authentication test; has no Store or settlement access. */
+  productionProbe?: ProductionProbeHandler;
   /** Extra denial gate; caller authentication and chain writes are separate concerns. */
   delegation?: { port: PermissionsPort; account: `0x${string}` };
   policy: Policy;
@@ -286,6 +289,7 @@ export function createApp(deps: AppDeps): Server {
     const path = url.pathname;
 
     try {
+      if (deps.productionProbe && await deps.productionProbe(req, res)) return;
       /* ── health ─────────────────────────────────────────────────────────── */
       if (req.method === 'GET' && path === '/health') {
         return json(res, 200, {

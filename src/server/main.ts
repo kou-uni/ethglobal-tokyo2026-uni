@@ -25,6 +25,7 @@ import { Store } from './state.js';
 import { createPublicClient, http, isAddress } from 'viem';
 import { sepolia } from 'viem/chains';
 import { EnsPermissions } from '../adapters/ens-permissions.js';
+import { productionProbeFromEnv } from './world-production-config.js';
 
 const PORT = Number(process.env['PORT'] ?? 8402);
 
@@ -78,6 +79,7 @@ const delegation = ensRpc && ensName
   : undefined;
 
 const app = createApp({
+  productionProbe: productionProbeFromEnv(process.env),
   ...(delegation ? { delegation } : {}),
   policy,
   store: new Store(KNOWN_PARTIES),
