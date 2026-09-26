@@ -1,0 +1,68 @@
+{
+  "observedOn": "2026-09-26",
+  "source": "Public /experience Chrome observer after PC-to-phone handoff; both receipts independently checked through Base Sepolia RPC and BaseScan",
+  "demoUrl": "https://mac-studio.taila649e1.ts.net/experience",
+  "publicAssets": {
+    "comparedAgainstCommit": "4446c56207615139eae806d03af37cc630ec7cef",
+    "htmlMatched": true,
+    "javascriptMatched": true,
+    "htmlSHA256": "753d78c50e8614e6910d855aac40b93f033bca0f825391374b9b4e8a48f9b10b",
+    "javascriptSHA256": "7165d3ed9ad6863efe9728368c1fd0a4012a595b6c50f97cb82c1501a166945f"
+  },
+  "desktopObservation": {
+    "generatedRequestsProcessed": 50,
+    "phoneHandoffCompleted": true,
+    "desktopBecameReadOnlyObserver": true,
+    "paidAnswersReceived": 2,
+    "paidAmountTestUSDC": "0.001121"
+  },
+  "identity": {
+    "configuredMode": "idkit-production-owner-and-visitor",
+    "requiredByPublicExperience": true,
+    "rawProofCollected": false,
+    "phoneScreenDirectlyInspected": false
+  },
+  "chainVerification": {
+    "checkedAt": "2026-09-26T15:57:09.178Z",
+    "rpc": "https://sepolia.base.org",
+    "chainId": 84532,
+    "transfers": [
+      {
+        "kind": "delegated",
+        "transaction": "0x8b60210db922288cfd3f4a792c221ba28863ad7b929972e47d6145468315da2d",
+        "status": "success",
+        "blockNumber": 47334906,
+        "token": "0x036cbd53842c5426634e7929541ec2318f3dcf7e",
+        "from": "0xcd6071453028bfb2510ecd575a2b431488fbe0f7",
+        "to": "0x5f52fa3c5df22d8c89fa6c2221e2aebd6fe722bd",
+        "amountAtomic": "120",
+        "amountTestUSDC": 0.00012,
+        "matchingTransferLogs": 1
+      },
+      {
+        "kind": "human_answer",
+        "transaction": "0xb652ed83b10b2faf50b2859b224dd041b00f0903a78e6a84b6c949daab2659d6",
+        "status": "success",
+        "blockNumber": 47334914,
+        "token": "0x036cbd53842c5426634e7929541ec2318f3dcf7e",
+        "from": "0xcd6071453028bfb2510ecd575a2b431488fbe0f7",
+        "to": "0x5f52fa3c5df22d8c89fa6c2221e2aebd6fe722bd",
+        "amountAtomic": "1001",
+        "amountTestUSDC": 0.001001,
+        "matchingTransferLogs": 1
+      }
+    ],
+    "totalAtomic": "1121",
+    "totalTestUSDC": "0.001121"
+  },
+  "limitations": [
+    "Generated demo requests and an emulated buyer inbox; not real customer demand or delivery to Koe directory members.",
+    "Test USDC on Base Sepolia, not mainnet revenue.",
+    "The desktop observer exposes neither the phone World proof nor its private drafts. Phone screen actions were performed by the user, not directly inspected by the agent.",
+    "The two transfer receipts prove sender, token, recipient, amount and success, not personhood or answer truth.",
+    "No fee ledger or fee collection is invoked by /experience.",
+    "No private key, cookie, handoff token, raw World proof, nullifier or personal answer text is included."
+  ],
+  "userFeedback": "The user reported that validation appeared successful. Phone screens were not directly inspected by the agent.",
+  "deploymentScope": "Observed on the Studio origin above. The user reported a new hosting migration in progress; this does not verify the new environment."
+}
