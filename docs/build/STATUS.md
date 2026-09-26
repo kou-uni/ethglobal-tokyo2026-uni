@@ -31,7 +31,7 @@ production-IDKit + on-chain settlement has been demonstrated yet.
 | External judge-device success and cancellation | After deployment, start from `/try` in that browser |
 | IDKit + Base Sepolia payment in one run | Only after the no-payment path passes on the public instance |
 | Final live demo URL and video | Use [PITCH](../product/PITCH.md); don't substitute static screenshots for the ENS live-demo requirement |
-| Live screening | Delegated to minta with the delivered key — [Issue #14](https://github.com/kou-uni/ethglobal-tokyo2026-uni/issues/14) |
+| Live screening on the public server | Adapter merged and working locally ([Issue #14](https://github.com/kou-uni/ethglobal-tokyo2026-uni/issues/14)). kou: `npm run setup:intercepta` on the public host, restart, confirm `/health` reports `screening: true`. The paid leg — one request settling after a live clean verdict — needs that deployment, since settlement is not wired locally |
 | Seller signup, actual content delivery | Not implemented; not prerequisites for the current limited demonstration |
 
 A qualified visitor may approve their own browser's demo. This does not authenticate them
@@ -72,7 +72,7 @@ npm run check
 | **Delegation boundary** | `src/ports/permissions.ts` | 13 tests. A delegate writes `yh:proposal` and is refused on the permission and payout keys — **and what the resolver refuses, rule 0 denies** |
 | **A decision model on rule 9** | `src/adapters/jev.ts` + 2 LLM adapters | 10 tests on the model itself, and **called for real**: `claude-opus-5` and `gpt-6-astra`. They disagreed; neither could produce `auto` |
 | **Proof of personhood** | `src/ports/identity.ts`, `adapters/world-oidc.ts` | 27 tests. **Issuer discovery fetched live** — `auth_time` and `acr` confirmed available |
-| **Payment screening shape** | `src/ports/screening.ts` | 9 tests. `clean` passes; `flagged` and `unavailable` both stop |
+| **Payment screening — a live call decides rule 4** ⭐ | `src/ports/screening.ts`, `src/adapters/intercepta.ts` | 24 tests on the adapter, 11 on the port. `clean` passes; `flagged` and `unavailable` both stop. **Called for real**: an ordinary mainnet wallet clears at `toxicScore 0`, an OFAC-listed exploiter is refused at 100, and a sanctioned *contract* answers 404 — which maps to `unavailable`, never to clean. The refusal shows the provider's own sentence, quoted. Raw bodies in [evidence/intercepta-live.json](evidence/intercepta-live.json) |
 | **Claims match the code** | `scripts/verify.ts` | **10** claims re-derived by running the code. **Checked by breaking each one on purpose** |
 | **Touchable console** | `demo/index.html` | One file, no server, no CDN. Runs the same `route()` the tests run |
 | **World ID, end to end** ⭐ | `src/adapters/world-oidc.ts` | **A person pressed it on a phone and it came back.** Discovery read live, ID token verified against the issuer's JWKS with `jose`, `acr = orb-v3` required, `auth_time` ≤ 120s checked against the server clock. **PKCE turned out to be mandatory and undocumented** — found by probing 8 combinations ([knowledge/WORLD-SANDBOX.md](../knowledge/WORLD-SANDBOX.md)) |
@@ -81,7 +81,7 @@ npm run check
 | **x402 settlement — money actually moved** ⭐⭐ | `src/ports/settlement.ts`, `src/adapters/x402.ts` | **Two transfers on Base Sepolia, both verified from the chain rather than from the facilitator's word.** `auto`: [`0x79c1e323…`](https://sepolia.basescan.org/tx/0x79c1e3239ef89cdc1b8a5fc14321093b06504a3c68a24644ba6390caf90393fa) — 120 atomic, settled inside the request. Held: [`0x5c79fddf…`](https://sepolia.basescan.org/tx/0x5c79fddfc8d6e6f64c1dd23752fae688a9b94ec5bc770f24fd1c2595b00d1d88) — **4,200 atomic, and it moved only when a person pressed Yes.** Before that press the seller's balance was 120; after it, 4,320. **The buyer's ETH balance is still 0** — 102,844 gas was paid by the facilitator, so "the buyer needs no ETH" is measured, not quoted |
 | **The server, on the public internet** | `src/server/` | `POST /requests`, `POST /approvals/:id`, `GET /ledger/:name`, `GET /approve/:id`, `GET /auth/world/callback`. 15 tests, including **HTTP and in-process agreeing about the same night** |
 
-**311 tests across 31 files.** Source lines and commit counts are deliberately not quoted
+**342 tests across 31 files.** Source lines and commit counts are deliberately not quoted
 here: they change with every push, and a number nobody re-derives is a fossil. `npm run check`
 prints the live figures, and `npm run verify` now fails if any document quotes a test count the
 run did not produce.
@@ -92,7 +92,7 @@ run did not produce.
 |---|---|---|
 | **ENSv2 public app integration** | Registration and all six delegation-proof transactions verified. Local server now uses the registered owner and reads live Sepolia permissions. Left: deploy/configure the public server and run the integrated demo | **minta / spark** — [ENS-DELEGATION-DEMO.md](ENS-DELEGATION-DEMO.md) |
 | **World ID: an in-app approval in the Agents dev environment** | Production IDKit already reached approved (rows above). What is missing is the dev environment: the sandbox never hands off to World ID app. It answers `amr: ["pop"]` with `auth_time` re-stamped, through Safari, Safari private and Chrome alike, with `prompt=login` **and** `max_age=0` sent. **Production `auth.world.org` exists and has the same shape** — three `.env` values would switch it — but its portal sign-in is gated. **Ask at the booth**; the claim on screen has already been corrected to what we can prove | **spark** — booth |
-| **Payment screening, live** | Key delivered 2026-09-26 and handed to minta. Rule 4, its 9 tests and the `/health` flag are already in place; the adapter, the setup page and the two confirmed addresses are not | **minta** — [Issue #14](https://github.com/kou-uni/ethglobal-tokyo2026-uni/issues/14) |
+| **Screening plus a payment, in one run** | The adapter is live and decides the branch, but settlement is not configured on the machine it was exercised on, so "cleared screening **and** settled" has not happened in a single run yet. Everything needed is merged; it takes the key on the public host and a restart | **kou** — public deployment |
 
 
 ## The one thing that would embarrass us

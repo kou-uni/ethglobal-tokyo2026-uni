@@ -1,0 +1,135 @@
+{
+  "observedAt": "2026-09-26",
+  "what": "Live payment screening behind rule 4, called by hand before any client was written, then through the running server. The API key is never included here, in any request line, or in any log.",
+  "endpoint": {
+    "host": "https://api.web3antivirus.io",
+    "quickScan": "GET /api/public/v2/extension/account/{address}/quick-scan",
+    "deepScan": "GET /api/public/v2/extension/account/{address}/toxic-score",
+    "authHeader": "x-api-key",
+    "authHeaderNote": "x-api-key and X-API-KEY both answer 200. authorization: Bearer, apikey, api-key and no header at all answer 403 with 'This authentication key is incorrect or doesn't exist'."
+  },
+  "rawResponses": [
+    {
+      "case": "ordinary mainnet wallet (vitalik.eth), quick-scan",
+      "address": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+      "status": 200,
+      "latencyMs": 4187,
+      "body": { "toxicScore": 0, "traits": [] }
+    },
+    {
+      "case": "Ronin bridge exploiter (OFAC SDN), quick-scan",
+      "address": "0x098B716B8Aaf21512996dC57EB0615e2383E2f96",
+      "status": 200,
+      "latencyMs": 1582,
+      "body": {
+        "toxicScore": 100,
+        "traits": [
+          {
+            "risk": 100,
+            "name": "known_scammer",
+            "description": "The address has a confirmed history of malicious activity, including scams, phishing, or other harmful behavior."
+          },
+          {
+            "risk": 100,
+            "name": "sanction_address",
+            "description": "The address is officially listed as sanctioned and poses significant legal and financial risks."
+          },
+          {
+            "risk": 100,
+            "name": "blacklist",
+            "description": "The address appears on external or internal blacklist sources due to prior involvement in high‑risk or malicious activity."
+          }
+        ]
+      }
+    },
+    {
+      "case": "Tornado Cash proxy (OFAC SDN), quick-scan — a contract, not an EOA",
+      "address": "0x722122dF12D4e14e13Ac3b6895a86e84145b6967",
+      "status": 404,
+      "latencyMs": 331,
+      "body": {
+        "status": 404,
+        "response": { "statusCode": 404, "message": "Not Found" },
+        "errors": [{ "message": "An Externally Owned Account with this address doesn't exist." }]
+      },
+      "note": "404 maps to unavailable, never to clean. An address this API cannot speak about is not an address it cleared."
+    },
+    {
+      "case": "ordinary mainnet wallet (vitalik.eth), deep scan",
+      "address": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+      "status": 200,
+      "latencyMs": 3650,
+      "body": {
+        "toxicScore": 0.04,
+        "traits": [
+          {
+            "risk": 0.04,
+            "name": "non_kyc_transfers",
+            "txsCount": 160,
+            "description": "Engaging with crypto exchanges that lack KYC verification, exposing transactions to unverified counterparties."
+          }
+        ]
+      },
+      "note": "A non-zero score is not by itself a reason to refuse. This is why the deny threshold is deliberate rather than 'greater than zero'."
+    },
+    {
+      "case": "Ronin bridge exploiter (OFAC SDN), deep scan",
+      "address": "0x098B716B8Aaf21512996dC57EB0615e2383E2f96",
+      "status": 200,
+      "latencyMs": 3998,
+      "body": {
+        "toxicScore": 100,
+        "traits": [
+          { "risk": 100, "name": "known_scammer" },
+          { "risk": 100, "name": "sanction_address" },
+          { "risk": 100, "name": "blacklist" },
+          { "risk": 85, "name": "sanction_address_communication", "txsCount": 16 },
+          { "risk": 0.54, "name": "fake_phishing_transfer", "txsCount": 19 }
+        ]
+      },
+      "note": "Descriptions omitted here only for length; they are identical in wording to the quick-scan bodies above."
+    }
+  ],
+  "mapping": {
+    "denyAt": 50,
+    "why": "The observed scale runs 0-100 with nothing in the middle: confirmed attribution (sanction_address, known_scammer, blacklist) at 100, contact with a sanctioned address at 85, incidental exposure (non_kyc_transfers) at 0.04. 50 sits in the empty space between them. It is our line, not a field in their response, and it is set in src/adapters/intercepta.ts rather than in configuration so that it cannot move per deployment.",
+    "clean": "200, and the highest of toxicScore and any trait risk is below 50",
+    "flagged": "200, and that highest value is 50 or above. The reason shown is the provider's own description of the highest-risk trait, quoted.",
+    "unavailable": "everything else — 404, 403, 429, 5xx, a timeout, a body that will not parse, a shape with no score in it, or an input that is not an address. Never a pass, under any configuration."
+  },
+  "throughTheServer": {
+    "host": "http://127.0.0.1:8412 (local, started for this check; the public server was not touched)",
+    "health": { "screening": true },
+    "healthWithoutTheKey": {
+      "screening": false,
+      "startupLine": "screening   not configured — rule 4 runs against the stand-in, /health says screening: false",
+      "note": "Observed by starting the same build with INTERCEPTA_API_KEY blank on port 8413. A server that cannot screen says so."
+    },
+    "sameGrantBothWays": [
+      {
+        "request": "experience/why-you-put-it-back, 120 JPYC, payoutAddress = confirmed clean fixture",
+        "response": { "verdict": "auto", "rule": 8, "reason": "within the standing grant for \"experience/why-you-put-it-back\"", "settlement": "not-wired" }
+      },
+      {
+        "request": "the same category, the same price, the same grant — payoutAddress = confirmed flagged fixture",
+        "response": {
+          "verdict": "deny",
+          "rule": 4,
+          "reason": "the payment source failed screening — known_scammer — The address has a confirmed history of malicious activity, including scams, phishing, or other harmful behavior."
+        }
+      },
+      {
+        "request": "the same category — payoutAddress = the sanctioned contract the API 404s on",
+        "response": {
+          "verdict": "deny",
+          "rule": 4,
+          "reason": "screening was unavailable — we do not settle unchecked (the screening API answered 404)"
+        }
+      }
+    ],
+    "onScreen": "GET /dropped groups the refusal under RULE 4 with the provider's sentence as the heading, so the reason a person reads is the reason the service gave.",
+    "seededNight": "npm run night against this server: 49 arrivals, 31 auto, 4 human, 14 deny, of which rule 4 accounted for 2 — the requests the generator marked dirty, screened by a real call."
+  },
+  "scope": "Local server. Settlement is not wired on this machine (X402_* are absent), so the clean request shows 'not-wired' rather than a transfer: this evidence shows screening deciding the branch, not a payment. The paid leg belongs to the public deployment. Risk data is mainnet; the addresses screened here are real mainnet addresses, and no testnet address was screened and called a live check.",
+  "quota": "Roughly 30 of the sandbox key's 1,000 requests used in total, including the probe that preceded the adapter."
+}

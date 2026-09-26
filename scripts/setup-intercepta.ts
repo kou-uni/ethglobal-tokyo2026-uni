@@ -12,10 +12,11 @@
  * does not go, because of **where the money would come from.** A licence and a payment are
  * different layers, and one can fail while the other holds.
  *
- * **Saving the key here does not make screening live.** Rule 4 currently runs against a
- * stand-in, and `/health` will keep reporting `screening: false` until the live adapter
- * exists — Issue #14. This page is only the place the credential lands, so that it never
- * has to travel through a chat window, an Issue or a shell history.
+ * **Saving the key here turns screening on at the next restart** — the live adapter landed
+ * with Issue #14 (`src/adapters/intercepta.ts`), and `main.ts` wires it whenever this key is
+ * present. With no key the stand-in runs and `/health` reports `screening: false`. This page
+ * is the place the credential lands, so that it never has to travel through a chat window,
+ * an Issue or a shell history.
  */
 
 import { createServer } from 'node:http';
@@ -87,10 +88,12 @@ code{background:#EDE9FF;border-radius:6px;padding:1px 6px;font-size:13.5px}
 <p class="lede">Local only. Written to <code>.env</code> at 0600, never shown back to you,
 never sent anywhere but this machine and the provider.</p>
 ${msg}
-<div class="why"><b>Saving the key does not turn screening on.</b> Rule 4 still runs against a
-stand-in, and <code>/health</code> keeps reporting <code>screening: false</code> until the live
-adapter lands. This page exists so the credential never has to travel through a chat window,
-an Issue, or your shell history.
+<div class="why"><b>Saving the key turns screening on at the next restart.</b> The live adapter
+is wired whenever this key is present, and <code>/health</code> then reports
+<code>screening: true</code>; with no key the stand-in runs and it reports
+<code>false</code>. Check it without starting the server:
+<code>npm run intercepta:check</code>. This page exists so the credential never has to travel
+through a chat window, an Issue, or your shell history.
 <br><br><b>What rule 4 is.</b> The one refusal that is not about permission: the grant is
 valid and the amount is fine, and the payment still does not go, because of where the money
 would come from. <code>unavailable</code> is not a pass &mdash; if we cannot check, we do not
@@ -104,16 +107,18 @@ placeholder="${set('INTERCEPTA_API_KEY') ? 'already set — leave blank to keep 
   DOCS ? ` Docs and keys: <a href="${DOCS}" target="_blank" rel="noopener">the API reference</a>.` : ''
 }</small>
 </fieldset>
-<fieldset><legend>ENDPOINT &mdash; NOT YET CALLED, CHECK THEM</legend>
+<fieldset><legend>ENDPOINT &mdash; CONFIRMED BY CALLING, 2026-09-26</legend>
 ${(['INTERCEPTA_BASE_URL', 'INTERCEPTA_SCAN_PATH', 'INTERCEPTA_AUTH_HEADER'] as const)
   .map((k) => `<label>${k}<input name="${k}" value="${esc(val(k))}"></label>${
     why(k) ? `<small>${esc(why(k))}</small>` : ''
   }`)
   .join('')}
-<small><b>These are suggestions, and one of them is an outright guess.</b> Nothing here is
-written into the source &mdash; <code>npm run verify</code> refuses a hardcoded endpoint, and a
-value with no provenance is a value nobody can re-check. The response shape is still unknown,
-so no adapter may assume a field called <code>clean</code> or <code>flagged</code>.</small>
+<small><b>All three answered 200 on 2026-09-26</b>, and the call that confirmed each one is
+recorded beside it in <code>config/intercepta-suggestions.json</code>. Nothing here is written
+into the source &mdash; <code>npm run verify</code> refuses a hardcoded endpoint, and a value
+with no provenance is a value nobody can re-check. There is no field called <code>clean</code>
+or <code>flagged</code> in the response: it returns a score and a list of traits, and the line
+between them is ours, in <code>src/adapters/intercepta.ts</code>.</small>
 </fieldset>
 <button type="submit">Save</button>
 </form>
@@ -139,8 +144,9 @@ const server = createServer(async (req, res) => {
     );
     res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
     return res.end(
-      page(`<div class="ok"><b>Saved to .env at 0600.</b> Screening is still the stand-in:
-      the live adapter, and the two addresses confirmed by an actual call, are Issue&nbsp;#14.</div>`),
+      page(`<div class="ok"><b>Saved to .env at 0600.</b> Restart the server and rule 4 checks
+      every declared payment address against the live API; <code>/health</code> will report
+      <code>screening: true</code>. Nothing was echoed back to this page.</div>`),
     );
   }
   res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });

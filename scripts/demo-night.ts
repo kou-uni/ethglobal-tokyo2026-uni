@@ -12,7 +12,8 @@
 import { loadEnv } from '../src/core/env.js';
 loadEnv();
 
-import { generateNight } from '../src/core/night.js';
+import { FLAGGED_ADDRESS, generateNight } from '../src/core/night.js';
+import { FIXTURES } from '../src/ports/screening.js';
 
 const API = process.env['YOHAKU_API'] ?? 'http://127.0.0.1:8402';
 const seed = Number(process.argv[2] ?? 18);
@@ -24,8 +25,31 @@ if (!health?.ok) {
 }
 const wired = (await health.json()) as { wired: Record<string, boolean>; dailyCap: number };
 
-const requests = generateNight(seed);
+/*
+ * Against a live-screening server, the night declares addresses that can actually be screened.
+ *
+ * The generator's payout addresses are counted up from one — `0x…01`, `0x…02` — which no risk
+ * API has ever heard of, and an address it cannot speak about is `unavailable`, which denies.
+ * A simulated night run against a live server would therefore refuse all 52 for a reason that
+ * says nothing about the rule. So the two confirmed fixtures stand in: the one the provider
+ * clears, and, for the request the night marked as dirty, the one it refuses. **Which requests
+ * are dirty is still the generator's decision, not ours** — the seed decides, and the count
+ * does not change.
+ */
+const live = Boolean(wired.wired['screening']) && Boolean(FIXTURES.clean) && Boolean(FIXTURES.flagged);
+const requests = generateNight(seed).map((r) =>
+  live
+    ? { ...r, payoutAddress: r.payoutAddress === FLAGGED_ADDRESS ? FIXTURES.flagged! : FIXTURES.clean! }
+    : r,
+);
+
 console.log(`\n  ${requests.length} requests → ${API}\n`);
+console.log(
+  live
+    ? '  screening is live on that server, so this night declares the two confirmed mainnet\n' +
+        '  fixtures as its payment sources. Rule 4 is a real call; everything else is seeded.\n'
+    : `  screening: ${wired.wired['screening'] ? 'live' : 'stand-in'} — the payout addresses in this night are generated, not real.\n`,
+);
 
 const tally: Record<string, number> = { auto: 0, human: 0, deny: 0 };
 const byRule = new Map<number, number>();

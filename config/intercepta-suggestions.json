@@ -1,19 +1,30 @@
 {
   "_why": "Starting values for the Intercepta setup page. They live here, not in source, because npm run verify refuses a hardcoded endpoint in src/ or scripts/ — and because a value without its provenance is a value nobody can re-check.",
-  "_unconfirmed": "Read before trusting anything here: we have not called this API yet. The host and the path below come from public documentation, and the auth header name is a guess. The response shape is entirely unknown, so no adapter may assume a field called clean or flagged. Confirmed values belong in Issue #14 with the raw curl output that produced them.",
+  "_confirmed": "Every value below has now been confirmed by calling the API on 2026-09-26. Raw request/response bodies, key redacted, are in docs/build/evidence/intercepta-live.json. The response has no field called clean or flagged: it returns a score and a list of traits, so the mapping onto ScreeningResult is a threshold we chose and defend in src/adapters/intercepta.ts.",
   "values": {
     "INTERCEPTA_BASE_URL": {
       "value": "https://api.web3antivirus.io",
-      "source": "The API host named in the public reference the prize page points at, https://docs.web3antivirus.io — the Intercepta prize uses that domain as its own reference."
+      "source": "CONFIRMED 2026-09-26 — the API host named in the public reference the prize page points at, https://docs.web3antivirus.io, and the host that answered 200 for both a clean and a flagged address."
     },
     "INTERCEPTA_SCAN_PATH": {
       "value": "/api/public/v2/extension/account/{address}/quick-scan",
-      "source": "Quick Scan Address, the low-latency risk assessment. Deep Scan is a separate endpoint (.../toxic-score) and is the one documented as explaining sanctions, laundering and fraud flags — switch to it if Quick Scan will not give us a reason we can show a person."
+      "source": "CONFIRMED 2026-09-26 — Quick Scan, chosen over Deep Scan (.../toxic-score). Both answer 200 and both carry the human-readable trait description rule 4 shows a person, so the reason is not the deciding factor. Quick Scan wins on two: an ordinary wallet comes back with an empty trait list rather than incidental exposure (Deep Scan reports non_kyc_transfers at 0.04 on the same wallet), and it is the endpoint the provider documents as the low-latency one — this call runs before every settlement."
     },
     "INTERCEPTA_AUTH_HEADER": {
       "value": "x-api-key",
-      "source": "UNCONFIRMED — a guess, kept here rather than in code precisely so it is visible as one. Replace it with the header an actual 200 response required."
+      "source": "CONFIRMED 2026-09-26 — x-api-key and X-API-KEY both answer 200. authorization: Bearer, apikey, api-key and no header at all all answer 403, 'This authentication key is incorrect or doesn't exist'. It was a guess when this file was written; it is not one now."
     }
+  },
+  "fixtures": {
+    "clean": {
+      "value": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+      "source": "CONFIRMED 2026-09-26 — a public, widely-known mainnet wallet (vitalik.eth). Quick Scan answered {\"toxicScore\":0,\"traits\":[]}. Used as the demo's declared payment source so that the live call before a settlement is a real call against a real mainnet address; it is not the wallet of whoever is running the demo."
+    },
+    "flagged": {
+      "value": "0x098B716B8Aaf21512996dC57EB0615e2383E2f96",
+      "source": "CONFIRMED 2026-09-26 — the Ronin bridge exploiter, an OFAC SDN listing. Quick Scan answered toxicScore 100 with traits known_scammer, sanction_address and blacklist, each at risk 100 and each carrying its own description."
+    },
+    "_traps": "Two addresses that look like obvious fixtures and are not. 0x722122dF12D4e14e13Ac3b6895a86e84145b6967 (Tornado Cash proxy, OFAC SDN) answers 404 — this endpoint is account-scoped and that address is a contract, so it maps to unavailable, never to clean. 0x8589427373D6D84E98730D7795D8f6f8731FDA16 (Tornado Cash router, OFAC SDN) answers toxicScore 0 on both endpoints. This API is not a sanctions oracle and must not be described as one."
   },
   "links": {
     "keys": {

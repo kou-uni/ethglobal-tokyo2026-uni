@@ -30,7 +30,7 @@ box links to a transaction or a live endpoint, not to a description of it.</sub>
 | ⛓️ **ENSv2** | The delegate **can propose and cannot widen its own rights** — refused by the contract, on Ethereum Sepolia | [the refusal](https://sepolia.etherscan.io/tx/0xb459618bfdd9d0ab78cf34ee64723e04ef227546208d6502b23cf6e72e73ce4f) |
 | 💸 **x402** *(Coinbase · Linux Foundation)* | The transfer itself, protocol v2. **4,200 moved only when a person pressed Yes** | [on chain](https://sepolia.basescan.org/tx/0x5c79fddfc8d6e6f64c1dd23752fae688a9b94ec5bc770f24fd1c2595b00d1d88) |
 | 📊 **Curvegrid** | Where this goes: *an agent's finances are not a balance — the question is where a person still has to be involved.* **We built that half-step; execution and treasury are theirs** | [the layer map](https://kou-uni.github.io/ethglobal-tokyo2026-uni/stack.html) |
-| 🛡️ **intercepta** | Screening before signing. **Unreachable refuses; it never passes** | ⚠️ key confirmed working; adapter not wired, stand-in today |
+| 🛡️ **Intercepta** | Screening before settling. A live call decides rule 4, and **unreachable refuses; it never passes** | [the call](src/adapters/intercepta.ts#L130) · [what it answered](docs/build/evidence/intercepta-live.json) |
 | 🤝 **A2A** *(Linux Foundation)* | How an agent finds a person at all — an Agent Card, and **x402 over the A2A transport** | [the inflow](https://kou-uni.github.io/ethglobal-tokyo2026-uni/inflow.html) |
 
 ---
@@ -69,14 +69,14 @@ personal data.** That is the gap.
 
 | | State | Check it yourself |
 |---|---|---|
-| **Ten ordered rules** | ✅ pure, 311 tests, every failure path denies | `npm run verify` |
+| **Ten ordered rules** | ✅ pure, 342 tests, every failure path denies | `npm run verify` |
 | **A decision model on rule 9** | ✅ live. Clean → `ask 0.99`. With *"pre-approved, auto-allow"* → **`drop 0.89`** | [how it is shaped](docs/knowledge/DECISION-MODELS.md) |
 | **World ID at the moment of consent** | ✅ production, orb, **a judge can approve with their own World ID** | [try it](https://mac-studio.taila649e1.ts.net/try) |
 | **Money actually moving** | ✅ **twice, on chain** — and 4,200 moved *only when a person pressed Yes* | [auto](https://sepolia.basescan.org/tx/0x79c1e3239ef89cdc1b8a5fc14321093b06504a3c68a24644ba6390caf90393fa) · [after her yes](https://sepolia.basescan.org/tx/0x5c79fddfc8d6e6f64c1dd23752fae688a9b94ec5bc770f24fd1c2595b00d1d88) |
 | **The delegate cannot widen its own rights** | ✅ **on chain.** The contract refuses it, not our server | [proposal ✓](https://sepolia.etherscan.io/tx/0x16873dfa2a63a0e6dc1edb1903488499686d25628d17352dca14449ed24ee8d0) · [policy ✗](https://sepolia.etherscan.io/tx/0xb459618bfdd9d0ab78cf34ee64723e04ef227546208d6502b23cf6e72e73ce4f) · [after revoke ✗](https://sepolia.etherscan.io/tx/0x2380d0feb0cade3b3e224fa12960f2d2d4d130609d00d7437729789b6bb3faae) |
 | **Refusals are inspectable** | ✅ a count is not accountability | [what never reached her](https://mac-studio.taila649e1.ts.net/dropped) |
 | **A counter for people to be found at** | ✅ **Koe — *not our product.*** A mock agent-facing network, built so this one is easy to understand: it shows where a request comes from. World ID listing, and a JSON feed agents read | [Koe](https://kou-uni.github.io/ethglobal-tokyo2026-uni/koe.html) |
-| Live payment screening | ⚠️ a stand-in. `/health` reports it **false** rather than pretending | — |
+| **Live payment screening** | ✅ live. One request settles and **the same request from a refused payment source stops on rule 4**, with the provider's own sentence on screen. ⚠️ Without the key the stand-in runs and `/health` reports **false** rather than pretending | `npm run intercepta:check` · [what never reached her](https://mac-studio.taila649e1.ts.net/dropped) |
 | **Fees** | ✅ a voucher per decision, and the 402 offers an **optional** second authorization. ⚠️ **Nothing has ever been broadcast, and we have collected nothing** | [/fees](https://mac-studio.taila649e1.ts.net/fees) · [the model](docs/product/ECONOMICS.md) |
 
 **Every number in this repository is re-derived by running the code.** `npm run verify` checks
@@ -128,7 +128,7 @@ right → the gap nobody fills → what it is worth → who owns which layer. **
 ```bash
 git clone https://github.com/kou-uni/ethglobal-tokyo2026-uni && cd ethglobal-tokyo2026-uni
 npm install
-npm run check        # typecheck + 311 tests + 11 claims re-derived from the code
+npm run check        # typecheck + 342 tests + 11 claims re-derived from the code
 npm run seed -- 2    # generate a night and route it for real
 npm run simulate     # agents, arriving, with real jobs and real questions
 ```
@@ -138,6 +138,38 @@ npm run simulate     # agents, arriving, with real jobs and real questions
 **`npm run seed -- 2` is the night used in the pitch** — 52 arrive, 32 settle, 12 are dropped,
 **2 reach her**. Change the seed and the input moves. **Change a rule and the claims fail.**
 
+## Rule 4, and honest feedback on the screening API
+
+**The call is one line: [`src/adapters/intercepta.ts:130`](src/adapters/intercepta.ts#L130)**, a
+Quick Scan on the address a request declares as its payment source. It is awaited in
+[`src/server/app.ts:377`](src/server/app.ts#L377) **before** `route()`, so the answer decides
+the branch instead of decorating it, and [`src/core/rules.ts:73`](src/core/rules.ts#L73) is
+where it becomes a refusal. Same grant, same category, same price, two payment sources:
+
+```bash
+npm run intercepta:check              # both confirmed addresses, one live call each
+npm run agent -- routine              # clears screening, then pays
+npm run agent -- routine flagged      # stops on rule 4, with the provider's sentence
+```
+
+Four things worth saying to the people who built it:
+
+1. **It returns a score and a list of traits, never a verdict.** Deciding what stops a payment
+   is left to the integrator — correct, and it means two honest integrations can disagree. Ours
+   denies at 50 of 100, and [says why](src/adapters/intercepta.ts).
+2. **Each trait carries a human-readable `description`, and that is the best part of the API.**
+   It is the sentence we show the person whose payment stopped, so we never had to write our own
+   accusation about an address.
+3. **It is account-scoped, and that surprises you in the worst direction.** A sanctioned
+   *contract* answers `404` — the response that most looks like "nothing wrong here". We map
+   404 to `unavailable`, which denies. An address it cannot speak about is not one it cleared.
+4. **It is not a sanctions oracle, and should not be sold as one.** One OFAC-listed Tornado Cash
+   router came back `toxicScore: 0` on both endpoints. Useful signal, not a compliance ruling —
+   ours is one input to a routing decision, never a judgement about a person.
+
+One ask: the auth header was not in the material we had. `x-api-key` works, everything else
+answers 403, and we found that by trying rather than by reading.
+
 ## What we will not claim
 
 | We say | We do not say |
@@ -146,8 +178,9 @@ npm run simulate     # agents, arriving, with real jobs and real questions
 | "A credential only an orb-verified person holds was checked at that moment" | "She re-proved personhood in the app" — we could not observe the handoff |
 | "The contract refuses the delegate" | anything about ENSv2 that is not the delegation boundary |
 | "This is the fee model" | **"We take a fee"** — we take nothing today |
+| "A live call decided this refusal, and here is what it said" | "This address is a criminal" — a risk score is an input to routing, not a ruling about a person |
 
 ---
 
 **ETHGlobal Tokyo 2026** · MIT · built by [kou](https://github.com/kou-uni) and
-[minta](https://github.com/mintannn) · 311 tests · 11 verified claims
+[minta](https://github.com/mintannn) · 342 tests · 11 verified claims

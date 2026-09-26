@@ -7,7 +7,7 @@ make it hard for one of you to work here.** What follows is what actually matter
 
 ```bash
 npm install
-npm run check      # typecheck + 311 tests + 11 verified claims
+npm run check      # typecheck + 342 tests + 11 verified claims
 ```
 
 `npm run check` must pass before and after your change. If a claim fails, **fix the code or
