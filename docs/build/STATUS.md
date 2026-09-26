@@ -32,7 +32,7 @@ production-IDKit + on-chain settlement has been demonstrated yet.
 | External judge-device success and cancellation | After deployment, start from `/try` in that browser |
 | IDKit + Base Sepolia payment in one run | Only after the no-payment path passes on the public instance |
 | Final live demo URL and video | Use [PITCH](../product/PITCH.md); don't substitute static screenshots for the ENS live-demo requirement |
-| Live screening on the public server | Adapter merged and working locally ([Issue #14](https://github.com/kou-uni/ethglobal-tokyo2026-uni/issues/14)). kou: `npm run setup:intercepta` on the public host, restart, confirm `/health` reports `screening: true`. The paid leg — one request settling after a live clean verdict — needs that deployment, since settlement is not wired locally |
+| Live screening on the public instance | **Done, with one boundary left.** Public `/health` reported `screening: true` at 16:08 JST — that is configuration evidence, not a run. The screening-plus-settlement run itself was exercised on kou's machine ([evidence](evidence/screening-with-settlement.json)); if judges want it on the public instance, `npm run agent -- routine` and `npm run agent -- routine flagged` reproduce both halves there |
 | Seller signup, actual content delivery | Not implemented; not prerequisites for the current limited demonstration |
 
 A qualified visitor may approve their own browser's demo. This does not authenticate them
@@ -74,7 +74,7 @@ npm run check
 | **A decision model on rule 9** | `src/adapters/jev.ts` + 2 LLM adapters | 10 tests on the model itself, and **called for real**: `claude-opus-5` and `gpt-6-astra`. They disagreed; neither could produce `auto` |
 | **Proof of personhood** | `src/ports/identity.ts`, `adapters/world-oidc.ts` | 27 tests. **Issuer discovery fetched live** — `auth_time` and `acr` confirmed available |
 | **Payment screening — a live call decides rule 4** ⭐ | `src/ports/screening.ts`, `src/adapters/intercepta.ts` | 24 tests on the adapter, 11 on the port. `clean` passes; `flagged` and `unavailable` both stop. **Called for real**: an ordinary mainnet wallet clears at `toxicScore 0`, an OFAC-listed exploiter is refused at 100, and a sanctioned *contract* answers 404 — which maps to `unavailable`, never to clean. The refusal shows the provider's own sentence, quoted. Raw bodies in [evidence/intercepta-live.json](evidence/intercepta-live.json) |
-| **Claims match the code** | `scripts/verify.ts` | **10** claims re-derived by running the code. **Checked by breaking each one on purpose** |
+| **Claims match the code** | `scripts/verify.ts` | **12 claims** re-derived by running the code. **Checked by breaking each one on purpose** |
 | **Touchable console** | `demo/index.html` | One file, no server, no CDN. Runs the same `route()` the tests run |
 | **World ID, end to end** ⭐ | `src/adapters/world-oidc.ts` | **A person pressed it on a phone and it came back.** Discovery read live, ID token verified against the issuer's JWKS with `jose`, `acr = orb-v3` required, `auth_time` ≤ 120s checked against the server clock. **PKCE turned out to be mandatory and undocumented** — found by probing 8 combinations ([knowledge/WORLD-SANDBOX.md](../knowledge/WORLD-SANDBOX.md)) |
 | **The two screens a person sees** | `src/server/pages.ts` | Today's offer count, the one being asked about, and a fold with what was handled without her. Service copy and demo tutorial are **separate surfaces** |

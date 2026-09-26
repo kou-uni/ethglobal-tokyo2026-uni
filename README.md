@@ -80,7 +80,7 @@ personal data.** That is the gap.
 | **Fees** | ✅ a voucher per decision, and the 402 offers an **optional** second authorization. ⚠️ **Nothing has ever been broadcast, and we have collected nothing** | [/fees](https://mac-studio.taila649e1.ts.net/fees) · [the model](docs/product/ECONOMICS.md) |
 
 **Every number in this repository is re-derived by running the code.** `npm run verify` checks
-ten claims and refuses any hardcoded model id, endpoint or contract address. **It has caught us
+12 claims and refuses any hardcoded model id, endpoint or contract address. **It has caught us
 five times** — including a claim we had measured, found false, and
 [withdrew in place](docs/product/ASSUMPTIONS.md).
 
