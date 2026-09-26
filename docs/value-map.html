@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Yohaku — 顧客・価値・技術を一枚で</title>
+<meta name="description" content="人に届くAIエージェントの依頼を、任せる・聞く・断るに分ける。誰のために、何を守り、どの技術が効くのか。">
+<style>
+:root{--ink:#242329;--muted:#625f6d;--paper:#f8f7f3;--purple:#6653c4;--lilac:#ece7fc;--lime:#e0f2ab;--line:#ddd9e4;--red:#9f434a}
+*{box-sizing:border-box}body{margin:0;background:#eae7e0;color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;line-height:1.6}
+a{color:inherit;text-underline-offset:3px}button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid var(--purple);outline-offset:4px}
+.toolbar{max-width:1400px;margin:auto;padding:16px 28px;display:flex;gap:24px;align-items:center;font-size:13px}.toolbar button{margin-left:auto;border:1px solid #bbb5c7;border-radius:30px;background:transparent;padding:6px 16px}
+.sheet{max-width:1400px;margin:0 auto 28px;background:var(--paper);padding:38px 48px 26px;box-shadow:0 12px 40px #27203512}
+header{display:flex;justify-content:space-between;gap:24px;align-items:center}.brand{display:flex;gap:10px;align-items:center;font-size:24px;font-weight:750;letter-spacing:-1px}.brand img{width:43px;height:43px}
+.eyebrow,.label{font-size:11px;letter-spacing:.13em;font-weight:750;color:var(--muted)}.eyebrow{margin-top:16px}h1{font-size:clamp(27px,3.3vw,45px);letter-spacing:-.055em;line-height:1.3;margin:8px 0 12px}h1 em{font-style:normal;color:var(--purple)}
+.intro{margin:0;color:var(--muted);font-size:15px}.topnote{max-width:245px;text-align:right;font-size:12px;color:var(--muted)}.topnote b{display:block;font-size:14px;color:var(--ink)}
+.customers{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:24px 0}
+.customer{border-top:2px solid var(--ink);padding:12px 0 0}.customer h2{font-size:17px;margin:4px 0 7px}.customer p{font-size:13px;color:var(--muted);margin:0}.customer strong{color:var(--ink)}.customer .benefit{margin-top:8px;color:var(--purple);font-weight:700}
+.section-title{display:flex;gap:16px;align-items:center;font-size:12px;font-weight:750;margin:0 0 10px}.section-title:after{content:"";height:1px;background:var(--line);flex:1}
+.flow{display:grid;grid-template-columns:1fr 36px 1.4fr 36px 1.1fr;align-items:stretch;gap:0}.card{padding:17px 18px;border:1px solid var(--line);border-radius:16px;background:white}.card h3{font-size:19px;margin:4px 0 9px}.card p{font-size:13px;margin:7px 0;color:var(--muted)}
+.arrow{display:flex;align-items:center;justify-content:center;color:var(--purple);font-size:24px}.router{background:var(--lilac);border-color:#c7bce9}.router h3{font-size:24px}
+.badge{display:inline-block;border:1px solid currentColor;border-radius:30px;padding:0 7px;font-size:10px;vertical-align:middle;color:var(--purple)}
+.request{background:var(--paper);border-radius:10px;padding:10px;font-size:12px;line-height:1.75}.request strong{font-size:14px}.rules{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px}.rules span{font-size:11px;background:#ffffffaa;border-radius:5px;padding:3px 6px}
+.outcomes{display:grid;gap:7px}.outcome{padding:8px 11px;border-radius:8px;font-size:12px;background:var(--paper)}.outcome b{display:block;font-size:14px}.auto{background:#edf4dd}.human{background:var(--lilac)}.deny{background:#f5e8e9}.deny b{color:var(--red)}
+.money{margin:10px 0 20px;padding:9px 16px;background:var(--lime);border-radius:8px;display:flex;justify-content:space-between;gap:16px;font-size:12px}.money strong{font-size:13px}
+.tech{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.tech article{background:white;border:1px solid var(--line);border-radius:12px;padding:13px}.tech h3{font-size:15px;margin:4px 0 5px}.tech p{font-size:12px;color:var(--muted);margin:0}.tech .value{font-weight:700;color:var(--ink);margin-bottom:7px}.num{font-size:10px;color:var(--purple);font-weight:750;letter-spacing:.08em}.scope{font-size:10px;margin-top:9px;color:var(--purple)}
+.story{display:grid;grid-template-columns:240px 1fr;gap:20px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:18px}
+.choices{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}.choices button{font-size:11px;background:white;border:1px solid var(--line);border-radius:20px;padding:5px 9px}.choices button[aria-pressed=true]{background:var(--ink);color:white;border-color:var(--ink)}#example{font-size:13px;margin:0}.example-label{font-size:10px;color:var(--muted)}[data-active=true]{outline:2px solid var(--purple);outline-offset:2px}
+.bottom{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:18px}.bottom h2{font-size:12px;margin:0 0 5px}.bottom p{font-size:11px;color:var(--muted);margin:0}.bottom strong{color:var(--ink)}
+footer{margin-top:18px;padding-top:10px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:18px;font-size:10px;color:var(--muted)}footer a{margin-left:8px}
+@media(max-width:850px){.sheet{padding:25px}.topnote{display:none}.customers{gap:12px}.flow{grid-template-columns:1fr}.arrow{height:30px;transform:rotate(90deg)}.tech{grid-template-columns:repeat(2,1fr)}.tech article:last-child{grid-column:1/-1}.money{flex-direction:column;gap:3px}.story{grid-template-columns:1fr;gap:10px}}
+@media(max-width:520px){.customers,.bottom{grid-template-columns:1fr}.sheet{padding:20px}.toolbar{padding:12px 20px;gap:13px}.toolbar a{font-size:11px}.brand{font-size:21px}.tech{grid-template-columns:1fr}.intro{font-size:13px}footer{flex-direction:column}.customer{padding-top:8px}}
+@page{size:A3 landscape;margin:9mm}
+@media print{body{background:white;print-color-adjust:exact;-webkit-print-color-adjust:exact}.toolbar{display:none}.sheet{width:100%;max-width:none;margin:0;padding:10px 18px;box-shadow:none}h1{font-size:36px}.customers{margin:16px 0}.sheet{break-inside:avoid}.choices{display:none}.story{margin-top:12px}.tech article{break-inside:avoid}a{text-decoration:none}}
+</style>
+</head>
+<body>
+<nav class="toolbar" aria-label="ページ操作"><a href="product.html">公開デモ</a><a href="stack.html">技術の概念図</a><button id="print" type="button">印刷 / PDF</button></nav>
+<main class="sheet">
+<header><div>
+<div class="brand"><img src="assets/value-mark.svg" alt="">yohaku <span style="font-size:12px;letter-spacing:.12em;color:var(--muted)">余白</span></div>
+<div class="eyebrow">VALUE MAP / 人とエージェントの間に、判断の窓口を。</div>
+<h1>機会は受け取る。<br><em>人が判断する量</em>は、自分で決める。</h1>
+<p class="intro">AIエージェントからの依頼を「任せる・聞く・断る」に分け、<br>人間の注意と、許可の範囲を守るルーター。</p>
+</div><div class="topnote"><b>最初のユースケース</b>企業の調査エージェントが<br>人の経験・意見を買う市場<br><br>事業の価値仮説 × 現在の実装<br>2026.09.26</div></header>
+
+<section class="customers" aria-label="顧客と解決する課題">
+<article class="customer"><span class="label">買い手 / 想定する支払者</span><h2>調査をする企業・エージェント運営者</h2><p>人にしか答えられない質問がある。<strong>誰に聞けて、いつまで待つのか</strong>を依頼ごとに交渉したくない。</p><p class="benefit">→ 共通APIで、可否・保留・期限が分かる。</p></article>
+<article class="customer"><span class="label">売り手 / 守られる利用者</span><h2>経験・意見を提供する人</h2><p>機会は欲しい。でも、<strong>大量の依頼の確認</strong>を毎日の仕事にしたくない。売らないものは自分で決めたい。</p><p class="benefit">→ 窓口は開き、判断の負担には上限を置く。</p></article>
+<article class="customer"><span class="label">導入先 / 想定する事業パートナー</span><h2>人とAIをつなぐ市場・サービス</h2><p><strong>権限・危険な支払い・承認・決済</strong>を、個別の依頼ごとに安全につなぐ必要がある。</p><p class="benefit">→ 共通の受付・判断機能を組み込める。</p></article>
+</section>
+
+<h2 class="section-title">01 / 一件の依頼で、価値が生まれる場所</h2>
+<section class="flow" aria-label="依頼から判定と人間の承認まで">
+<article class="card"><span class="label">発見 → 依頼</span><h3>企業のAIエージェント</h3><div class="request"><strong>「なぜ、その商品を<br>買わなかったの？」</strong><br>誰から / 何を / 目的 / 金額 / 期限</div><p><b>Koe</b>は人を探す入口のデモ。<br>Yohakuは届いた依頼の判断を担う。</p></article>
+<div class="arrow" aria-hidden="true">→</div>
+<article class="card router"><span class="label">YOHAKU / 自分で作っている中心部分</span><h3>安全に受け付けて、<br>必要な判断だけを届ける。</h3><p>① 権限を確認 → ② 支払い元を審査<br>③ 本人のルールで振り分ける。<br>迷う依頼は、まとめて優先順位をつける。</p><div class="rules"><span>許可・禁止</span><span>金額の上限</span><span>初めての相手</span><span>一日の件数上限</span><span>期限切れは拒否</span></div></article>
+<div class="arrow" aria-hidden="true">→</div>
+<article class="card"><span class="label">機会と、時間の両方を守る</span><div class="outcomes">
+<div class="outcome auto"><b>任せる / auto</b>事前に許可した条件なら、自動処理。</div>
+<div class="outcome human"><b>聞く / human</b>本人が決める。例：朝に最大2件。<br>承認時にWorld IDで人間性を確認。</div>
+<div class="outcome deny"><b>断る / deny</b>禁止・危険・期限切れは進めない。<br>拒否の理由も、あとから確認できる。</div></div></article>
+</section>
+<div class="money"><strong>成立した支払い：買い手のウォレット → 本人のウォレット</strong><span>x402 / 署名された金額・宛先を維持。Yohakuが売上をいったん預かる構成ではない。</span></div>
+
+<h2 class="section-title">02 / 技術の名前ではなく、「何を守るか」で見る</h2>
+<section class="tech" aria-label="技術と価値の対応">
+<article id="ens"><span class="num">① 権限の境界</span><h3>ENSv2 / EAC</h3><p class="value">任せても、決定権は渡さない。</p><p>委任先は提案用のキーを書ける。本人の方針キーは書けない。撤回後は提案も止まる。</p><div class="scope">Sepoliaで書込み成功・拒否を実証</div></article>
+<article id="screen"><span class="num">② 資金リスクの境界</span><h3>Intercepta</h3><p class="value">許可があっても、危険なら止める。</p><p>申告された支払い元をAPIで審査。危険・未確認ならrule 4で拒否し、サービス側の決済を止める。</p><div class="scope">Kou環境で実API＋送金分岐を実証</div></article>
+<article id="ai"><span class="num">③ AIが決められる範囲</span><h3>Jev / 分類アダプター</h3><p class="value">AIの推測だけで許可しない。</p><p>ルールで決まらない依頼に使う。出力は「人に聞く / 落とす」だけ。「許可」は型に存在しない。</p><div class="scope">接続実装あり / 採用モデルは設定依存</div></article>
+<article id="world"><span class="num">④ 人間の判断の境界</span><h3>World ID</h3><p class="value">この承認に、人が関与した証拠。</p><p>Koe登録と依頼の承認を別々に検証。人間性の証明であり、回答内容の真実性までは証明しない。</p><div class="scope">公開版で本番Orb認証→送金を実証</div></article>
+<article id="pay"><span class="num">⑤ 支払いの境界</span><h3>x402 / EIP-3009</h3><p class="value">承認待ちの署名と、送金を分ける。</p><p>autoまたは承認後にfacilitatorが決済。宛先・金額は署名に固定。結果はチェーンの取引と照合する。</p><div class="scope">Base SepoliaのテストUSDCで実証</div></article>
+</section>
+
+<section class="story" aria-label="具体例で読む">
+<div><span class="example-label">仕組みを理解する例 / 実行や送金はしません</span><div class="choices"><button type="button" data-case="ask" aria-pressed="true">初めての相手</button><button type="button" data-case="risk" aria-pressed="false">危険な支払い元</button><button type="button" data-case="delegate" aria-pressed="false">AIの越権</button></div></div>
+<p id="example" aria-live="polite">初めての会社からの依頼は保留にする。本人に確認し、World IDで承認を検証してから支払う。<b>相手を待たせる状態も、本人の責任範囲も明確になる。</b></p>
+</section>
+
+<section class="bottom">
+<article><h2>事業として何を売る？</h2><p><strong>「依頼を判断する仕事」への従量課金が構想。</strong>売り手への対価とは別に、買い手から手数料を受け取る設計。判定台帳・任意の別署名の保持まで実装し、回収は未実装。顧客の支払意思・導入需要は未検証。</p></article>
+<article><h2>デモで示したこと / これから作ること</h2><p>振り分け・権限境界・本番本人認証・テスト送金は検証済み。<strong>約50件→朝2件は生成シナリオで、実顧客の実績ではない。</strong>個人別の質問・回答配送、継続アカウント、手数料回収は未接続。MultiBaas / NEOはこの決済経路に接続していない。</p></article>
+</section>
+<footer><span>Curvegridとの接点：エージェントの依頼を、方針・人間の判断・決済につなぐ層。サービスの包括的な安全性や法令適合を保証するものではありません。</span><span><a href="build/evidence/world-public-payment.json">認証・送金の証拠</a><a href="build/evidence/screening-with-settlement.json">審査の証拠</a><a href="product/ECONOMICS.md">収益設計</a></span></footer>
+</main>
+<script>
+const examples={
+ask:{text:'初めての会社からの依頼は保留にする。本人に確認し、World IDで承認を検証してから支払う。相手を待たせる状態も、本人の責任範囲も明確になる。',ids:['world','pay']},
+risk:{text:'許可された内容・金額でも、支払い元の審査が危険なら止める。APIが答えられない場合も拒否する。「本人が許可したか」と「受け取ってよい支払いか」を分ける。',ids:['screen']},
+delegate:{text:'AIが「もっと依頼を通したい」と本人の方針キーを書き換えようとしても、ENSv2のキー単位の権限で拒否する。提案は任せても、AIが自分の権限を広げることはできない。',ids:['ens','ai']}
+};
+document.querySelectorAll('[data-case]').forEach(button=>button.addEventListener('click',()=>{
+const e=examples[button.dataset.case];document.getElementById('example').textContent=e.text;
+document.querySelectorAll('[data-case]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
+document.querySelectorAll('.tech article').forEach(a=>a.dataset.active=String(e.ids.includes(a.id)));
+}));
+document.getElementById('print').addEventListener('click',()=>window.print());
+</script>
+</body></html>
