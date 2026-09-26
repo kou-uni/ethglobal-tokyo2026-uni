@@ -10,6 +10,47 @@
 
 ---
 
+## 0. facilitator とは何か
+
+**署名された支払いを、代わりにチェーンへ流す中継役です。** それ以上のことはしません。
+
+```mermaid
+flowchart LR
+  A["🤖 買い手<br/><small>USDC を持っている。<b>ETH は無くていい</b></small>"]
+  A -->|"① 署名だけ作る<br/><small>宛先・金額・有効期限が入っている</small>"| Y["⬜ 売り手のサーバ"]
+  Y -->|"② そのまま渡す"| F["🚚 facilitator"]
+  F -->|"③ <b>ガスを払って</b>ブロードキャスト"| C["⛓️ チェーン"]
+  C -->|"④ USDC が動く"| S["🧑 売り手の財布"]
+  F -.->|"✗ 金額を変える<br/>✗ 宛先を変える<br/>✗ 預かる"| X["<b>できない</b>"]
+  classDef f fill:#EDE9FF,stroke:#6B5BD6,stroke-width:2px,color:#241f3d
+  classDef no fill:#FFF0F0,stroke:#FF6B6B,stroke-width:2px,stroke-dasharray:5 4,color:#7a1f1f
+  classDef g fill:#F2FBD9,stroke:#7FA326,color:#2F3D09
+  class F f
+  class X no
+  class S,C g
+```
+
+仕様にはっきり書いてあります。
+
+> *"In all cases, **the Facilitator cannot modify the amount or destination.**
+> They serve only as the transaction broadcaster."*
+
+**署名にすべて入っているからです。** 宛先・金額・有効期限は EIP-712 で署名された中身で、
+1文字でも変えれば署名が合わなくなる。だから **facilitator を信用する必要がありません。**
+お金を預けるのではなく、**封をした指示書を運んでもらうだけ**です。
+
+| facilitator がすること | しないこと（できないこと） |
+|---|---|
+| 署名が正しいか検証する（`POST /verify`） | 金額を変える |
+| **ガスを払って**トランザクションを流す（`POST /settle`） | 宛先を変える |
+| 対応するスキームとネットワークを答える（`GET /supported`） | お金を預かる |
+
+**ここが効きます: 買い手の財布に ETH が要りません。** ガスは facilitator 持ちなので、
+USDC だけ入っていれば払えます。ブースで財布を出してもらうときの手数がこれで1つ減ります。
+
+**我々が使っているのは x402.org の無料 testnet facilitator です**（鍵不要・Base Sepolia のみ）。
+自前で立てることもできます。実装は複数公開されています。
+
 ## 1. 生きている facilitator に聞いた結果
 
 ```
