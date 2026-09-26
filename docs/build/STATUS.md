@@ -70,8 +70,8 @@ npm run check
 | **Morning ledger** | `src/core/ledger.ts` | used by the console |
 | **Learning over a month** | `src/core/decisions.ts`, `week.ts` | 16 tests. 30 nights replayed: the cap binds for two weeks, being spared grows 0.1 → 6.3/day |
 | **Delegation boundary** | `src/ports/permissions.ts` | 13 tests. A delegate writes `yh:proposal` and is refused on the permission and payout keys — **and what the resolver refuses, rule 0 denies** |
-| **A decision model on rule 9** | `src/adapters/jev.ts` + 2 LLM adapters | 19 tests, and **called for real**: `claude-opus-5` and `gpt-6-astra`. They disagreed; neither could produce `auto` |
-| **Proof of personhood** | `src/ports/identity.ts`, `adapters/world-oidc.ts` | 18 tests. **Issuer discovery fetched live** — `auth_time` and `acr` confirmed available |
+| **A decision model on rule 9** | `src/adapters/jev.ts` + 2 LLM adapters | 10 tests on the model itself, and **called for real**: `claude-opus-5` and `gpt-6-astra`. They disagreed; neither could produce `auto` |
+| **Proof of personhood** | `src/ports/identity.ts`, `adapters/world-oidc.ts` | 27 tests. **Issuer discovery fetched live** — `auth_time` and `acr` confirmed available |
 | **Payment screening shape** | `src/ports/screening.ts` | 9 tests. `clean` passes; `flagged` and `unavailable` both stop |
 | **Claims match the code** | `scripts/verify.ts` | **10** claims re-derived by running the code. **Checked by breaking each one on purpose** |
 | **Touchable console** | `demo/index.html` | One file, no server, no CDN. Runs the same `route()` the tests run |
@@ -79,16 +79,19 @@ npm run check
 | **The two screens a person sees** | `src/server/pages.ts` | Today's offer count, the one being asked about, and a fold with what was handled without her. Service copy and demo tutorial are **separate surfaces** |
 | **Past nights, replayed not typed** | `src/core/history.ts` | 8 tests. Each night runs through the real `route()` + `surface()`. **Across 14 nights arrivals move and what reaches her is the cap, every time** |
 | **x402 settlement — money actually moved** ⭐⭐ | `src/ports/settlement.ts`, `src/adapters/x402.ts` | **Two transfers on Base Sepolia, both verified from the chain rather than from the facilitator's word.** `auto`: [`0x79c1e323…`](https://sepolia.basescan.org/tx/0x79c1e3239ef89cdc1b8a5fc14321093b06504a3c68a24644ba6390caf90393fa) — 120 atomic, settled inside the request. Held: [`0x5c79fddf…`](https://sepolia.basescan.org/tx/0x5c79fddfc8d6e6f64c1dd23752fae688a9b94ec5bc770f24fd1c2595b00d1d88) — **4,200 atomic, and it moved only when a person pressed Yes.** Before that press the seller's balance was 120; after it, 4,320. **The buyer's ETH balance is still 0** — 102,844 gas was paid by the facilitator, so "the buyer needs no ETH" is measured, not quoted |
-| **The server, on the public internet** | `src/server/` | `POST /requests`, `POST /approvals/:id`, `GET /ledger/:name`, `GET /approve/:id`, `GET /auth/world/callback`. 12 tests, including **HTTP and in-process agreeing about the same night** |
+| **The server, on the public internet** | `src/server/` | `POST /requests`, `POST /approvals/:id`, `GET /ledger/:name`, `GET /approve/:id`, `GET /auth/world/callback`. 15 tests, including **HTTP and in-process agreeing about the same night** |
 
-**5,438 lines of source, 156 tests, 55 commits.**
+**311 tests across 31 files.** Source lines and commit counts are deliberately not quoted
+here: they change with every push, and a number nobody re-derives is a fossil. `npm run check`
+prints the live figures, and `npm run verify` now fails if any document quotes a test count the
+run did not produce.
 
 ## ❌ Not running
 
 | | Blocked on | Who |
 |---|---|---|
 | **ENSv2 public app integration** | Registration and all six delegation-proof transactions verified. Local server now uses the registered owner and reads live Sepolia permissions. Left: deploy/configure the public server and run the integrated demo | **minta / spark** — [ENS-DELEGATION-DEMO.md](ENS-DELEGATION-DEMO.md) |
-| **World ID: a real app approval** | The sandbox never hands off to World ID app. It answers `amr: ["pop"]` with `auth_time` re-stamped, through Safari, Safari private and Chrome alike, with `prompt=login` **and** `max_age=0` sent. **Production `auth.world.org` exists and has the same shape** — three `.env` values would switch it — but its portal sign-in is gated. **Ask at the booth**; the claim on screen has already been corrected to what we can prove | **spark** — booth |
+| **World ID: an in-app approval in the Agents dev environment** | Production IDKit already reached approved (rows above). What is missing is the dev environment: the sandbox never hands off to World ID app. It answers `amr: ["pop"]` with `auth_time` re-stamped, through Safari, Safari private and Chrome alike, with `prompt=login` **and** `max_age=0` sent. **Production `auth.world.org` exists and has the same shape** — three `.env` values would switch it — but its portal sign-in is gated. **Ask at the booth**; the claim on screen has already been corrected to what we can prove | **spark** — booth |
 | **Payment screening, live** | Key delivered 2026-09-26 and handed to minta. Rule 4, its 9 tests and the `/health` flag are already in place; the adapter, the setup page and the two confirmed addresses are not | **minta** — [Issue #14](https://github.com/kou-uni/ethglobal-tokyo2026-uni/issues/14) |
 
 
@@ -101,21 +104,36 @@ in the app — so what the screen can honestly claim is *"a credential only an o
 person holds was presented at that moment"*, and it says exactly that. We asked for more with
 `prompt=login` and `max_age=0` and were given this.
 
-**2. The ENSv2 delegate boundary is still against a mock**, and the mock says so. The name,
-the resolver and the role bits are on chain; the refusal is not yet.
+**2. The ENSv2 delegate is revoked, so the boundary can only be shown refusing.** The six
+transactions are real — including the refused policy write and the refused proposal after
+revocation — but a *fresh successful* proposal would need rights granted again. Offer the
+read-only denial, which needs no transaction, and say why the happy path is not live.
+
+**3. Payment screening is not running.** Rule 4 is the one refusal that is not about
+permission, it has 9 tests, and it is still answered by a stand-in. The key exists; the
+adapter does not.
 
 Everything else on the screen is checkable, and volunteering these two is what buys the rest.
 
-## Next, in order — 2026-09-26 11:40 JST、締切まで約21時間
+## Next, in order
 
-**ENSの登録・委任境界は実チェーンで検証済み。残るENS作業は公開アプリへの接続です。**
+Submission closes **2026-09-27 09:00 JST**. No countdown is written here, because a countdown
+is wrong within the hour and this file is read by people deciding what to do next.
 
-1. **minta / spark — ENSの証拠を取り込み、公開アプリへ接続する。** Issue #5の4件は
-   [実証JSON](evidence/ens-delegation.json)で完了。PR #3を取り込み、policy.ownerとENS設定を
-   登録名に合わせて、公開デモを一周確認する。追加のfaucet・登録・実証用署名は不要。
-2. **spark — ブース巡回。** 各スポンサーに「何を探しているか」を逐語で。World には
-   **`amr: pop` の件**を持っていく（再現手順つきの実測なので、これが一番強い）
-3. **両方 — 足すのをやめる。** 製品の主張は揃い、金も動いた
+ENS registration and the delegation boundary are verified on chain. The remaining ENS work is
+connecting the public app.
+
+1. **minta / spark — connect the public app to the verified ENS evidence.** The four items in
+   Issue #5 are settled by [the proof JSON](evidence/ens-delegation.json). Merge PR #3, align
+   `policy.owner` and the ENS configuration with the registered name, and walk the public demo
+   once. No further faucet, registration or proof transactions are needed.
+2. **minta — make rule 4 live.** [Issue #14](https://github.com/kou-uni/ethglobal-tokyo2026-uni/issues/14):
+   the key works, `x-api-key` is confirmed, both a clean and a flagged address are confirmed.
+   What is left is the adapter and one of the twelve denials becoming a screening refusal.
+3. **spark — the booth round.** Ask every sponsor what they are looking for, verbatim. Take the
+   `amr: pop` finding to World; it is a measured result with reproduction steps, which makes it
+   the strongest thing we have to offer them.
+4. **Both — stop adding.** The product claims are complete and the money has moved.
 
 ## What changed today, and why it is written down
 

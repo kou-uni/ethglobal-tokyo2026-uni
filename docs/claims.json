@@ -1,6 +1,6 @@
 {
   "generatedBy": "npm run verify -- --json",
-  "generatedAt": "2026-09-26T04:42:54.439Z",
+  "generatedAt": "2026-09-26T06:03:29.860Z",
   "note": "Each claim is re-derived by running the code. Nothing here is asserted by hand. Re-run the command to check it yourself.",
   "passed": true,
   "claims": [
@@ -53,6 +53,11 @@
       "claim": "every placeholder is still marked as one",
       "ok": true,
       "detail": "ASSUMPTIONS.md has no 🔴 left — either everything is verified, or the marks were dropped"
+    },
+    {
+      "claim": "no document quotes a test or claim count the run did not produce",
+      "ok": true,
+      "detail": " — this run has 311 tests and 11 claims"
     }
   ]
 }

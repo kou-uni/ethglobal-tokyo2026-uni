@@ -6,3 +6,4 @@ scripts/night.json
 *.log
 demo/lib/
 .models-*.txt
+.test-counts.json

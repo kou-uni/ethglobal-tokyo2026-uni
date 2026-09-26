@@ -1,11 +1,11 @@
 # Yohaku — an escalation router for the agent economy
 
 > **Short on time?** &nbsp;**[30 seconds — touch it](https://kou-uni.github.io/ethglobal-tokyo2026-uni/console.html)**
-> &nbsp;·&nbsp; **[3 minutes — the whole story in 16 diagrams](docs/product/STORY.md)**
+> &nbsp;·&nbsp; **[3 minutes — the whole story in 16 diagrams](../product/STORY.md)**
 > &nbsp;·&nbsp; **[30 minutes — check the claims instead of trusting them](#verify-it-yourself)**
 >
-> **Reading this as an agent?** Start with **[llms.txt](llms.txt)**. Changing the code?
-> **[AGENTS.md](AGENTS.md)**. Want the claims as data? **[docs/claims.json](docs/claims.json)**
+> **Reading this as an agent?** Start with **[llms.txt](../../llms.txt)**. Changing the code?
+> **[AGENTS.md](../../AGENTS.md)**. Want the claims as data? **[docs/claims.json](../claims.json)**
 > — the output of `npm run verify -- --json`, not a hand-written list.
 
 > In Japanese painting, *yohaku* — the empty space — is not what's left over.
@@ -29,7 +29,7 @@ protection authority stated in February 2026 that *an agent's autonomy creates n
 category; the deploying organization retains full responsibility.* **"The AI did it" is not
 a defence.** So what decides everything is who holds the record of when consent was given,
 by whom, to what — **and that is the piece with no owner.** See
-[STORY §9](docs/product/STORY.md).
+[STORY §9](../product/STORY.md).
 
 **MIT licensed, and that is a requirement, not generosity.** AP2 requires a Trusted Surface
 to be *non-agentic*, because *"the Agent itself is a potential attacker."* The same logic
@@ -37,22 +37,22 @@ runs one step further: **a surface that decides what a person never sees must be
 can read.** A closed box deciding "you don't need to see this" is the thing we are trying to
 avoid. So every claim here is re-derived from the running code by `npm run verify`, and
 **you can disprove them with the same command.** Take the shape, not the product —
-[the six pieces worth stealing](docs/product/STORY.md#持っていってほしいもの).
+[the six pieces worth stealing](../product/STORY.md#持っていってほしいもの).
 
 **Where it sits.** An agent that works around the clock spends and earns around the clock.
 The question that decides everything is not how much, but **where a person still has to be
 involved.** Yohaku is that involvement point — not a wallet, not a treasury dashboard, not
 an execution layer. **It decides which of an agent's money movements a human has to see at
-all.** See [CONCEPT §0-B](docs/product/CONCEPT.md).
+all.** See [CONCEPT §0-B](../product/CONCEPT.md).
 
 **Why an agent pays a person at all:** scraping is free and **contaminated** — an agent cannot
 tell what a human wrote. So the scarce thing is not information, it is *information provably
 from a person*. **Only humans register here, and a name can be revoked** when someone poisons
-the well. See [CONCEPT §0](docs/product/CONCEPT.md).
+the well. See [CONCEPT §0](../product/CONCEPT.md).
 
-![Architecture overview](docs/assets/overview.svg)
+![Architecture overview](../assets/overview.svg)
 
-![Market](docs/assets/market.svg)
+![Market](../assets/market.svg)
 
 ---
 
@@ -60,24 +60,24 @@ the well. See [CONCEPT §0](docs/product/CONCEPT.md).
 
 | | |
 |---|---|
-| 🗺️ **[docs/README.md](docs/README.md)** | **全体の俯瞰** — 何が動いていて何が動いていないか、貫いている考え方、次にやること |
-| 📍 **[STATUS.md](docs/build/STATUS.md)** | **Where we are right now** — what runs, what does not, who does what next |
-| 🎨 **[Yohaku identity v3](design/yohaku-v3/README.md)** | **Selected logo, brand narrative, SVG assets, previews** — *Make room. For being human.* |
-| 📄 **[CONCEPT.md](docs/product/CONCEPT.md)** | **Product design** — request schema, routing, queue control |
-| 📖 **[STORY.md](docs/product/STORY.md)** | **通しの物語** — 思想 → 市場 → ジャーニー → 権威づけ → 穴 → 価値 → 層。**図14枚と文の両方** |
-| 💴 **[ECONOMICS.md](docs/product/ECONOMICS.md)** | **どうやって食べていくのか** — 通り道で薄く取る設計、無料からの課金、断り方を提供した人へのキャッシュバック。**1行も実装していないと明記** |
-| 🧭 **[JOURNEY.md](docs/product/JOURNEY.md)** | **二人の顧客のジャーニー** — エージェントと人間。規約がどこで受け渡されるか |
-| 📐 **[ARCHITECTURE.md](docs/product/ARCHITECTURE.md)** | **Layers, components, rules, failure paths, state machines, sequence** |
-| 📈 **[MARKET.md](docs/product/MARKET.md)** | **Why this is a market** — supply exhaustion, buyer growth, and what an agent saves |
-| 📋 **[ASSUMPTIONS.md](docs/product/ASSUMPTIONS.md)** | **Every number, and where it came from.** Nothing here is a measurement |
-| 🌍 **[WORLD-SETUP.md](docs/build/WORLD-SETUP.md)** | **The two steps left to finish the browser round-trip** — HTTPS host, then the OIDC client |
-| 🔧 **[ENSV2-SPIKE.md](docs/build/ENSV2-SPIKE.md)** | **What already runs offline, what is unconfirmed, and the 90-minute spike** |
-| 🎤 **[PITCH.md](docs/product/PITCH.md)** | Pitch script |
-| 💬 **[FEEDBACK.md](docs/build/FEEDBACK.md)** | Integration feedback to sponsors *(filled in as we build)* |
-| 🔬 **[knowledge/](docs/knowledge/)** | **外から確かめたこと。** ENSv2 の Sepolia 現物・World sandbox。全ファイルに出典と日付 |
-| 🔎 [INTERCEPTA.md](docs/decisions/INTERCEPTA.md) | Seller-side payment screening: evidence and integration proposal *(JA)* |
-| 🔎 [ENS-VS-INTERCEPTA.md](docs/decisions/ENS-VS-INTERCEPTA.md) | Prize-focused comparison, recommendation, validation gates *(JA)* |
-| 🔎 [ENSV2-DIFFERENTIATION.md](docs/decisions/ENSV2-DIFFERENTIATION.md) | Official ENSv2 differentiators and a scoped agent-permissions demo *(JA)* |
+| 🗺️ **[docs/README.md](../README.md)** | **全体の俯瞰** — 何が動いていて何が動いていないか、貫いている考え方、次にやること |
+| 📍 **[STATUS.md](STATUS.md)** | **Where we are right now** — what runs, what does not, who does what next |
+| 🎨 **[Yohaku identity v3](../../design/yohaku-v3/README.md)** | **Selected logo, brand narrative, SVG assets, previews** — *Make room. For being human.* |
+| 📄 **[CONCEPT.md](../product/CONCEPT.md)** | **Product design** — request schema, routing, queue control |
+| 📖 **[STORY.md](../product/STORY.md)** | **通しの物語** — 思想 → 市場 → ジャーニー → 権威づけ → 穴 → 価値 → 層。**図14枚と文の両方** |
+| 💴 **[ECONOMICS.md](../product/ECONOMICS.md)** | **どうやって食べていくのか** — 通り道で薄く取る設計、無料からの課金、断り方を提供した人へのキャッシュバック。**1行も実装していないと明記** |
+| 🧭 **[JOURNEY.md](../product/JOURNEY.md)** | **二人の顧客のジャーニー** — エージェントと人間。規約がどこで受け渡されるか |
+| 📐 **[ARCHITECTURE.md](../product/ARCHITECTURE.md)** | **Layers, components, rules, failure paths, state machines, sequence** |
+| 📈 **[MARKET.md](../product/MARKET.md)** | **Why this is a market** — supply exhaustion, buyer growth, and what an agent saves |
+| 📋 **[ASSUMPTIONS.md](../product/ASSUMPTIONS.md)** | **Every number, and where it came from.** Nothing here is a measurement |
+| 🌍 **[WORLD-SETUP.md](WORLD-SETUP.md)** | **The two steps left to finish the browser round-trip** — HTTPS host, then the OIDC client |
+| 🔧 **[ENSV2-SPIKE.md](ENSV2-SPIKE.md)** | **What already runs offline, what is unconfirmed, and the 90-minute spike** |
+| 🎤 **[PITCH.md](../product/PITCH.md)** | Pitch script |
+| 💬 **[FEEDBACK.md](FEEDBACK.md)** | Integration feedback to sponsors *(filled in as we build)* |
+| 🔬 **[knowledge/](../knowledge)** | **外から確かめたこと。** ENSv2 の Sepolia 現物・World sandbox。全ファイルに出典と日付 |
+| 🔎 [INTERCEPTA.md](../decisions/INTERCEPTA.md) | Seller-side payment screening: evidence and integration proposal *(JA)* |
+| 🔎 [ENS-VS-INTERCEPTA.md](../decisions/ENS-VS-INTERCEPTA.md) | Prize-focused comparison, recommendation, validation gates *(JA)* |
+| 🔎 [ENSV2-DIFFERENTIATION.md](../decisions/ENSV2-DIFFERENTIATION.md) | Official ENSv2 differentiators and a scoped agent-permissions demo *(JA)* |
 
 ---
 
@@ -91,11 +91,11 @@ things actually land — **if it is not checked here, it does not exist.**
 
 - [x] **Policy model and evaluation** — `src/core/types.ts`
 - [x] **Delegation boundary — modelled, mocked and tested** (`src/ports/permissions.ts`, 13 tests)
-- [ ] Permission policy written to / read from ENS **on chain** — see [ENSV2-SPIKE.md](docs/build/ENSV2-SPIKE.md)
+- [ ] Permission policy written to / read from ENS **on chain** — see [ENSV2-SPIKE.md](ENSV2-SPIKE.md)
 - [x] **Routing — ten ordered rules** (`auto` / `human` / `deny`) — `src/core/rules.ts`, 24 tests
 - [x] **Human queue control** — bundling, ranking, daily cap, deadline fallback — `src/core/queue.ts`, 8 tests
 - [x] **Fresh proof of personhood — done, end to end.** A real person pressed Approve on a phone; `auth_time` came back seconds old, `acr = orb-v3`. The declined path ran too
-- [x] **HTTP surface** — `POST /requests`, `POST /approvals/:id`, `GET /ledger/:name`, `GET /health`. 12 tests, including **parity between HTTP and in-process**
+- [x] **HTTP surface** — `POST /requests`, `POST /approvals/:id`, `GET /ledger/:name`, `GET /health`. 15 tests, including **parity between HTTP and in-process**
 - [ ] Payment execution under the owner's constraints
 - [x] **Morning ledger** — `src/core/ledger.ts`, used by the console
 - [x] **Model on rule 9** — `claude-opus-5`, called for real. Transcript below
@@ -210,7 +210,7 @@ A second request was declined: *"Left alone. Nothing was sent, and nothing moved
 **PKCE turned out to be mandatory and undocumented.** Every authorization request without
 `code_challenge` returns a bare `invalid_request`. Found by probing eight parameter
 combinations against the live endpoint — written up in
-[FEEDBACK.md](docs/build/FEEDBACK.md), since that is exactly what the integration debrief is for.
+[FEEDBACK.md](FEEDBACK.md), since that is exactly what the integration debrief is for.
 
 ## Where the model runs, and what it cannot do
 
@@ -310,7 +310,7 @@ Implemented stack: TypeScript · Node HTTP server · viem · World OIDC / IDKit 
 
 **What we claim about ENSv2 is narrow**: not that revocation is unique to it, but that
 **a delegated agent can propose without being able to rewrite what it is allowed to do.**
-See [ARCHITECTURE.md §6](docs/product/ARCHITECTURE.md).
+See [ARCHITECTURE.md §6](../product/ARCHITECTURE.md).
 
 ## MultiBaas usage
 
@@ -352,21 +352,21 @@ fail.
 **`npm run seed -- 2` is the night used in the pitch** — 52 arrive, 32 settle, 12 are dropped,
 **2 reach her**. Change the seed and the arrivals wander between 46 and 54; **across all 20 runs,
 the number that reaches her is 2. Every time.** That is her cap, not our claim.
-See [ASSUMPTIONS.md §2](docs/product/ASSUMPTIONS.md).
+See [ASSUMPTIONS.md §2](../product/ASSUMPTIONS.md).
 
 Copy `.env.example` to `.env` before touching chain or sponsor APIs. *(UI and chain
 configuration depends on the instance; inspect `/health`.)*
 
 The seeded “32 settle” above is a simulated disposition count, not 32 live transfers.
 For measured transactions, production World proof results, and remaining deployment work,
-see [current status](docs/build/STATUS.md).
+see [current status](STATUS.md).
 
 ## Judging and submission
 
-- [Prize requirements and evidence](docs/build/PRIZE-READINESS.md)
-- [60-second pitch and live demonstration](docs/product/PITCH.md)
-- [English submission copy](docs/product/SUBMISSION.md)
-- [Production IDKit visitor demo setup](docs/build/WORLD-IDKIT-DEMO.md)
+- [Prize requirements and evidence](PRIZE-READINESS.md)
+- [60-second pitch and live demonstration](../product/PITCH.md)
+- [English submission copy](../product/SUBMISSION.md)
+- [Production IDKit visitor demo setup](WORLD-IDKIT-DEMO.md)
 
 ## Team
 
@@ -379,9 +379,9 @@ The linked GitHub accounts above are the team's public handles.
 
 ## Feedback to sponsors
 
-See **[docs/FEEDBACK.md](docs/build/FEEDBACK.md)** — time to first success, friction, missing
+See **[docs/FEEDBACK.md](FEEDBACK.md)** — time to first success, friction, missing
 capabilities, and the single change that would help most, per sponsor SDK.
 
 ## License
 
-[MIT](LICENSE)
+[MIT](../../LICENSE)

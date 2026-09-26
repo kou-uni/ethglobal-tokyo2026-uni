@@ -125,8 +125,8 @@ impossible to tell what can be checked.
 ## 5. Checking it instead of trusting it
 
 ```bash
-npm test             # 300 tests
-npm run verify       # 10 claims, re-derived by running the code
+npm test             # 311 tests
+npm run verify       # 11 claims, re-derived by running the code
 npm run seed -- 2    # generate a night and route it for real
 npm run simulate     # agents arriving, with real jobs and real questions
 npm start            # the server

@@ -70,7 +70,7 @@ WORLD_IDKIT_SIGNING_KEY=<kouの公開サーバーで生成済みの専用秘密�
 
 ## 検証状況
 
-- 261 tests / 10 claims通過。15件の追加テストで、別来場者、Origin違い、
+- 311 tests / 11 claims通過。15件の追加テストで、別来場者、Origin違い、
   旧認証への迂回、使用済み証明、期限切れ、検証中の変更・取消、並行承認を確認した。
 - 認証単体では、本番のOrb証明に成功済み：
   [world-idkit.json](evidence/world-idkit.json)。

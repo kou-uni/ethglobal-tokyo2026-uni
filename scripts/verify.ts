@@ -211,6 +211,78 @@ check(
   'ASSUMPTIONS.md has no 🔴 left — either everything is verified, or the marks were dropped',
 );
 
+/* ── 6. no document may quote a test count the test run did not produce ───── */
+
+/*
+ * Why this exists: six different files quoted a total that had been true once — 133, 150,
+ * 156, 261, 300 — and each was written by someone reading a passing run. A number nobody
+ * re-derives is not evidence, it is a fossil, and a reviewer who checks one and finds it
+ * stale is right to stop trusting the rest.
+ *
+ * `npm test` writes the real counts; this compares every "N tests" in every document
+ * against them. A number is allowed if it is the live total or the live count of some test
+ * file. Anything else is a fossil, and this fails.
+ */
+
+interface VitestJson {
+  numTotalTests: number;
+  testResults: { name: string; assertionResults: unknown[] }[];
+}
+
+function docsQuotingCounts(): { file: string; line: number; value: number; kind: 'tests' | 'claims' }[] {
+  const out: { file: string; line: number; value: number; kind: 'tests' | 'claims' }[] = [];
+  const walk = (dir: string): string[] =>
+    readdirSync(dir).flatMap((e) => {
+      const full = join(dir, e);
+      if (statSync(full).isDirectory()) return e === 'node_modules' ? [] : walk(full);
+      return full.endsWith('.md') ? [full] : [];
+    });
+  const walkAny = (dir: string): string[] =>
+    readdirSync(dir).flatMap((e) => {
+      const full = join(dir, e);
+      if (statSync(full).isDirectory()) return e === 'node_modules' ? [] : walkAny(full);
+      return /\.(md|txt|html)$/.test(full) ? [full] : [];
+    });
+  for (const file of [...walkAny('docs'), 'README.md', 'AGENTS.md']) {
+    read(file)
+      .split('\n')
+      .forEach((text, i) => {
+        for (const m of text.matchAll(/([0-9][0-9,]*)\s+(tests|(?:verified )?claims)/g)) {
+          out.push({
+            file: file,
+            line: i + 1,
+            value: Number(m[1]!.replace(/,/g, '')),
+            kind: m[2]!.includes('claim') ? 'claims' : 'tests',
+          });
+        }
+      });
+  }
+  return out;
+}
+
+try {
+  const run = JSON.parse(read('.test-counts.json')) as VitestJson;
+  const allowed = new Set<number>([
+    run.numTotalTests,
+    ...run.testResults.map((t) => t.assertionResults.length),
+  ]);
+  const fossils = docsQuotingCounts().filter((q) =>
+    q.kind === 'tests' ? !allowed.has(q.value) : q.value !== results.length + 1,
+  );
+  check(
+    'no document quotes a test or claim count the run did not produce',
+    fossils.length === 0,
+    fossils.map((f) => `${f.file}:${f.line} says ${f.value} ${f.kind}`).join('; ') +
+      ` — this run has ${run.numTotalTests} tests and ${results.length + 1} claims`,
+  );
+} catch (e) {
+  check(
+    'no document quotes a test or claim count the run did not produce',
+    false,
+    `could not read .test-counts.json — run npm test first (${e instanceof Error ? e.message : e})`,
+  );
+}
+
 /* ── report ───────────────────────────────────────────────────────────────── */
 
 if (process.argv.includes('--json')) {

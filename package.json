@@ -17,7 +17,7 @@
     "setup:ens": "tsx scripts/setup-ens.ts",
     "setup:ens-delegation": "tsx scripts/setup-ens-delegate.ts",
     "setup:ens-server": "tsx scripts/setup-ens-server.ts",
-    "test": "vitest run",
+    "test": "vitest run --reporter=default --reporter=json --outputFile.json=.test-counts.json",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit && tsc -p tsconfig.setup.json --noEmit",
     "seed": "tsx scripts/seed.ts",
