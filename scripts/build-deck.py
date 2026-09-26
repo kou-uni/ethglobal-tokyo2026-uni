@@ -1,0 +1,113 @@
+# docs/deck.html — the 2:30 deck. Eight slides, one file, arrow keys.
+# Slide text is deliberately tiny in volume: the speaking is the content.
+import html, io
+
+S = [
+ dict(k='era', big=['Agents are not assistants.', 'They are <em>customers.</em>'],
+      sub='And the person they buy from is you.'),
+ dict(k='mkt', big=['It gets bigger.', 'The supply <em>runs out</em> first.'],
+      notes=['<b>2026–2032</b> the stock of public human text is used up — Epoch AI',
+             '<b>$60M / year</b> Google → Reddit, for what people wrote. None of it reaches them']),
+ dict(k='night', big=['<em>52</em> requests.', 'One night.', 'She was asleep.'],
+      sub='A market with nobody at the counter.'),
+ dict(k='yohaku', invert=True, big=['余白'], roman='yohaku',
+      sub='the space a painter decides not to fill'),
+ dict(k='proto', label='ONE NIGHT', big=['Refused', 'before anyone <em>is asked.</em>'],
+      chips=[('Intercepta', 'may this money move?'),
+             ('Jev', 'ask or drop — never yes'),
+             ('ENSv2', 'the delegate cannot widen its own rights'),
+             ('x402', 'what clears, settles itself')]),
+ dict(k='world', big=['Two are left.'],
+      sub='What an agent is buying:',
+      punch='an answer a human is <em>proven</em> to have given',
+      foot='World ID · at the moment of consent, not at signup'),
+ dict(k='money', big=['Check your <em>own</em> balance.'], sub='Not our screen.'),
+ dict(k='close', big=['Two taps.', 'She kept the rest of the night.'],
+      notes=['<b>one unit per decision we handled</b> — never a share of what she earned',
+             'what agents spend has to be governed somewhere → <b>Curvegrid</b>']),
+]
+
+def slide(i, d):
+    c = ['<section class="s%s"%s>' % (' inv' if d.get('invert') else '',
+         ' data-i="%d"' % i)]
+    if d.get('label'): c.append('<p class="lbl">%s</p>' % d['label'])
+    c.append('<h2>%s</h2>' % '<br>'.join(d['big']))
+    if d.get('roman'): c.append('<p class="rom">%s</p>' % d['roman'])
+    if d.get('sub'): c.append('<p class="sub">%s</p>' % d['sub'])
+    if d.get('punch'): c.append('<p class="punch">%s</p>' % d['punch'])
+    if d.get('chips'):
+        c.append('<div class="chips">' + ''.join(
+            '<div class="chip"><b>%s</b><span>%s</span></div>' % (n, t) for n, t in d['chips']) + '</div>')
+    if d.get('notes'): c.append('<div class="notes">' + ''.join('<p>%s</p>' % n for n in d['notes']) + '</div>')
+    if d.get('foot'): c.append('<p class="foot">%s</p>' % d['foot'])
+    c.append('</section>')
+    return '\n'.join(c)
+
+io.open('docs/deck.html', 'w', encoding='utf-8').write('''<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Yohaku — the deck</title>
+<meta name="description" content="Eight slides. Agents are becoming customers, and a person needs room.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@800;900&display=swap');
+:root{--ink:#1D1B26;--ink2:#6B6484;--ink3:#9A93B8;--violet:#5B4BE0;--pink:#DE3F97}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:#0E0C18;color:var(--ink);overflow:hidden;
+font-family:"M PLUS Rounded 1c",-apple-system,BlinkMacSystemFont,"Hiragino Maru Gothic ProN",sans-serif;
+font-weight:800;-webkit-font-smoothing:antialiased}
+#deck{position:fixed;inset:0;display:grid;place-items:center}
+section{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+padding:6vmin 8vmin;opacity:0;pointer-events:none;transition:opacity .22s;
+background:linear-gradient(160deg,#E9F0FF 0%,#F4EDFF 48%,#FFEAF6 100%)}
+section.on{opacity:1;pointer-events:auto}
+section.inv{background:#5B4BE0;color:#fff;align-items:center;text-align:center}
+h2{font-size:clamp(34px,7.6vmin,104px);font-weight:900;line-height:1.1;letter-spacing:-.025em}
+h2 em{font-style:normal;color:var(--violet)}
+section.inv h2{font-size:clamp(70px,20vmin,260px);letter-spacing:.04em}
+section.inv h2 em{color:#fff}
+.rom{font-size:clamp(24px,5vmin,64px);color:#D6CEFF;margin-top:1vmin;letter-spacing:.12em}
+.sub{font-size:clamp(17px,2.9vmin,40px);color:var(--ink2);margin-top:3vmin;line-height:1.45;max-width:24ch}
+section.inv .sub{color:#CFC6FF;max-width:30ch;margin-top:4vmin}
+.punch{font-size:clamp(22px,4.4vmin,60px);color:var(--ink);margin-top:2vmin;line-height:1.24;max-width:20ch}
+.punch em{font-style:normal;color:var(--pink)}
+.lbl{font-size:clamp(11px,1.5vmin,18px);letter-spacing:.2em;color:var(--ink3);margin-bottom:3vmin}
+.foot{font-size:clamp(13px,1.9vmin,24px);color:var(--ink3);margin-top:4vmin}
+.notes{margin-top:5vmin;display:flex;flex-direction:column;gap:1.6vmin}
+.notes p{font-size:clamp(14px,2.2vmin,30px);color:var(--ink2);line-height:1.4}
+.notes b{color:var(--ink)}
+.chips{margin-top:5vmin;display:grid;gap:1.6vmin;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.chip{background:rgba(255,255,255,.7);border-radius:3vmin;padding:2.4vmin 3vmin}
+.chip b{display:block;font-size:clamp(18px,3vmin,38px);font-weight:900}
+.chip span{display:block;font-size:clamp(12px,1.8vmin,22px);color:var(--ink2);margin-top:.6vmin;line-height:1.35}
+#dots{position:fixed;bottom:2.4vmin;left:0;right:0;display:flex;gap:1.1vmin;justify-content:center;z-index:5}
+#dots i{width:1.1vmin;height:1.1vmin;min-width:7px;min-height:7px;border-radius:50%;background:#C9C2E8;transition:background .2s}
+#dots i.on{background:var(--violet)}
+body.inv #dots i{background:rgba(255,255,255,.45)}
+body.inv #dots i.on{background:#fff}
+</style></head><body>
+<div id="deck">
+''' + '\n'.join(slide(i, d) for i, d in enumerate(S)) + '''
+</div>
+<div id="dots">''' + ''.join('<i></i>' for _ in S) + '''</div>
+<script>
+var S=document.querySelectorAll('section'), D=document.querySelectorAll('#dots i'), i=0;
+function go(n){i=Math.max(0,Math.min(S.length-1,n));
+  S.forEach(function(s,k){s.classList.toggle('on',k===i)});
+  D.forEach(function(d,k){d.classList.toggle('on',k===i)});
+  document.body.classList.toggle('inv',S[i].classList.contains('inv'));
+  history.replaceState(null,'','?p='+(i+1));}
+addEventListener('keydown',function(e){
+  if(['ArrowRight','ArrowDown',' ','PageDown','Enter'].indexOf(e.key)>-1){e.preventDefault();go(i+1)}
+  if(['ArrowLeft','ArrowUp','PageUp','Backspace'].indexOf(e.key)>-1){e.preventDefault();go(i-1)}
+  if(e.key==='Home')go(0); if(e.key==='End')go(S.length-1);
+  if(e.key==='f'&&document.documentElement.requestFullscreen)document.documentElement.requestFullscreen();});
+var x=null;
+addEventListener('touchstart',function(e){x=e.touches[0].clientX},{passive:true});
+addEventListener('touchend',function(e){if(x===null)return;var d=e.changedTouches[0].clientX-x;
+  if(Math.abs(d)>45)go(i+(d<0?1:-1)); x=null},{passive:true});
+addEventListener('click',function(e){if(e.clientX<innerWidth*0.25)go(i-1);else go(i+1)});
+go((parseInt(new URLSearchParams(location.search).get('p'),10)||1)-1);
+</script>
+</body></html>
+''')
+print('docs/deck.html —', len(S), 'slides')

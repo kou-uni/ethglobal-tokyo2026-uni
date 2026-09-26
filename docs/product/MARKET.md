@@ -96,7 +96,7 @@ the capability that the bundle existed to supply.
 |---|---|---|
 | **TAM** | **~$56B** | The research sector of the insights industry — the part that is *asking people things*. Not the software or reporting sectors, which agents replace rather than buy |
 | **SAM** | **$4–20B by the early 2030s** | Dataset licensing reaching $22.6B (2034), plus the share of a $183B agent market spent on external data. **Both are extrapolations from other people's forecasts** |
-| **SOM (first year)** | **small, and deliberately so** | One category (purchase intent), one country. At 4,324 cosmetics manufacture-and-sale licences in Japan, one study a month each and n=400, that is ~$2M/yr of demand **in a single vertical** |
+| **SOM (first year)** | **small, and deliberately so** | One category (purchase intent), one country. At 4,324 cosmetics manufacture-and-sale licences in Japan, **one study a year each** at n=400, that is **~$1.7M/yr** of demand **in a single vertical**. At one study a month it would be $20.8M, which we are not claiming — the conservative reading is the one we size against |
 
 **What would falsify this.** If synthetic data turns out to be an adequate substitute for
 human answers, the thesis fails — and that is the single assumption worth arguing about.
@@ -116,3 +116,23 @@ Epoch's projection is about *exhaustion of supply*, not about whether a substitu
 - [Japan Cosmetic Industry Association — licence counts](https://www.jcia.org/user/statistics/industry)
 
 *Extrapolations are ours and are marked as such. Nothing here was measured by us.*
+
+## How much weight each number will carry
+
+Checked 2026-09-26, including the arithmetic. **One error was found and corrected**: the
+single-vertical sizing said one study a month and then quoted a yearly figure ten times too
+small for it. It now says a year, and states the monthly reading rather than hiding it.
+
+| | Confidence | Why |
+|---|---|---|
+| **Epoch AI, public human text exhausted 2026–2032** | **High** | A specific, dated, falsifiable projection from a research group, not a vendor with something to sell. It is also the only claim here the whole thesis needs |
+| **Reddit → Google, ~$60M a year** | **High** | Widely reported, and the part that matters — none of it reaches the people who wrote the text — is not in dispute |
+| The three agent-market forecasts | **Medium** | Vendor forecasts that disagree on the level by roughly 2×. Each is internally consistent: every CAGR reproduces its own end figure to within 2%. Use the **shape**, never a single level |
+| ESOMAR insights industry, ~$150B | Medium | An industry body's own survey of its industry |
+| Per-response cost table | **Low** | Sourced to a single practitioner write-up. It carries our entire ROI comparison, which is more weight than one blog can hold |
+| Dataset licensing to $22.6B (2034) | **Low** | A firm with little independent track record |
+| OpenAI → Financial Times, $5–10M | **Low** | Never officially disclosed; the range is press estimate |
+
+**For a slide, use the first two and the shape of the third.** The low-confidence rows are
+fine in a document a reader can weigh; on a slide they are unsourced-looking numbers standing
+next to good ones, which costs more than they add.
