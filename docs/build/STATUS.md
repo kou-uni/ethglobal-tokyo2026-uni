@@ -18,6 +18,7 @@ operation. Check `/health` on the instance used for judging; this file is not li
 | IDKit cancellation | [world-idkit-cancel.json](evidence/world-idkit-cancel.json) | App cancel button; request remains unapproved. Not a World App rejection |
 | x402 automatic payment | [Base Sepolia transaction](https://sepolia.basescan.org/tx/0x79c1e3239ef89cdc1b8a5fc14321093b06504a3c68a24644ba6390caf90393fa) | Previously verified transfer of 120 atomic USDC units |
 | x402 held payment | [Base Sepolia transaction](https://sepolia.basescan.org/tx/0x5c79fddfc8d6e6f64c1dd23752fae688a9b94ec5bc770f24fd1c2595b00d1d88) | Previously verified transfer of 4,200 atomic USDC units after the dev-flow approval |
+| Live screening **and** settlement in one run | [screening-with-settlement.json](evidence/screening-with-settlement.json) · [Base Sepolia transaction](https://sepolia.basescan.org/tx/0xa6b97b7c07716a8456c9f6b78157366e3ac760f2be3dfbb77b63eedcbb8d0087) | The gap PR #15 recorded as open. A cleared payment source settled 120 atomic USDC; the flagged one was denied on rule 4 in the provider's own words. Receipt read from the chain: status 0x1, gas 85,756 paid by the relayer |
 
 Production IDKit and those x402 payments are **separate runs**. Do not claim the combined
 production-IDKit + on-chain settlement has been demonstrated yet.
@@ -92,7 +93,6 @@ run did not produce.
 |---|---|---|
 | **ENSv2 public app integration** | Registration and all six delegation-proof transactions verified. Local server now uses the registered owner and reads live Sepolia permissions. Left: deploy/configure the public server and run the integrated demo | **minta / spark** — [ENS-DELEGATION-DEMO.md](ENS-DELEGATION-DEMO.md) |
 | **World ID: an in-app approval in the Agents dev environment** | Production IDKit already reached approved (rows above). What is missing is the dev environment: the sandbox never hands off to World ID app. It answers `amr: ["pop"]` with `auth_time` re-stamped, through Safari, Safari private and Chrome alike, with `prompt=login` **and** `max_age=0` sent. **Production `auth.world.org` exists and has the same shape** — three `.env` values would switch it — but its portal sign-in is gated. **Ask at the booth**; the claim on screen has already been corrected to what we can prove | **spark** — booth |
-| **Screening plus a payment, in one run** | The adapter is live and decides the branch, but settlement is not configured on the machine it was exercised on, so "cleared screening **and** settled" has not happened in a single run yet. Everything needed is merged; it takes the key on the public host and a restart | **kou** — public deployment |
 
 
 ## The one thing that would embarrass us

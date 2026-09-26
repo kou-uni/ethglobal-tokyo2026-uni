@@ -1,0 +1,55 @@
+{
+  "observedAt": "2026-09-26",
+  "what": "The gap PR #15 recorded as not done: live payment screening deciding the branch AND an on-chain settlement in the same run. Exercised on kou's machine, where both INTERCEPTA_API_KEY and X402_* are configured. The API key appears nowhere in this file, in any request line, or in any log.",
+  "server": {
+    "where": "127.0.0.1:8412, started for this and stopped afterwards. Nothing on the public host was touched.",
+    "healthWired": {
+      "routing": true,
+      "classifier": true,
+      "identity": true,
+      "identityMode": "idkit-production-visitor-demo",
+      "koeRegistration": true,
+      "screening": true,
+      "settlement": true,
+      "delegationReader": true
+    }
+  },
+  "cleared": {
+    "command": "AGENT_TARGET=http://127.0.0.1:8412 npx tsx scripts/agent.ts routine",
+    "payoutAddress": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+    "screening": "clean — toxicScore 0, no traits, from the live API",
+    "verdict": "auto",
+    "rule": 8,
+    "settlement": {
+      "status": "settled",
+      "transaction": "0xa6b97b7c07716a8456c9f6b78157366e3ac760f2be3dfbb77b63eedcbb8d0087",
+      "network": "eip155:84532 (Base Sepolia)",
+      "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+      "amount": "120 atomic units of testnet USDC"
+    },
+    "confirmedFromTheChain": {
+      "method": "eth_getTransactionReceipt against https://sepolia.base.org, not the facilitator's response",
+      "status": "0x1",
+      "blockNumber": 47318256,
+      "gasUsed": 85756,
+      "gasPaidBy": "0xd407e409e34e0b9afb99ecceb609bdbcd5e7f1bf — the relayer, not the buyer",
+      "transferLog": "0xcd6071453028bfb2510ecd575a2b431488fbe0f7 -> 0x262a96e438b3759998251120e5c03dd4ca6ffdc0, value 120"
+    }
+  },
+  "refused": {
+    "command": "AGENT_TARGET=http://127.0.0.1:8412 npx tsx scripts/agent.ts routine flagged",
+    "payoutAddress": "0x098B716B8Aaf21512996dC57EB0615e2383E2f96",
+    "screening": "flagged — toxicScore 100, from the live API",
+    "verdict": "deny",
+    "rule": 4,
+    "reason": "the payment source failed screening — known_scammer — The address has a confirmed history of malicious activity, including scams, phishing, or other harmful behavior.",
+    "settlement": "none. No payment was sent and no content was delivered.",
+    "note": "Same grant, same category, same price as the cleared run. Only the declared payment source differs."
+  },
+  "scope": [
+    "Two runs, one seller, testnet USDC. This is not observed customer traffic or revenue.",
+    "The refusal quotes the provider's own trait description. We do not write our own explanation of why an address was refused.",
+    "What was stopped is the service receiving and settling, not the buyer signing. The buyer had already signed a payment authorization.",
+    "A verdict is one input to a routing decision, not a judgement about a person, the accuracy of their data, or the legality of a transaction."
+  ]
+}
