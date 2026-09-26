@@ -1,5 +1,10 @@
 # sandboxを残した本番World IDテスト
 
+**2026-09-26追記：この文書はAgents OIDC方式についてです。**
+通常のDeveloper Portalでは別方式のIDKitアプリ登録ができました。
+現在の実機確認は [WORLD-IDKIT-PROBE.md](WORLD-IDKIT-PROBE.md) を使います。
+IDKitのApp IDを、この文書のOIDC Client IDとして流用しないでください。
+
 通常のデモは従来の `WORLD_*` 設定を使い続けます。
 本番の確認は `/world-production` だけで行います。
 本番テストの成功から、決済・依頼承認・ENS権限付与へは接続していません。

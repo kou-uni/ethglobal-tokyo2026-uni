@@ -1,0 +1,15 @@
+{
+  "checked": "2026-09-26",
+  "appName": "Yohaku",
+  "appId": "app_e62379615c7f9d9c48faebf8e566b12a",
+  "rpId": "rp_b14f684c8aeb60f0",
+  "environment": "production",
+  "rpRegistrationVerified": true,
+  "signerAddress": "0xF6A8e6fD5815b28A9EF67741617d8eec62C40Ea2",
+  "action": "yohaku-live-check",
+  "verifyBaseUrl": "https://developer.world.org/api/v4/verify",
+  "verifySource": "https://docs.world.org/api-reference/developer-portal/verify",
+  "source": "2026-09-26: Developer Portal showed App configured successfully and the matching signer address. GET /api/v4/rp-status/rp_b14f684c8aeb60f0 returned production_status=registered and staging_status=registered.",
+  "documentation": "https://docs.world.org/world-id/idkit/integrate",
+  "note": "Public configuration only. This IDKit app is separate from the blocked Agents OIDC client and is not evidence of a successful production proof."
+}

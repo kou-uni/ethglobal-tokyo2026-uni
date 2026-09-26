@@ -52,7 +52,7 @@ issuer・client ID・secretを同一環境に揃える。sandboxのsecretを本�
 既存ブラウザーcookieはfresh proofを代替しない。エージェントの操作を人間が許可する
 用途には適合するが、device開始・期限付きpolling・結果と依頼の結び付けが必要。
 **sandboxのまま方式だけ替えても、本番の本人確認の証拠にはならない。**
-現時点ではIDKitや旧IdPへ全面移行する根拠はない。
+この時点では全面移行の判断は保留した。その後のIDKit登録結果は末尾に記載する。
 
 ### 自分たちの検証ロジックにも残る課題
 
@@ -87,3 +87,24 @@ step-up  e8e22ed9f13f9a3e3b42a1548b68341c3e22a5ffa5ecb0f6d8ef143af41c9d75
 ```
 
 この調査では公開サーバーや認証方式の変更は行っていない。
+
+## 追記：IDKitの本番登録はできた（2026-09-26）
+
+以下は上記の公開情報調査に続いて、本人のログイン後に確認した事実。
+`auth.world.org/portal` のAgents OIDC開発者アクセスと、
+`developer.world.org` のIDKit開発者アクセスは別の入口だった。
+後者でWorldによるログイン、Yohakuアプリの作成、署名者の登録が完了した。
+公開RP status APIでも `production_status: registered` を確認した。
+登録だけで本人の実機証明の成功とはしない。
+
+公式IDKitガイドに沿い、秘密鍵はサーバーに置き、認証依頼に署名する。
+ブラウザーでQRを表示し、返った証明をサーバーから本番verify APIへ送って検証する。
+この方法を認証単体テストとして追加した。既存のAgents OIDCデモとは接続していない。
+手順・制約は [WORLD-IDKIT-PROBE.md](../build/WORLD-IDKIT-PROBE.md)。
+
+追加の一次資料：
+
+- `https://docs.world.org/world-id/idkit/integrate`
+- `https://docs.world.org/world-id/idkit/signatures`
+- `https://docs.world.org/api-reference/developer-portal/verify`
+- `https://developer.world.org/api/v4/rp-status/rp_b14f684c8aeb60f0`
