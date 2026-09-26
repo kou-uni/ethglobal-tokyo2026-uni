@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 1282" role="img" aria-label="Two separate money paths: the seller is paid directly by the buyer, and Yohaku's per-decision fee is a separate optional authorization that is only redeemed above a threshold">
+<rect width="100%" height="100%" fill="#F8F7F3"/>
+<defs>
+<marker id="cf-d" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="13" markerHeight="13" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#7FA326"/></marker>
+<marker id="cf-f" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#6B5BD6"/></marker>
+<marker id="cf-k" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#242329"/></marker>
+</defs>
+<style>
+.cf-lnm{font:900 13px "M PLUS Rounded 1c",sans-serif;fill:#8C8998;letter-spacing:.11em}
+.cf-h0{font:900 30px "M PLUS Rounded 1c",sans-serif;fill:#241f3d}
+.cf-h1{font:900 20px "M PLUS Rounded 1c",sans-serif;fill:#242329}
+.cf-b{font:800 15.5px "M PLUS Rounded 1c",sans-serif;fill:#5F5D6B}
+.cf-n{font:900 17px "M PLUS Rounded 1c",sans-serif;fill:#242329}
+.cf-mono{font:900 12.5px ui-monospace,Menlo,monospace;fill:#6F9022}
+.cf-monoF{font:900 12.5px ui-monospace,Menlo,monospace;fill:#6B5BD6}
+.cf-pill{font:900 12.5px "M PLUS Rounded 1c",sans-serif;fill:#fff;letter-spacing:.05em}
+.cf-seller{stroke:#7FA326;stroke-width:6;fill:none;marker-end:url(#cf-d)}
+.cf-fee{stroke:#6B5BD6;stroke-width:3;fill:none;stroke-dasharray:8 5;marker-end:url(#cf-f)}
+.cf-k{stroke:#242329;stroke-width:3;fill:none;marker-end:url(#cf-k)}
+</style>
+<text class="cf-lnm" x="20" y="44">ONE BUYER, TWO AUTHORIZATIONS, TWO SEPARATE PATHS</text>
+<rect x="270" y="70" width="480" height="120" rx="20" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
+<text class="cf-h1" x="296" y="108">&#129302; Buyer agent</text>
+<text class="cf-b" x="296" y="136">It signs the price. It may also sign a</text>
+<text class="cf-b" x="296" y="158">second, tiny authorization for routing.</text>
+<text class="cf-mono" x="296" y="180">buyer ETH balance: 0 — it never pays gas</text>
+<path class="cf-k" d="M420 190 L420 214 L251 214 L251 250"/>
+<path class="cf-k" d="M600 190 L600 214 L769 214 L769 250"/>
+<rect x="20" y="250" width="300" height="28" rx="14" fill="#7FA326"/>
+<text class="cf-pill" x="36" y="269">THE PRICE &#183; RUNNING</text>
+<text class="cf-h0" x="20" y="304">The seller's money</text>
+<rect x="20" y="330" width="462" height="100" rx="18" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
+<text class="cf-n" x="46" y="360">402, then one EIP-3009 signature</text>
+<text class="cf-b" x="46" y="384">validBefore is the request deadline, so</text>
+<text class="cf-b" x="46" y="406">an unanswered request cannot settle.</text>
+<path class="cf-seller" d="M251 434 L251 460"/>
+<rect x="20" y="464" width="462" height="102" rx="18" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
+<text class="cf-n" x="46" y="494">The facilitator submits it</text>
+<text class="cf-b" x="46" y="518">It pays the gas, not the buyer.</text>
+<text class="cf-mono" x="46" y="542">gas 85,756 — paid by the relayer</text>
+<path class="cf-seller" d="M251 570 L251 596"/>
+<rect x="20" y="600" width="462" height="124" rx="18" fill="#F2FBD9" stroke="#C7E479" stroke-width="2"/>
+<text class="cf-n" x="46" y="630">→ Straight to the seller's wallet</text>
+<text class="cf-b" x="46" y="654">The whole price. Yohaku is not a hop</text>
+<text class="cf-b" x="46" y="676">on this path and holds nothing.</text>
+<text class="cf-mono" x="46" y="700">120 atomic USDC, on Base Sepolia</text>
+<rect x="538" y="250" width="300" height="28" rx="14" fill="#6B5BD6"/>
+<text class="cf-pill" x="554" y="269">THE ROUTING FEE &#183; RUNNING</text>
+<text class="cf-h0" x="538" y="304">Our fee</text>
+<rect x="538" y="330" width="462" height="146" rx="18" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
+<text class="cf-n" x="564" y="360">An extension on that same 402</text>
+<text class="cf-b" x="564" y="384">extensions[yohaku-routing-fee],</text>
+<text class="cf-b" x="564" y="406">optional. Decline it and the request</text>
+<text class="cf-b" x="564" y="428">is still routed.</text>
+<text class="cf-monoF" x="564" y="452">per-request nonce, 15-minute expiry</text>
+<path class="cf-fee" d="M769 480 L769 506"/>
+<rect x="538" y="510" width="462" height="122" rx="18" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
+<text class="cf-n" x="564" y="540">1 atomic unit per decision</text>
+<text class="cf-b" x="564" y="564">Charged for the routing, not as a share</text>
+<text class="cf-b" x="564" y="586">of the sale. auto, human and deny all</text>
+<text class="cf-b" x="564" y="608">cost the same, because all three are work.</text>
+<path class="cf-fee" d="M769 636 L769 662"/>
+<rect x="538" y="666" width="462" height="124" rx="18" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
+<text class="cf-n" x="564" y="696">A voucher ledger, off the money path</text>
+<text class="cf-b" x="564" y="720">Authorizations accumulate here. The</text>
+<text class="cf-b" x="564" y="742">seller's proceeds never enter it.</text>
+<text class="cf-monoF" x="564" y="766">redeemed: 0 · broadcast: false</text>
+<path class="cf-fee" d="M769 794 L769 820"/>
+<rect x="538" y="824" width="462" height="146" rx="18" fill="#EDE9FF" stroke="#C9BFFF" stroke-width="2"/>
+<text class="cf-n" x="564" y="854">→ One redemption, above 10,000</text>
+<text class="cf-b" x="564" y="878">Below that, gas costs more than the fee,</text>
+<text class="cf-b" x="564" y="900">so nothing is broadcast at all. Today:</text>
+<text class="cf-b" x="564" y="922">nothing has been.</text>
+<text class="cf-monoF" x="564" y="946">x402 batch-settlement</text>
+<rect x="20" y="1000" width="980" height="120" rx="20" fill="#EDE9FF" stroke="#C9BFFF" stroke-width="2"/>
+<text class="cf-h1" x="46" y="1036">Why two paths and not one cut</text>
+<text class="cf-b" x="46" y="1062">A router that took a share of the sale would have to sit inside the seller’s payment.</text>
+<text class="cf-b" x="46" y="1084">This one cannot. The fee is a separate authorization to a different address, and the</text>
+<text class="cf-b" x="46" y="1106">ledger’s own summary type is broadcast: false — it cannot report holding anything.</text>
+<rect x="20" y="1138" width="980" height="120" rx="20" fill="#FFF6DC" stroke="#F0DFA8" stroke-width="2"/>
+<text class="cf-h1" x="46" y="1174">Not built: the part that compounds</text>
+<text class="cf-b" x="46" y="1200">The intended next step: a filter rule that becomes a default earns its contributor a</text>
+<text class="cf-b" x="46" y="1222">share of the fees it saves, so the fee falls as the router learns.</text>
+<text class="cf-b" x="46" y="1244">None of it exists. It is a direction, drawn so it is not mistaken for revenue.</text>
+</svg>

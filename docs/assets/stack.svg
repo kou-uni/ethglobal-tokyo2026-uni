@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg viewBox="0 0 1020 1100" role="img" aria-label="How Yohaku relates to agents, people and the layers it plugs into">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 1100" role="img" aria-label="How Yohaku relates to agents, people and the layers it plugs into">
 <rect width="100%" height="100%" fill="#F8F7F3"/>
 <defs>
 <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#242329"/></marker>
