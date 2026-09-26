@@ -88,7 +88,7 @@ interface Profile{name:string;headline:string;answers:string[];willNotAnswer:str
 const $=(id:string)=>document.getElementById(id)!;
 const esc=(v:unknown)=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 const params=new URL(location.href).searchParams;
-let lang:'ja'|'en'=params.get('lang')==='en'?'en':'ja';
+let lang:'ja'|'en'=params.get('lang')==='ja'?'ja':'en';
 let view:View=(['discover','monitor','answers','work','receipts','space'].includes(params.get('view')??'')?params.get('view'):params.get('device')==='phone'||innerWidth<=700?'work':'discover') as View;
 let actor:'agent'|'human'=['work','receipts','space'].includes(view)?'human':'agent';
 let state:State|undefined,busy=false,generation=0,attempt:string|undefined,filter='all',shown=0,draft='',draftFor='',expanded=false;
