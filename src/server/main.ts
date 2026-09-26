@@ -18,6 +18,7 @@ import { MockScreening } from '../ports/screening.js';
 import { MockIdentity, type FreshnessPolicy } from '../ports/identity.js';
 import { WorldIdentity } from '../adapters/world-oidc.js';
 import { createApp } from './app.js';
+import { X402Settlement, x402FromEnv } from '../adapters/x402.js';
 import { Store } from './state.js';
 
 const PORT = Number(process.env['PORT'] ?? 8402);
@@ -38,6 +39,16 @@ const worldConfigured = Boolean(
 
 const redirectUri = process.env['WORLD_REDIRECT_URI'];
 
+/*
+ * Settlement is wired only when every piece of it is configured.
+ *
+ * A half-configured payment path is worse than none: it would let the server answer 200 to
+ * an agent while nothing moved. `x402FromEnv` returns the list of what is missing, and we
+ * print that list rather than starting in a state nobody can diagnose.
+ */
+const x402 = x402FromEnv(process.env);
+const settlement = 'missing' in x402 ? undefined : new X402Settlement(x402);
+
 const app = createApp({
   policy: DEMO_POLICY,
   store: new Store(KNOWN_PARTIES),
@@ -47,6 +58,9 @@ const app = createApp({
   ...(provider.live ? { classifier: provider.create() } : {}),
   ...(redirectUri ? { redirectUri } : {}),
   identityWired: worldConfigured && Boolean(redirectUri),
+  ...(settlement ? { settlement } : {}),
+  ...(redirectUri ? { origin: redirectUri.replace(/\/auth\/world\/callback$/, '') } : {}),
+  ...(process.env['X402_EXPLORER_URL'] ? { explorerUrl: process.env['X402_EXPLORER_URL'] } : {}),
   identity: worldConfigured
     ? new WorldIdentity({
         issuer: process.env['WORLD_ISSUER']!,
@@ -57,6 +71,19 @@ const app = createApp({
     : new MockIdentity(freshness),
 });
 
+/*
+ * Ask the facilitator whether it supports what we are configured for, before anyone pays.
+ *
+ * Getting the network string wrong is a five-character mistake that only shows up at the
+ * moment a judge tries to pay. This moves it to startup, where it is one line of output.
+ */
+if (settlement) {
+  void settlement.assertSupported().then(
+    () => console.log('\n  facilitator: supports exact on the configured network'),
+    (e: Error) => console.error(`\n  ⚠️  facilitator check failed: ${e.message}`),
+  );
+}
+
 app.listen(PORT, () => {
   console.log(`\n  yohaku — listening on http://127.0.0.1:${PORT}\n`);
   console.log(`    owner       ${DEMO_POLICY.owner}`);
@@ -64,7 +91,13 @@ app.listen(PORT, () => {
   console.log(`    classifier  ${provider.live ? `${provider.provider} / ${provider.model}` : 'not configured — rule 9 stays with the owner'}`);
   console.log(`    identity    ${worldConfigured && redirectUri ? `World ID → ${redirectUri}` : 'mock — approvals are not proving anything yet'}`);
   console.log(`    screening   mock`);
-  console.log(`    settlement  not wired`);
+  console.log(
+    `    settlement  ${
+      settlement
+        ? `x402 → ${(x402 as { network: string }).network}`
+        : `not wired — missing ${'missing' in x402 ? x402.missing.join(', ') : ''}`
+    }`,
+  );
   console.log(`\n  the page she opens:   ${redirectUri ? redirectUri.replace(/\/auth\/world\/callback$/, '') : `http://127.0.0.1:${PORT}`}/approve/<id>`);
   console.log(`\n  try it:\n`);
   console.log(`    curl -s localhost:${PORT}/health | jq`);

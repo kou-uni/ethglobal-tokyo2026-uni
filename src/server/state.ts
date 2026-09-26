@@ -6,6 +6,7 @@
  * Everything that must outlive the process is on chain or in the owner's policy, not here.
  */
 
+import type { HeldAuthorization } from '../ports/settlement.js';
 import type { AgentRequest, Bundle, Decision, HeldRequest } from '../core/types.js';
 import type { DecisionRecord } from '../core/decisions.js';
 
@@ -16,6 +17,14 @@ export interface Entry {
   resolution?: 'approved' | 'ignored' | 'expired';
   /** Present only when money actually moved. Absent is not "pending" — it is "no". */
   settlement?: string;
+  /**
+   * An authorization the agent signed at intake, held against a `human` verdict.
+   *
+   * It moves nothing while it waits. If the owner never answers, its `validBefore` passes
+   * and it becomes unsettleable by anyone — which is why the deadline is enforced by the
+   * signature rather than by us.
+   */
+  auth?: HeldAuthorization;
   receivedAt: string;
 }
 

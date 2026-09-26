@@ -146,6 +146,18 @@ a.g,button.g{background:var(--card);color:var(--ink2);box-shadow:0 6px 0 var(--g
 a.g:active,button.g:active{box-shadow:0 1px 0 var(--grey),0 3px 8px rgba(36,35,41,.12)}
 form{margin:0}
 
+/* the receipt — only ever rendered when a transfer really happened */
+.paid{margin-top:20px;background:var(--lime);border-radius:26px;padding:18px 20px;
+  box-shadow:0 7px 0 var(--limeD),0 14px 28px rgba(36,35,41,.18);
+  animation:bg .6s cubic-bezier(.2,1.6,.4,1) .55s both}
+.paid .pk{font-size:12px;font-weight:900;letter-spacing:.13em;color:#3F5413}
+.paid .pv{font-size:30px;font-weight:900;color:#2F3D09;letter-spacing:-.5px;margin-top:4px}
+.paid .px{display:inline-block;margin-top:12px;font-size:15px;font-weight:900;color:#fff;
+  background:var(--ink);padding:10px 18px;border-radius:99px;text-decoration:none;
+  box-shadow:0 4px 0 #0F0E14}
+.paid .px:active{transform:translateY(3px);box-shadow:0 1px 0 #0F0E14}
+.paid .ph{margin-top:10px;font-size:12px;font-weight:800;color:#41530F;word-break:break-all}
+
 /* the result */
 .big{width:136px;height:136px;border-radius:50%;margin:0 auto 22px;display:flex;
   align-items:center;justify-content:center;position:relative}
@@ -479,6 +491,12 @@ export function resultPage(p: {
   acr?: string;
   what?: string;
   amount?: string;
+  /** Set only when money actually moved. The page must never imply this without it. */
+  settled?: { transaction: string; network: string };
+  /** Why it did not. Shown plainly rather than left blank. */
+  notSettled?: string;
+  /** Where a transaction can be looked at. Comes from configuration, never hardcoded. */
+  explorer?: string;
 }): string {
   if (p.outcome === 'approved') {
     const t = p.verifiedAt ? ago(p.verifiedAt) : undefined;
@@ -497,11 +515,30 @@ ${
 <div class="trio">
   <div><div class="s on">✓</div><div class="l">person<br>verified</div></div>
   <div><div class="s on">✓</div><div class="l">answer<br>kept</div></div>
-  <div><div class="s">—</div><div class="l">payment<br>not wired</div></div>
+  <div><div class="s${p.settled ? ' on' : ''}">${p.settled ? '✓' : '—'}</div><div class="l">${
+      p.settled ? 'money<br>arrived' : 'payment<br>not wired'
+    }</div></div>
 </div>
+${
+  p.settled
+    ? `<div class="paid"><div class="pk">PAID · ${esc(p.settled.network)}</div>
+<div class="pv">${p.amount ? esc(p.amount) : 'Settled'}</div>
+${
+  p.explorer
+    ? `<a class="px" href="${esc(p.explorer)}${esc(p.settled.transaction)}" target="_blank" rel="noopener">
+Look at it on the explorer &rarr;</a>`
+    : `<div class="ph">${esc(p.settled.transaction)}</div>`
+}</div>`
+    : ''
+}
 </main>
-<footer><b>You have not been paid.</b> Payment is not connected yet, so nothing was
-transferred.<br>Your permission was recorded, and you will not be asked this again.</footer>`,
+<footer>${
+      p.settled
+        ? '<b>The money is in your wallet.</b> Not a record of a promise &mdash; the transfer itself, which you can check without us.'
+        : `<b>You have not been paid.</b> ${
+            p.notSettled ? esc(p.notSettled) : 'Payment is not connected yet'
+          }, so nothing was transferred.`
+    }<br>Your permission was recorded, and you will not be asked this again.</footer>`,
       [
         {
           tag: 'THAT NUMBER',
@@ -520,8 +557,12 @@ transferred.<br>Your permission was recorded, and you will not be asked this aga
         {
           tag: 'THE THIRD TILE',
           lines: [
-            'Payment is <b>not wired</b>, and the screen says so.',
-            'Everything up to the signature happened; the signature did not. <b>We would rather you heard that from the product than found it.</b>',
+            p.settled
+              ? 'The agent signed an authorization <b>before she was asked</b>, and it moved nothing while she slept. Pressing Yes is what settled it.'
+              : 'Payment is <b>not wired</b>, and the screen says so. Everything up to the signature happened; the signature did not.',
+            p.settled
+              ? 'That authorization carried an expiry. <b>Had she never answered, it would have expired and nobody could have settled it</b> — not the agent, not us. "Silence is not consent" is enforced by the signature, not by our server.'
+              : '<b>We would rather you heard that from the product than found it.</b>',
           ],
         },
       ],
