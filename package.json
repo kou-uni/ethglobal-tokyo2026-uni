@@ -35,7 +35,9 @@
     "setup:world": "tsx scripts/setup-world.ts",
     "agent": "tsx scripts/agent.ts",
     "setup:wallet": "tsx scripts/setup-wallet.ts",
-    "stage": "tsx scripts/stage-demo.ts"
+    "stage": "tsx scripts/stage-demo.ts",
+    "setup:jev": "tsx scripts/setup-jev.ts",
+    "jev:check": "tsx scripts/jev-check.ts"
   },
   "devDependencies": {
     "@types/node": "^22.7.4",

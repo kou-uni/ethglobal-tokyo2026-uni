@@ -13,8 +13,9 @@
 import { MockClassifier, type ClassifierPort } from './classifier.js';
 import { ClaudeClassifier } from '../adapters/claude-classifier.js';
 import { OpenAIClassifier } from '../adapters/openai-classifier.js';
+import { JevClassifier, jevFromEnv } from '../adapters/jev.js';
 
-export type ProviderName = 'claude' | 'openai' | 'mock';
+export type ProviderName = 'jev' | 'claude' | 'openai' | 'mock';
 
 export interface ProviderChoice {
   provider: ProviderName;
@@ -42,14 +43,31 @@ export function chooseProvider(env: NodeJS.ProcessEnv = process.env): ProviderCh
   const forced = env['YOHAKU_PROVIDER'] as ProviderName | undefined;
   const hasClaude = Boolean(env['ANTHROPIC_API_KEY'] || env['ANTHROPIC_AUTH_TOKEN']);
   const hasOpenAI = Boolean(env['OPENAI_API_KEY']);
+  const hasJev = Boolean(jevFromEnv(env));
 
+  /*
+   * A decision model is preferred when one is configured.
+   *
+   * Not because it is more trustworthy — the published weakness of this category is that a
+   * planted field can move a verdict. It is preferred because it is **narrower**: it answers
+   * a typed question whose options we supply, so there is no free text for an instruction to
+   * arrive in and no name for an approving answer. A language model reaches the same place
+   * only because we then constrain its output; here the constraint is the request itself.
+   */
   const pick: ProviderName =
-    forced === 'claude' && hasClaude ? 'claude'
+    forced === 'jev' && hasJev ? 'jev'
+    : forced === 'claude' && hasClaude ? 'claude'
     : forced === 'openai' && hasOpenAI ? 'openai'
     : forced === 'mock' ? 'mock'
+    : hasJev ? 'jev'
     : hasClaude ? 'claude'
     : hasOpenAI ? 'openai'
     : 'mock';
+
+  if (pick === 'jev') {
+    const config = jevFromEnv(env)!;
+    return { provider: 'jev', model: config.model, live: true, create: () => new JevClassifier(config) };
+  }
 
   if (pick === 'claude') {
     // No default: see the note in the OpenAI branch. `npm run models` lists them.

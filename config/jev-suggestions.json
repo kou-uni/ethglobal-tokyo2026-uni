@@ -1,0 +1,20 @@
+{
+  "_why": "Starting values for the decision-model setup page. They live here, not in source, because npm run verify refuses a hardcoded endpoint in src/ or scripts/ — and because a value without its provenance is a value nobody can re-check.",
+  "_confirmed": "2026-09-26",
+  "values": {
+    "JEV_BASE_URL": {
+      "value": "https://api.typesafe.ai/v1/systemone",
+      "source": "TypeSafe AI API reference: every request is a POST here, authenticated with a Bearer token. https://docs.typesafe.ai/api"
+    },
+    "JEV_MODEL": {
+      "value": "jev-latest",
+      "source": "TypeSafe's flagship decision model, as named in the same reference."
+    }
+  },
+  "links": {
+    "keys": {
+      "value": "https://docs.typesafe.ai/api",
+      "source": "Where the API reference and key management live."
+    }
+  }
+}
