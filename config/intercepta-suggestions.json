@@ -1,0 +1,24 @@
+{
+  "_why": "Starting values for the Intercepta setup page. They live here, not in source, because npm run verify refuses a hardcoded endpoint in src/ or scripts/ — and because a value without its provenance is a value nobody can re-check.",
+  "_unconfirmed": "Read before trusting anything here: we have not called this API yet. The host and the path below come from public documentation, and the auth header name is a guess. The response shape is entirely unknown, so no adapter may assume a field called clean or flagged. Confirmed values belong in Issue #14 with the raw curl output that produced them.",
+  "values": {
+    "INTERCEPTA_BASE_URL": {
+      "value": "https://api.web3antivirus.io",
+      "source": "The API host named in the public reference the prize page points at, https://docs.web3antivirus.io — the Intercepta prize uses that domain as its own reference."
+    },
+    "INTERCEPTA_SCAN_PATH": {
+      "value": "/api/public/v2/extension/account/{address}/quick-scan",
+      "source": "Quick Scan Address, the low-latency risk assessment. Deep Scan is a separate endpoint (.../toxic-score) and is the one documented as explaining sanctions, laundering and fraud flags — switch to it if Quick Scan will not give us a reason we can show a person."
+    },
+    "INTERCEPTA_AUTH_HEADER": {
+      "value": "x-api-key",
+      "source": "UNCONFIRMED — a guess, kept here rather than in code precisely so it is visible as one. Replace it with the header an actual 200 response required."
+    }
+  },
+  "links": {
+    "keys": {
+      "value": "https://docs.web3antivirus.io",
+      "source": "Where the API reference lives. Sandbox keys come from the prize page's form: one key, 1,000 requests, valid through judging."
+    }
+  }
+}

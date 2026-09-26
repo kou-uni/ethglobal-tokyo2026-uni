@@ -38,7 +38,8 @@
     "stage": "tsx scripts/stage-demo.ts",
     "setup:jev": "tsx scripts/setup-jev.ts",
     "jev:check": "tsx scripts/jev-check.ts",
-    "simulate": "tsx scripts/simulate.ts"
+    "simulate": "tsx scripts/simulate.ts",
+    "setup:intercepta": "tsx scripts/setup-intercepta.ts"
   },
   "devDependencies": {
     "@types/node": "^22.7.4",
