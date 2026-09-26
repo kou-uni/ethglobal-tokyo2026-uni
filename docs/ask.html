@@ -1,0 +1,164 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Yohaku — ask about the build</title>
+<meta name="description" content="Ask why Yohaku is built this way. Answers come from a fixed set with evidence links, and it says so when it has nothing.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap');
+:root{--ink:#242329;--ink2:#5F5D6B;--ink3:#A6A3B4;--paper:#F8F7F3;--card:#fff;--line:#E8E5DC;
+--lilac:#BCB2FA;--lilacD:#6B5BD6;--lilacL:#EDE9FF;--limeD:#7FA326;--limeL:#F2FBD9;--amber:#B08900;--amberL:#FFF6DC;
+--sh:0 6px 0 rgba(36,35,41,.09),0 12px 28px rgba(36,35,41,.13);--shS:0 4px 0 rgba(36,35,41,.08)}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:820px;padding:26px 18px 90px;color:var(--ink);
+background:linear-gradient(180deg,#EFEBFF 0%,#F6F4EC 40%,var(--paper) 100%);background-attachment:fixed;
+font-family:"M PLUS Rounded 1c",-apple-system,BlinkMacSystemFont,"Hiragino Maru Gothic ProN",sans-serif;
+font-size:16px;line-height:1.7;font-weight:700;-webkit-font-smoothing:antialiased}
+a.back{font-size:14px;color:var(--lilacD);text-decoration:none;font-weight:900}
+h1{font-size:clamp(28px,6.4vw,42px);font-weight:900;letter-spacing:-.02em;margin:12px 0 6px;line-height:1.2}
+h1 em{font-style:normal;display:inline-block;color:#fff;background:var(--lilacD);padding:0 12px 3px;
+border-radius:15px;box-shadow:0 5px 0 #4A3BAE;transform:rotate(-1.4deg)}
+p.sub{color:var(--ink2);font-size:16px;margin:10px 0 20px;max-width:52ch}
+#log{display:flex;flex-direction:column;gap:12px;margin-bottom:18px}
+.you{align-self:flex-end;background:var(--ink);color:#fff;border-radius:20px 20px 6px 20px;
+padding:11px 17px;font-size:15.5px;max-width:82%}
+.me{background:var(--card);border-radius:22px 22px 22px 6px;padding:17px 20px;box-shadow:var(--shS);max-width:94%}
+.chip{display:inline-block;font-size:11px;font-weight:900;letter-spacing:.08em;color:#fff;
+border-radius:11px;padding:2px 10px;margin-bottom:9px}
+.RUNNING{background:var(--limeD)}.DESIGNED{background:var(--lilacD)}.NOT{background:var(--amber)}
+.me p{margin:0 0 12px;font-size:15.5px;line-height:1.72}
+.ev{display:flex;flex-wrap:wrap;gap:8px}
+.ev a{font-size:12.5px;font-weight:900;text-decoration:none;color:var(--lilacD);background:var(--lilacL);
+border-radius:11px;padding:5px 11px}
+.rel{margin-top:13px;padding-top:12px;border-top:2px solid var(--line);display:flex;flex-wrap:wrap;gap:8px}
+button.q{font:inherit;font-size:13px;font-weight:800;cursor:pointer;background:#fff;color:var(--ink2);
+border:2px solid var(--line);border-radius:14px;padding:6px 13px}
+button.q:hover{border-color:var(--lilac);color:var(--lilacD)}
+form{display:flex;gap:9px;position:sticky;bottom:14px}
+input{flex:1;font:inherit;font-size:16px;font-weight:700;padding:14px 18px;border:2px solid var(--line);
+border-radius:18px;background:#fff;box-shadow:var(--shS)}
+input:focus{outline:0;border-color:var(--lilac)}
+button.go{font:inherit;font-size:16px;font-weight:900;padding:14px 22px;border:0;border-radius:18px;
+background:var(--ink);color:#fff;cursor:pointer;box-shadow:var(--shS)}
+.starter{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.note{font-size:13px;color:var(--ink3);margin-top:22px;line-height:1.6}
+</style></head><body>
+<a class="back" href="./">&larr; Yohaku</a>
+<h1>Ask why it is<br>built <em>this way.</em></h1>
+<p class="sub">Answers come from a fixed set, each with something you can check. When there is
+nothing, it says so rather than inventing one.</p>
+
+<div class="starter" id="starters"></div>
+<div id="log"></div>
+
+<form id="f" autocomplete="off">
+  <input id="q" placeholder="Did money actually move?" aria-label="Ask a question">
+  <button class="go" type="submit">Ask</button>
+</form>
+
+<p class="note">No model runs here. The answer set is
+<a href="ask/answers.json">ask/answers.json</a> &mdash; 28 entries, every one with a link out.
+An agent reading this can fetch that file directly instead of parsing this page.</p>
+
+<script>
+const STARTERS = ['what', 'x402', 'not-built', 'embarrass', 'fees', 'verify'];
+let DB = [];
+
+const norm = s => s.toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').split(/\s+/).filter(w => w.length > 2);
+const STOP = new Set(['the','and','for','you','are','was','how','what','why','does','did','your','with','that','this','from','into','can','has','have','not','its','who','when','where','they','their','our','out','get','use','tell','about','show','give','want','know','like','please','could','would','some','any','thing','there','here','make','made','been','more','much','many','one','two','also','just','very','really']);
+
+/*
+ * Token matching, not substring matching.
+ *
+ * `"defensible".includes("ens")` is true, which sent "why ens v2" to the page about why this
+ * is a layer. Keys are compared as whole words; a multi-word key still gets to match as a
+ * phrase against the raw question, because that is how people type "payment source" or
+ * "business model".
+ */
+function score(q, e) {
+  const raw = ' ' + q.toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ') + ' ';
+  const qw = norm(q).filter(w => !STOP.has(w));
+  if (!qw.length) return 0;
+  const keyTok = new Set(norm(e.keys.join(' ')));
+  const quest = new Set(norm(e.q));
+  const body = new Set(norm(e.a));
+  let s = 0, covered = new Set();
+  for (const k of e.keys) {
+    if (k.includes(' ') && raw.includes(' ' + k + ' ')) {
+      s += 4;
+      norm(k).forEach(w => covered.add(w));
+    }
+  }
+  for (const w of qw) {
+    let hit = false;
+    if (keyTok.has(w)) { s += 2.5; hit = true; }
+    if (quest.has(w)) { s += 1.2; hit = true; }
+    if (body.has(w)) { s += 0.4; hit = true; }
+    if (hit) covered.add(w);
+  }
+  // "who won the world cup" touches `world` and nothing else. One incidental word is not a question.
+  if ([...covered].filter(w => qw.includes(w)).length / qw.length < 0.5) return 0;
+  return s / Math.sqrt(qw.length);
+}
+
+function chip(status) {
+  const cls = status === 'NOT BUILT' ? 'NOT' : status;
+  return '<span class="chip ' + cls + '">' + status + '</span>';
+}
+
+function render(entry, related) {
+  const ev = entry.ev.map(([label, href]) =>
+    '<a href="' + href + '"' + (/^http/.test(href) ? ' target="_blank" rel="noopener"' : '') + '>' + label + ' &rarr;</a>').join('');
+  const rel = related.length
+    ? '<div class="rel">' + related.map(r => '<button class="q" data-id="' + r.id + '">' + r.q + '</button>').join('') + '</div>'
+    : '';
+  return '<div class="me">' + chip(entry.status) + '<p>' + entry.a + '</p><div class="ev">' + ev + '</div>' + rel + '</div>';
+}
+
+function nothing(near) {
+  return '<div class="me"><p><b>I do not have that one.</b> This answers from a fixed set rather than a model, '
+    + 'so when it has nothing it says nothing. The closest it holds:</p><div class="rel" style="border:0;padding:0;margin:0">'
+    + near.map(r => '<button class="q" data-id="' + r.id + '">' + r.q + '</button>').join('') + '</div></div>';
+}
+
+function ask(text, id) {
+  const log = document.getElementById('log');
+  log.insertAdjacentHTML('beforeend', '<div class="you">' + text.replace(/</g, '&lt;') + '</div>');
+  let hit, ranked;
+  if (id) {
+    hit = DB.find(e => e.id === id);
+    ranked = DB.filter(e => e.id !== id).map(e => [score(hit.q + ' ' + hit.keys.join(' '), e), e]).sort((a, b) => b[0] - a[0]);
+  } else {
+    ranked = DB.map(e => [score(text, e), e]).sort((a, b) => b[0] - a[0]);
+    if (ranked[0][0] >= 1.6) { hit = ranked[0][1]; ranked = ranked.slice(1); }
+  }
+  const near = ranked.slice(0, 3).map(r => r[1]);
+  log.insertAdjacentHTML('beforeend', hit ? render(hit, near.slice(0, 2)) : nothing(near));
+  log.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+document.addEventListener('click', ev => {
+  const b = ev.target.closest('button.q');
+  if (!b) return;
+  ask(b.textContent, b.dataset.id);
+});
+
+document.getElementById('f').addEventListener('submit', ev => {
+  ev.preventDefault();
+  const i = document.getElementById('q');
+  if (i.value.trim()) { ask(i.value.trim()); i.value = ''; }
+});
+
+fetch('ask/answers.json').then(r => r.json()).then(d => {
+  DB = d.answers;
+  // ?q=... answers on load, so a single link can carry a question and its evidence
+  const pre = new URLSearchParams(location.search).get('q');
+  if (pre) ask(pre);
+  document.getElementById('starters').innerHTML = STARTERS
+    .map(id => DB.find(e => e.id === id))
+    .filter(Boolean)
+    .map(e => '<button class="q" data-id="' + e.id + '">' + e.q + '</button>').join('');
+}).catch(() => {
+  document.getElementById('starters').innerHTML =
+    '<p class="note">The answer set did not load. It is at <a href="ask/answers.json">ask/answers.json</a>.</p>';
+});
+</script>
+</body></html>

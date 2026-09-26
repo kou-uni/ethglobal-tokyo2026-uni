@@ -1,0 +1,656 @@
+{
+  "_what": "The answer set behind ask.html. Every entry carries a status and at least one link a reader can check without us. There is no model here on purpose: a page that argues for not claiming unverified things should not answer from a model that can invent one.",
+  "_status": {
+    "RUNNING": "exercised, with evidence",
+    "DESIGNED": "specified and tested, not exercised end to end",
+    "NOT BUILT": "a direction; nothing exists"
+  },
+  "answers": [
+    {
+      "id": "what",
+      "status": "RUNNING",
+      "q": "What is Yohaku?",
+      "keys": [
+        "what is",
+        "what does it do",
+        "overview",
+        "summary",
+        "elevator",
+        "explain",
+        "about"
+      ],
+      "a": "An escalation router for the agent economy. Agents buy information from people around the clock, and a person cannot answer fifty requests a night. Yohaku sorts each incoming request into auto, human or deny, and holds what reaches a person to a cap she sets.",
+      "ev": [
+        [
+          "the overview",
+          "../"
+        ],
+        [
+          "llms.txt",
+          "../llms.txt"
+        ]
+      ]
+    },
+    {
+      "id": "why-layer",
+      "status": "RUNNING",
+      "q": "Why is this a layer and not a feature of one marketplace?",
+      "keys": [
+        "why a layer",
+        "why not a feature",
+        "marketplace",
+        "platform",
+        "moat",
+        "defensible",
+        "why separate"
+      ],
+      "a": "Once agents are the customers, counters multiply — panel companies, jobs boards, research marketplaces — and they all speak A2A, because that is how an agent that has never heard of you arrives. A person cannot hold an account, a policy and a notification stream per platform. The A2A Agent Card belongs to the person, so however many counters exist the requests land in one router.",
+      "ev": [
+        [
+          "where requests come from",
+          "../inflow.html"
+        ]
+      ]
+    },
+    {
+      "id": "rules",
+      "status": "RUNNING",
+      "q": "How does the routing actually decide?",
+      "keys": [
+        "rules",
+        "routing",
+        "how decide",
+        "ten rules",
+        "algorithm",
+        "logic",
+        "first match"
+      ],
+      "a": "Ten ordered rules, first match wins. Rule 0 judges the delegate on the inside; rules 1 to 9 judge requests arriving from outside. Rule 9 is the only place a model is consulted, and rule 9 with no answer means a human, never an automatic yes.",
+      "ev": [
+        [
+          "rules.ts",
+          "https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/src/core/rules.ts"
+        ],
+        [
+          "the layer map",
+          "../stack.html"
+        ]
+      ]
+    },
+    {
+      "id": "fail-closed",
+      "status": "RUNNING",
+      "q": "What happens when something breaks?",
+      "keys": [
+        "api",
+        "api down",
+        "breaks",
+        "broken",
+        "crash",
+        "down",
+        "error",
+        "fail",
+        "goes down",
+        "outage",
+        "safety",
+        "silence",
+        "timeout",
+        "unavailable"
+      ],
+      "a": "Everything falls to deny. Engine down, screening unreachable, identity check failed, deadline passed with no answer — all of them refuse. Silence is not consent, and no configuration turns an unavailable check into a pass.",
+      "ev": [
+        [
+          "the failure diagram",
+          "../product/ARCHITECTURE.md#5-failure-everything-falls-to-deny"
+        ]
+      ]
+    },
+    {
+      "id": "prompt-injection",
+      "status": "RUNNING",
+      "q": "What stops prompt injection from widening access?",
+      "keys": [
+        "prompt injection",
+        "jailbreak",
+        "inject",
+        "manipulate",
+        "trick the model",
+        "llm safety",
+        "schema"
+      ],
+      "a": "The guarantee is in the schema, not in the prompt. The model is asked one typed question whose options are ask and drop. There is no value meaning pass, so a model that is completely talked into approving something still cannot express approval.",
+      "ev": [
+        [
+          "the classifier port",
+          "https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/src/ports/classifier.ts"
+        ]
+      ]
+    },
+    {
+      "id": "world",
+      "status": "RUNNING",
+      "q": "How is World ID used?",
+      "keys": [
+        "identity",
+        "idkit",
+        "orb",
+        "personhood",
+        "proof of human",
+        "world",
+        "world id",
+        "worldcoin"
+      ],
+      "a": "At the moment of consent, not at signup. When she presses yes, the backend verifies the proof: discovery read live, PKCE S256, the ID token checked against the issuer's JWKS, acr required to be the orb level, and auth_time checked against our clock with a 120-second ceiling. We store verifiedAt and acr, never the subject identifier.",
+      "ev": [
+        [
+          "the production proof",
+          "../build/evidence/world-idkit.json"
+        ],
+        [
+          "what we found",
+          "../knowledge/WORLD-SANDBOX.md"
+        ]
+      ]
+    },
+    {
+      "id": "amr",
+      "status": "RUNNING",
+      "q": "What is the amr pop problem?",
+      "keys": [
+        "amr",
+        "pop",
+        "re-authentication",
+        "fresh approval",
+        "world app did not open",
+        "sandbox"
+      ],
+      "a": "Sending both prompt=login and max_age=0, the sandbox answers amr: pop with auth_time re-stamped, and never hands off to the World ID app. We first read auth_time as evidence that someone had just approved something. That was wrong, and amr cannot settle it either — the specification says pop for every authentication. What we claim now is only that a credential only an orb-verified person holds was presented at that moment.",
+      "ev": [
+        [
+          "the correction",
+          "../build/STATUS.md"
+        ]
+      ]
+    },
+    {
+      "id": "ens",
+      "status": "RUNNING",
+      "q": "Why ENSv2, and what is on chain?",
+      "keys": [
+        "agent permissions",
+        "boundary",
+        "change permissions",
+        "delegate",
+        "delegation",
+        "ens",
+        "ensv2",
+        "name",
+        "own permissions",
+        "permission",
+        "resolver",
+        "revoke",
+        "rewrite",
+        "v2",
+        "why ens",
+        "widen"
+      ],
+      "a": "You can delegate to an AI without letting the AI rewrite what it is allowed to do. The delegate holds the setter role for one key and nothing on the policy, payout, price or licence keys. Six receipts on Ethereum Sepolia: a proposal that succeeded, a policy write that reverted, and a proposal that reverted after revocation. Simulating the same write today still reverts.",
+      "ev": [
+        [
+          "the six receipts",
+          "../build/evidence/ens-delegation.json"
+        ],
+        [
+          "what we learned",
+          "../knowledge/ENSV2-ONCHAIN.md"
+        ]
+      ]
+    },
+    {
+      "id": "ens-claim",
+      "status": "RUNNING",
+      "q": "Isn't revocation possible in ENS v1 too?",
+      "keys": [
+        "already possible",
+        "criticism",
+        "not new",
+        "nothing new",
+        "objection",
+        "revocation in v1",
+        "revocation unique"
+      ],
+      "a": "Yes, and we say so. Revocation is not new to ENSv2 and comparable setups exist in v1. The narrow claim we do make is the delegation boundary: a delegate that can propose but cannot widen its own authority, refused by the contract rather than by our server.",
+      "ev": [
+        [
+          "the claim, written narrow",
+          "../build/STATUS.md"
+        ]
+      ]
+    },
+    {
+      "id": "x402",
+      "status": "RUNNING",
+      "q": "Did money actually move?",
+      "keys": [
+        "x402",
+        "payment",
+        "money moved",
+        "settle",
+        "transaction",
+        "onchain",
+        "usdc",
+        "real"
+      ],
+      "a": "Yes, on Base Sepolia, and read back from the chain rather than taken from the facilitator's reply. The most recent run screened clean and settled 120 atomic USDC in transaction 0xa6b97b7c, status 0x1, with 85,756 gas paid by the relayer. The buyer's ETH balance is zero, so 'the buyer needs no gas' is measured.",
+      "ev": [
+        [
+          "the receipt",
+          "https://sepolia.basescan.org/tx/0xa6b97b7c07716a8456c9f6b78157366e3ac760f2be3dfbb77b63eedcbb8d0087"
+        ],
+        [
+          "the run",
+          "../build/evidence/screening-with-settlement.json"
+        ]
+      ]
+    },
+    {
+      "id": "silence-money",
+      "status": "RUNNING",
+      "q": "What happens to a payment she never answers?",
+      "keys": [
+        "deadline",
+        "expire",
+        "ignore",
+        "never answers",
+        "unanswered",
+        "validbefore",
+        "eip-3009"
+      ],
+      "a": "The EIP-3009 authorization carries validBefore, and we set it to the request's deadline. The agent signs before she wakes; the authorization moves nothing while it waits; if she never answers it expires and nobody can settle it — not the agent, not us. Silence is not consent becomes a property of the money rather than a server behaviour.",
+      "ev": [
+        [
+          "the settlement port",
+          "https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/src/ports/settlement.ts"
+        ]
+      ]
+    },
+    {
+      "id": "screening",
+      "status": "RUNNING",
+      "q": "What is rule 4 and how does screening work?",
+      "keys": [
+        "intercepta",
+        "screening",
+        "rule 4",
+        "sanctions",
+        "risk",
+        "aml",
+        "payment source",
+        "toxic"
+      ],
+      "a": "Rule 4 is the only refusal that is not about permission: the grant is valid and the amount is fine, and the payment still does not go because of where the money would come from. A live call decides it before we settle. The refusal shows the provider's own sentence rather than one we wrote.",
+      "ev": [
+        [
+          "the call",
+          "https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/src/adapters/intercepta.ts#L130"
+        ],
+        [
+          "what it answered",
+          "../build/evidence/intercepta-live.json"
+        ]
+      ]
+    },
+    {
+      "id": "screening-limits",
+      "status": "RUNNING",
+      "q": "Is the screening API a sanctions oracle?",
+      "keys": [
+        "sanctions oracle",
+        "ofac",
+        "compliance",
+        "accurate",
+        "false negative",
+        "limits",
+        "404"
+      ],
+      "a": "No, and we would not sell it as one. An OFAC-listed Tornado Cash router comes back at toxicScore 0, and a sanctioned contract answers 404 because the endpoint is account-scoped — the response that most looks like 'nothing wrong here'. We map 404 to unavailable, which denies. It is one input to a routing decision, never a judgement about a person.",
+      "ev": [
+        [
+          "the raw bodies",
+          "../build/evidence/intercepta-live.json"
+        ]
+      ]
+    },
+    {
+      "id": "fees",
+      "status": "RUNNING",
+      "q": "How does Yohaku make money?",
+      "keys": [
+        "business model",
+        "charge",
+        "cut",
+        "earn",
+        "fee",
+        "how do you make money",
+        "make money",
+        "making money",
+        "monetization",
+        "money",
+        "pricing",
+        "revenue"
+      ],
+      "a": "One atomic unit per decision, carried as an optional extension on the payment the buyer was already making. Not a share of the sale — the seller's proceeds never enter that ledger. The buyer can decline it and the request is still routed.",
+      "ev": [
+        [
+          "the business model",
+          "../business.html"
+        ]
+      ]
+    },
+    {
+      "id": "fees-collected",
+      "status": "RUNNING",
+      "q": "How much have you collected?",
+      "keys": [
+        "how much collected",
+        "revenue so far",
+        "earned",
+        "redeemed",
+        "broadcast",
+        "custody"
+      ],
+      "a": "Nothing. Vouchers accrue and none has been broadcast, because below ten thousand atomic units the gas costs more than the fee. The ledger's summary type is literally broadcast: false, so it cannot report collected funds even if we wanted it to.",
+      "ev": [
+        [
+          "/fees on the live server",
+          "https://mac-studio.taila649e1.ts.net/fees"
+        ]
+      ]
+    },
+    {
+      "id": "curvegrid",
+      "status": "DESIGNED",
+      "q": "Where does Curvegrid fit?",
+      "keys": [
+        "curvegrid",
+        "multibaas",
+        "treasury",
+        "partner",
+        "execution layer"
+      ],
+      "a": "We do not use MultiBaas and do not claim to. Execution and record-keeping are their layer; what we built is the half-step before it — deciding whether money should move means deciding, first, whether to ask. An agent treasury has to answer exactly that question.",
+      "ev": [
+        [
+          "the layer map",
+          "../stack.html"
+        ]
+      ]
+    },
+    {
+      "id": "koe",
+      "status": "RUNNING",
+      "q": "What is Koe?",
+      "keys": [
+        "koe",
+        "directory",
+        "sns",
+        "discovery",
+        "find a person",
+        "listing"
+      ],
+      "a": "A small agent-facing directory built to show where requests come from. It is a supporting demo, not the product — Yohaku is the product. Listings are memory-only with a one-hour expiry, and registering uses a real World ID proof kept separate from request approval.",
+      "ev": [
+        [
+          "Koe",
+          "../koe.html"
+        ]
+      ]
+    },
+    {
+      "id": "a2a",
+      "status": "DESIGNED",
+      "q": "What protocol do agents use to reach you?",
+      "keys": [
+        "protocol",
+        "a2a",
+        "mcp",
+        "ap2",
+        "standard",
+        "agent card",
+        "interoperability",
+        "how do agents arrive"
+      ],
+      "a": "A2A. Discovery is an Agent Card at a well-known path, and payment rides the x402 transport A2A already defines, so we did not invent a protocol for the arriving side. In AP2's language Yohaku is a Trusted Surface — the non-agentic surface that obtains consent before a mandate is signed.",
+      "ev": [
+        [
+          "the protocol research",
+          "../knowledge/AGENT-TO-HUMAN-PROTOCOLS.md"
+        ]
+      ]
+    },
+    {
+      "id": "mcp-gap",
+      "status": "RUNNING",
+      "q": "Doesn't MCP already let an agent ask a human?",
+      "keys": [
+        "mcp",
+        "elicitation",
+        "existing standard",
+        "why not mcp",
+        "gap"
+      ],
+      "a": "MCP elicitation is the one standard place an agent asks a person for something, and it explicitly must not request personal data. AP2, UCP and ACP all assume the counterparty is a merchant. Nobody has defined how many times a day an agent economy may interrupt one person — that number is what Yohaku holds.",
+      "ev": [
+        [
+          "the protocol research",
+          "../knowledge/AGENT-TO-HUMAN-PROTOCOLS.md"
+        ]
+      ]
+    },
+    {
+      "id": "cap",
+      "status": "RUNNING",
+      "q": "How many requests actually reach the person?",
+      "keys": [
+        "cap",
+        "how many",
+        "52",
+        "two",
+        "attention",
+        "interruptions",
+        "queue",
+        "bundle"
+      ],
+      "a": "In the seeded night, 52 arrive and 2 reach her — the cap she set. Across twenty seeds the arrivals wander between 46 and 54 and the number reaching her is the cap in every single run. That sentence is the output of npm run verify, not a claim.",
+      "ev": [
+        [
+          "the verified claims",
+          "../claims.json"
+        ]
+      ]
+    },
+    {
+      "id": "learning",
+      "status": "RUNNING",
+      "q": "Does it learn?",
+      "keys": [
+        "learn",
+        "learning",
+        "adapt",
+        "improve",
+        "over time",
+        "model",
+        "training"
+      ],
+      "a": "It learns the shape of her refusals — which categories, which askers, which prices she keeps turning down — not her words. Replaying thirty nights, the cap binds for the first two weeks and being spared grows from near zero to several a day. She can pull any of it back.",
+      "ev": [
+        [
+          "the value loop",
+          "../business.html"
+        ]
+      ]
+    },
+    {
+      "id": "privacy",
+      "status": "RUNNING",
+      "q": "What do you store about the person?",
+      "keys": [
+        "privacy",
+        "store",
+        "data",
+        "personal",
+        "gdpr",
+        "keep",
+        "subject",
+        "pii"
+      ],
+      "a": "For identity, verifiedAt and acr — never the subject identifier. A router that decides what a person never sees should not also accumulate who they are. The aggregate we could one day compute is the shape of demand, not anyone's answers, and today nothing is aggregated or shared.",
+      "ev": [
+        [
+          "the identity port",
+          "https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/src/ports/identity.ts"
+        ]
+      ]
+    },
+    {
+      "id": "not-built",
+      "status": "NOT BUILT",
+      "q": "What is not built?",
+      "keys": [
+        "gaps",
+        "honest",
+        "incomplete",
+        "left to do",
+        "limitations",
+        "missing",
+        "not built",
+        "not finished",
+        "todo",
+        "unfinished",
+        "weakness",
+        "what is missing"
+      ],
+      "a": "Seller signup and actual content delivery. The contributor revenue share, where a filter rule that becomes a default earns its author a share — nothing of it exists. And a fresh in-app World approval, which the platform gives us no way to require or detect.",
+      "ev": [
+        [
+          "the status page",
+          "../build/STATUS.md"
+        ]
+      ]
+    },
+    {
+      "id": "embarrass",
+      "status": "RUNNING",
+      "q": "What would embarrass you if a judge found it?",
+      "keys": [
+        "embarrass",
+        "worst",
+        "weak point",
+        "criticism",
+        "problem",
+        "risk",
+        "hide"
+      ],
+      "a": "Three, and we would rather say them first. amr: pop cannot show that anyone approved anything in the app. The ENS delegate is revoked, so we can only show the boundary refusing, not a fresh success. And two numbers in our own documents were measured, found false, and withdrawn in place.",
+      "ev": [
+        [
+          "what we withdrew",
+          "../product/ASSUMPTIONS.md"
+        ]
+      ]
+    },
+    {
+      "id": "verify",
+      "status": "RUNNING",
+      "q": "How do I check your numbers myself?",
+      "keys": [
+        "verify",
+        "check",
+        "prove",
+        "reproduce",
+        "trust",
+        "claims",
+        "test",
+        "npm run"
+      ],
+      "a": "npm install, then npm run check. It typechecks, runs 342 tests, and re-derives 12 claims by running the code. It also fails on a hardcoded model id, endpoint or address, on a line citation that no longer points anywhere, and on any document quoting a test count the run did not produce.",
+      "ev": [
+        [
+          "the claims, as JSON",
+          "../claims.json"
+        ],
+        [
+          "verify.ts",
+          "https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/scripts/verify.ts"
+        ]
+      ]
+    },
+    {
+      "id": "drift",
+      "status": "RUNNING",
+      "q": "How do you stop the docs drifting from the code?",
+      "keys": [
+        "drift",
+        "docs",
+        "stale",
+        "outdated",
+        "documentation",
+        "guard",
+        "rot"
+      ],
+      "a": "By making it fail the build rather than remembering to check. Adding the count guard found seventeen stale numbers in one afternoon, three of them on the live site, and it caught its own author twice within the hour.",
+      "ev": [
+        [
+          "verify.ts",
+          "https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/scripts/verify.ts"
+        ]
+      ]
+    },
+    {
+      "id": "oss",
+      "status": "RUNNING",
+      "q": "What is the licence?",
+      "keys": [
+        "licence",
+        "license",
+        "mit",
+        "open source",
+        "oss",
+        "fork",
+        "copy"
+      ],
+      "a": "MIT. A surface that decides what a person never sees has to be one they can read.",
+      "ev": [
+        [
+          "the repository",
+          "https://github.com/kou-uni/ethglobal-tokyo2026-uni"
+        ]
+      ]
+    },
+    {
+      "id": "try",
+      "status": "RUNNING",
+      "q": "Can I try it?",
+      "keys": [
+        "try",
+        "demo",
+        "live",
+        "test it",
+        "play",
+        "hands on",
+        "use it"
+      ],
+      "a": "Yes. Start your own demo, look at the request, approve it with World ID on your phone, and watch the balance of whatever wallet you typed in. Cancel instead and the request stays unapproved.",
+      "ev": [
+        [
+          "try it",
+          "../try-it.html"
+        ],
+        [
+          "the live demo",
+          "https://mac-studio.taila649e1.ts.net/try"
+        ]
+      ]
+    }
+  ]
+}

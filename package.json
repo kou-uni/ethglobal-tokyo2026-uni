@@ -40,7 +40,8 @@
     "jev:check": "tsx scripts/jev-check.ts",
     "simulate": "tsx scripts/simulate.ts",
     "setup:intercepta": "tsx scripts/setup-intercepta.ts",
-    "intercepta:check": "tsx scripts/intercepta-check.ts"
+    "intercepta:check": "tsx scripts/intercepta-check.ts",
+    "ask:check": "node scripts/ask-check.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.7.4",
