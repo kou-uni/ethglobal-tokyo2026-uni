@@ -33,26 +33,26 @@ writeFileSync('docs/faq.html', `<!doctype html><html lang="en"><head>
 body{margin:0 auto;max-width:820px;padding:26px 18px 80px;color:var(--ink);
 background:linear-gradient(180deg,#EFEBFF 0%,#F6F4EC 40%,var(--paper) 100%);background-attachment:fixed;
 font-family:"M PLUS Rounded 1c",-apple-system,BlinkMacSystemFont,"Hiragino Maru Gothic ProN",sans-serif;
-font-size:16px;line-height:1.7;font-weight:700;-webkit-font-smoothing:antialiased}
-a.back{font-size:14px;color:var(--lilacD);text-decoration:none;font-weight:900}
-h1{font-size:clamp(28px,6.4vw,42px);font-weight:900;letter-spacing:-.02em;margin:12px 0 6px;line-height:1.2}
+font-size:20px;line-height:1.7;font-weight:700;-webkit-font-smoothing:antialiased}
+a.back{font-size:18px;color:var(--lilacD);text-decoration:none;font-weight:900}
+h1{font-size:clamp(36px,6.4vw,42px);font-weight:900;letter-spacing:-.02em;margin:12px 0 6px;line-height:1.2}
 h1 em{font-style:normal;display:inline-block;color:#fff;background:var(--lilacD);padding:0 12px 3px;
 border-radius:15px;box-shadow:0 5px 0 #4A3BAE;transform:rotate(-1.4deg)}
-p.sub{color:var(--ink2);font-size:16px;margin:10px 0 20px;max-width:52ch}
-h2{font-size:12px;letter-spacing:.15em;color:var(--ink3);font-weight:900;margin:34px 0 12px}
+p.sub{color:var(--ink2);font-size:20px;margin:10px 0 20px;max-width:52ch}
+h2{font-size:15px;letter-spacing:.15em;color:var(--ink3);font-weight:900;margin:34px 0 12px}
 nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
-a.q{font-size:13px;font-weight:800;text-decoration:none;color:var(--ink2);background:#fff;
+a.q{font-size:17px;font-weight:800;text-decoration:none;color:var(--ink2);background:#fff;
 border:2px solid var(--line);border-radius:14px;padding:6px 13px}
 a.q:hover{border-color:var(--lilac);color:var(--lilacD)}
 article{background:var(--card);border-radius:22px;padding:18px 21px;box-shadow:var(--shS);margin:12px 0;scroll-margin-top:18px}
-.chip{display:inline-block;font-size:11px;font-weight:900;letter-spacing:.08em;color:#fff;border-radius:11px;padding:2px 10px}
+.chip{display:inline-block;font-size:14px;font-weight:900;letter-spacing:.08em;color:#fff;border-radius:11px;padding:2px 10px}
 .RUNNING{background:var(--limeD)}.DESIGNED{background:var(--lilacD)}.NOT{background:var(--amber)}
-h3{font-size:18.5px;font-weight:900;margin:9px 0 7px;line-height:1.35;letter-spacing:-.2px}
-article p{margin:0 0 12px;font-size:15.5px;color:var(--ink2);line-height:1.72}
+h3{font-size:23.5px;font-weight:900;margin:9px 0 7px;line-height:1.35;letter-spacing:-.2px}
+article p{margin:0 0 12px;font-size:19.5px;color:var(--ink2);line-height:1.72}
 .ev{display:flex;flex-wrap:wrap;gap:8px}
-.ev a{font-size:12.5px;font-weight:900;text-decoration:none;color:var(--lilacD);background:var(--lilacL);
+.ev a{font-size:15.5px;font-weight:900;text-decoration:none;color:var(--lilacD);background:var(--lilacL);
 border-radius:11px;padding:5px 11px}
-footer{margin-top:40px;padding-top:18px;border-top:2px dashed var(--line);font-size:13.5px;color:var(--ink2)}
+footer{margin-top:40px;padding-top:18px;border-top:2px dashed var(--line);font-size:17.5px;color:var(--ink2)}
 footer a{color:var(--lilacD)}
 </style></head><body>
 <a class="back" href="ask.html">&larr; the question box</a>

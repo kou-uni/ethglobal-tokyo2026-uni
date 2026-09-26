@@ -21,29 +21,29 @@ a{color:var(--deep)}
 
 header{display:flex;align-items:center;gap:10px;padding:6px 0 2px}
 header svg{width:26px;height:26px;flex:0 0 26px}
-header b{font-size:20px;font-weight:700;letter-spacing:-.3px}
-header span{font-size:11px;font-weight:700;color:var(--sub);letter-spacing:1.1px;margin-left:auto;text-align:right}
-.lede{font-size:15px;line-height:1.6;color:var(--sub);margin:12px 0 4px}
+header b{font-size:29px;font-weight:700;letter-spacing:-.3px}
+header span{font-size:15.5px;font-weight:700;color:var(--sub);letter-spacing:1.1px;margin-left:auto;text-align:right}
+.lede{font-size:22px;line-height:1.6;color:var(--sub);margin:12px 0 4px}
 .lede b{color:var(--ink)}
-.claim{font-size:13px;font-weight:700;color:var(--deep);margin:14px 0 26px;
+.claim{font-size:19px;font-weight:700;color:var(--deep);margin:14px 0 26px;
   border-left:3px solid var(--lilac);padding-left:12px;line-height:1.5}
 
 section{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px 18px;margin:0 0 16px}
 .n{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
-  border-radius:50%;background:var(--ink);color:var(--paper);font-size:12px;font-weight:700;margin-right:9px}
-h2{font-size:17px;display:flex;align-items:center;margin-bottom:6px}
-.hint{font-size:12.5px;color:var(--sub);line-height:1.55;margin:0 0 16px}
+  border-radius:50%;background:var(--ink);color:var(--paper);font-size:17.5px;font-weight:700;margin-right:9px}
+h2{font-size:24.5px;display:flex;align-items:center;margin-bottom:6px}
+.hint{font-size:18px;color:var(--sub);line-height:1.55;margin:0 0 16px}
 .hint b{color:var(--ink)}
 
-label{display:block;font-size:11px;font-weight:700;color:var(--faint);
+label{display:block;font-size:15.5px;font-weight:700;color:var(--faint);
   letter-spacing:1px;margin:0 0 5px}
-select,input[type=text]{width:100%;font:inherit;font-size:14px;padding:9px 11px;
+select,input[type=text]{width:100%;font:inherit;font-size:20px;padding:9px 11px;
   border:1px solid var(--line);border-radius:11px;background:var(--paper);color:var(--ink)}
 input[type=range]{width:100%;accent-color:var(--deep)}
 .row{display:grid;gap:11px;margin-bottom:12px}
 @media(min-width:620px){.row.two{grid-template-columns:1fr 1fr}.row.three{grid-template-columns:1fr 1fr 1fr}}
 
-button{font:inherit;font-size:14px;font-weight:700;padding:10px 16px;border-radius:12px;
+button{font:inherit;font-size:20px;font-weight:700;padding:10px 16px;border-radius:12px;
   border:1px solid var(--ink);background:var(--ink);color:var(--paper);cursor:pointer;
   transition:transform .08s ease,opacity .15s ease}
 button:active{transform:translateY(1px)}
@@ -53,16 +53,16 @@ button.quiet{background:var(--mute);border-color:var(--mute);color:var(--sub)}
 button:disabled{opacity:.4;cursor:default}
 .btns{display:flex;flex-wrap:wrap;gap:8px}
 
-.out{margin-top:15px;border-radius:14px;padding:14px;font-size:14px;line-height:1.55;
+.out{margin-top:15px;border-radius:14px;padding:14px;font-size:20px;line-height:1.55;
   background:var(--mute);border:1px solid var(--line);min-height:56px}
 .out.auto{background:var(--lime);border-color:#C6E472}
 .out.human{background:var(--lilac);border-color:#A79BF3}
 .out.deny{background:var(--mute);border-color:#D8D6CE}
-.out .v{font-size:19px;font-weight:700;display:flex;align-items:baseline;gap:9px}
-.out .v em{font-style:normal;font-size:11.5px;font-weight:700;color:var(--sub);
+.out .v{font-size:27.5px;font-weight:700;display:flex;align-items:baseline;gap:9px}
+.out .v em{font-style:normal;font-size:17px;font-weight:700;color:var(--sub);
   background:#fff;padding:2px 8px;border-radius:99px}
 .out .r{margin-top:5px;color:var(--ink);opacity:.8}
-.out.pre{white-space:pre-wrap;font-variant-numeric:tabular-nums;font-size:13px}
+.out.pre{white-space:pre-wrap;font-variant-numeric:tabular-nums;font-size:19px}
 
 .dots{display:grid;grid-template-columns:repeat(13,1fr);gap:6px;margin:16px 0 10px}
 @media(min-width:620px){.dots{grid-template-columns:repeat(18,1fr)}}
@@ -74,29 +74,29 @@ button:disabled{opacity:.4;cursor:default}
 
 .tally{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
 .tally div{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:10px 8px;text-align:center}
-.tally b{display:block;font-size:21px;font-weight:700;font-variant-numeric:tabular-nums}
+.tally b{display:block;font-size:31px;font-weight:700;font-variant-numeric:tabular-nums}
 .tally span{font-size:10.5px;color:var(--sub);letter-spacing:.3px}
 .tally .hl{background:var(--lilac);border-color:var(--lilac)}
 
 .card{border:1px solid var(--line);border-radius:14px;padding:13px;margin-bottom:9px;background:var(--paper)}
 .card.done{opacity:.55}
-.card h3{font-size:14.5px;margin-bottom:3px}
-.card p{margin:0;font-size:12.5px;color:var(--sub);line-height:1.5}
+.card h3{font-size:21.5px;margin-bottom:3px}
+.card p{margin:0;font-size:18px;color:var(--sub);line-height:1.5}
 .card .acts{display:flex;gap:7px;margin-top:11px}
-.card .acts button{padding:7px 13px;font-size:13px}
+.card .acts button{padding:7px 13px;font-size:19px}
 
-.mark{font-size:12.5px;font-weight:700;padding:3px 9px;border-radius:99px;display:inline-block}
+.mark{font-size:18px;font-weight:700;padding:3px 9px;border-radius:99px;display:inline-block}
 .ok{background:var(--lime);color:var(--leaf)}
 .no{background:#F3E3E3;color:#A03C3C}
 
-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+table{width:100%;border-collapse:collapse;font-size:19px;margin-top:6px}
 td{padding:6px 0;border-bottom:1px solid var(--line)}
 td:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
 tr:last-child td{border-bottom:0}
 
-footer{font-size:11.5px;color:var(--faint);line-height:1.6;padding:22px 2px 0}
+footer{font-size:17px;color:var(--faint);line-height:1.6;padding:22px 2px 0}
 footer b{color:var(--sub)}
-.k{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;
+.k{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:18px;
   background:var(--mute);padding:1px 6px;border-radius:6px}
 </style>
 </head>
