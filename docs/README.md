@@ -105,7 +105,7 @@ scripts/     verify.ts（主張をコードから再導出）・seed・鍵の投
 demo/        1ファイル。USBメモリから、wifi無しで開く
 design/      minta さんのブランド（Make room. For being human.）
 docs/
-  product/   何を作るか — STORY / CONCEPT / ARCHITECTURE / JOURNEY / PITCH / MARKET / ASSUMPTIONS
+  product/   何を作るか — STORY / CONCEPT / ARCHITECTURE / JOURNEY / ECONOMICS / PITCH / MARKET / ASSUMPTIONS
   decisions/ 何を選び、何を捨てたか — ENS vs intercepta ほか
   build/     いまどこまで動くか — STATUS / WORLD-SETUP / ENSV2-SPIKE / FEEDBACK
   knowledge/ 外から確かめたこと。全ファイルに出典と日付

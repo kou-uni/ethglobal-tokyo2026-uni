@@ -65,6 +65,7 @@ the well. See [CONCEPT §0](docs/product/CONCEPT.md).
 | 🎨 **[Yohaku identity v3](design/yohaku-v3/README.md)** | **Selected logo, brand narrative, SVG assets, previews** — *Make room. For being human.* |
 | 📄 **[CONCEPT.md](docs/product/CONCEPT.md)** | **Product design** — request schema, routing, queue control |
 | 📖 **[STORY.md](docs/product/STORY.md)** | **通しの物語** — 思想 → 市場 → ジャーニー → 権威づけ → 穴 → 価値 → 層。**図14枚と文の両方** |
+| 💴 **[ECONOMICS.md](docs/product/ECONOMICS.md)** | **どうやって食べていくのか** — 通り道で薄く取る設計、無料からの課金、断り方を提供した人へのキャッシュバック。**1行も実装していないと明記** |
 | 🧭 **[JOURNEY.md](docs/product/JOURNEY.md)** | **二人の顧客のジャーニー** — エージェントと人間。規約がどこで受け渡されるか |
 | 📐 **[ARCHITECTURE.md](docs/product/ARCHITECTURE.md)** | **Layers, components, rules, failure paths, state machines, sequence** |
 | 📈 **[MARKET.md](docs/product/MARKET.md)** | **Why this is a market** — supply exhaustion, buyer growth, and what an agent saves |
