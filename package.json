@@ -26,7 +26,8 @@
     "night": "tsx scripts/demo-night.ts",
     "setup:world": "tsx scripts/setup-world.ts",
     "agent": "tsx scripts/agent.ts",
-    "setup:wallet": "tsx scripts/setup-wallet.ts"
+    "setup:wallet": "tsx scripts/setup-wallet.ts",
+    "stage": "tsx scripts/stage-demo.ts"
   },
   "devDependencies": {
     "@types/node": "^22.7.4",
