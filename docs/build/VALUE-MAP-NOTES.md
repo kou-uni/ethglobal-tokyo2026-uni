@@ -38,7 +38,7 @@ Dated transaction evidence is distinct from current deployment health.
 
 ## Presentation implementation
 
-A single scene state drives captions, highlights and payment status. Seven scenes use fixed
+A single scene state drives captions, highlights and payment status. Eight scenes use fixed
 CSS-grid boxes, not moving particles with computed screen coordinates. Each scene lasts eight
 seconds in autoplay. Play/pause, back/next, restart and direct scene selection are available.
 It stops after the final scene and pauses when the document becomes hidden. Reduced-motion
@@ -60,3 +60,27 @@ external font, tracking, identity operation, request creation or payment is used
   independently measured on a phone.
 
 The logo is copied from the adopted `design/yohaku-v3/mark.svg` into the Pages docs root.
+
+
+## NEO and Curvegrid, added after user feedback
+
+NEO now appears in the concept and map, plus a dedicated presentation scene before the OSS
+invitation. The relationship is **complementary / proposed**, drawn with a dashed boundary:
+NEO addresses corporate digital-asset treasury management; Yohaku could add request triage
+and attention budgets to that environment. No NEO API or supported integration contract has
+been verified. The hypothetical exchange of policies, approval items and decisions is our
+proposal, not a product feature announcement by Curvegrid.
+
+Sources checked on 2026-09-26:
+
+- User-provided transcript of Jeff Wentworth's workshop,
+  https://www.youtube.com/watch?v=fFiGBkEpBlU : 3:22–4:09 introduces NEO's treasury scope;
+  12:59–13:32 discusses policy, human approval and a secure signer in the new-product context.
+  That design discussion is not treated as a complete shipped feature list.
+- https://ethglobal.com/events/tokyo2026/prizes/curvegrid : retrieved official page again.
+  Best AI Agent Project explicitly includes treasury automation, policy-driven transactions
+  and human approvals. MultiBaas is optional. Idea and technical execution are judged.
+
+Prize positioning: demonstrate our actual policy / approval / payment behavior, then explain
+how it could contribute to the future NEO ecosystem. Naming NEO alone is not technical
+integration or evidence of prize eligibility, and winning is not guaranteed.
