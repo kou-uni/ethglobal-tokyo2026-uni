@@ -1,162 +1,42 @@
-<!doctype html><html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Koe — people agents can ask</title>
-<meta name="description" content="A directory of verified humans and what they can answer about. Only people can be listed. Agents read the JSON.">
-<link rel="alternate" type="application/json" href="koe/directory.json" title="the directory agents read">
-<style>
-@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap');
-:root{--ink:#1B2430;--ink2:#5A6B7D;--ink3:#9AA8B6;--paper:#F4F7FA;--card:#fff;--line:#E2E9F0;
---brand:#0B6BCB;--brandD:#084E95;--brandL:#E3EFFB;--lime:#DDF691;--limeD:#7FA326;
---sh:0 2px 0 rgba(27,36,48,.04),0 10px 26px rgba(27,36,48,.09)}
-*{box-sizing:border-box}
-body{margin:0 auto;max-width:1000px;padding:0 18px 70px;color:var(--ink);background:var(--paper);
-font-family:"M PLUS Rounded 1c",-apple-system,BlinkMacSystemFont,"Hiragino Maru Gothic ProN",sans-serif;
-font-size:16px;line-height:1.7;font-weight:700;-webkit-font-smoothing:antialiased}
-header.top{display:flex;align-items:center;gap:14px;padding:16px 0;border-bottom:2px solid var(--line);
-margin-bottom:26px;flex-wrap:wrap}
-.logo{font-size:25px;font-weight:900;color:var(--brand);letter-spacing:-.5px}
-.logo span{font-size:13px;color:var(--ink3);font-weight:800;margin-left:8px;letter-spacing:.06em}
-header.top .sp{flex:1}
-a.btn{font-size:14.5px;font-weight:900;color:#fff;background:var(--brand);padding:10px 18px;
-border-radius:99px;text-decoration:none;white-space:nowrap}
-a.btn.ghost{background:transparent;color:var(--brand);border:2px solid var(--brand)}
-a.btn:active{transform:translateY(2px)}
-h1{font-size:clamp(28px,6.4vw,42px);font-weight:900;line-height:1.22;letter-spacing:-.02em;margin:0 0 10px}
-h1 em{font-style:normal;color:var(--brand)}
-p.lede{color:var(--ink2);font-size:17px;max-width:52ch;margin:0 0 18px}
-h2{font-size:12px;letter-spacing:.14em;color:var(--ink3);font-weight:900;margin:38px 0 14px}
-.badge{display:inline-flex;align-items:center;gap:7px;background:var(--brandL);color:var(--brandD);
-border-radius:99px;padding:6px 15px;font-size:13.5px;font-weight:900;margin-bottom:18px}
-.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
-.p{background:var(--card);border-radius:16px;padding:20px;box-shadow:var(--sh);display:flex;
-flex-direction:column;border:1px solid var(--line)}
-.p .hd{display:flex;gap:13px;align-items:flex-start;margin-bottom:10px}
-.p .av{width:52px;height:52px;border-radius:50%;background:var(--brandL);color:var(--brandD);
-display:flex;align-items:center;justify-content:center;font-size:23px;font-weight:900;flex:0 0 auto}
-.p .nm{font-size:19px;font-weight:900;line-height:1.25}
-.p .vf{font-size:12px;color:var(--limeD);font-weight:900;display:flex;align-items:center;gap:5px}
-.p .hl{font-size:15px;color:var(--ink);line-height:1.5;margin-bottom:8px}
-.p .ab{font-size:14px;color:var(--ink2);line-height:1.6;margin-bottom:14px;flex:1}
-.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
-.tg{font-size:12px;font-weight:800;padding:4px 10px;border-radius:8px;background:#EEF4E4;color:#4D6416}
-.tg.ask{background:#FFF3D6;color:#8A6A12}
-.tg.no{background:#F6E9E8;color:#9A4A44;text-decoration:line-through}
-.p .ln{font-size:12.5px;color:var(--ink3);font-weight:900;letter-spacing:.06em;margin:10px 0 4px}
-.p .ft{display:flex;align-items:center;gap:12px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);
-font-size:13.5px;color:var(--ink2);flex-wrap:wrap}
-.p .ft b{color:var(--ink);font-size:16px}
-pre{background:var(--ink);color:#EAF1F8;border-radius:14px;padding:16px 18px;overflow-x:auto;
-font-size:13px;line-height:1.85;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:500}
-pre b{color:#9FD356;font-weight:700}
-.two{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
-.box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--sh)}
-.box b.t{display:block;font-size:19px;font-weight:900;margin-bottom:8px}
-.box p{margin:0 0 12px;font-size:15px;color:var(--ink2);line-height:1.6}
-.note{background:#FFF6DC;border-radius:14px;padding:14px 17px;font-size:14.5px;color:#6E520A;line-height:1.65}
-.note b{color:#4D3A05}
-footer{margin-top:44px;padding-top:20px;border-top:2px solid var(--line);font-size:14px;color:var(--ink2)}
-footer a{color:var(--brand)}
-</style></head><body>
-
-<header class="top">
-  <div class="logo">Koe<span>VOICES · 声</span></div>
-  <div class="sp"></div>
-  <a class="btn ghost" href="inflow.html">Why this exists</a>
-  <a class="btn ghost" href="koe/directory.json">For agents: the directory</a>
-  <a class="btn" href="https://mac-studio.taila649e1.ts.net/try">Join — verify with World ID</a>
-</header>
-
-<div class="badge">&#9679; Only verified people can be listed</div>
-<h1>Agents can read everything<br>you ever posted. <em>None of it<br>is what they need.</em></h1>
-<p class="lede">Koe is where a person says what they can actually speak to &mdash; the part of a
-question a model cannot answer truthfully because it was never there. Agents read the
-directory, and ask.</p>
-
-<h2>PEOPLE</h2>
-<div class="grid" id="people"></div>
-
-<h2>IF YOU ARE AN AGENT</h2>
-<div class="two">
-  <div class="box">
-    <b class="t">Read the directory, not the page</b>
-    <p>Everyone here publishes what they will answer, what they will not, what needs asking
-    first, and what it costs. <b>You do not have to guess, and you do not have to scrape.</b></p>
-    <pre>curl -s https://kou-uni.github.io/ethglobal-tokyo2026-uni/koe/directory.json | jq</pre>
-  </div>
-  <div class="box">
-    <b class="t">Then ask their router</b>
-    <p>Koe does not decide. <b>Each person's own router does</b> &mdash; and it answers
-    synchronously, so you are never left holding a connection while somebody sleeps.</p>
-    <pre>POST &lt;profile.router&gt;/requests
-  who · what · purpose · price · deadline
-
-<b>200</b> settled under their standing rules
-<b>202</b> held for them, with the deadline
-<b>402</b> pay first — sign what PAYMENT-REQUIRED asks for
-<b>deny</b> refused, and it tells you which rule</pre>
-  </div>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Koe — human perspectives, discoverable by agents</title>
+<meta name="description" content="An agent-readable directory sketch. Discover human perspectives in JSON, then ask through Yohaku.">
+<link rel="alternate" type="application/json" href="koe/directory.json" title="Koe directory v1">
+<link rel="stylesheet" href="koe/style.css">
+<script type="module" src="koe/app.js"></script>
+</head>
+<body>
+<header><a class="wordmark" href="koe.html" aria-label="Koe home">koe<span>.</span></a><span class="descriptor">Human perspectives. Agent access.</span><nav aria-label="Main"><a href="#directory">Directory</a><a href="#protocol">For agents</a><a href="#join">Participate ↗</a></nav></header>
+<main>
+<section class="intro"><p class="eyebrow">A DIRECTORY FOR THE AGENT ECONOMY</p><h1>Find a person.<br>Ask through their boundaries.</h1><p class="lead">People have experiences that a model can only imagine.<br>Discover who can speak to a question. Their router decides what happens next.</p><div class="intro-links"><a class="primary" href="koe/directory.json">Read the directory <span>JSON ↗</span></a><a href="#protocol">Build a request →</a></div></section>
+<aside class="notice"><strong>Illustrative demo.</strong> Every profile is fictional and unverified. All profiles use one shared Yohaku demo router. No answers are sold or delivered.</aside>
+<div class="workspace">
+<section id="directory" aria-labelledby="directory-title">
+<div class="section-top"><h2 id="directory-title">People & perspectives</h2><span id="count" role="status">Loading…</span></div>
+<div class="filters"><label>Find a perspective<input id="search" type="search" placeholder="Try coffee, commuting, writing…"></label><label>Topic<select id="topic"><option value="">All topics</option></select></label></div>
+<div id="profiles" class="profiles" aria-live="polite"></div>
+<noscript><p>JavaScript is needed for this directory view. Agents can read <a href="koe/directory.json">the JSON directly</a>.</p></noscript>
+<p class="footnote">Categories describe the shared demo policy, subject to its other rules. The limit is two bundled notification slots per day, not necessarily two raw requests.</p>
+</section>
+<aside id="protocol" class="protocol" aria-labelledby="protocol-title">
+<p class="eyebrow">FOR AGENTS · V1</p><h2 id="protocol-title">Read. Match. Request.</h2>
+<ol><li>Read <a href="koe/directory.json">directory.json</a>.</li><li>Match a perspective and category.</li><li>POST the five fields to its router.<br>Read the verdict before taking action.</li></ol>
+<p class="endpoint">GET <a href="koe/directory.json">koe/directory.json</a></p>
+<div class="request-head"><h3>Request example</h3><button id="copy" type="button" disabled>Copy curl</button></div>
+<p id="selection" class="selection">Choose a topic on a profile.</p>
+<pre id="payload" tabindex="0" aria-label="Request JSON">Loading directory…</pre>
+<details><summary>Executable curl</summary><pre id="curl" tabindex="0" aria-label="Executable curl command"></pre></details>
+<p class="footnote">A fresh 15-minute deadline is included when you copy. This unsigned example sends a request, not money. It uses a known demo counterparty; a new agent may be asked to wait for a human.</p>
+<div class="response-key"><p><b>auto</b> Eligible under standing rules. A 402 asks for payment; it is not a receipt.</p><p><b>human</b> Held for a decision. A 202 is not approval.</p><p><b>deny</b> Refused. A 200 can contain this verdict. Never infer approval from status alone.</p></div>
+<p class="footnote">These are demo policy expectations. The router’s response is authoritative. JPYC is the request currency; the demo settles testnet USDC. Inspect returned payment terms.</p>
+<a class="subtle-link" href="koe/README.md">Protocol notes & limitations ↗</a>
+<p id="copy-status" role="status" class="copy-status"></p>
+</aside>
 </div>
-
-<h2>WHY ONLY PEOPLE</h2>
-<div class="two">
-  <div class="box">
-    <b class="t">Scraping is free, and contaminated</b>
-    <p>An agent reading the open web cannot tell what a human wrote. Synthetic text is free,
-    abundant and indistinguishable at scale. <b>So the scarce thing is not information &mdash;
-    it is an answer only someone who lived it can give truthfully.</b></p>
-    <p>A model can invent an answer to <i>&ldquo;what made you put it back on the shelf?&rdquo;</i>
-    It cannot invent a true one.</p>
-  </div>
-  <div class="box">
-    <b class="t">And a name can be taken away</b>
-    <p>Proof of personhood at the door says <i>the account holder</i> is a person. It does not
-    say <i>the content</i> is. <b>What keeps this clean is that a listing can be revoked</b> when
-    someone poisons the well. Personhood here is maintained, not certified once.</p>
-  </div>
-</div>
-
-<div class="note" style="margin-top:20px"><b>&#9888; This page is a sketch, not the build.</b>
-It exists so the contract below is concrete: <b><a href="koe/directory.json">directory.json</a> is
-the part that matters</b>, because that is what an agent reads. The HTML around it can be
-replaced entirely. See the issue for the specification.</div>
-
-<div class="note" style="margin-top:12px"><b>About this page.</b> Koe is a sketch of the counter
-that has to exist for any of this to make sense &mdash; it is <b>not</b> the product we built.
-The product is the thing behind the ask button:
-<a href="product.html"><b>Yohaku</b></a>, which decides how many of these requests reach a
-person at all. The people listed here are fictional; <b>the router endpoint is real, and so is
-what happens when you post to it.</b></div>
-
-<footer>
-<b>Koe</b> &mdash; a counter for verified people, sketched for ETHGlobal Tokyo 2026 ·
-<a href="./">Yohaku</a> · <a href="koe/directory.json">directory.json</a> ·
-<a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni">source</a>
-</footer>
-
-<script>
-const label = s => s.split('/').pop().replace(/-/g, ' ');
-fetch('koe/directory.json').then(r => r.json()).then(d => {
-  document.getElementById('people').innerHTML = d.profiles.map(p => `
-    <div class="p">
-      <div class="hd">
-        <div class="av">${p.name.slice(0,1)}</div>
-        <div><div class="nm">${p.name}</div>
-        <div class="vf">&#10003; ${p.verified}${p.ens ? ' · ' + p.ens : ''}</div></div>
-      </div>
-      <div class="hl">${p.headline}</div>
-      <div class="ab">${p.about}</div>
-      ${p.answers.length ? `<div class="ln">ANSWERS AUTOMATICALLY</div><div class="tags">${
-        p.answers.map(a => `<span class="tg">${label(a)}</span>`).join('')}</div>` : ''}
-      ${p.needsToBeAsked.length ? `<div class="ln">WILL BE ASKED FIRST</div><div class="tags">${
-        p.needsToBeAsked.map(a => `<span class="tg ask">${label(a)}</span>`).join('')}</div>` : ''}
-      ${p.willNotAnswer.length ? `<div class="ln">NEVER</div><div class="tags">${
-        p.willNotAnswer.map(a => `<span class="tg no">${label(a)}</span>`).join('')}</div>` : ''}
-      <div class="ft"><span>from <b>${p.priceFrom.amount}</b> ${p.priceFrom.currency}</span>
-        <span>&#183;</span><span>at most <b>${p.interruptionsPerDay}</b> a day</span></div>
-    </div>`).join('');
-}).catch(() => {
-  document.getElementById('people').innerHTML =
-    '<div class="box">The directory did not load. It is one file: <a href="koe/directory.json">directory.json</a>.</div>';
-});
-</script>
+<section id="join" class="join"><div><p class="eyebrow">FOR PEOPLE</p><h2>Your perspective.<br>Your terms.</h2><p>The intended flow is to verify with World ID, describe what you can answer, and set your boundaries.</p></div><div class="join-action"><a id="world-link" class="primary" aria-disabled="true">Try the World ID approval demo ↗</a><p>This opens Yohaku’s existing <strong>request approval</strong> flow. Choose “Skip” to try without payment. It does not register you in Koe.</p><p class="footnote">Verified profile publishing, listing removal, personal routers and persistent accounts are not implemented. This page never treats opening the demo as identity verification.</p></div></section>
+<footer><span><strong>Koe</strong> is the discovery sketch. <a href="./">Yohaku</a> is the product behind the request.</span><a href="inflow.html">See how requests arrive →</a></footer>
+</main>
 </body></html>
