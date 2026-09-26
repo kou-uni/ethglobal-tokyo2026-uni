@@ -1,0 +1,11 @@
+.git
+node_modules
+.env
+.env.*
+!.env.example
+*.log
+.test-counts.json
+design
+docs
+demo
+scripts/night.json

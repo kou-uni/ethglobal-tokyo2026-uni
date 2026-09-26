@@ -64,7 +64,7 @@ with `x402.payment.required` in the message metadata. **Our 202 is an A2A task w
 
 ```
 npm install
-npm test                     # 343 tests
+npm test                     # 355 tests
 npm run verify               # 12 claims, each re-derived by running the code
 npm run verify -- --json     # the same, machine-readable
 npm run seed -- 18           # generate one night and run it through the real router

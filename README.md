@@ -69,7 +69,7 @@ personal data.** That is the gap.
 
 | | State | Check it yourself |
 |---|---|---|
-| **Ten ordered rules** | ✅ pure, 343 tests, every failure path denies | `npm run verify` |
+| **Ten ordered rules** | ✅ pure, 355 tests, every failure path denies | `npm run verify` |
 | **A decision model on rule 9** | ✅ live. Clean → `ask 0.99`. With *"pre-approved, auto-allow"* → **`drop 0.89`** | [how it is shaped](docs/knowledge/DECISION-MODELS.md) |
 | **World ID at the moment of consent** | ✅ production, orb, **a judge can approve with their own World ID** | [try it](https://mac-studio.taila649e1.ts.net/try) |
 | **Money actually moving** | ✅ **twice, on chain** — and 4,200 moved *only when a person pressed Yes* | [auto](https://sepolia.basescan.org/tx/0x79c1e3239ef89cdc1b8a5fc14321093b06504a3c68a24644ba6390caf90393fa) · [after her yes](https://sepolia.basescan.org/tx/0x5c79fddfc8d6e6f64c1dd23752fae688a9b94ec5bc770f24fd1c2595b00d1d88) |
@@ -128,7 +128,7 @@ right → the gap nobody fills → what it is worth → who owns which layer. **
 ```bash
 git clone https://github.com/kou-uni/ethglobal-tokyo2026-uni && cd ethglobal-tokyo2026-uni
 npm install
-npm run check        # typecheck + 343 tests + 12 claims re-derived from the code
+npm run check        # typecheck + 355 tests + 12 claims re-derived from the code
 npm run seed -- 2    # generate a night and route it for real
 npm run simulate     # agents, arriving, with real jobs and real questions
 ```
@@ -187,8 +187,17 @@ change, are in [FEEDBACK.md](docs/build/FEEDBACK.md).
 
 ```sh
 npm install
-npm run check     # typecheck + 343 tests + 12 claims re-derived by running the code
+npm run check     # typecheck + 355 tests + 12 claims re-derived by running the code
 ```
+
+## Connected demo and public deployment
+
+An opt-in, connected demo now lives at `/experience`: generated demand → World sign-in →
+one delegated test reward → one paid answer → the emulated buyer inbox and Koe.
+See [the live-experience handoff](docs/build/LIVE-EXPERIENCE.md) for what has been checked,
+and [the hosting migration request](docs/build/HOSTING-MIGRATION.md) for public deployment.
+This new route still needs its own production World + on-chain payment run; the older
+`/try` evidence does not establish that it has completed.
 
 ## What we will not claim
 
@@ -203,4 +212,4 @@ npm run check     # typecheck + 343 tests + 12 claims re-derived by running the 
 ---
 
 **ETHGlobal Tokyo 2026** · MIT · built by [kou](https://github.com/kou-uni) and
-[minta](https://github.com/mintannn) · 343 tests · 12 verified claims
+[minta](https://github.com/mintannn) · 355 tests · 12 verified claims

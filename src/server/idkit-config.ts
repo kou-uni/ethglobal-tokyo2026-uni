@@ -28,6 +28,10 @@ export async function idkitApprovalFromEnv(env: NodeJS.ProcessEnv): Promise<Idki
     entryPoints: [new URL('../../setup/koe-registration.ts', import.meta.url).pathname],
     bundle: true, platform: 'browser', format: 'esm', target: 'es2022', minify: true, write: false,
   });
+  const experienceBundle = env.YOHAKU_EXPERIENCE_ENABLED === 'true' ? await build({
+    entryPoints: [new URL('../../setup/experience.ts', import.meta.url).pathname],
+    bundle: true, platform: 'browser', format: 'esm', target: 'es2022', minify: true, write: false,
+  }) : undefined;
   return {
     origin, appId: config.appId, action: config.action,
     sign: () => {
@@ -41,6 +45,10 @@ export async function idkitApprovalFromEnv(env: NodeJS.ProcessEnv): Promise<Idki
       wasm: readFileSync(new URL('../../node_modules/@worldcoin/idkit-core/dist/idkit_wasm_bg.wasm', import.meta.url)),
       koePage: readFileSync(new URL('../../setup/koe-registration.html', import.meta.url), 'utf8'),
       koeJs: koeBundle.outputFiles[0]!.contents,
+      ...(experienceBundle ? {
+        experiencePage: readFileSync(new URL('../../setup/experience.html', import.meta.url), 'utf8'),
+        experienceJs: experienceBundle.outputFiles[0]!.contents,
+      } : {}),
     },
   };
 }

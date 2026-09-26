@@ -99,6 +99,9 @@ const idkitDemo = await idkitApprovalFromEnv(process.env);
 const app = createApp({
   ...(fees ? { fees } : {}),
   ...(idkitDemo ? { idkitDemo } : {}),
+  ...(idkitDemo?.assets.experiencePage && idkitDemo.assets.experienceJs ? {
+    experience: { page: idkitDemo.assets.experiencePage, js: idkitDemo.assets.experienceJs },
+  } : {}),
   productionProbe: productionProbeFromEnv(process.env),
   ...(delegation ? { delegation } : {}),
   policy,
@@ -108,6 +111,7 @@ const app = createApp({
   // Replayed through the same route(), so the fold shows the router's output, not a fixture.
   nights: pastNights(new Date(), 4, policy),
   ...(provider.live ? { classifier: provider.create() } : {}),
+  classifierName: provider.provider,
   ...(redirectUri ? { redirectUri } : {}),
   identityWired: worldConfigured && Boolean(redirectUri),
   ...(pkg.repository?.url ? { docsUrl: pkg.repository.url } : {}),

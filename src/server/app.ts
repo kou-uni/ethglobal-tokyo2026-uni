@@ -40,8 +40,11 @@ import type { ProductionProbeHandler } from './world-production-probe.js';
 import { createIdkitApproval, beginDemoBrowser, demoBrowser, type IdkitApprovalOptions } from './idkit-approval.js';
 import { RoutingFees, FEE_HEADER } from './routing-fees.js';
 import { createKoeRegistration } from './koe-registration.js';
+import { createExperience, type ExperienceAssets } from './experience.js';
 
 export interface AppDeps {
+  /** Opt-in, browser-owned live journey. Shares the existing demo signing budget. */
+  experience?: ExperienceAssets;
   fees?: RoutingFees;
   /** Any qualified human can approve only the visitor demo they started. */
   idkitDemo?: IdkitApprovalOptions;
@@ -56,6 +59,7 @@ export interface AppDeps {
   screeningWired?: boolean;
   /** Optional: consulted only on rule 9. */
   classifier?: ClassifierPort;
+  classifierName?: string;
   /** Optional: required before an approval can settle. */
   identity?: IdentityPort;
   /** Where the issuer sends her back. Must be HTTPS and registered with them. */
@@ -310,12 +314,14 @@ export function createApp(deps: AppDeps): Server {
   const signedAt: number[] = [];
   const allowDemoSignature = (): boolean => {
     const ceiling = deps.demoSignsPerHour ?? 40;
+    if (!Number.isSafeInteger(ceiling) || ceiling < 0) return false;
     const cutoff = now().getTime() - 3_600_000;
     while (signedAt.length && signedAt[0]! < cutoff) signedAt.shift();
     if (signedAt.length >= ceiling) return false;
     signedAt.push(now().getTime());
     return true;
   };
+  const experience = createExperience(deps, allowDemoSignature);
 
   const html = (res: ServerResponse, status: number, body: string): void => {
     res.writeHead(status, { 'content-type': 'text/html; charset=utf-8' });
@@ -346,6 +352,7 @@ export function createApp(deps: AppDeps): Server {
     const path = url.pathname;
 
     try {
+      if (await experience(req, res)) return;
       if (await koe(req, res)) return;
       if (idkit && await idkit(req, res)) return;
       if (deps.productionProbe && await deps.productionProbe(req, res)) return;
@@ -368,6 +375,7 @@ export function createApp(deps: AppDeps): Server {
             identity: Boolean(deps.idkitDemo || (deps.identityWired && deps.identity)),
             identityMode: deps.idkitDemo ? 'idkit-production-visitor-demo' : 'oidc-or-mock',
             koeRegistration: Boolean(deps.idkitDemo?.assets.koePage && deps.idkitDemo?.assets.koeJs),
+            experience: Boolean(deps.experience && deps.idkitDemo),
             screening: Boolean(deps.screeningWired),
             settlement: Boolean(deps.settlement?.live),
             delegationReader: Boolean(deps.delegation),

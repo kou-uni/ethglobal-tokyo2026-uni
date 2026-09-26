@@ -573,7 +573,7 @@
         "test",
         "npm run"
       ],
-      "a": "npm install, then npm run check. It typechecks, runs 343 tests, and re-derives 12 claims by running the code. It also fails on a hardcoded model id, endpoint or address, on a line citation that no longer points anywhere, and on any document quoting a test count the run did not produce.",
+      "a": "npm install, then npm run check. It typechecks, runs 355 tests, and re-derives 12 claims by running the code. It also fails on a hardcoded model id, endpoint or address, on a line citation that no longer points anywhere, and on any document quoting a test count the run did not produce.",
       "ev": [
         [
           "the claims, as JSON",

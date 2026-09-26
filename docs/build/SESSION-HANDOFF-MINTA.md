@@ -1,4 +1,22 @@
-# minta セッション引き継ぎ — 2026-09-26 14:50 JST頃
+# minta セッション引き継ぎ — 2026-09-26
+
+## 最新の追加：依頼から回答・報酬までのデモ
+
+作業ブランチは `minta/live-human-journey`。PR #23の
+`minta/agent-traffic-animation` の上に積んでいます。
+
+- 新しい `/experience`：50件の生成依頼 → 実ルール・審査 → Worldログイン →
+  委任分1件の報酬 → 本人回答1件の報酬・買い手受信箱 → Koe。日英切替あり。
+- [LIVE-EXPERIENCE.md](LIVE-EXPERIENCE.md) に実処理とエミュレーションの範囲、
+  実機確認の残りを記載。Worldとfacilitatorのテストはスタブで、新経路の実送金完走は未確認。
+- [HOSTING-MIGRATION.md](HOSTING-MIGRATION.md) にKouへの公開移行依頼。
+  Dockerfileを追加。クラウドの契約、設定移送、公開切替はまだ行っていない。
+- `docs/experience.html` は公開healthの `wired.experience` を確認する入口。
+  新サーバー反映までは準備中表示。移行先URLは未確定。
+- 公開中の旧 `/try` や `/world-approval` は別経路。
+  ユーザーが認証中ならブラウザ遷移・サーバー再起動を行わない。
+
+以下は14:50頃の履歴です。最新の公開環境の状態として読み替えないでください。
 
 ## 最初に読むもの
 
@@ -17,7 +35,7 @@
   証拠は `evidence/world-public-payment.json`。
 - コミット `7445905`：上記証拠と、依頼価格JPYCと実送金トークン量を区別する表示修正。
 - PR #13にはhealthのCORS修正、審査向け案内、Koeの位置づけ明記も含む。
-- 変更前後の `npm run check` 成功。343 tests / 12 claims。
+- 変更前後の `npm run check` 成功。repository tests / 12 claims。
 
 ## 次にすること
 
