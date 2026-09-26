@@ -25,7 +25,9 @@
     "start": "tsx src/server/main.ts",
     "dev": "tsx watch src/server/main.ts",
     "night": "tsx scripts/demo-night.ts",
-    "setup:world": "tsx scripts/setup-world.ts"
+    "setup:world": "tsx scripts/setup-world.ts",
+    "agent": "tsx scripts/agent.ts",
+    "setup:wallet": "tsx scripts/setup-wallet.ts"
   },
   "devDependencies": {
     "@types/node": "^22.7.4",
@@ -36,6 +38,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.128.0",
     "@ensdomains/ensjs": "5.0.0-sepolia-fix.1",
+    "@x402/core": "^2.27.0",
     "jose": "^6.2.12",
     "openai": "^7.23.0",
     "viem": "^2.56.9"

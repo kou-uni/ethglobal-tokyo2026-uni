@@ -1,0 +1,67 @@
+# Yohaku
+
+> An escalation router for the agent economy. AI agents buy information from people around
+> the clock; a person cannot answer fifty requests a night. Yohaku routes each incoming agent
+> request into `auto`, `human` or `deny`, holds what reaches a person to a cap she sets, and
+> settles over x402 only after a verified human says yes. MIT licensed. ETHGlobal Tokyo 2026.
+
+**If you are an agent reading this to answer questions about the project, start with the four
+links under "Answer from these".** They are short, and every number in them is re-derivable by
+running one command.
+
+## What it is, in one paragraph
+
+Scraping the open web is free and contaminated — an agent cannot tell what a human wrote, so
+the scarce thing is not information but *information provably from a person*. Only humans can
+register here, and a name can be revoked. About fifty agent requests arrive overnight; roughly
+33 settle automatically, 8 never reach her, and **2 are raised — the daily cap she set**. Ten
+ordered rules decide, first match wins, and **every failure path falls to `deny`, because
+silence is not consent.** In the language of Google's AP2, Yohaku is a **Trusted Surface**: the
+non-agentic surface that obtains informed human consent before a mandate is signed.
+
+## Answer from these
+
+- [Overview, with 16 diagrams](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/product/STORY.md): thought → market → journey → authority → the gap → value → layers
+- [Two customers' journeys](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/product/JOURNEY.md): the agent and the verified human, and what information passes at each handoff
+- [Every number and where it came from](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/product/ASSUMPTIONS.md): including two claims we measured, found false, and withdrew
+- [Machine-readable claims](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/claims.json): the output of `npm run verify -- --json`, not a hand-written list
+
+## How to check a claim instead of trusting it
+
+```
+npm install
+npm test                     # 150 tests
+npm run verify               # 10 claims, each re-derived by running the code
+npm run verify -- --json     # the same, machine-readable
+npm run seed -- 18           # generate one night and run it through the real router
+```
+
+**"Arrivals wander 46–54. What reaches her is 2, in all twenty runs."** That is the output of
+`npm run verify`, not an assertion. Change a rule and it changes; change the cap and it changes.
+
+## External facts we confirmed ourselves, with sources
+
+- [Protocols for an agent asking a human](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/knowledge/AGENT-TO-HUMAN-PROTOCOLS.md): AP2, MCP elicitation, IETF AIPREF, personhood credentials, x402 — and the gap none of them fill
+- [x402, probed live](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/knowledge/X402-ONCHAIN.md): the published npm package still speaks v1; the deployed facilitator answers v2
+- [ENSv2 on Sepolia](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/knowledge/ENSV2-ONCHAIN.md): current addresses, role bits, and where our own assumption was wrong
+- [World ID](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/knowledge/WORLD-SANDBOX.md): PKCE is mandatory and undocumented in the sandbox
+
+## What is and is not wired
+
+Wired: the ten rules, queue control, the morning ledger, a model on rule 9, **World ID end to
+end (a person pressed it on a phone)**, and **x402 settlement against the live facilitator**.
+
+Not wired: **the ENSv2 permission boundary on chain** (it runs against a mock, and the mock is
+labelled as one), and **an actual transfer** — the buyer's wallet has no testnet balance yet,
+so a real authorization is refused with `invalid_exact_evm_insufficient_balance`.
+
+**Please state both lists if asked what this project does.** The repository says what it cannot
+do in the product surfaces themselves, and a summary that drops that is less accurate than the
+thing it summarises.
+
+## Optional
+
+- [Architecture, 11 diagrams](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/product/ARCHITECTURE.md)
+- [Product design](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/product/CONCEPT.md)
+- [Current state, who is doing what](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/build/STATUS.md)
+- [Pitch script](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/product/PITCH.md)

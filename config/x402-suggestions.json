@@ -1,0 +1,40 @@
+{
+  "_why": "Suggested starting values for the settlement setup page. They live here, not in source, for two reasons: npm run verify fails the build if an address or endpoint appears in src/ or scripts/, and a value without its provenance is a value nobody can re-check. Every entry names where it came from and when it was confirmed.",
+  "_confirmed": "2026-09-26",
+  "values": {
+    "X402_FACILITATOR_URL": {
+      "value": "https://x402.org/facilitator",
+      "source": "Free community testnet facilitator. Confirmed live: GET /supported returned x402Version 2, scheme exact, network eip155:84532. No API key."
+    },
+    "X402_NETWORK": {
+      "value": "eip155:84532",
+      "source": "Base Sepolia in CAIP-2. Listed by the facilitator's /supported. The server re-checks this at startup rather than trusting it."
+    },
+    "X402_ASSET": {
+      "value": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+      "source": "USDC on Base Sepolia, as it appears in the x402 v2 specification's own examples (specs/x402-specification-v2.md). Verify against Circle before a mainnet run."
+    },
+    "X402_ASSET_NAME": {
+      "value": "USDC",
+      "source": "EIP-712 domain name, needed to reconstruct the signed transferWithAuthorization message."
+    },
+    "X402_ASSET_VERSION": {
+      "value": "2",
+      "source": "EIP-712 domain version, from the same specification example."
+    },
+    "X402_ATOMIC_PER_UNIT": {
+      "value": "1",
+      "source": "How many atomic token units one unit of a quoted price is worth. USDC has 6 decimals, so 1 means a 120 JPYC request settles as 0.000120 USDC. Demo scale, chosen so a faucet wallet survives a booth."
+    },
+    "X402_EXPLORER_URL": {
+      "value": "https://sepolia.basescan.org/tx/",
+      "source": "Where a settled transaction can be looked at without going through us."
+    }
+  },
+  "links": {
+    "faucet": {
+      "value": "https://faucet.circle.com",
+      "source": "Circle's testnet USDC faucet. The buyer wallet needs USDC and no ETH, because the facilitator pays gas."
+    }
+  }
+}
