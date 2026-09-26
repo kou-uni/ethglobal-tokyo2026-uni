@@ -18,9 +18,10 @@ h1{font-size:clamp(30px,7vw,44px);font-weight:900;letter-spacing:-.02em;margin:1
 h1 em{font-style:normal;display:inline-block;color:#fff;background:var(--lilacD);padding:0 13px 3px;
 border-radius:15px;box-shadow:0 5px 0 #4A3BAE;transform:rotate(-1.4deg)}
 p.sub{color:var(--ink2);font-size:16px;margin:12px 0 0;max-width:48ch}
-figure.diag{margin:0;background:var(--card);border-radius:26px;padding:16px;box-shadow:var(--sh);
-overflow-x:auto}
-figure.diag svg{display:block;width:100%;height:auto;min-width:700px}
+figure.diag{margin:0;background:var(--card);border-radius:26px;padding:18px 16px;
+box-shadow:var(--sh);overflow:visible}
+/* スクロールさせない。切れるくらいなら縮める */
+figure.diag svg{display:block;width:100%;height:auto}
 figure.diag figcaption{font-size:14px;color:var(--ink2);margin-top:12px;line-height:1.6;font-weight:800}
 figure.diag figcaption b{color:var(--ink)}
 h2{font-size:12px;letter-spacing:.15em;color:var(--ink3);font-weight:900;margin:40px 0 14px}
