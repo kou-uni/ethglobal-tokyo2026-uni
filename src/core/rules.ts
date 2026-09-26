@@ -40,6 +40,7 @@ function grantFor(policy: Policy, req: AgentRequest): Grant | undefined {
  * so the same inputs always produce the same decision and the demo is reproducible.
  */
 export function route(req: AgentRequest, policy: Policy, ctx: RoutingContext): Decision {
+  if (!(Date.parse(req.deadline) > ctx.now.getTime())) return onFailure('deadline-passed');
   // ── 0. The delegate may propose. It may not widen its own rights. ──────────
   // Rejected on-chain as well; this is the server agreeing with the contract.
   if (req.actingAs === 'delegate') {

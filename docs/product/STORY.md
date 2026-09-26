@@ -551,7 +551,7 @@ AP2 は Trusted Surface に **MUST be non-agentic** を課しました。理由�
 だから我々は、主張を主張のまま置きません。
 
 ```bash
-npm test          # 343 tests
+npm test          # 391 tests
 npm run verify    # 12 claims — ドキュメントの数字をコードから再導出する
 npm run seed -- 2    # 一晩を生成して route() に通す。seed を変えれば入力は動く
 ```

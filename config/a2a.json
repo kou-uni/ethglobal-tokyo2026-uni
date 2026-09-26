@@ -1,0 +1,8 @@
+{
+  "protocolVersion": "0.3.0",
+  "protocolSource": "https://github.com/a2aproject/A2A/blob/v0.3.0/specification/json/a2a.json",
+  "paymentExtension": "https://github.com/google-a2a/a2a-x402/v0.1",
+  "paymentSource": "https://github.com/coinbase/x402/blob/main/specs/transports-v2/a2a.md",
+  "checkedAt": "2026-09-26",
+  "scope": "JSON-RPC message/send and tasks/get. Routing and consent receipts only. No content delivery, streaming, push notifications or A2A 1.0 conformance claim."
+}

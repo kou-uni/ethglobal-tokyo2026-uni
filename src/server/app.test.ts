@@ -154,13 +154,12 @@ describe('the server and the seed script describe the same night', () => {
     expect(overHttp['human']).toBe(inProcess.filter((d) => d.verdict === 'human').length);
   }, 30_000);
 
-  it('surfaces the same number of bundles as the queue does', async () => {
-    const held: HeldRequest[] = store.outstanding();
-    const expected = surface(held, DEMO_POLICY, NIGHT).surfaced.length;
+  it('holds invitations until the notification hour instead of exposing the morning preview at night', async () => {
     const led = (await (await fetch(`${base}/ledger/alice.yohaku.eth`)).json()) as {
       needsYou: unknown[];
     };
-    expect(led.needsYou).toHaveLength(expected);
+    expect(NIGHT.getHours()).toBeLessThan(DEMO_POLICY.notifyHour);
+    expect(led.needsYou).toHaveLength(0);
   });
 });
 

@@ -1,0 +1,153 @@
+{
+  "observedAt": "2026-09-26T11:41:40.487Z",
+  "endpoint": "https://mac-studio.taila649e1.ts.net/requests",
+  "health": {
+    "ok": true,
+    "owner": "yohaku-minta-2026.eth",
+    "dailyCap": 2,
+    "wired": {
+      "routing": true,
+      "classifier": true,
+      "identity": true,
+      "identityMode": "idkit-production-visitor-demo",
+      "koeRegistration": true,
+      "screening": true,
+      "settlement": true,
+      "delegationReader": true
+    }
+  },
+  "paymentSignatureSupplied": false,
+  "newPaymentRequested": false,
+  "results": [
+    {
+      "label": "許可済みの内容",
+      "request": {
+        "who": "market-research.acme.eth",
+        "purpose": "demand-estimation",
+        "price": {
+          "amount": 120,
+          "currency": "JPYC"
+        },
+        "deadline": "2026-09-26T12:41:35.123Z",
+        "payoutAddress": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+        "id": "live-routing-1790422895123-auto",
+        "what": "experience/why-you-put-it-back"
+      },
+      "httpStatus": 402,
+      "response": {
+        "id": "live-routing-1790422895123-auto",
+        "verdict": "auto",
+        "reason": "within the standing grant for \"experience/why-you-put-it-back\"",
+        "accepts": [
+          {
+            "scheme": "exact",
+            "network": "eip155:84532",
+            "amount": "120",
+            "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+            "payTo": "0x262A96E438B3759998251120e5C03DD4CA6ffDc0",
+            "maxTimeoutSeconds": 60,
+            "extra": {
+              "name": "USDC",
+              "version": "2",
+              "assetTransferMethod": "eip3009"
+            }
+          }
+        ],
+        "x402Version": 2
+      },
+      "expectedVerdict": "auto",
+      "matches": true
+    },
+    {
+      "label": "本人の判断が必要な内容",
+      "request": {
+        "who": "market-research.acme.eth",
+        "purpose": "demand-estimation",
+        "price": {
+          "amount": 120,
+          "currency": "JPYC"
+        },
+        "deadline": "2026-09-26T12:41:35.123Z",
+        "payoutAddress": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+        "id": "live-routing-1790422895123-human",
+        "what": "experience/the-time-it-failed-you"
+      },
+      "httpStatus": 202,
+      "response": {
+        "id": "live-routing-1790422895123-human",
+        "verdict": "human",
+        "rule": 5,
+        "reason": "\"experience/the-time-it-failed-you\" is a sensitive domain",
+        "held": true,
+        "deadline": "2026-09-26T12:41:35.123Z",
+        "payment": {
+          "note": "sign an authorization now and it settles only if she approves",
+          "accepts": [
+            {
+              "scheme": "exact",
+              "network": "eip155:84532",
+              "amount": "120",
+              "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+              "payTo": "0x262A96E438B3759998251120e5C03DD4CA6ffDc0",
+              "maxTimeoutSeconds": 60,
+              "extra": {
+                "name": "USDC",
+                "version": "2",
+                "assetTransferMethod": "eip3009"
+              }
+            }
+          ]
+        }
+      },
+      "expectedVerdict": "human",
+      "matches": true
+    },
+    {
+      "label": "通常依頼だが支払い元が検査NG",
+      "request": {
+        "who": "market-research.acme.eth",
+        "purpose": "demand-estimation",
+        "price": {
+          "amount": 120,
+          "currency": "JPYC"
+        },
+        "deadline": "2026-09-26T12:41:35.123Z",
+        "payoutAddress": "0x098B716B8Aaf21512996dC57EB0615e2383E2f96",
+        "id": "live-routing-1790422895123-deny",
+        "what": "experience/why-you-put-it-back"
+      },
+      "httpStatus": 200,
+      "response": {
+        "id": "live-routing-1790422895123-deny",
+        "verdict": "deny",
+        "rule": 4,
+        "reason": "the payment source failed screening — known_scammer — The address has a confirmed history of malicious activity, including scams, phishing, or other harmful behavior."
+      },
+      "expectedVerdict": "deny",
+      "matches": true
+    }
+  ],
+  "ledger": {
+    "before": {
+      "arrived": 1,
+      "autoCount": 0,
+      "heldCount": 1,
+      "denyCount": 0,
+      "received": []
+    },
+    "after": {
+      "arrived": 4,
+      "autoCount": 1,
+      "heldCount": 2,
+      "denyCount": 1,
+      "received": []
+    },
+    "countDelta": {
+      "arrived": 3,
+      "autoCount": 1,
+      "heldCount": 1,
+      "denyCount": 1
+    }
+  },
+  "scope": "Live HTTP classification. auto is payment-required, human is held and not approved, deny is rejected. No payment signatures or World approvals sent by this script."
+}

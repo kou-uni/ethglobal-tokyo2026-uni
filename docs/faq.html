@@ -193,7 +193,7 @@ footer a{color:var(--lilacD)}
 <article id="a2a">
   <span class="chip DESIGNED">DESIGNED</span>
   <h3>What protocol do agents use to reach you?</h3>
-  <p>A2A. Discovery is an Agent Card at a well-known path, and payment rides the x402 transport A2A already defines, so we did not invent a protocol for the arriving side. In AP2's language Yohaku is a Trusted Surface — the non-agentic surface that obtains consent before a mandate is signed.</p>
+  <p>The implemented gateway uses A2A 0.3 JSON-RPC: an Agent Card, message/send and tasks/get. It calls the same routing intake and carries x402 requirements and receipts in task metadata. It returns routing/consent receipts, without answer delivery, streaming or push notifications. In AP2's language Yohaku is a Trusted Surface — the non-agentic surface that obtains consent before a mandate is signed.</p>
   <div class="ev"><a href="../knowledge/AGENT-TO-HUMAN-PROTOCOLS.md">the protocol research &rarr;</a></div>
 </article>
 
@@ -242,7 +242,7 @@ footer a{color:var(--lilacD)}
 <article id="verify">
   <span class="chip RUNNING">RUNNING</span>
   <h3>How do I check your numbers myself?</h3>
-  <p>npm install, then npm run check. It typechecks, runs 343 tests, and re-derives 12 claims by running the code. It also fails on a hardcoded model id, endpoint or address, on a line citation that no longer points anywhere, and on any document quoting a test count the run did not produce.</p>
+  <p>npm install, then npm run check. It typechecks, runs 391 tests, and re-derives 12 claims by running the code. It also fails on a hardcoded model id, endpoint or address, on a line citation that no longer points anywhere, and on any document quoting a test count the run did not produce.</p>
   <div class="ev"><a href="../claims.json">the claims, as JSON &rarr;</a><a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/scripts/verify.ts" target="_blank" rel="noopener">verify.ts &rarr;</a></div>
 </article>
 

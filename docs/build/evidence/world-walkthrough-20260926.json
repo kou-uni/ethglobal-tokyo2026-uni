@@ -1,0 +1,215 @@
+{
+  "recordedAt": "2026-09-26T11:28:54.208449+00:00",
+  "status": "public-production-World-approval-and-testnet-payment-confirmed",
+  "local": {
+    "startedAt": "2026-09-26T11:23:29.202Z",
+    "origin": "http://127.0.0.1:8427",
+    "sourceCommit": "6b10c2c51dfb963198da405a691c1b4d96bb6eac",
+    "mode": "real-production-World-local-browser-bound-visitor-demo",
+    "payment": "disabled; no buyer wallet on this machine",
+    "identitySummaries": [
+      {
+        "requestId": "try-030c6e07",
+        "verified": true,
+        "environment": "production",
+        "protocolVersion": "3.0",
+        "credential": "orb",
+        "checkedAt": "2026-09-26T11:24:42.000Z"
+      }
+    ],
+    "events": [
+      {
+        "at": "2026-09-26T11:24:04.295Z",
+        "method": "POST",
+        "path": "/try",
+        "status": 302
+      },
+      {
+        "at": "2026-09-26T11:24:26.585Z",
+        "method": "POST",
+        "path": "/world-approval/challenge",
+        "status": 200
+      },
+      {
+        "at": "2026-09-26T11:24:43.669Z",
+        "method": "POST",
+        "path": "/world-approval/verify",
+        "status": 200
+      },
+      {
+        "at": "2026-09-26T11:25:23.673Z",
+        "method": "POST",
+        "path": "/requests",
+        "status": 200
+      },
+      {
+        "at": "2026-09-26T11:25:24.308Z",
+        "method": "POST",
+        "path": "/requests",
+        "status": 200
+      },
+      {
+        "at": "2026-09-26T11:25:24.735Z",
+        "method": "POST",
+        "path": "/requests",
+        "status": 200
+      }
+    ],
+    "entries": [
+      {
+        "requestId": "try-030c6e07",
+        "verdict": "human",
+        "rule": 5,
+        "resolution": "approved",
+        "settlement": "not-wired"
+      },
+      {
+        "requestId": "walkthrough-clean",
+        "verdict": "auto",
+        "rule": 8,
+        "resolution": "pending",
+        "settlement": "not-wired"
+      },
+      {
+        "requestId": "walkthrough-flagged",
+        "verdict": "deny",
+        "rule": 4,
+        "resolution": "pending",
+        "settlement": null
+      },
+      {
+        "requestId": "walkthrough-revoked",
+        "verdict": "deny",
+        "rule": 0,
+        "resolution": "pending",
+        "settlement": null
+      }
+    ]
+  },
+  "public": {
+    "baselineAt": "2026-09-26T11:28:03.270Z",
+    "health": {
+      "ok": true,
+      "owner": "yohaku-minta-2026.eth",
+      "dailyCap": 2,
+      "wired": {
+        "routing": true,
+        "classifier": true,
+        "identity": true,
+        "identityMode": "idkit-production-visitor-demo",
+        "koeRegistration": true,
+        "screening": true,
+        "settlement": true,
+        "delegationReader": true
+      }
+    },
+    "visitorPaymentConfigured": true,
+    "beforeBlockNumber": "47326897",
+    "receivedBefore": [],
+    "unsignedRoutingResults": [
+      {
+        "name": "clean",
+        "status": 402,
+        "id": "walkthrough-clean-1790422001587",
+        "verdict": "auto",
+        "reason": "within the standing grant for \"experience/why-you-put-it-back\"",
+        "accepts": [
+          {
+            "scheme": "exact",
+            "network": "eip155:84532",
+            "amount": "120",
+            "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+            "payTo": "0x262A96E438B3759998251120e5C03DD4CA6ffDc0",
+            "maxTimeoutSeconds": 60,
+            "extra": {
+              "name": "USDC",
+              "version": "2",
+              "assetTransferMethod": "eip3009"
+            }
+          }
+        ]
+      },
+      {
+        "name": "flagged",
+        "status": 200,
+        "id": "walkthrough-flagged-1790422001712",
+        "verdict": "deny",
+        "rule": 4,
+        "reason": "the payment source failed screening — known_scammer — The address has a confirmed history of malicious activity, including scams, phishing, or other harmful behavior."
+      },
+      {
+        "name": "revoked",
+        "status": 200,
+        "id": "walkthrough-revoked-1790422002708",
+        "verdict": "deny",
+        "rule": 0,
+        "reason": "delegation has been revoked — even proposals stop"
+      }
+    ],
+    "observedTransferReceipt": {
+      "checkedAt": "2026-09-26T11:35:35.204Z",
+      "candidateOnly": false,
+      "transaction": "0x12f1c4b90dafa3c6fff8d28e94e422c43d7f46f49fe4b5a14dee45f422d99aa1",
+      "status": "success",
+      "chainId": 84532,
+      "blockNumber": "47326951",
+      "blockTime": "2026-09-26T11:29:50.000Z",
+      "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+      "transfers": [
+        {
+          "from": "0xCD6071453028bfB2510EcD575a2B431488fBE0F7",
+          "to": "0x5f52FA3c5DF22d8c89fA6c2221E2aeBd6FE722bD",
+          "atomic": "4200"
+        }
+      ],
+      "gasUsed": "85768",
+      "note": "Transaction matches the public approval result supplied by the user. Receipt success and exact token Transfer independently read from Base Sepolia RPC."
+    },
+    "receivedAfter": [
+      {
+        "currency": "JPYC",
+        "amount": 4200
+      }
+    ],
+    "observedAfterAt": "2026-09-26T11:30:00.287Z",
+    "approvalResultSource": "User-supplied JSON from public Verification & payment details in this conversation.",
+    "approvalResult": {
+      "id": "try-6ae1fe31",
+      "verdict": "approved",
+      "identity": {
+        "verified": true,
+        "environment": "production",
+        "protocolVersion": "3.0",
+        "credential": "orb",
+        "checkedAt": "2026-09-26T11:29:47.000Z"
+      },
+      "settlement": {
+        "settled": true,
+        "transaction": "0x12f1c4b90dafa3c6fff8d28e94e422c43d7f46f49fe4b5a14dee45f422d99aa1",
+        "network": "eip155:84532"
+      }
+    },
+    "match": {
+      "requestId": "try-6ae1fe31",
+      "transactionMatches": true,
+      "networkMatches": true,
+      "receiptSucceeded": true,
+      "amountAtomic": "4200",
+      "tokenDecimals": 6,
+      "tokenAmount": "0.0042",
+      "receiver": "0x5f52FA3c5DF22d8c89fA6c2221E2aeBd6FE722bD",
+      "identityVerifiedBeforeTransferSeconds": 3,
+      "ledgerOfferAmountMatches": true,
+      "scope": "One observed successful browser-bound visitor approval and one matching on-chain transfer; not a proof of general exactly-once behavior."
+    }
+  },
+  "limitations": [
+    "Local personhood verification is real production World Orb; local payment is disabled.",
+    "Public World identity summary is the user-supplied application result; the raw proof was not obtained or re-verified by this audit.",
+    "The matched payment is testnet USDC, not JPYC or revenue. Ledger values represent the demo offer currency.",
+    "Cancellation on a real device has not been observed in this walkthrough.",
+    "Normal agent owner approval, A2A, content delivery, treasury and previously reproduced application gaps remain unresolved.",
+    "No raw proof, nullifier, cookie, private key or payment authorization is included."
+  ],
+  "matchedAt": "2026-09-26T11:35:47.112856+00:00"
+}

@@ -73,7 +73,7 @@ describe('the address the provider is asked about', () => {
     const { base, scan } = await boot();
     const res = await ask(base, { id: 'undeclared' });
     expect(scan).not.toHaveBeenCalled();
-    expect((await res.json() as { verdict: string }).verdict).toBe('auto');
+    expect((await res.json() as { verdict: string }).verdict).toBe('deny');
   });
 
   /**

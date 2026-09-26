@@ -4,6 +4,7 @@ import type { RpContext } from '@worldcoin/idkit-core';
 import type { IdkitChallenge, IdkitProofSummary } from '../adapters/idkit-proof.js';
 import type { Entry, Store } from './state.js';
 import { asQuestion } from '../core/night.js';
+import type { OwnerAuth } from './owner-auth.js';
 
 export interface IdkitApprovalOptions {
   origin: string;
@@ -11,6 +12,7 @@ export interface IdkitApprovalOptions {
   action: string;
   sign(): RpContext;
   verify(challenge: IdkitChallenge, proof: unknown): Promise<IdkitProofSummary>;
+  owner?: OwnerAuth;
   assets: { page: string; js: Uint8Array; wasm: Uint8Array; koePage?: string; koeJs?: Uint8Array };
 }
 export function demoCookieName(origin: string) {
@@ -35,10 +37,18 @@ const snapshot = (e: Entry) => digest(JSON.stringify({
 }));
 const escape = (s: string) => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 
-/** Any qualified human may approve their own visitor demo; this is not owner authorization. */
+export function approvalBrowser(req: IncomingMessage, entry: Entry, options: IdkitApprovalOptions): string | undefined {
+  if (entry.demoBrowser) {
+    const browser = demoBrowser(req, options.origin);
+    return browser === entry.demoBrowser ? browser : undefined;
+  }
+  return options.owner?.browser(req);
+}
+
+/** Visitors can approve their own demo. Ordinary requests require owner authority as well. */
 export function createIdkitApproval(
   options: IdkitApprovalOptions, store: Store,
-  finish: (entry: Entry, summary: IdkitProofSummary) => Promise<unknown>,
+  finish: (entry: Entry, summary: IdkitProofSummary, authorized: () => Promise<boolean>) => Promise<unknown>,
   now: () => number = Date.now,
 ) {
   const pending = new Map<string, IdkitChallenge & { browser: string; requestId: string; snapshot: string; entry: Entry }>();
@@ -63,7 +73,7 @@ export function createIdkitApproval(
     if (req.method === 'GET' && url.pathname === base) {
       const entry = store.get(url.searchParams.get('id') ?? '');
       if (!entry || entry.resolution || entry.decision.verdict !== 'human'
-        || !entry.demoBrowser || entry.demoBrowser !== demoBrowser(req, options.origin)
+        || !approvalBrowser(req, entry, options)
         || !(Date.parse(entry.request.deadline) > now())) {
         json(409, { error: 'Nothing to approve' }); return true;
       }
@@ -78,18 +88,24 @@ export function createIdkitApproval(
     if (req.method !== 'POST' || req.headers.origin !== options.origin) {
       json(403, { error: 'このサイトの承認画面から操作してください' }); return true;
     }
-    const browser = demoBrowser(req, options.origin);
-    if (!browser) { json(403, { error: 'missing_browser' }); return true; }
     try {
       let raw = '';
       for await (const chunk of req) { raw += chunk; if (raw.length > 65536) throw new Error('too_large'); }
       const body = JSON.parse(raw || '{}');
       if (url.pathname === base + '/challenge') {
         const entry = store.get(body.requestId);
+        const browser = entry && approvalBrowser(req, entry, options);
         if (!entry || entry.resolution || entry.decision.verdict !== 'human'
-          || entry.demoBrowser !== browser
+          || !browser
           || !(Date.parse(entry.request.deadline) > now()) || body.snapshot !== snapshot(entry)) {
           json(409, { error: '依頼が変更・終了しています。承認画面を開き直してください' }); return true;
+        }
+        if (!entry.demoBrowser && !await options.owner?.authority()) {
+          json(403, { error: 'owner_authority_not_verified' }); return true;
+        }
+        if (approvalBrowser(req, entry, options) !== browser || entry.resolution
+          || !(Date.parse(entry.request.deadline) > now()) || body.snapshot !== snapshot(entry)) {
+          json(409, { error: 'request_or_session_changed' }); return true;
         }
         if (pending.size >= 100) { json(429, { error: '少し待ってからお試しください' }); return true; }
         for (const [id, c] of pending) if (c.browser === browser) pending.delete(id);
@@ -104,20 +120,28 @@ export function createIdkitApproval(
         json(200, { id, signal, appId: options.appId, action: options.action, rp_context: rp }); return true;
       }
       const c = typeof body.id === 'string' ? pending.get(body.id) : undefined;
+      const browser = c && approvalBrowser(req, c.entry, options);
       if (!c || c.browser !== browser) { json(400, { error: '期限切れ・使用済み・別ブラウザーの認証です' }); return true; }
       if (url.pathname !== base + '/verify' && url.pathname !== base + '/cancel') { json(404, { error: 'not_found' }); return true; }
       pending.delete(body.id); // Consume before the network request; never retry uncertain proofs.
       if (url.pathname === base + '/cancel') { json(200, { cancelled: true }); return true; }
       const summary = await options.verify(c, body.proof);
+      if (!c.entry.demoBrowser && !await options.owner?.authority()) {
+        json(403, { error: 'owner_authority_not_verified' }); return true;
+      }
       const current = store.get(c.requestId);
       if (!current || current !== c.entry || current.resolution || current.decision.verdict !== 'human'
-        || current.demoBrowser !== browser
+        || approvalBrowser(req, current, options) !== browser
         || snapshot(current) !== c.snapshot || !(Date.parse(current.request.deadline) > now())
         || c.expiresAt <= now() / 1000) {
         json(409, { error: '検証中に依頼が変更・終了しました。承認しませんでした' }); return true;
       }
       // finish must claim resolution synchronously before its first await.
-      json(200, await finish(current, summary)); return true;
+      json(200, await finish(current, summary, async () => {
+        if (!current.demoBrowser && !await options.owner?.authority()) return false;
+        return approvalBrowser(req, current, options) === browser && snapshot(current) === c.snapshot
+          && c.expiresAt > now() / 1000;
+      })); return true;
     } catch {
       json(403, { error: '承認を完了できませんでした。結果を確認してから新しい操作を始めてください。' }); return true;
     }

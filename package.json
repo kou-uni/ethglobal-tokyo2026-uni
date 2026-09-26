@@ -28,6 +28,7 @@
     "models": "tsx scripts/models.ts",
     "verify": "tsx scripts/verify.ts",
     "check": "npm run typecheck && npm test && npm run verify",
+    "integration:check": "tsx scripts/integration-check.ts",
     "world:check": "tsx scripts/world-check.ts",
     "start": "tsx src/server/main.ts",
     "dev": "tsx watch src/server/main.ts",

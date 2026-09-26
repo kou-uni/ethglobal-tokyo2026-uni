@@ -420,7 +420,7 @@
         "interoperability",
         "how do agents arrive"
       ],
-      "a": "A2A. Discovery is an Agent Card at a well-known path, and payment rides the x402 transport A2A already defines, so we did not invent a protocol for the arriving side. In AP2's language Yohaku is a Trusted Surface — the non-agentic surface that obtains consent before a mandate is signed.",
+      "a": "The implemented gateway uses A2A 0.3 JSON-RPC: an Agent Card, message/send and tasks/get. It calls the same routing intake and carries x402 requirements and receipts in task metadata. It returns routing/consent receipts, without answer delivery, streaming or push notifications. In AP2's language Yohaku is a Trusted Surface — the non-agentic surface that obtains consent before a mandate is signed.",
       "ev": [
         [
           "the protocol research",
@@ -573,7 +573,7 @@
         "test",
         "npm run"
       ],
-      "a": "npm install, then npm run check. It typechecks, runs 343 tests, and re-derives 12 claims by running the code. It also fails on a hardcoded model id, endpoint or address, on a line citation that no longer points anywhere, and on any document quoting a test count the run did not produce.",
+      "a": "npm install, then npm run check. It typechecks, runs 391 tests, and re-derives 12 claims by running the code. It also fails on a hardcoded model id, endpoint or address, on a line citation that no longer points anywhere, and on any document quoting a test count the run did not produce.",
       "ev": [
         [
           "the claims, as JSON",

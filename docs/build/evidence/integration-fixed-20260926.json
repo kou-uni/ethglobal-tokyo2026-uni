@@ -1,0 +1,177 @@
+{
+  "checkedAt": "2026-09-26T12:52:01.043Z",
+  "commit": "ebbce5e3cfee8ca7afb31992101d98f2109c813f",
+  "includesWorkingTreeChanges": true,
+  "mode": "local-simulated-providers",
+  "automatedChecksPassed": true,
+  "counts": {
+    "pass": 17,
+    "gap": 0,
+    "blocked": 0,
+    "fail": 0
+  },
+  "results": [
+    {
+      "name": "x402 v2 support and unpaid quote",
+      "status": "pass",
+      "detail": {
+        "status": 402,
+        "settlements": 0,
+        "provider": "local simulated facilitator"
+      }
+    },
+    {
+      "name": "declared clean source -> real signing -> x402 HTTP -> ledger",
+      "status": "pass",
+      "detail": {
+        "status": 200,
+        "rule": 8,
+        "settlement": "settled",
+        "onchain": false
+      }
+    },
+    {
+      "name": "screening flagged -> deny without settlement",
+      "status": "pass",
+      "detail": {
+        "verdict": "deny",
+        "rule": 4,
+        "settlementsAdded": 0
+      }
+    },
+    {
+      "name": "screening unavailable -> deny without settlement",
+      "status": "pass",
+      "detail": {
+        "verdict": "deny",
+        "rule": 4,
+        "settlementsAdded": 0
+      }
+    },
+    {
+      "name": "delegate permission refusal and revoked proposal refusal",
+      "status": "pass",
+      "detail": {
+        "permission": "deny",
+        "afterRevocation": "deny",
+        "provider": "simulated ENS permission state"
+      }
+    },
+    {
+      "name": "unknown topic -> classifier drop -> no payment",
+      "status": "pass",
+      "detail": {
+        "rule": 9,
+        "verdict": "deny",
+        "provider": "MockClassifier"
+      }
+    },
+    {
+      "name": "ordinary human request -> wallet owner login -> World approval -> settlement",
+      "status": "pass",
+      "detail": {
+        "walletSignature": "real cryptography, ephemeral wallet",
+        "World": "simulated verifier",
+        "settlementsAdded": 1
+      }
+    },
+    {
+      "name": "visitor proof -> payment once; replay refused",
+      "status": "pass",
+      "detail": {
+        "proof": "simulated verifier result",
+        "settlement": "local HTTP facilitator",
+        "onchain": false,
+        "replayStatus": 400
+      }
+    },
+    {
+      "name": "visitor cancel -> no payment",
+      "status": "pass",
+      "detail": {
+        "status": 400,
+        "settlementsAdded": 0
+      }
+    },
+    {
+      "name": "visitor reject -> no payment",
+      "status": "pass",
+      "detail": {
+        "status": 403,
+        "settlementsAdded": 0
+      }
+    },
+    {
+      "name": "visitor expire -> no payment",
+      "status": "pass",
+      "detail": {
+        "status": 400,
+        "settlementsAdded": 0
+      }
+    },
+    {
+      "name": "fees remain accounting only",
+      "status": "pass",
+      "detail": {
+        "vouchers": 8,
+        "broadcast": false,
+        "collected": false
+      }
+    },
+    {
+      "name": "architecture discovery endpoint",
+      "status": "pass",
+      "detail": {
+        "status": 200,
+        "protocolVersion": "0.3.0",
+        "transport": "JSON-RPC",
+        "routedVerdict": "deny"
+      }
+    },
+    {
+      "name": "missing payment source behavior",
+      "status": "pass",
+      "detail": {
+        "status": 200,
+        "scans": 1
+      }
+    },
+    {
+      "name": "expired or malformed intake deadline behavior",
+      "status": "pass",
+      "detail": [
+        {
+          "deadline": "2026-09-26T00:01:01.000Z",
+          "status": 410,
+          "verdict": "deny",
+          "settlementsAdded": 0
+        },
+        {
+          "deadline": "not-a-date",
+          "status": 400,
+          "settlementsAdded": 0
+        }
+      ]
+    },
+    {
+      "name": "same request ID with fresh payment authorization",
+      "status": "pass",
+      "detail": {
+        "payments": 1
+      }
+    },
+    {
+      "name": "queue cap after previous requests were answered",
+      "status": "pass",
+      "detail": {
+        "first": 2,
+        "second": 0
+      }
+    }
+  ],
+  "limitations": [
+    "Local proof verifier and facilitator are simulated; no new human proof or blockchain payment.",
+    "No private key, browser cookie, raw proof or payment authorization is included.",
+    "Live health describes configuration, not successful end-to-end execution."
+  ]
+}
