@@ -126,7 +126,7 @@ impossible to tell what can be checked.
 
 ```bash
 npm test             # 342 tests
-npm run verify       # 11 claims, re-derived by running the code
+npm run verify       # 12 claims, re-derived by running the code
 npm run seed -- 2    # generate a night and route it for real
 npm run simulate     # agents arriving, with real jobs and real questions
 npm start            # the server

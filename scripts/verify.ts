@@ -211,7 +211,54 @@ check(
   'ASSUMPTIONS.md has no 🔴 left — either everything is verified, or the marks were dropped',
 );
 
-/* ── 6. no document may quote a test count the test run did not produce ───── */
+/* ── 6. a line citation that has drifted points the reader at nothing ─────── */
+
+/*
+ * The prize-facing README says "the call is one line: src/adapters/intercepta.ts:130". That
+ * kind of pointer is the most useful thing a reviewer can be handed and the first thing to
+ * rot: one of ours already said app.ts:377 when the call had moved to 380, so it pointed at a
+ * blank line. A citation nobody re-checks is worse than no citation, because it spends the
+ * reader's trust before it fails.
+ */
+
+function lineCitations(): { file: string; target: string; line: number; label: string }[] {
+  const out: { file: string; target: string; line: number; label: string }[] = [];
+  const walk = (dir: string): string[] =>
+    readdirSync(dir).flatMap((e) => {
+      const full = join(dir, e);
+      if (statSync(full).isDirectory()) return e === 'node_modules' ? [] : walk(full);
+      return full.endsWith('.md') ? [full] : [];
+    });
+  for (const file of [...walk('docs'), 'README.md', 'AGENTS.md']) {
+    for (const m of read(file).matchAll(/\[([^\]]{1,120})\]\(([^)\s#]+)#L(\d+)\)/g)) {
+      const target = m[2]!.startsWith('http')
+        ? ''
+        : join(file === 'README.md' || file === 'AGENTS.md' ? '.' : file.replace(/\/[^/]+$/, ''), m[2]!);
+      if (target) out.push({ file, target, line: Number(m[3]), label: m[1]! });
+    }
+  }
+  return out;
+}
+
+const rotted = lineCitations().filter((c) => {
+  let lines: string[];
+  try {
+    lines = read(c.target).split('\n');
+  } catch {
+    return true;
+  }
+  if (!(lines[c.line - 1] ?? '').trim()) return true;
+  // If the visible text names a line number too, the two must agree.
+  const shown = /:(\d+)\b/.exec(c.label);
+  return shown ? Number(shown[1]) !== c.line : false;
+});
+check(
+  'every line citation still points at a line that exists',
+  rotted.length === 0,
+  rotted.map((c) => `${c.file} cites ${c.target}#L${c.line}`).join('; '),
+);
+
+/* ── 7. no document may quote a test count the test run did not produce ───── */
 
 /*
  * Why this exists: six different files quoted a total that had been true once — 133, 150,

@@ -128,7 +128,7 @@ right → the gap nobody fills → what it is worth → who owns which layer. **
 ```bash
 git clone https://github.com/kou-uni/ethglobal-tokyo2026-uni && cd ethglobal-tokyo2026-uni
 npm install
-npm run check        # typecheck + 342 tests + 11 claims re-derived from the code
+npm run check        # typecheck + 342 tests + 12 claims re-derived from the code
 npm run seed -- 2    # generate a night and route it for real
 npm run simulate     # agents, arriving, with real jobs and real questions
 ```
@@ -142,7 +142,7 @@ npm run simulate     # agents, arriving, with real jobs and real questions
 
 **The call is one line: [`src/adapters/intercepta.ts:130`](src/adapters/intercepta.ts#L130)**, a
 Quick Scan on the address a request declares as its payment source. It is awaited in
-[`src/server/app.ts:377`](src/server/app.ts#L377) **before** `route()`, so the answer decides
+[`src/server/app.ts:380`](src/server/app.ts#L380) **before** `route()`, so the answer decides
 the branch instead of decorating it, and [`src/core/rules.ts:73`](src/core/rules.ts#L73) is
 where it becomes a refusal. Same grant, same category, same price, two payment sources:
 
@@ -183,4 +183,4 @@ answers 403, and we found that by trying rather than by reading.
 ---
 
 **ETHGlobal Tokyo 2026** · MIT · built by [kou](https://github.com/kou-uni) and
-[minta](https://github.com/mintannn) · 342 tests · 11 verified claims
+[minta](https://github.com/mintannn) · 342 tests · 12 verified claims
