@@ -89,7 +89,7 @@ export class Store {
   received(): { amount: number; currency: string }[] {
     const byCurrency = new Map<string, number>();
     for (const e of this.all()) {
-      if (!e.settlement) continue;
+      if (!e.settlement || e.settlement === 'not-wired') continue;
       const { amount, currency } = e.request.price;
       byCurrency.set(currency, (byCurrency.get(currency) ?? 0) + amount);
     }
