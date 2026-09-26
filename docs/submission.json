@@ -51,6 +51,54 @@
       "limit": null,
       "text": "https://github.com/kou-uni/ethglobal-tokyo2026-uni",
       "chars": 50
+    },
+    {
+      "id": "eth-tools",
+      "label": "Ethereum developer tools",
+      "text": "viem · @ensdomains/ensjs · @x402/core · @worldcoin/idkit-core · @worldcoin/idkit-server\n\n（選択肢に無いものは「Other」欄へ。Hardhat / Foundry / The Graph は使っていない — コントラクトは書かず、既存のENSv2とx402に接続している）",
+      "chars": 181
+    },
+    {
+      "id": "networks",
+      "label": "Blockchain networks",
+      "text": "Ethereum Sepolia · Base Sepolia\n\n（ENSv2 は Ethereum Sepolia、x402 の決済は Base Sepolia。別チェーンなので両方選ぶ）",
+      "chars": 95
+    },
+    {
+      "id": "languages",
+      "label": "Programming languages",
+      "text": "TypeScript · JavaScript · Python · HTML · CSS\n\n（TypeScript 108ファイルが本体。Python 6本は図の生成器、JavaScript 4本はビルド）",
+      "chars": 104
+    },
+    {
+      "id": "frameworks",
+      "label": "Web frameworks",
+      "text": "None\n\n（node:http だけで書いている。React も Next.js も Express も使っていない。選択肢に None が無ければ空欄か「Other: none」）",
+      "chars": 92
+    },
+    {
+      "id": "databases",
+      "label": "Databases",
+      "text": "None\n\n（状態はプロセス内のMap/Setのみ。永続化していないこと自体が設計 — 掲載は1時間で消え、再起動で消える）",
+      "chars": 62
+    },
+    {
+      "id": "design",
+      "label": "Design tools",
+      "text": "⚠️ ここだけ私が事実を持っていません。ロゴは minta さん作（design/yohaku-v3）。\nFigma などを使ったなら選ぶ。使っていなければ None。推測で埋めない",
+      "chars": 91
+    },
+    {
+      "id": "other",
+      "label": "Other technologies",
+      "text": "A2A (agent-to-agent protocol), x402, EIP-3009, World ID / IDKit, ENSv2, Intercepta, Jev (TypeSafe AI), viem, jose, vitest, tsx, esbuild, Tailscale Funnel",
+      "chars": 153
+    },
+    {
+      "id": "ai",
+      "label": "How AI tools were used",
+      "text": "Claude Code wrote most of this repository, with the two of us reviewing and deciding. It was also used for something less obvious: after we found three numbers in our own documents that had been true when written and false by the time anyone read them, we had it build the checks that now fail the build on that — npm run verify re-derives every quoted figure by running the code, refuses any hardcoded model id, endpoint or contract address, and rejects any document quoting a test or claim count the run did not produce. Those checks have since caught their own author several times.\n\nInside the product, three models are called for real rather than mocked. Jev, a decision model from TypeSafe AI, is consulted on rule 9 — the one case no rule settled — and Claude and GPT sit behind the same port as alternates. We ran the same request through Claude and GPT and they disagreed, which is the point: the guarantee cannot depend on having picked a good model.\n\nSo the model is deliberately boxed. It is asked one typed question whose only options are ask and drop. There is no value meaning pass, so a request that talks a model into approving it still cannot be approved — we measured that with a prompt injection, which moved the verdict from ask 0.99 to drop 0.89 and could not move it any further.",
+      "chars": 1302
     }
   ]
 }
