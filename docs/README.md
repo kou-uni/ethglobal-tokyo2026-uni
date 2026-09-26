@@ -176,7 +176,9 @@ That is the output of `npm run verify`, not a claim. **Disprove it with the same
 | 12 | [Screens](product/ARCHITECTURE.md#10-screens) | flowchart | Who sees which |
 | 13 | [Handoffs](product/JOURNEY.md#1-規約の受け渡し--誰から誰へ何が渡るか) | **sequence** | **What passes at each step** |
 | 14 | [The story](product/STORY.md) | 16 diagrams | Thought → market → journey → the gap → value → layers |
-| 15 | [Cash flow](business.html) | **SVG** | **Two money paths.** The seller is paid directly; our fee is a separate authorization |
+| 15 | [Money, in one look](business.html) | **SVG** | **The requests go through us, the money goes around us.** Price and fee drawn to scale |
+| 16 | [Cash flow, with the mechanism](business.html) | **SVG** | Two lanes: the price, and the optional per-decision fee |
+| 17 | [The value loop](business.html) | **SVG** | What accumulates per person, what only a platform sees, and what is **not built** |
 
 ### Brand — minta (`design/yohaku-v3/`)
 
