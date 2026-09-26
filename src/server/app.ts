@@ -38,9 +38,11 @@ import { delegationDisabled } from '../ports/delegation.js';
 import type { PermissionsPort } from '../ports/permissions.js';
 import type { ProductionProbeHandler } from './world-production-probe.js';
 import { createIdkitApproval, beginDemoBrowser, demoBrowser, type IdkitApprovalOptions } from './idkit-approval.js';
+import { RoutingFees, FEE_HEADER } from './routing-fees.js';
 import { createKoeRegistration } from './koe-registration.js';
 
 export interface AppDeps {
+  fees?: RoutingFees;
   /** Any qualified human can approve only the visitor demo they started. */
   idkitDemo?: IdkitApprovalOptions;
   /** Standalone authentication test; has no Store or settlement access. */
@@ -142,6 +144,7 @@ function paymentRequired(
   resourceUrl: string,
   reason: string,
   body: Record<string, unknown>,
+  extensions?: Record<string, unknown>,
 ): void {
   const header = encodePaymentRequiredHeader({
     x402Version: 2,
@@ -152,12 +155,13 @@ function paymentRequired(
       mimeType: 'application/json',
     },
     accepts: [requirement],
+    ...(extensions ? { extensions } : {}),
   } as never);
   res.writeHead(402, {
     'content-type': 'application/json; charset=utf-8',
     'PAYMENT-REQUIRED': header,
   });
-  res.end(JSON.stringify({ ...body, x402Version: 2, accepts: [requirement] }, null, 2));
+  res.end(JSON.stringify({ ...body, x402Version: 2, accepts: [requirement], ...(extensions ? { extensions } : {}) }, null, 2));
 }
 
 const FIVE_FIELDS = ['who', 'what', 'purpose', 'price', 'deadline'] as const;
@@ -311,6 +315,9 @@ export function createApp(deps: AppDeps): Server {
       if (await koe(req, res)) return;
       if (idkit && await idkit(req, res)) return;
       if (deps.productionProbe && await deps.productionProbe(req, res)) return;
+      if (req.method === 'GET' && path === '/fees') {
+        return json(res, deps.fees ? 200 : 404, deps.fees?.summary(now().getTime()) ?? { error: 'not_found' });
+      }
       /* ── health ─────────────────────────────────────────────────────────── */
       if (req.method === 'GET' && path === '/health') {
         return json(res, 200, {
@@ -366,6 +373,10 @@ export function createApp(deps: AppDeps): Server {
         }
 
         const entry: Entry = { request, decision, receivedAt: now().toISOString() };
+        const feeQuote = deps.fees?.record(request, now().getTime());
+        const extensions = feeQuote ? deps.fees!.extensions(feeQuote) : undefined;
+        const fee = feeQuote ? { optional: true, status: await deps.fees!.receive(feeQuote, req.headers[FEE_HEADER], now().getTime()), paid: false } : undefined;
+        const feeBody = fee ? { fee, ...(extensions ? { extensions } : {}) } : {};
         const payment = signedPayment(req);
         const resourceUrl = `${deps.origin ?? ''}/requests`;
 
@@ -387,26 +398,28 @@ export function createApp(deps: AppDeps): Server {
               deps.store.add(entry);
               return paymentRequired(res, requirement, resourceUrl, 'payment is required', {
                 id: request.id,
+                ...feeBody,
                 verdict: 'auto',
                 reason: decision.reason,
-              });
+              }, extensions);
             }
             const result = await deps.settlement.settle(payment, requirement);
             if (result.status === 'refused') {
               deps.store.add(entry);
               return paymentRequired(res, requirement, resourceUrl, result.reason, {
                 id: request.id,
+                ...feeBody,
                 verdict: 'auto',
                 settlement: 'refused',
                 reason: result.reason,
-              });
+              }, extensions);
             }
             entry.settlement = result.transaction;
             deps.store.add(entry);
             res.writeHead(200, { 'content-type': 'application/json; charset=utf-8' });
             return res.end(
               JSON.stringify(
-                { ...verdictBody(entry), settlement: { ...result, requirement } },
+                { ...verdictBody(entry), ...feeBody, settlement: { ...result, requirement } },
                 null,
                 2,
               ),
@@ -464,7 +477,7 @@ export function createApp(deps: AppDeps): Server {
 
         deps.store.add(entry);
         const status = decision.verdict === 'human' ? 202 : 200;
-        return json(res, status, { ...verdictBody(entry), ...authNote });
+        return json(res, status, { ...verdictBody(entry), ...feeBody, ...authNote });
       }
 
       /* ── the owner answers ──────────────────────────────────────────────── */

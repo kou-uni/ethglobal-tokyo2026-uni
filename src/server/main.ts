@@ -1,3 +1,5 @@
+import { feesFromEnv } from '../core/fees.js';
+import { RoutingFees } from './routing-fees.js';
 /**
  * Yohaku — run it.
  *
@@ -61,6 +63,8 @@ const redirectUri = process.env['WORLD_REDIRECT_URI'];
  */
 const x402 = x402FromEnv(process.env);
 const settlement = 'missing' in x402 ? undefined : new X402Settlement(x402);
+const feePolicy = feesFromEnv(process.env);
+const fees = feePolicy ? new RoutingFees(feePolicy, settlement?.quote(1, 'JPYC')) : undefined;
 
 const resolverAddress = process.env.ENS_RESOLVER_ADDRESS;
 const delegateAddress = process.env.ENS_DELEGATE_ADDRESS;
@@ -81,6 +85,7 @@ const delegation = ensRpc && ensName
 
 const idkitDemo = await idkitApprovalFromEnv(process.env);
 const app = createApp({
+  ...(fees ? { fees } : {}),
   ...(idkitDemo ? { idkitDemo } : {}),
   productionProbe: productionProbeFromEnv(process.env),
   ...(delegation ? { delegation } : {}),
