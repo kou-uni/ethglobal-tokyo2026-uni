@@ -49,6 +49,20 @@ describe('outlivesDeadline', () => {
     expect(outlivesDeadline(authorized(atDeadline - 1), deadline)).toBe(false);
   });
 
+  /**
+   * Found by running the real agent against the real facilitator.
+   *
+   * A deadline that is not a whole second used to refuse an authorization that matched it
+   * exactly, because the agent could only express whole seconds and floored. Comparing in
+   * seconds is the only comparison EIP-3009 can actually support.
+   */
+  it('does not punish a deadline that falls mid-second', () => {
+    const odd = '2026-09-27T00:00:00.500Z';
+    const secs = Math.ceil(new Date(odd).getTime() / 1000);
+    expect(outlivesDeadline(authorized(secs), odd)).toBe(true);
+    expect(outlivesDeadline(authorized(secs - 1), odd)).toBe(false);
+  });
+
   it('refuses a payload with no authorization at all', () => {
     expect(outlivesDeadline({}, deadline)).toBe(false);
   });

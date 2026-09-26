@@ -77,7 +77,15 @@ export function validBeforeOf(payload: unknown): number {
 export function outlivesDeadline(payload: unknown, deadline: string): boolean {
   const validBefore = validBeforeOf(payload);
   if (validBefore <= 0) return false;
-  return validBefore * 1000 >= new Date(deadline).getTime();
+  /*
+   * Compared in whole seconds, because that is all an EIP-3009 authorization has.
+   *
+   * Found by running it: an agent that took the deadline in milliseconds and floored it was
+   * refused for being up to 999ms short of a deadline it had matched exactly. Rounding the
+   * deadline up is the honest comparison — the authorization must still be valid at the
+   * last second the request could be answered, and there is no finer resolution to argue about.
+   */
+  return validBefore >= Math.ceil(new Date(deadline).getTime() / 1000);
 }
 
 /** Stands in when no facilitator is configured. Refuses, and says why. */

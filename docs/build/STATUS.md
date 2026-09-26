@@ -28,6 +28,7 @@ npm install && npm run check      # typecheck + 133 tests + 10 verified claims
 | **World ID, end to end** ⭐ | `src/adapters/world-oidc.ts` | **A person pressed it on a phone and it came back.** Discovery read live, ID token verified against the issuer's JWKS with `jose`, `acr = orb-v3` required, `auth_time` ≤ 120s checked against the server clock. **PKCE turned out to be mandatory and undocumented** — found by probing 8 combinations ([knowledge/WORLD-SANDBOX.md](../knowledge/WORLD-SANDBOX.md)) |
 | **The two screens a person sees** | `src/server/pages.ts` | Today's offer count, the one being asked about, and a fold with what was handled without her. Service copy and demo tutorial are **separate surfaces** |
 | **Past nights, replayed not typed** | `src/core/history.ts` | 8 tests. Each night runs through the real `route()` + `surface()`. **Across 14 nights arrivals move and what reaches her is the cap, every time** |
+| **x402 settlement, against the live facilitator** ⭐ | `src/ports/settlement.ts`, `src/adapters/x402.ts` | 17 tests. **Run for real:** the facilitator confirms `exact` on the configured network at startup, and a signed EIP-3009 authorization is refused with `invalid_exact_evm_insufficient_balance` — meaning **the requirements and the signature were both accepted and only the balance is missing.** Two bugs were found by running it, not by testing it ([knowledge/X402-ONCHAIN.md](../knowledge/X402-ONCHAIN.md) §6) |
 | **The server, on the public internet** | `src/server/` | `POST /requests`, `POST /approvals/:id`, `GET /ledger/:name`, `GET /approve/:id`, `GET /auth/world/callback`. 12 tests, including **HTTP and in-process agreeing about the same night** |
 
 **3,960 lines of source, 133 tests, 38 commits.**
@@ -38,7 +39,7 @@ npm install && npm run check      # typecheck + 133 tests + 10 verified claims
 |---|---|---|
 | **ENSv2 on chain** | ~~Sepolia addresses~~ ~~role bits~~ ~~grant function~~ ~~resolver scoping~~ **all four resolved 9/26** ([knowledge/ENSV2-ONCHAIN.md](../knowledge/ENSV2-ONCHAIN.md)). Left: **testnet USDC/DAI and the registration price**, then the 90-minute spike | **minta / spark** — [ENSV2-SPIKE.md](ENSV2-SPIKE.md) |
 | **Payment screening, live** | The API key (requested 2026-09-26, arrives by email) | **spark** — check inbox |
-| **Settlement** | Deliberately last. Nothing is claimed about it | — |
+| **Settlement, actually landing** | ~~the protocol~~ ~~the signing~~ ~~the facilitator~~ **all proven**. Left: **testnet USDC in the buyer's wallet** | **minta** — issue #2 |
 
 ## The one thing that would embarrass us
 

@@ -114,14 +114,21 @@ export class X402Settlement implements SettlementPort {
         transaction?: string;
         network?: string;
         payer?: string;
+        /** `settle` names its refusal this way… */
         errorReason?: string;
+        /** …and `verify` names it this way. Both are read, so the real cause survives. */
+        invalidReason?: string;
         error?: string;
       };
       const ok = op === 'verify' ? res.isValid === true : res.success === true;
       if (!ok) {
         return {
           status: 'refused',
-          reason: res.errorReason ?? res.error ?? `facilitator ${op} returned no success`,
+          reason:
+            res.invalidReason ??
+            res.errorReason ??
+            res.error ??
+            `facilitator ${op} returned no success`,
         };
       }
       return {

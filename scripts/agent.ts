@@ -83,7 +83,9 @@ interface Requirement {
 async function authorize(req: Requirement, validBeforeMs: number) {
   const account = privateKeyToAccount(KEY as `0x${string}`);
   const validAfter = BigInt(Math.floor(Date.now() / 1000) - 60);
-  const validBefore = BigInt(Math.floor(validBeforeMs / 1000));
+  // Rounded up, and with a minute of slack: an authorization that expires on the exact
+  // second the deadline lands is a coin flip, and losing it costs a whole demo.
+  const validBefore = BigInt(Math.ceil(validBeforeMs / 1000) + 60);
   const nonce = `0x${Buffer.from(crypto.getRandomValues(new Uint8Array(32))).toString('hex')}` as `0x${string}`;
 
   const authorization = {
@@ -186,7 +188,9 @@ async function main() {
     const paid = await post({ 'PAYMENT-SIGNATURE': encodePaymentSignatureHeader(payload as never) });
     const out = (await paid.json()) as Record<string, unknown>;
     console.log(`  paid → ${paid.status}`);
-    console.log(`  ${JSON.stringify(out['settlement'] ?? out, null, 2)}\n`);
+    // The reason matters more than the status: "no funds" means the whole path worked and
+    // only the balance did not, while a schema complaint means we built the payload wrong.
+    console.log(`  ${JSON.stringify(out, null, 2)}\n`);
     return;
   }
 

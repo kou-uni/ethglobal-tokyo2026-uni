@@ -108,13 +108,55 @@ flowchart LR
 投入は `npm run setup:wallet` → `http://127.0.0.1:4175`。**ローカルのみ・`.env` は 0600・
 秘密は画面にもログにも返しません。**
 
+## 6. 実物で通したところ（2026-09-26、資金なし）
+
+**着金以外は全部通りました。** facilitator は本物を叩いています。
+
+```
+npm run agent -- routine
+  402 — 120 atomic units of 0x036C…CF7e on eip155:84532
+  paid → 402
+  "reason": "invalid_exact_evm_insufficient_balance"
+```
+
+**この返事が重要です。** `insufficient_balance` ということは、facilitator まで届いた上で
+**PaymentRequirements も EIP-3009 の署名も受理され、残高だけが無い**という意味になります。
+スキーマが違っていれば、ここまで来ません。
+
+```
+npm run agent -- sensitive
+  202 held — 4200 JPYC is above the threshold
+  re-sent with an authorization → 202
+  "accepted": false, "reason": "invalid_exact_evm_insufficient_balance"
+```
+
+保留側も同じところまで到達。**残高が入れば、そのまま保持されます。**
+
+起動時のチェックも通りました。
+
+```
+settlement  x402 → eip155:84532
+facilitator: supports exact on the configured network
+```
+
+### 走らせて見つけた不具合が2つ
+
+**どちらもテストでは出ず、実物で1回動かして出たものです。**
+
+| 見つかったもの | 直し方 |
+|---|---|
+| **期限ちょうどの認可が弾かれた。** エージェントが `validBefore` をミリ秒から**切り捨て**ていたので、合致しているはずの期限に最大999ms足りなかった | **秒で比較する。** EIP-3009 には秒しか無いので、それ以上の精度で争うこと自体が誤り。エージェント側も切り上げ＋60秒の余裕を持つようにした |
+| **拒否理由が「no success」に潰れていた。** `settle` は `errorReason`、**`verify` は `invalidReason`** と、フィールド名が違う | 両方読む。潰れた理由は、原因が「残高不足」なのか「payload が不正」なのかを見分けられなくする |
+
+**2つ目のほうが重い。** 理由が潰れていると、当日ブースで詰まったときに**どこを直せばいいか分からなくなります。**
+
 ## ⚠️ 確かめていないこと
 
 - **mainnet。** この facilitator は Base Sepolia しか持っていません
 - **JPYC では精算していません。** testnet の USDC です。**画面に出る金額の単位が
   依頼の単位（JPYC）と違う**ことは、そのまま書くこと（[ASSUMPTIONS.md](../product/ASSUMPTIONS.md) D3）
 - `upto` と `batch-settlement` は使っていません。**1件1決済**です
-- 実際の着金は、資金を入れたウォレットで**まだ通していません**（この文書を書いた時点）
+- **実際の着金だけ、まだ通していません。**残高が入ればそこだけが埋まります（issue #2）
 
 ## 出典
 
