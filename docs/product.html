@@ -167,12 +167,12 @@ the console, the diagrams, the code — works without it.</div>
     <div class="on live">触れる</div>
   </div>
 
-  <div class="jy-note"><b>右の4つを、あなた自身で通せます。</b>財布の住所を渡す → エージェントが
+  <div class="jy-note"><b>右の4つを、あなた自身で通せます。実際に金が動きます。</b>財布の住所を渡す → エージェントが
   依頼してくる → 朝の画面で答える → <b>World ID で「いま人である」ことを証明</b>する →
   <b>その住所に着金する</b>。確かめるのは我々の言葉ではなく、あなたの残高です。<br><br>
-  <b>いま欠けているのは2つだけ。</b>着金は署名も検証も本物ですが、買い手の財布に testnet の
-  残高がまだ無いので、実際の転送はこれから。左端の「売り手として登録する」画面も、
-  World ID の認証自体は通っているものの、まだ作っていません。</div>
+  <b>いま欠けているのは1つだけ。</b>左端の「売り手として自分で登録する」画面はまだです。
+  <b>着金は通りました</b> — Base Sepolia で2件、チェーンから確認済み。うち4,200 atomic は
+  <b>人が Yes を押した瞬間にだけ</b>動いています。</div>
 </div></div>
 
 <h2>TRY IT — ONE LINK, NO SETUP</h2>
@@ -356,9 +356,9 @@ one night end to end, and three state machines — are in
 <tr><th>Piece</th><th>State</th></tr>
 <tr><td>Routing</td><td><span class="ok">Wired.</span> Ten ordered rules, pure, 150 tests. Every failure path denies</td></tr>
 <tr><td>A model</td><td><span class="ok">Wired.</span> Consulted on rule 9 only — and <b>the value "pass" does not exist in its schema</b></td></tr>
-<tr><td>World ID</td><td><span class="ok">Wired, end to end.</span> A person pressed it on a phone. ID token verified against the issuer's JWKS, <code>acr</code> required, <code>auth_time</code> ≤ 120s</td></tr>
-<tr><td>x402</td><td><span class="ok">Wired</span> against the live facilitator, protocol v2. A signed EIP-3009 authorization reaches it and is refused only for balance</td></tr>
-<tr><td>A transfer landing</td><td><span class="no">Not yet.</span> The buyer's wallet has no testnet balance, so a real authorization returns <code>invalid_exact_evm_insufficient_balance</code> — everything except the money worked</td></tr>
+<tr><td>World ID</td><td><span class="ok">Wired, end to end.</span> A person pressed it on a phone; ID token verified against the issuer's JWKS, <code>acr</code> required, <code>auth_time</code> ≤ 120s. <b>Measured caveat:</b> the sandbox answers <code>amr: pop</code> — a held credential presented freshly, <b>not an approval in World ID app</b>. The screen says so itself</td></tr>
+<tr><td>x402</td><td><span class="ok">Wired,</span> protocol v2, against the live facilitator</td></tr>
+<tr><td>Money actually moving</td><td><span class="ok">Done, twice, on Base Sepolia.</span> <a href="https://sepolia.basescan.org/tx/0x79c1e3239ef89cdc1b8a5fc14321093b06504a3c68a24644ba6390caf90393fa">120 atomic settled inside the request</a>, and <a href="https://sepolia.basescan.org/tx/0x5c79fddfc8d6e6f64c1dd23752fae688a9b94ec5bc770f24fd1c2595b00d1d88">4,200 atomic that moved only when a person pressed Yes</a>. <b>The buyer's ETH balance is still 0</b> — the facilitator paid the 102,844 gas</td></tr>
 <tr><td>ENSv2 boundary</td><td><span class="no">Mocked.</span> The delegate can propose and cannot rewrite its own permissions — but against a mock, and <b>the mock says so on screen</b></td></tr>
 </table>
 <p class="sub" style="font-size:15px">The running service says the same thing about itself:

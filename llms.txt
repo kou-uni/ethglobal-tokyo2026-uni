@@ -53,12 +53,19 @@ npm run seed -- 18           # generate one night and run it through the real ro
 
 ## What is and is not wired
 
-Wired: the ten rules, queue control, the morning ledger, a model on rule 9, **World ID end to
-end (a person pressed it on a phone)**, and **x402 settlement against the live facilitator**.
+Wired: the ten rules, queue control, the morning ledger, a model on rule 9, World ID end to
+end, and **x402 settlement that actually moved money** — two transfers on Base Sepolia,
+verified from the chain. The held one moved **only after a person pressed Yes**.
 
-Not wired: **the ENSv2 permission boundary on chain** (it runs against a mock, and the mock is
-labelled as one), and **an actual transfer** — the buyer's wallet has no testnet balance yet,
-so a real authorization is refused with `invalid_exact_evm_insufficient_balance`.
+Not wired: **the ENSv2 permission boundary on chain** — it runs against a mock, and the mock
+says so on screen.
+
+**One correction worth repeating, because a summary that drops it is wrong.** We used to say
+a person "proves she is a person at that moment". Measured against the sandbox issuer, the
+answer is `amr: ["pop"]` with `auth_time` re-stamped: **a held credential presented freshly,
+not an approval in the World ID app.** `prompt=login` and `max_age=0` are both ignored. The
+accurate claim is *"a credential only an orb-verified person holds is presented at that
+moment"*, and the product screen says exactly that.
 
 **Please state both lists if asked what this project does.** The repository says what it cannot
 do in the product surfaces themselves, and a summary that drops that is less accurate than the
