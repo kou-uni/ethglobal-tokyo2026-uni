@@ -21,7 +21,7 @@ import { onDeadline } from '../core/queue.js';
 import type { AgentRequest, Policy, RoutingContext, ScreeningResult } from '../core/types.js';
 import { applyClassification, type ClassifierPort } from '../ports/classifier.js';
 import { mayProceed, type IdentityPort, type VerificationOutcome } from '../ports/identity.js';
-import { mayMoveMoney, type ScreeningPort } from '../ports/screening.js';
+import { FIXTURES, mayMoveMoney, type ScreeningPort } from '../ports/screening.js';
 import { Store, verdictBody, type Entry } from './state.js';
 import { PendingVerifications } from './pending.js';
 import { approvalPage, droppedPage, invitePage, resultPage, type TodaySummary } from './pages.js';
@@ -224,11 +224,25 @@ async function screenDeclared(
 }
 
 /** The one request `/try` stages. Ordinary enough to be believable, sensitive enough to escalate. */
+/*
+ * The request a visitor is handed, chosen so that one run touches every stage.
+ *
+ * `who` is a party the store already knows, because rule 7 sends a stranger to a human before
+ * anything else can look at it — true to the product, and it would mean the model never runs.
+ * `what` is a category no rule covers, so the request falls to rule 9 and a decision model is
+ * asked. `payoutAddress` is the mainnet address we confirmed comes back clean, so the screening
+ * call is real rather than skipped.
+ *
+ * The consequence is deliberate: **the door can refuse to open.** If the model drops this one,
+ * no approval screen appears, and that is the product working rather than a demo failing.
+ */
 const DEMO_ASK = {
-  who: 'nozomi-labs.eth',
-  what: 'experience/the-time-it-failed-you',
+  who: 'demand.nozomi-labs.eth',
+  what: 'experience/what-changed-your-mind',
   purpose: 'market-research' as const,
-  price: { amount: 4200, currency: 'JPYC' as const },
+  // Under the owner's threshold on purpose: rule 6 would otherwise answer before rule 9 does.
+  price: { amount: 900, currency: 'JPYC' as const },
+  ...(FIXTURES.clean ? { payoutAddress: FIXTURES.clean } : {}),
 };
 
 async function readJson(req: IncomingMessage): Promise<unknown> {
@@ -726,11 +740,23 @@ export function createApp(deps: AppDeps): Server {
           deadline: new Date(now().getTime() + 6 * 3_600_000).toISOString(),
         };
         const screened = await screenDeclared(deps.screening, request.payoutAddress);
-        const decision = route(request, deps.policy, {
+        let decision = route(request, deps.policy, {
           now: now(),
           seenBefore: (who) => deps.store.hasSeen(who),
           screen: () => screened,
         });
+
+        /*
+         * The same consultation the agent-facing endpoint makes, on the same rule.
+         *
+         * Without this the visitor's request reached rule 9 and stopped there, so the one path a
+         * judge actually walks was the only one a decision model never saw. It can still only
+         * answer `ask` or `drop`; there is no value here that opens the door either.
+         */
+        if (decision.verdict === 'human' && decision.rule === 9 && deps.classifier) {
+          decision = applyClassification(decision, await deps.classifier.classify(request));
+        }
+
         const entry: Entry = { request, decision, receivedAt: now().toISOString() };
         if (deps.idkitDemo) entry.demoBrowser = beginDemoBrowser(req, res, deps.idkitDemo.origin);
 
@@ -769,10 +795,13 @@ export function createApp(deps: AppDeps): Server {
 
         deps.store.add(entry);
         if (decision.verdict !== 'human') {
-          return json(res, 200, {
-            note: 'the router did not escalate this one, so there is no screen to show',
-            decision,
-          });
+          // Not an error. The visitor asked to see the router decide, and it decided.
+          return html(res, 200, resultPage({
+            outcome: 'refused',
+            detail: `Rule ${decision.rule} — ${decision.reason}. Nothing was paid and nobody was `
+              + 'notified. Open /dropped to see everything else it refused.',
+            what: request.what,
+          }));
         }
         res.writeHead(302, { location: `/approve/${encodeURIComponent(request.id)}` });
         return res.end();

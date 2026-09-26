@@ -76,12 +76,36 @@ describe('the address the provider is asked about', () => {
     expect((await res.json() as { verdict: string }).verdict).toBe('auto');
   });
 
-  it('is not asked for at all by the visitor demo, which has no mainnet payment source', async () => {
+  /**
+   * The visitor demo screens a *declared* mainnet address, never the visitor's own wallet.
+   *
+   * This reverses an earlier decision, deliberately. The reason for skipping the call was that
+   * the only address in sight was the visitor's testnet wallet, and checking that would prove
+   * nothing. The demo now declares the mainnet fixture we confirmed comes back clean, so the
+   * call is real — and the wallet the visitor types in is still never sent anywhere.
+   */
+  it('is the declared mainnet fixture in the visitor demo, and never the visitor’s wallet', async () => {
     const { base, scan } = await boot();
-    const res = await fetch(`${base}/try`, { method: 'POST', body: 'go=skip', redirect: 'manual' });
-    expect(scan).not.toHaveBeenCalled();
+    const visitorWallet = '0x' + 'b'.repeat(40);
+    const res = await fetch(`${base}/try`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: `payTo=${visitorWallet}`,
+      redirect: 'manual',
+    });
+    expect(scan).toHaveBeenCalledTimes(1);
+    expect(scan).not.toHaveBeenCalledWith(visitorWallet);
+    expect(scan.mock.calls[0]![0]).toMatch(/^0x[0-9a-fA-F]{40}$/);
     expect(res.status).toBe(302);
     expect(res.headers.get('location')).toMatch(/^\/approve\//);
+  });
+
+  /** A refused payment source stops the demo before any approval screen exists. */
+  it('refuses the visitor demo when the declared source is flagged', async () => {
+    const { base } = await boot('flagged', 'known_scammer — a confirmed history of malicious activity.');
+    const res = await fetch(`${base}/try`, { method: 'POST', body: 'go=skip', redirect: 'manual' });
+    expect(res.status).toBe(200);
+    expect(await res.text()).toContain('Rule 4');
   });
 });
 

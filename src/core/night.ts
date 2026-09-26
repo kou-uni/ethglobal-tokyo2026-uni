@@ -126,6 +126,7 @@ export const ASK_QUESTION: Record<string, string> = {
   'experience/where-you-got-stuck': 'Where in the instructions did you get stuck?',
   'judgement/what-youd-warn-a-friend-about': 'What would you warn a friend about?',
   'experience/the-time-it-failed-you': 'Tell me about a time it let you down.',
+  'experience/what-changed-your-mind': 'What changed your mind about it?',
   'experience/why-you-stopped': 'Why did you stop using it?',
   'corpus/your-own-words': 'Your own writing, in your own words — to train on.',
   'contact/where-you-live': 'What is your home address?',
