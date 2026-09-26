@@ -18,7 +18,7 @@ import { buildLedger } from '../core/ledger.js';
 import { surface } from '../core/queue.js';
 import { route } from '../core/rules.js';
 import { onDeadline } from '../core/queue.js';
-import type { AgentRequest, Policy, RoutingContext } from '../core/types.js';
+import type { AgentRequest, Policy, RoutingContext, ScreeningResult } from '../core/types.js';
 import { applyClassification, type ClassifierPort } from '../ports/classifier.js';
 import { mayProceed, type IdentityPort, type VerificationOutcome } from '../ports/identity.js';
 import { mayMoveMoney, type ScreeningPort } from '../ports/screening.js';
@@ -203,6 +203,26 @@ async function readText(req: IncomingMessage): Promise<string> {
   return Buffer.concat(chunks).toString('utf8');
 }
 
+/**
+ * Screen the payment address a request declares — and only that.
+ *
+ * The live adapter is handed an address or it is not called at all. It is never handed an
+ * empty string, which it could only answer `unavailable`: **a request that declares no
+ * payment address is not a request whose payment source failed a check.** That has always
+ * been rule 4's behaviour here — the stand-in answers `clean` for an address it was never
+ * given, and so does the demo context the console runs on. What the live call changes is
+ * what a *declared* address now means, not what an absent one means.
+ *
+ * The consequence is worth stating plainly rather than hiding: an agent that declares no
+ * payment address is not screened. The two demo paths that settle both declare one.
+ */
+async function screenDeclared(
+  port: ScreeningPort,
+  declared: string | undefined,
+): Promise<ScreeningResult> {
+  return declared ? port.scan(declared) : 'clean';
+}
+
 /** The one request `/try` stages. Ordinary enough to be believable, sensitive enough to escalate. */
 const DEMO_ASK = {
   who: 'nozomi-labs.eth',
@@ -354,11 +374,14 @@ export function createApp(deps: AppDeps): Server {
 
         // Screening runs before anything can settle, and its result decides the branch.
         // Awaited here so that `route` stays synchronous and pure.
-        const screened = await deps.screening.scan(request.payoutAddress ?? '');
+        const screened = await screenDeclared(deps.screening, request.payoutAddress);
         const routingCtx: RoutingContext = {
           now: now(),
           seenBefore: (who) => deps.store.hasSeen(who),
           screen: () => screened,
+          ...(deps.screening.reasonFor
+            ? { screeningReason: () => deps.screening.reasonFor!(request.payoutAddress ?? '') }
+            : {}),
           ...(request.actingAs === 'delegate'
             ? { delegationRevoked: await delegationDisabled(deps.policy.owner, deps.delegation) }
             : {}),
@@ -699,7 +722,7 @@ export function createApp(deps: AppDeps): Server {
           id: `try-${randomUUID().slice(0, 8)}`,
           deadline: new Date(now().getTime() + 6 * 3_600_000).toISOString(),
         };
-        const screened = await deps.screening.scan('');
+        const screened = await screenDeclared(deps.screening, request.payoutAddress);
         const decision = route(request, deps.policy, {
           now: now(),
           seenBefore: (who) => deps.store.hasSeen(who),

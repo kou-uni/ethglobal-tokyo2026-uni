@@ -11,22 +11,19 @@
  * don't qualify"*. So the mock below exists for tests and for the console — **never for the
  * submission**.
  *
- * ⚠️ **Unconfirmed until the key arrives** (requested 2026-09-26, delivered by email within
- * hours). Endpoint path, auth header and response shape are NOT written here, because we
- * have not called them. What is known from public material:
+ * **The live adapter is `src/adapters/intercepta.ts`** — wired in `src/server/main.ts` when the
+ * key is present, and reported as `screening` in `GET /health` so a judge can see which one is
+ * running without reading the source. What the API answers, and why its score maps onto these
+ * three values the way it does, is documented there.
  *
- *   - the operation is referred to as a **Quick Scan**
+ * Known before the first call, and still true after it:
+ *
  *   - screening must be run against **real mainnet addresses, even for testnet payments**
  *   - integrations are expected to **fail closed** when the key or the live result is
  *     unavailable — which is the same rule this file already enforces
- *
- * First thing to do when the key lands, before writing any client:
- *
- *   1. one `clean` address and one `flagged` address, confirmed by actually calling it
- *   2. `curl` both and keep the raw responses in the PR
- *   3. only then map the response onto `ScreeningResult`
  */
 
+import { existsSync, readFileSync } from 'node:fs';
 import type { ScreeningResult } from '../core/types.js';
 
 export interface ScreeningPort {
@@ -37,9 +34,17 @@ export interface ScreeningPort {
    * fail-closed decision explicitly instead of inheriting it from an exception.
    */
   scan(address: string, token?: string): Promise<ScreeningResult>;
+
+  /**
+   * What the provider said about the address it was last asked about, in its own words.
+   *
+   * Optional, and no decision depends on it: `scan` decides, and this only supplies the
+   * sentence shown to whoever reads the refusal. The stand-ins have nothing to add.
+   */
+  reasonFor?(address: string): string | undefined;
 }
 
-/** Addresses used to prove both branches. Filled in once the API has actually answered. */
+/** Addresses used to prove both branches. Confirmed by calling, never from a list we believe. */
 export interface ScreeningFixtures {
   /** A real mainnet address that comes back clean. */
   clean?: string;
@@ -47,10 +52,31 @@ export interface ScreeningFixtures {
   flagged?: string;
 }
 
-export const FIXTURES: ScreeningFixtures = {
-  // clean:   '0x…',   ← fill from a real call
-  // flagged: '0x…',   ← fill from a real call, never from a list we merely believe
-};
+/**
+ * Read from configuration rather than written here.
+ *
+ * `npm run verify` refuses a hardcoded address in `src/` or `scripts/`, and it is right to:
+ * these two came back from a real call on 2026-09-26, and the call that produced each one is
+ * recorded next to it in `config/intercepta-suggestions.json`. A value without its provenance
+ * is a value nobody can re-check.
+ */
+function confirmedFixtures(): ScreeningFixtures {
+  const path = new URL('../../config/intercepta-suggestions.json', import.meta.url);
+  if (!existsSync(path)) return {};
+  try {
+    const file = JSON.parse(readFileSync(path, 'utf8')) as {
+      fixtures?: Record<string, { value?: string }>;
+    };
+    const clean = file.fixtures?.['clean']?.value;
+    const flagged = file.fixtures?.['flagged']?.value;
+    return { ...(clean ? { clean } : {}), ...(flagged ? { flagged } : {}) };
+  } catch {
+    // A malformed config leaves the fixtures empty rather than inventing an address.
+    return {};
+  }
+}
+
+export const FIXTURES: ScreeningFixtures = confirmedFixtures();
 
 /**
  * Stand-in for tests and the console.

@@ -11,8 +11,10 @@
  *
  * Run it:
  *
- *   npm run agent -- routine        one ordinary request
- *   npm run agent -- sensitive      one that will be held for her
+ *   npm run agent -- routine            one ordinary request
+ *   npm run agent -- sensitive          one that will be held for her
+ *   npm run agent -- routine flagged    the same request from a payment source that fails
+ *                                       screening — rule 4, and nothing settles
  *
  * The private key is the *agent's*, not the seller's — it is the buyer's wallet, and the
  * only thing it can do with this signature is pay the exact amount to the exact address the
@@ -23,6 +25,7 @@ import { loadEnv } from '../src/core/env.js';
 loadEnv();
 
 import { authorizeRoutingFee } from '../src/adapters/fee-authorization.js';
+import { FIXTURES } from '../src/ports/screening.js';
 import { privateKeyToAccount } from 'viem/accounts';
 import { encodePaymentSignatureHeader, decodePaymentRequiredHeader } from '@x402/core/http';
 
@@ -36,6 +39,20 @@ if (!SERVER) {
 
 const kind = process.argv[2] === 'sensitive' ? 'sensitive' : 'routine';
 
+/**
+ * The payment source this agent declares, and the reason it is a mainnet address.
+ *
+ * Risk data is mainnet; our payments are Base Sepolia. Screening the testnet wallet this
+ * agent signs with would be a check that proves nothing, so the request declares a real
+ * mainnet address and the server screens that. **It is a fixture confirmed by an actual call
+ * — see `config/intercepta-suggestions.json` — not this agent's own wallet.**
+ *
+ * `flagged` swaps it for the address the provider refuses. Same grant, same category, same
+ * amount: the only thing that changes is where the money would come from.
+ */
+const declaresFlagged = process.argv.includes('flagged');
+const payoutAddress = declaresFlagged ? FIXTURES.flagged : FIXTURES.clean;
+
 const request =
   kind === 'sensitive'
     ? {
@@ -44,6 +61,7 @@ const request =
         what: 'experience/the-time-it-failed-you',
         purpose: 'market-research',
         price: { amount: 4200, currency: 'JPYC' },
+        ...(payoutAddress ? { payoutAddress } : {}),
       }
     : {
         id: `agent-${Date.now()}`,
@@ -51,6 +69,7 @@ const request =
         what: 'experience/why-you-put-it-back',
         purpose: 'demand-estimation',
         price: { amount: 120, currency: 'JPYC' },
+        ...(payoutAddress ? { payoutAddress } : {}),
       };
 
 /** Hours from now, as the deadline the authorization must outlive. */
@@ -151,7 +170,12 @@ const post = (headers: Record<string, string> = {}) =>
 async function main() {
   console.log(`\n  agent → ${SERVER}`);
   console.log(`  asking for  ${request.what}  at ${request.price.amount} ${request.price.currency}`);
-  console.log(`  deadline    ${deadline}\n`);
+  console.log(`  deadline    ${deadline}`);
+  console.log(
+    `  paying from ${payoutAddress ?? 'no address declared — nothing for rule 4 to screen'}${
+      payoutAddress ? `  (${declaresFlagged ? 'the fixture the provider refuses' : 'the fixture the provider clears'})` : ''
+    }\n`,
+  );
 
   const first = await post();
   const body = (await first.json()) as Record<string, unknown>;

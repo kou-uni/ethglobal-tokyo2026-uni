@@ -273,6 +273,19 @@ export function generateNight(seed: number, night: Date = NIGHT): AgentRequest[]
   });
 }
 
+/**
+ * What the live screening provider said about a sanctioned address.
+ *
+ * Recorded from an actual call on 2026-09-26 and quoted, not paraphrased — the raw body is in
+ * `docs/build/evidence/intercepta-live.json`. **The console is a single HTML file that runs
+ * offline, so this is a recording rather than a live verdict.** On the server the same rule
+ * asks the provider itself and shows whatever it answers that moment; the wording is the
+ * provider's in both places, because we do not write our own account of why an address is
+ * flagged.
+ */
+export const RECORDED_SCREENING_FINDING =
+  'sanction_address — The address is officially listed as sanctioned and poses significant legal and financial risks. (Intercepta, recorded 2026-09-26; this console replays it offline)';
+
 /** The context the demo and the seed script both run against. */
 export function demoContext(now: Date = NIGHT): RoutingContext {
   const seen = new Set(KNOWN_PARTIES);
@@ -280,5 +293,6 @@ export function demoContext(now: Date = NIGHT): RoutingContext {
     now,
     seenBefore: (who) => seen.has(who),
     screen: (addr) => (addr === FLAGGED_ADDRESS ? 'flagged' : 'clean'),
+    screeningReason: (addr) => (addr === FLAGGED_ADDRESS ? RECORDED_SCREENING_FINDING : undefined),
   };
 }

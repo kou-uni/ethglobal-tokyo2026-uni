@@ -31,7 +31,7 @@ production-IDKit + on-chain settlement has been demonstrated yet.
 | External judge-device success and cancellation | After deployment, start from `/try` in that browser |
 | IDKit + Base Sepolia payment in one run | Only after the no-payment path passes on the public instance |
 | Final live demo URL and video | Use [PITCH](../product/PITCH.md); don't substitute static screenshots for the ENS live-demo requirement |
-| Live screening | Delegated to minta with the delivered key — [Issue #14](https://github.com/kou-uni/ethglobal-tokyo2026-uni/issues/14) |
+| Live screening on the public server | Adapter merged and working locally ([Issue #14](https://github.com/kou-uni/ethglobal-tokyo2026-uni/issues/14)). kou: `npm run setup:intercepta` on the public host, restart, confirm `/health` reports `screening: true`. The paid leg — one request settling after a live clean verdict — needs that deployment, since settlement is not wired locally |
 | Seller signup, actual content delivery | Not implemented; not prerequisites for the current limited demonstration |
 
 A qualified visitor may approve their own browser's demo. This does not authenticate them
@@ -72,7 +72,7 @@ npm run check
 | **Delegation boundary** | `src/ports/permissions.ts` | 13 tests. A delegate writes `yh:proposal` and is refused on the permission and payout keys — **and what the resolver refuses, rule 0 denies** |
 | **A decision model on rule 9** | `src/adapters/jev.ts` + 2 LLM adapters | 19 tests, and **called for real**: `claude-opus-5` and `gpt-6-astra`. They disagreed; neither could produce `auto` |
 | **Proof of personhood** | `src/ports/identity.ts`, `adapters/world-oidc.ts` | 18 tests. **Issuer discovery fetched live** — `auth_time` and `acr` confirmed available |
-| **Payment screening shape** | `src/ports/screening.ts` | 9 tests. `clean` passes; `flagged` and `unavailable` both stop |
+| **Payment screening — a live call decides rule 4** ⭐ | `src/ports/screening.ts`, `src/adapters/intercepta.ts` | 40 tests. `clean` passes; `flagged` and `unavailable` both stop. **Called for real**: an ordinary mainnet wallet clears at `toxicScore 0`, an OFAC-listed exploiter is refused at 100, and a sanctioned *contract* answers 404 — which maps to `unavailable`, never to clean. The refusal shows the provider's own sentence, quoted. Raw bodies in [evidence/intercepta-live.json](evidence/intercepta-live.json) |
 | **Claims match the code** | `scripts/verify.ts` | **10** claims re-derived by running the code. **Checked by breaking each one on purpose** |
 | **Touchable console** | `demo/index.html` | One file, no server, no CDN. Runs the same `route()` the tests run |
 | **World ID, end to end** ⭐ | `src/adapters/world-oidc.ts` | **A person pressed it on a phone and it came back.** Discovery read live, ID token verified against the issuer's JWKS with `jose`, `acr = orb-v3` required, `auth_time` ≤ 120s checked against the server clock. **PKCE turned out to be mandatory and undocumented** — found by probing 8 combinations ([knowledge/WORLD-SANDBOX.md](../knowledge/WORLD-SANDBOX.md)) |
@@ -89,7 +89,7 @@ npm run check
 |---|---|---|
 | **ENSv2 public app integration** | Registration and all six delegation-proof transactions verified. Local server now uses the registered owner and reads live Sepolia permissions. Left: deploy/configure the public server and run the integrated demo | **minta / spark** — [ENS-DELEGATION-DEMO.md](ENS-DELEGATION-DEMO.md) |
 | **World ID: a real app approval** | The sandbox never hands off to World ID app. It answers `amr: ["pop"]` with `auth_time` re-stamped, through Safari, Safari private and Chrome alike, with `prompt=login` **and** `max_age=0` sent. **Production `auth.world.org` exists and has the same shape** — three `.env` values would switch it — but its portal sign-in is gated. **Ask at the booth**; the claim on screen has already been corrected to what we can prove | **spark** — booth |
-| **Payment screening, live** | Key delivered 2026-09-26 and handed to minta. Rule 4, its 9 tests and the `/health` flag are already in place; the adapter, the setup page and the two confirmed addresses are not | **minta** — [Issue #14](https://github.com/kou-uni/ethglobal-tokyo2026-uni/issues/14) |
+| **Screening plus a payment, in one run** | The adapter is live and decides the branch, but settlement is not configured on the machine it was exercised on, so "cleared screening **and** settled" has not happened in a single run yet. Everything needed is merged; it takes the key on the public host and a restart | **kou** — public deployment |
 
 
 ## The one thing that would embarrass us

@@ -19,6 +19,7 @@ import { serverPolicy } from './policy.js';
 import { pastNights } from '../core/history.js';
 import { chooseProvider } from '../ports/provider.js';
 import { MockScreening } from '../ports/screening.js';
+import { InterceptaScreening, interceptaFromEnv } from '../adapters/intercepta.js';
 import { MockIdentity, type FreshnessPolicy } from '../ports/identity.js';
 import { WorldIdentity } from '../adapters/world-oidc.js';
 import { createApp } from './app.js';
@@ -83,6 +84,17 @@ const delegation = ensRpc && ensName
     }
   : undefined;
 
+/*
+ * Rule 4 against the real thing, or not at all.
+ *
+ * With the key present, every declared payment address is checked by a live call before
+ * anything can settle. Without it we keep the stand-in and `/health` keeps reporting
+ * `screening: false` — a server that cannot screen should say so rather than imply a check
+ * it never made.
+ */
+const intercepta = interceptaFromEnv(process.env);
+const screening = intercepta ? new InterceptaScreening(intercepta) : new MockScreening();
+
 const idkitDemo = await idkitApprovalFromEnv(process.env);
 const app = createApp({
   ...(fees ? { fees } : {}),
@@ -91,7 +103,8 @@ const app = createApp({
   ...(delegation ? { delegation } : {}),
   policy,
   store: new Store(KNOWN_PARTIES),
-  screening: new MockScreening(),
+  screening,
+  screeningWired: Boolean(intercepta),
   // Replayed through the same route(), so the fold shows the router's output, not a fixture.
   nights: pastNights(new Date(), 4, policy),
   ...(provider.live ? { classifier: provider.create() } : {}),
@@ -134,7 +147,13 @@ app.listen(PORT, () => {
   console.log(`    ENS reader  ${delegation ? `configured for ${policy.owner}` : 'not configured — delegate requests are denied'}`);
   console.log(`    classifier  ${provider.live ? `${provider.provider} / ${provider.model}` : 'not configured — rule 9 stays with the owner'}`);
   console.log(`    identity    ${idkitDemo ? 'IDKit production — browser-bound visitor demos only' : worldConfigured && redirectUri ? `World ID → ${redirectUri}` : 'mock — approvals are not proving anything yet'}`);
-  console.log(`    screening   mock`);
+  console.log(
+    `    screening   ${
+      intercepta
+        ? 'live — every declared payment address is checked before anything settles'
+        : 'not configured — rule 4 runs against the stand-in, /health says screening: false'
+    }`,
+  );
   console.log(
     `    settlement  ${
       settlement

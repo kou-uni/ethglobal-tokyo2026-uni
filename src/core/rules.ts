@@ -72,10 +72,25 @@ export function route(req: AgentRequest, policy: Policy, ctx: RoutingContext): D
   // `unavailable` is not a pass. If we cannot check, we do not move money.
   const screening = ctx.screen(req.payoutAddress);
   if (screening === 'flagged') {
-    return deny(4, 'the payment source failed screening');
+    /*
+     * The rule is ours; the finding is not.
+     *
+     * Why an address is flagged is the provider's statement, quoted rather than paraphrased,
+     * so that what a person reads on the refusal page is what the service actually said.
+     * When there is nothing to quote the refusal still stands — the verdict decides, not the
+     * sentence.
+     */
+    const said = ctx.screeningReason?.(req.payoutAddress);
+    return deny(4, said ? `the payment source failed screening — ${said}` : 'the payment source failed screening');
   }
   if (screening === 'unavailable') {
-    return deny(4, 'screening was unavailable — we do not settle unchecked');
+    const said = ctx.screeningReason?.(req.payoutAddress);
+    return deny(
+      4,
+      said
+        ? `screening was unavailable — we do not settle unchecked (${said})`
+        : 'screening was unavailable — we do not settle unchecked',
+    );
   }
 
   // ── 5. Sensitive domain ───────────────────────────────────────────────────

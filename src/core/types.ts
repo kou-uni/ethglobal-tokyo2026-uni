@@ -85,6 +85,11 @@ export interface RoutingContext {
   seenBefore(who: string): boolean;
   /** Live call, before signing. Its result decides what happens next. */
   screen(payoutAddress: string | undefined): ScreeningResult;
+  /**
+   * What the screening provider said, in its own words. Optional, and nothing decides on it —
+   * `screen` decides, and this is only the sentence rule 4 shows for its refusal.
+   */
+  screeningReason?(payoutAddress: string | undefined): string | undefined;
   /** True once the owner has revoked the delegate entirely. */
   delegationRevoked?: boolean;
 }
