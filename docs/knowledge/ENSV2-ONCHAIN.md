@@ -8,11 +8,27 @@
 
 ---
 
+## 0. ⚠️ どちらの Sepolia か — 混同すると全部無駄になる
+
+**ENSv2 は Ethereum Sepolia（chainId 11155111）に居ます。Base Sepolia ではありません。**
+`eth_getCode` で両方に当てて確かめました。
+
+| チェーン | chainId | ETHRegistry | PermissionedResolverImpl |
+|---|---|---|---|
+| **Ethereum Sepolia** | **11155111** | **32,002 chars** | **31,218 chars** |
+| Base Sepolia | 84532 | `0x`（不在） | `0x`（不在） |
+
+**そして x402 の無料 facilitator は Base Sepolia しか扱いません**（`/supported` の EVM は
+`eip155:84532` のみ。`eip155:11155111` は**無い**）。
+
+> **つまり2つのチェーンが同時に要ります。** ENSv2 は Ethereum Sepolia、決済は Base Sepolia。
+> **片方でもう片方を代用することはできません。**
+
 ## 1. Sepolia（ENSv2 beta）のアドレス — デプロイを確認済み
 
 | コントラクト | アドレス | `eth_getCode` |
 |---|---|---|
-| ETHRegistry | `0x657ea849311d3d5823348dded7c2aaafb3ede09e` | **32,002 chars** |
+| ETHRegistry | `0x657ea849311d3d5823348dded7c2aaafb3ede09e` | **32,002 chars**（**Ethereum** Sepolia） |
 | ETHRegistrar | `0xabe76f6c8dfced81aa5a2bb8034202a7136b94ca` | **16,076 chars** |
 | PermissionedResolverImpl | `0x14f09fd05d4585759e54844dc9b00147131cf243` | **31,218 chars** |
 | UniversalResolverV2 | `0x5d25c1d6acbb71b7a28aa7899618a3412a8303e3` | — |

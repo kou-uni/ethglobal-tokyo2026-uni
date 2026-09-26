@@ -30,7 +30,7 @@ GET https://x402.org/facilitator/supported  → 200
 |---|---|
 | プロトコル | **v2** |
 | 使うスキーム | **`exact`**（`upto` と `batch-settlement` もあるが使わない） |
-| ネットワーク | **`eip155:84532`**（Base Sepolia）。**mainnet は無い** |
+| ネットワーク | **`eip155:84532`（Base Sepolia）だけ。** mainnet も、**Ethereum Sepolia（`eip155:11155111`）も無い** |
 | 鍵 | **不要。** 無料の testnet facilitator |
 | 検証 | `POST /verify` — `{paymentPayload, paymentRequirements}` |
 | 精算 | `POST /settle` — 同じ body |
@@ -38,6 +38,12 @@ GET https://x402.org/facilitator/supported  → 200
 **我々のサーバは起動時にこの `/supported` を叩いて、設定されたスキームとネットワークが
 本当に載っているかを確かめます。** ネットワーク文字列の5文字の間違いが、審査員が払う瞬間に
 初めて出るのを避けるためです。
+
+### ⚠️ ENSv2 とは別のチェーンです
+
+**ENSv2 は Ethereum Sepolia（11155111）、x402 の決済は Base Sepolia（84532）。**
+`eth_getCode` で両方に当てて確認済み（[ENSV2-ONCHAIN.md](ENSV2-ONCHAIN.md) §0）。
+**同じ「Sepolia」でも入れ替えは効きません。** 資金も両方に要ります。
 
 ## 2. 使うパッケージ
 
