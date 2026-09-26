@@ -90,6 +90,7 @@ function move(id,path,p,on=true){
 function render(){
  if(!enabled)return;const time=Number($('trafficTime').value),cap=Number($('trafficCap').value),t=COPY[lang],canAnswer=cap>0,paid=canAnswer&&time>=37.5,retained=time>=39.8;
  const pan=Math.max(0,Math.min(1,(time-33.5)/1.5)),y=260*pan*pan*(3-2*pan);
+ map.style.setProperty('--traffic-aspect',overview?String(1170/775):String(1170/515));
  map.setAttribute('viewBox',overview?'0 0 1170 775':`0 ${y.toFixed(2)} 1170 515`);
  move('trafficMoneySignPacket','Fee',(time-33.5)/1.5,canAnswer);
  move('trafficMoneyCashPacket','Cash',(time-35)/2.5,canAnswer);

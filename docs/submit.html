@@ -78,21 +78,23 @@ MIT licensed, because a surface that decides what a person never sees has to be 
 </section>
 <section>
   <div class="h"><h2>How it's made</h2>
-    <span class="n ">4554 chars · min 280</span>
+    <span class="n ">5062 chars · min 280</span>
     <button data-for="made">copy</button></div>
   <pre id="made">TypeScript, no framework. src/core is pure — the router takes a request, a policy and a clock and returns a verdict; no I/O, so the same code runs in the tests, in the server and in a single-file console that opens from a USB stick with no network.
 
 Ports and adapters: ClassifierPort, IdentityPort, ScreeningPort, PermissionsPort, SettlementPort. The guarantee is in the port's schema, not in the adapter, so swapping an implementation cannot weaken it.
 
-World ID (OIDC). Discovery read at run time — no endpoint is written in our source. PKCE with S256, which turned out to be mandatory and undocumented in the sandbox; we found it by probing eight parameter combinations against a bare invalid_request with no error_description. The ID token is verified against the issuer's JWKS with jose, acr is required to be the orb level, and auth_time is checked against this server's clock with a 120-second ceiling. We store only verifiedAt and acr — never the subject identifier.
+The public demo is /experience: an agent workspace and a mobile human inbox. Fifty generated requests go through the real routing core, with configured Intercepta screening and bounded Jev decision support. Before authentication, a one-use, two-minute handoff moves the run to a phone. The original desktop becomes a read-only observer of paid answers; it cannot see the phone's proof or drafts.
 
-Measured caveat, stated because a summary that omits it is wrong: sending both prompt=login and max_age=0, the sandbox answers amr: ["pop"] with auth_time re-stamped one second before iat, and never hands off to the World ID app — through Safari, Safari private and Chrome alike. So what is true is "a credential only an orb-verified person holds is presented at that moment", not "she re-proves personhood in the app". The product screen says exactly that, and FreshnessPolicy.acceptedAmr exists so a deployment that needs more can refuse pop.
+World ID in this demo uses production IDKit, not the legacy OIDC sandbox. The backend verifies the proof and binds its signal to the browser, run, recipient, policy and quoted payments. Access lasts fifteen minutes. The user opens World App and returns to the original phone browser. Authentication alone is not a transfer: the explicit inbox action then collects one delegated sample reward, and a separate answer-and-consent action triggers the human-answer reward. World establishes the required personhood credential; it does not establish wallet ownership or the truth of an answer.
+
+The older World OIDC adapter remains a separate path. Its PKCE and sandbox auth_time/amr findings are documented as earlier experiments, not as the authentication mechanism of the public mobile demo.
 
 x402 (protocol v2, Base Sepolia). The published x402 npm package still speaks v1 (X-PAYMENT); the deployed facilitator answers x402Version 2 (PAYMENT-SIGNATURE). We build on @x402/core, whose only dependency is zod, and accept both header names. The server confirms at startup that the facilitator actually supports the configured scheme and network.
 
-The design decision worth pointing at: an EIP-3009 authorization carries validBefore, and we set it to the request's deadline. The agent signs before she wakes up; the authorization moves nothing while it waits; settlement runs from exactly one place in the code, after a verified yes. If she never answers, the authorization expires and nobody can settle it — not the agent, not us. "Silence is not consent" stops being a server behaviour and becomes a property of the money.
+In the ordinary request path, an EIP-3009 authorization is kept separate from settlement and expires at the request deadline. The public /experience demo uses the same x402 adapter but creates its authorization after the required consent and a fresh payer screening. A pending or refused request is not counted as paid, uncertain settlement is not retried automatically, and an answer reaches the demo buyer only after settlement succeeds.
 
-Two transfers on Base Sepolia, verified by reading the chain rather than trusting the facilitator's response: 0x79c1e323… (120 atomic, settled inside the request) and 0x5c79fddf… (4,200 atomic, which moved only when a person pressed Yes — the seller's balance was 120 before and 4,320 after). The buyer's ETH balance is still zero; the facilitator paid 102,844 gas.
+The public mobile run is now backed by two independently checked Base Sepolia transfers: 0x8b60210db922288cfd3f4a792c221ba28863ad7b929972e47d6145468315da2d (120 atomic test USDC for the delegated sample) and 0xb652ed83b10b2faf50b2859b224dd041b00f0903a78e6a84b6c949daab2659d6 (1,001 atomic for the human answer). The desktop changed to observer mode after phone handoff and received both paid answers. RPC receipts confirmed the configured token, direct buyer-to-recipient transfers, exact amounts and success; BaseScan showed both transfers too. The total is 0.001121 test USDC. These are new /experience receipts, distinct from the earlier /try evidence. The verification record is docs/build/evidence/experience-public-payment.json; it contains no raw World proof or personal answer text.
 
 ENSv2 (Ethereum Sepolia — a different chain from the settlement, which costs an hour if you confuse them). A name is registered and resolved through a permissioned resolver: yohaku-minta-2026.eth, receipt 0x8e13e0ad…, resolver a proxy of PermissionedResolverImpl, paid 8.000021 MockUSDC for 365 days. Role bits confirmed from the chain via decodeSetter — all five text keys at role 16 — after direct eth_call to the implementation reverted for every selector.
 
@@ -104,9 +106,9 @@ Anti-guessing is enforced rather than remembered. npm run verify re-derives ever
 </section>
 <section>
   <div class="h"><h2>Demonstration link</h2>
-    <span class="n ">62 chars</span>
+    <span class="n ">69 chars</span>
     <button data-for="demo">copy</button></div>
-  <pre id="demo">https://kou-uni.github.io/ethglobal-tokyo2026-uni/product.html</pre>
+  <pre id="demo">https://mac-studio.taila649e1.ts.net/experience?lang=en&amp;view=discover</pre>
 </section>
 <section>
   <div class="h"><h2>GitHub repository</h2>
@@ -148,11 +150,9 @@ Anti-guessing is enforced rather than remembered. npm run verify re-derives ever
 </section>
 <section>
   <div class="h"><h2>Databases</h2>
-    <span class="n ">62 chars</span>
+    <span class="n ">198 chars</span>
     <button data-for="databases">copy</button></div>
-  <pre id="databases">None
-
-（状態はプロセス内のMap/Setのみ。永続化していないこと自体が設計 — 掲載は1時間で消え、再起動で消える）</pre>
+  <pre id="databases">No database server. Optional local JSON files persist ordinary requests and attention state. The mobile demo uses in-memory sessions (30 minutes); Koe listings expire and are not permanent accounts.</pre>
 </section>
 <section>
   <div class="h"><h2>Design tools</h2>
@@ -178,25 +178,25 @@ Inside the product, three models are called for real rather than mocked. Jev, a 
 So the model is deliberately boxed. It is asked one typed question whose only options are ask and drop. There is no value meaning pass, so a request that talks a model into approving it still cannot be approved — we measured that with a prompt injection, which moved the verdict from ask 0.99 to drop 0.89 and could not move it any further.</pre>
 </section>
 <section>
-  <div class="h"><h2>ENS — $10,000 — How are you using this API?</h2>
-    <span class="n ">646 chars</span>
+  <div class="h"><h2>ENS — Best Use of ENSv2 — How are you using this API?</h2>
+    <span class="n ">827 chars</span>
     <button data-for="prize-ens-why">copy</button></div>
-  <pre id="prize-ens-why">You can delegate to an AI without letting the AI rewrite what it is allowed to do. The owner's policy lives under text keys on a permissioned ENSv2 resolver, and a delegated agent holds the setter role for exactly one key — it can propose, and it cannot widen its own authority. That boundary is rule 0 of our router, and it is the contract that refuses the write, not our server. Six transactions on Ethereum Sepolia show it: a proposal that succeeded, a policy write that reverted with EACUnauthorizedAccountRoles, and a proposal that reverted after revocation. Simulating the same write today still reverts, so it is not a historical artefact.</pre>
+  <pre id="prize-ens-why">You can delegate to an AI without letting the AI rewrite what it is allowed to do. The owner's policy lives under text keys on a permissioned ENSv2 resolver, and a delegated agent holds the setter role for exactly one key — it can propose, and it cannot widen its own authority. That boundary is rule 0 of our router, and it is the contract that refuses the write, not our server. Six transactions on Ethereum Sepolia show it: a proposal that succeeded, a policy write that reverted with EACUnauthorizedAccountRoles, and a proposal that reverted after revocation. Simulating the same write today still reverts, so it is not a historical artefact. The Ethereum Sepolia delegation demonstration is separate from the public mobile /experience payment journey; we present both rather than claiming that the mobile flow invokes ENS.</pre>
 </section>
 <section>
-  <div class="h"><h2>ENS — $10,000 — Link to the line of code</h2>
+  <div class="h"><h2>ENS — Best Use of ENSv2 — Link to the line of code</h2>
     <span class="n ">122 chars</span>
     <button data-for="prize-ens-code">copy</button></div>
   <pre id="prize-ens-code">https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/f95bab53ec3b7efbef6500142da7d8795891affb/src/core/rules.ts#L43-L52</pre>
 </section>
 <section>
-  <div class="h"><h2>ENS — $10,000 — Ease of use (1-10)</h2>
+  <div class="h"><h2>ENS — Best Use of ENSv2 — Ease of use (1-10)</h2>
     <span class="n ">6 chars</span>
     <button data-for="prize-ens-stars">copy</button></div>
   <pre id="prize-ens-stars">5 / 10</pre>
 </section>
 <section>
-  <div class="h"><h2>ENS — $10,000 — Additional feedback</h2>
+  <div class="h"><h2>ENS — Best Use of ENSv2 — Additional feedback</h2>
     <span class="n ">927 chars</span>
     <button data-for="prize-ens-feedback">copy</button></div>
   <pre id="prize-ens-feedback">It works, and getting there cost more than it should have.
@@ -210,25 +210,25 @@ The one line of documentation that would have saved the most: the per-key grant 
 What we would not claim, and would ask you not to let teams claim: revocation is not new to v2. The thing that is genuinely v2 is the delegation boundary, and it is a better story than the one people reach for.</pre>
 </section>
 <section>
-  <div class="h"><h2>Curvegrid — $3,000 — How are you using this API?</h2>
+  <div class="h"><h2>Curvegrid — Best AI Agent Project — How are you using this API?</h2>
     <span class="n ">600 chars</span>
     <button data-for="prize-curvegrid-why">copy</button></div>
   <pre id="prize-curvegrid-why">An agent that works around the clock spends around the clock, and the question that decides whether a team can live with that is not how much — it is which movements a person has to see at all. We built that half-step: ten ordered rules run before any payment, and only a request that came out as auto settles without a person. The agent never signs on the owner's behalf, and the owner's constraints are read from a permissioned ENSv2 resolver rather than from our database. We do not use MultiBaas and are not claiming we do — execution and record-keeping are your layer, and we stop cleanly at it.</pre>
 </section>
 <section>
-  <div class="h"><h2>Curvegrid — $3,000 — Link to the line of code</h2>
+  <div class="h"><h2>Curvegrid — Best AI Agent Project — Link to the line of code</h2>
     <span class="n ">119 chars</span>
     <button data-for="prize-curvegrid-code">copy</button></div>
   <pre id="prize-curvegrid-code">https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/f95bab53ec3b7efbef6500142da7d8795891affb/src/server/app.ts#L431</pre>
 </section>
 <section>
-  <div class="h"><h2>Curvegrid — $3,000 — Ease of use (1-10)</h2>
+  <div class="h"><h2>Curvegrid — Best AI Agent Project — Ease of use (1-10)</h2>
     <span class="n ">13 chars</span>
     <button data-for="prize-curvegrid-stars">copy</button></div>
   <pre id="prize-curvegrid-stars">（下のフィードバック参照）</pre>
 </section>
 <section>
-  <div class="h"><h2>Curvegrid — $3,000 — Additional feedback</h2>
+  <div class="h"><h2>Curvegrid — Best AI Agent Project — Additional feedback</h2>
     <span class="n ">922 chars</span>
     <button data-for="prize-curvegrid-feedback">copy</button></div>
   <pre id="prize-curvegrid-feedback">⚠️ 星は「使ったAPI」への評価欄です。**MultiBaas を使っていないので、正直に評価できません。** フォームが必須なら、下の一文を先頭に置いて、中央値を入れてください。
@@ -243,25 +243,25 @@ What we would most like from you is the opposite of feedback: a correction. We w
 https://kou-uni.github.io/ethglobal-tokyo2026-uni/curvegrid.html</pre>
 </section>
 <section>
-  <div class="h"><h2>Intercepta — $2,500 — How are you using this API?</h2>
+  <div class="h"><h2>Intercepta — Safe Agent-to-Agent Payments with x402 — How are you using this API?</h2>
     <span class="n ">594 chars</span>
     <button data-for="prize-intercepta-why">copy</button></div>
   <pre id="prize-intercepta-why">Rule 4 is the only refusal in our router that is not about permission: the grant is valid, the category is allowed, the amount is fine, and the payment still does not go because of where the money would come from. A live Quick Scan runs on the declared payment source before we settle or deliver, and its result decides the branch — clean settles, flagged refuses in your own words, and unavailable refuses too, because if we cannot check we do not move money. Same grant, same category, same price, two payment sources: one settled 120 atomic USDC on Base Sepolia, the other stopped on rule 4.</pre>
 </section>
 <section>
-  <div class="h"><h2>Intercepta — $2,500 — Link to the line of code</h2>
+  <div class="h"><h2>Intercepta — Safe Agent-to-Agent Payments with x402 — Link to the line of code</h2>
     <span class="n ">128 chars</span>
     <button data-for="prize-intercepta-code">copy</button></div>
   <pre id="prize-intercepta-code">https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/f95bab53ec3b7efbef6500142da7d8795891affb/src/adapters/intercepta.ts#L130</pre>
 </section>
 <section>
-  <div class="h"><h2>Intercepta — $2,500 — Ease of use (1-10)</h2>
+  <div class="h"><h2>Intercepta — Safe Agent-to-Agent Payments with x402 — Ease of use (1-10)</h2>
     <span class="n ">6 chars</span>
     <button data-for="prize-intercepta-stars">copy</button></div>
   <pre id="prize-intercepta-stars">7 / 10</pre>
 </section>
 <section>
-  <div class="h"><h2>Intercepta — $2,500 — Additional feedback</h2>
+  <div class="h"><h2>Intercepta — Safe Agent-to-Agent Payments with x402 — Additional feedback</h2>
     <span class="n ">1166 chars</span>
     <button data-for="prize-intercepta-feedback">copy</button></div>
   <pre id="prize-intercepta-feedback">Fast to integrate — we went from key to a live branch in an afternoon. Three things we found that you may want to know.
@@ -273,38 +273,6 @@ The endpoint is account-scoped, and that surprises you in the worst direction. A
 And one worth checking on your side: 0x8589427373D6D84E98730D7795D8f6f8731FDA16, also OFAC-listed, comes back toxicScore 0 on both quick-scan and toxic-score. We are not treating your API as a sanctions oracle because of it, and we would suggest you do not let integrators treat it as one either.
 
 The best part of the API is the one we did not expect: every trait carries a human-readable description, so the sentence we show the person whose payment stopped is yours and not an accusation we wrote.</pre>
-</section>
-<section>
-  <div class="h"><h2>World — (該当枠) — How are you using this API?</h2>
-    <span class="n ">510 chars</span>
-    <button data-for="prize-world-why">copy</button></div>
-  <pre id="prize-world-why">We use World ID at the moment of consent, not at signup. A request arrives, ten ordered rules decide it, and the ones no rule settles wait for a person. When she presses yes, that is when the proof is verified — bound to that request and that browser by a signal hashed from both, so it cannot be replayed on another request. Everything fails to deny: a refusal, a stale authentication, an unreachable issuer and silence all end the same way. We store verifiedAt and the assurance level, and never the subject.</pre>
-</section>
-<section>
-  <div class="h"><h2>World — (該当枠) — Link to the line of code</h2>
-    <span class="n ">128 chars</span>
-    <button data-for="prize-world-code">copy</button></div>
-  <pre id="prize-world-code">https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/f95bab53ec3b7efbef6500142da7d8795891affb/src/adapters/idkit-proof.ts#L10</pre>
-</section>
-<section>
-  <div class="h"><h2>World — (該当枠) — Ease of use (1-10)</h2>
-    <span class="n ">6 chars</span>
-    <button data-for="prize-world-stars">copy</button></div>
-  <pre id="prize-world-stars">6 / 10</pre>
-</section>
-<section>
-  <div class="h"><h2>World — (該当枠) — Additional feedback</h2>
-    <span class="n ">1388 chars</span>
-    <button data-for="prize-world-feedback">copy</button></div>
-  <pre id="prize-world-feedback">The production IDKit path worked the same day. The Agents dev environment took much longer, and almost all of that was one undocumented requirement.
-
-PKCE is mandatory at the sandbox and is not documented. Every authorization request without code_challenge returns a bare invalid_request with no error_description, which is indistinguishable from a dozen other mistakes. We identified it by probing eight parameter combinations. One sentence in the guide would have saved a working day.
-
-The one that matters more: there is no way to ask for, or to detect, a fresh in-app approval. Sending both prompt=login and max_age=0, the sandbox answers amr: ["pop"] with auth_time stamped one second before iat, and never hands off to the World ID app — Safari, Safari private and Chrome alike. We read auth_time as evidence that a person had just approved something. That was wrong, and nothing in the response says so; your own guide specifies amr as ["pop"] for every authentication, so amr cannot separate the two either.
-
-So what we claim on screen is the smaller true thing: a credential only an orb-verified person holds was presented at that moment.
-
-Top improvement: give integrators a way to require a fresh in-app approval and a way to tell that it happened. Until then, one line — "auth_time does not imply re-authentication" — would stop the next team shipping the claim we nearly did.</pre>
 </section>
 <script>
 document.addEventListener('click', async e => {

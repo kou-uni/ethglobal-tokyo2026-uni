@@ -15,10 +15,9 @@ The page explains three benefits: an API through which agents can request human 
 policy-based selection without reviewing everything, and a cap on interruptions as demand grows.
 It presents this as a product thesis, not a claim of being the first or having proven demand.
 
-The vision panel separates the working foundation (routing, attention caps, human approval
-and testnet payment evidence) from the next step: connecting per-person question and answer
-delivery to complete the exchange. The latter is still unimplemented, consistent with
-`../journey.html`.
+The vision panel separates the verified temporary demo (phone handoff, answers and testnet
+payments) from the next step: persistent accounts, delivery to people listed in Koe and NEO
+integration. The new public-run evidence is `../build/evidence/experience-public-payment.json`.
 
 ## One product, two views
 
@@ -27,6 +26,13 @@ support, and attention control. Intercepta and Jev appear inside that boundary a
 used by its capabilities. The small policy box is not labeled as the whole product anymore.
 The boundary describes the product's capabilities, not ownership or hosting of those services.
 The person remains outside, and NEO remains an explicitly proposed external connection.
+
+For the current prize presentation, ENSv2 is prominent at the policy/delegation node.
+`yh:proposal ✓` and `yh:policy ✕` show the per-key boundary; the node highlights as requests
+reach it. The paths, particle timing, 50 outcomes and payment overlay are unchanged.
+A separate evidence panel links the actual proposal success and policy refusal on Ethereum
+Sepolia. It explicitly distinguishes that demonstration from the mobile `/experience` path,
+which does not invoke ENS.
 
 The player switches between **Watch 50 requests** and **Explore decision criteria**. Open
 `../launch.html?lang=ja&view=examples#traffic` for the latter. The language and view survive
@@ -134,16 +140,22 @@ Official protocol sources and the implementation boundaries are in
 
 Main through `ebbce5e`, Kou's product / architecture / Curvegrid discussion and numbered journey, actual core and adapters,
 and existing evidence informed the page. The user set the customer as the agent and sponsor
-priority as Curvegrid → Intercepta → World. See `../build/LAUNCH-PRIZE-MAP.md` for exact official
+targets as ENS, Curvegrid and Intercepta. World remains an identity integration. See `../build/LAUNCH-PRIZE-MAP.md` for exact official
 categories, requirement mapping, technical scope and remaining work.
 
 We do not repeat unsupported market-size, traction or world-first claims from older materials.
-The risk-screening input is currently declared; payer binding is an explicit gap. World proves
+The ordinary request path has a declared screening input; the mobile demo re-screens its
+configured payer before payment. World proves
 personhood, not answer truth. NEO is proposed, not connected. The 50→2 display is an explanatory
 sample, not observed customer usage. No live backend availability is asserted by this static page.
 
 ## Validation
 
+- ENS presentation update: Chrome rendered the larger ENSv2 badge, scoped-delegation copy
+  and proposal/policy labels in Japanese and English, including the payment-overlay
+  presentation view. Translation keys and references match; prize cards are ENS,
+  Curvegrid and Intercepta. The existing `position()` math and all 50 replay fixtures are
+  unchanged. Repository checks pass with 409 tests and 12 claims.
 - Payment additions: Chrome review covered the separate Japanese payment diagram, the
   integrated 50-request replay and final payment example, whole-diagram view, presentation
   view, Japanese/English switching, and the cap-zero case refusing the illustrated human

@@ -1,7 +1,8 @@
 # LPの価値訴求と賞要件の対応 — 2026-09-26
 
-最新main `1778364`（KouのCurvegrid対話ページを含む）を参照したLP用の整理。
-**今回のユーザー指定優先順位は Curvegrid → Intercepta → World。**
+main `c9d745b` と公開スマホデモの検証を参照したLP用の整理。
+**今回のユーザー指定の応募先は ENS・Curvegrid・Intercepta。**
+Worldは本人確認の技術として残すが、今回の応募先3つには含めない。
 古い `PRIZE-READINESS.md` の優先順位・実装状況を、そのまま現在値として使わない。
 
 ## 一言と差別化
@@ -17,7 +18,26 @@ Yohakuはエージェントの依頼を、任せる・聞く・断るに分け�
 Jevに判定を誤らせたとき、最悪でも必ずdropになる、とは言わない。askにもなりうるが、
 autoにはならない。通知量の制御は別途必要。
 
-## 1. Curvegrid — Best AI Agent Project
+## 1. ENS — Best Use of ENSv2
+
+公式が挙げるEACによる**特定のtext recordだけへの権限付与**が、今回の実証と直接対応する。
+`yh:proposal`だけを書けるエージェントに、`yh:policy`を書き換える権限は渡さない。
+取り消せること自体をENSv2固有の価値とはせず、権限をキー単位で限定できる点を見せる。
+
+| 公式条件の要約 | 今回示すもの | 境界 |
+| --- | --- | --- |
+| SepoliaのENSv2を使用 | permissioned resolverへの実取引 | x402のBase Sepoliaとは別チェーン |
+| v2機能が製品の中心 | AIは提案だけ、本人の方針は変更できない | 名前を表示するだけの説明にしない |
+| 固定値だけではない動作デモ | 提案成功、方針変更のrevert、取消後のrevert | アニメーションは実取引の代替ではない |
+| 公開デモと公開コード | リポジトリ、実証手順、Explorerと記録 | 公開スマホ `/experience` はENSを呼ばないため、別の委任実証を併せて見せる |
+
+**発表の一言：AIに仕事を任せても、AIが自分の権限を書き換えられない。**
+根拠は [ENS-DELEGATION-DEMO.md](ENS-DELEGATION-DEMO.md) と
+[ens-delegation.json](evidence/ens-delegation.json)。
+図では方針を照合する場所にENSv2を大きく表示し、提案✓／方針✕を並べる。
+粒の経路・数・再生時間は変えず、その権限確認の位置を青く強調する。
+
+## 2. Curvegrid — Best AI Agent Project
 
 公式の「Some Ideas to Explore」のうち **Policy-Aware Transaction Agent** が最も直接対応。
 トレジャリー操作の推薦、ステーブルコイン決済という例にも接点がある。
@@ -38,7 +58,7 @@ NEOはJeffの紹介動画（3:22–4:09）で企業向けデジタル資産ト�
 12:59–13:32の方針・人の承認・secure signerの説明は設計思想として参照し、出荷済み機能一覧とはしない。
 NEOへのAPI接続、正式な連携仕様、採用・提携の合意はない。LPのJSON出力は未署名・実行不能の構想サンプル。
 
-## 2. Intercepta — Safe Agent-to-Agent Payments with x402
+## 3. Intercepta — Safe Agent-to-Agent Payments with x402
 
 公式の用途説明 **The paid agent or service** に最も近い。買い手の署名を止めた実証ではなく、
 サービスが受け入れ・決済へ進むかを判定する側。
@@ -51,13 +71,18 @@ NEOへのAPI接続、正式な連携仕様、採用・提携の合意はない�
 | 通過する決済と停止／保留、理由をデモする | 通過のreceiptと、providerの理由付き拒否 | 同じ実行環境で再現可能にする |
 | 公開GitHub。READMEに実装場所と3〜5行のAPI体験 | `src/adapters/intercepta.ts`、呼出は`src/server/app.ts` | 本当の初回成功時間・困りごとでfeedbackを整える |
 
-**最重要の不足：現在の`payoutAddress`は申告値。実際のEIP-3009 payerから導いた値ではない。**
+**一般の依頼経路の不足：`payoutAddress`は申告値。実際のEIP-3009 payerから導いた値ではない。**
 cleanなmainnetアドレスを名乗るだけでよい状態は、実資金を守る強い説明にならない。
 署名されたauthorizationの`from`とscreening対象を一致させる方式、または署名で検証可能な
 対応関係を定義する必要がある。これはLPの見せ方で解決済みにしてはいけない。
-今回のLPでは明記し、バックエンドの支払い経路は変更していない。
+一方、新しい `/experience` は設定された買い手の署名アドレスを使い、送金直前にも再審査する。
+この経路では2件の決済と回答到着を確認した
+（[experience-public-payment.json](evidence/experience-public-payment.json)）。
+一般の入力を解決したという主張や、再生図だけで実API利用を証明したという主張にはしない。
 
-## 3. World — Best Use of IDKit
+## 参考：World — 本人確認の技術として継続使用
+
+今回の応募先からは外す。以下はIDKitの利用意図と従来の条件整理であり、応募を続けるという意味ではない。
 
 公式の「real trust moment」：保護された操作が成立する直前の、人への必要十分な信頼確認に対応。
 World ID for Agentsは別枠で、公式のイベントdev環境への統合が必要。本番IDKitの証拠で代替しない。
@@ -90,6 +115,7 @@ World ID for Agentsは別枠で、公式のイベントdev環境への統合が�
 2026-09-26に本文を再取得。表内の番号づけは掲載順の整理で、公式に番号があると主張しない。
 
 - https://ethglobal.com/events/tokyo2026/prizes/curvegrid
+- https://ethglobal.com/events/tokyo2026/prizes/ens （2026-09-26に再確認）
 - https://ethglobal.com/events/tokyo2026/prizes/intercepta
 - https://ethglobal.com/events/tokyo2026/prizes/world
 - https://www.youtube.com/watch?v=fFiGBkEpBlU （ユーザー提供の文字起こしを参照）
