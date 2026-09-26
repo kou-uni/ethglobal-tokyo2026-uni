@@ -1,5 +1,9 @@
 # ENSv2 spike — what is already standing, and what is left
 
+> **2026-09-26 update:** the pinned published SDK differs from the main-branch source
+> cited below. Registration payment is not the only remaining uncertainty.
+> Read [ENS-SDK-COMPATIBILITY.md](ENS-SDK-COMPATIBILITY.md) before sending transactions.
+
 **The claim we are making is narrow:** a delegated agent can propose, and cannot rewrite what
 it is allowed to do. Not "revocation is new" — that is false, and saying it would cost us the
 room. See [ENSV2-DIFFERENTIATION.md](../decisions/ENSV2-DIFFERENTIATION.md).

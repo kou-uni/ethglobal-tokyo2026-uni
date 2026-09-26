@@ -1,5 +1,10 @@
 # Status — 2026-09-26
 
+> **ENS update:** the installed `5.0.0-sepolia-fix.1` SDK and the main-branch
+> source cited in our research have different permission interfaces and scopes.
+> The claim below that only registration payment remains is on hold.
+> See [ENS-SDK-COMPATIBILITY.md](ENS-SDK-COMPATIBILITY.md).
+
 **What runs, what does not, and what each of us does next.** Everything marked ✅ was run;
 nothing here is inferred from the code looking right.
 
