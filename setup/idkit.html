@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Yohaku — 本物のWorld IDを試す</title>
+<style>
+body{font:17px/1.8 system-ui,sans-serif;background:#f8f7f3;color:#242329;margin:0;padding:28px 18px}
+main{max-width:620px;margin:3vh auto;background:#fff;border:1px solid #e2e0d8;border-radius:24px;padding:28px}
+h1{font-size:25px;line-height:1.5}small{color:#6e6c75}p,pre{white-space:pre-wrap;overflow-wrap:anywhere}
+button{font:inherit;background:#242329;color:white;border:0;border-radius:14px;padding:13px 20px;cursor:pointer}
+button:disabled{opacity:.5}canvas{max-width:100%;height:auto!important}a{color:#4e42a8}
+#status{background:#f0edf9;border-radius:14px;padding:14px}
+</style>
+<main><small>余白 · 認証だけのテスト</small><h1>本物のWorld IDで接続を試す</h1>
+<p>このPCに表示するQRコードを、スマホのWorld Appで読み取ります。本人確認の案内を確認して操作してください。</p>
+<p><small>決済・依頼の承認・資産へのアクセスは行いません。成功しても、個人の識別子や証明データは保存しません。対応するOrb認証資格が必要です。</small></p>
+<button id="start" disabled>本番のWorld IDで試す</button>
+<p id="status" role="status">準備状態を確認しています…</p>
+<section id="connection" hidden><canvas id="qr"></canvas><p><a id="connect" target="_blank" rel="noopener noreferrer">World IDを開く</a></p>
+<button id="cancel">このテストをキャンセル</button></section>
+<pre id="result"></pre></main><script type="module" src="/app.js"></script></html>

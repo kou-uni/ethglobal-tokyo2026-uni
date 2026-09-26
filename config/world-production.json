@@ -1,0 +1,8 @@
+{
+  "checked": "2026-09-26",
+  "issuer": "https://auth.world.org",
+  "requiredAcr": "https://world.org/oidc/acr/orb-v3",
+  "source": "https://auth.world.org/.well-known/openid-configuration",
+  "guide": "https://auth.world.org/mcp — get_idp_guide: oidc, step-up",
+  "callbackPath": "/world-production/callback"
+}

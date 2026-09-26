@@ -36,8 +36,14 @@ import { decodePaymentSignatureHeader, encodePaymentRequiredHeader } from '@x402
 import { isAddress, signAuthorization } from '../adapters/eip3009.js';
 import { delegationDisabled } from '../ports/delegation.js';
 import type { PermissionsPort } from '../ports/permissions.js';
+import type { ProductionProbeHandler } from './world-production-probe.js';
+import { createIdkitApproval, beginDemoBrowser, demoBrowser, type IdkitApprovalOptions } from './idkit-approval.js';
 
 export interface AppDeps {
+  /** Any qualified human can approve only the visitor demo they started. */
+  idkitDemo?: IdkitApprovalOptions;
+  /** Standalone authentication test; has no Store or settlement access. */
+  productionProbe?: ProductionProbeHandler;
   /** Extra denial gate; caller authentication and chain writes are separate concerns. */
   delegation?: { port: PermissionsPort; account: `0x${string}` };
   policy: Policy;
@@ -238,6 +244,17 @@ function validate(body: Record<string, unknown>): { ok: true; request: AgentRequ
 export function createApp(deps: AppDeps): Server {
   const now = deps.now ?? (() => new Date());
   const pending = new PendingVerifications();
+  const idkit = deps.idkitDemo ? createIdkitApproval(deps.idkitDemo, deps.store, async (entry, proof) => {
+    // Claim before settlement awaits: concurrent valid proofs cannot settle twice.
+    entry.resolution = 'approved';
+    const paid = await settleApproved(entry, deps.settlement);
+    entry.settlement = paid.settled ? paid.transaction : 'not-wired';
+    deps.store.remember({
+      who: entry.request.who, what: entry.request.what, outcome: 'approved',
+      decidedAt: now().toISOString(), escalatedBy: entry.decision.rule,
+    });
+    return { id: entry.request.id, verdict: 'approved', identity: proof, settlement: paid };
+  }, () => now().getTime()) : undefined;
 
   /*
    * How many payments this process will sign for strangers in an hour.
@@ -286,6 +303,8 @@ export function createApp(deps: AppDeps): Server {
     const path = url.pathname;
 
     try {
+      if (idkit && await idkit(req, res)) return;
+      if (deps.productionProbe && await deps.productionProbe(req, res)) return;
       /* ── health ─────────────────────────────────────────────────────────── */
       if (req.method === 'GET' && path === '/health') {
         return json(res, 200, {
@@ -296,7 +315,8 @@ export function createApp(deps: AppDeps): Server {
           wired: {
             routing: true,
             classifier: Boolean(deps.classifier),
-            identity: Boolean(deps.identityWired && deps.identity),
+            identity: Boolean(deps.idkitDemo || (deps.identityWired && deps.identity)),
+            identityMode: deps.idkitDemo ? 'idkit-production-visitor-demo' : 'oidc-or-mock',
             screening: Boolean(deps.screeningWired),
             settlement: Boolean(deps.settlement?.live),
             delegationReader: Boolean(deps.delegation),
@@ -442,6 +462,7 @@ export function createApp(deps: AppDeps): Server {
 
       /* ── the owner answers ──────────────────────────────────────────────── */
       if (req.method === 'POST' && path.startsWith('/approvals/')) {
+        if (deps.idkitDemo) return json(res, 403, { error: 'Use the browser-bound World ID visitor demo. Raw approval codes are disabled.' });
         const id = decodeURIComponent(path.slice('/approvals/'.length));
         const entry = deps.store.get(id);
         if (!entry) return json(res, 404, { error: 'no such request' });
@@ -564,7 +585,9 @@ export function createApp(deps: AppDeps): Server {
             'Silence. If the owner does not answer before the deadline, the request is denied, not queued.',
           ],
           cannotDo: [
-            ...(deps.identityWired ? [] : ['identity is mocked on this instance']),
+            ...(deps.idkitDemo
+              ? ['IDKit proves personhood only for browser-bound visitor demos; ordinary owner approvals are disabled']
+              : deps.identityWired ? [] : ['identity is mocked on this instance']),
             ...(deps.settlement?.live ? [] : ['settlement is not wired on this instance']),
             ...(deps.delegation
               ? ['ENS reads a configured resolver; registration binding and caller authentication are not verified here']
@@ -631,6 +654,10 @@ export function createApp(deps: AppDeps): Server {
        * correct failure rather than a hidden special case.
        */
       if (req.method === 'POST' && path === '/try') {
+        if (deps.idkitDemo && (req.headers.origin !== deps.idkitDemo.origin
+          || req.headers.host !== new URL(deps.idkitDemo.origin).host)) {
+          return json(res, 403, { error: 'Start from this site’s demo page.' });
+        }
         const form = new URLSearchParams(await readText(req));
         const wanted = (form.get('payTo') ?? '').trim();
         const skipping = form.get('go') === 'skip';
@@ -659,6 +686,7 @@ export function createApp(deps: AppDeps): Server {
           screen: () => screened,
         });
         const entry: Entry = { request, decision, receivedAt: now().toISOString() };
+        if (deps.idkitDemo) entry.demoBrowser = beginDemoBrowser(req, res, deps.idkitDemo.origin);
 
         /*
          * Sign on the buyer's behalf, payable to the visitor.
@@ -736,6 +764,9 @@ export function createApp(deps: AppDeps): Server {
         const id = decodeURIComponent(path.slice('/approve/'.length));
         const entry = deps.store.get(id);
         if (!entry) return html(res, 404, resultPage({ outcome: 'refused', detail: 'No such request.' }));
+        if (deps.idkitDemo && (!entry.demoBrowser || entry.demoBrowser !== demoBrowser(req, deps.idkitDemo.origin))) {
+          return html(res, 403, resultPage({ outcome: 'refused', detail: 'Start your own demo from /try in this browser.' }));
+        }
         if (entry.resolution) {
           return html(res, 200, resultPage({
             outcome: entry.resolution === 'approved' ? 'approved' : 'declined',
@@ -761,7 +792,7 @@ export function createApp(deps: AppDeps): Server {
           currency: entry.request.price.currency,
           deadline: entry.request.deadline,
           reason: entry.decision.reason,
-          identityWired: Boolean(deps.identityWired),
+          identityWired: Boolean(deps.idkitDemo || deps.identityWired),
           ...(entry.payTo ? { payTo: entry.payTo } : {}),
           today: todaySummary(deps.store, Boolean(deps.settlement?.live)),
           nights: deps.nights ?? [],
@@ -771,6 +802,10 @@ export function createApp(deps: AppDeps): Server {
       /* ── she presses approve: go and prove it ───────────────────────────── */
       if (req.method === 'GET' && /^\/approve\/[^/]+\/verify$/.test(path)) {
         const id = decodeURIComponent(path.slice('/approve/'.length, -'/verify'.length));
+        if (deps.idkitDemo) {
+          res.writeHead(303, { location: `/world-approval?id=${encodeURIComponent(id)}` });
+          return res.end();
+        }
         const entry = deps.store.get(id);
         if (!entry || entry.resolution) {
           return html(res, 404, resultPage({ outcome: 'refused', detail: 'Nothing to approve.' }));
@@ -799,11 +834,16 @@ export function createApp(deps: AppDeps): Server {
         if (!entry || entry.resolution) {
           return html(res, 404, resultPage({ outcome: 'refused', detail: 'Nothing to answer.' }));
         }
+        if (deps.idkitDemo && (req.headers.origin !== deps.idkitDemo.origin
+          || !entry.demoBrowser || entry.demoBrowser !== demoBrowser(req, deps.idkitDemo.origin))) {
+          return json(res, 403, { error: 'Only your own visitor demo can be declined here.' });
+        }
         return refuse(res, entry, 'declined', 'Nothing was sent, and nothing moved.', 'refused');
       }
 
       /* ── she comes back from the issuer ─────────────────────────────────── */
       if (req.method === 'GET' && path === '/auth/world/callback') {
+        if (deps.idkitDemo) return json(res, 403, { error: 'OIDC callbacks cannot approve an IDKit demo.' });
         const state = url.searchParams.get('state') ?? '';
         const p = pending.take(state);
         if (!p) {

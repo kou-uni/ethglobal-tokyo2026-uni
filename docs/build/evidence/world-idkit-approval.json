@@ -1,0 +1,18 @@
+{
+  "observedAt": "2026-09-26",
+  "source": "Chrome local Yohaku /world-approval success screen; verification and payment details expanded through the UI",
+  "requestId": "try-71c26cb6",
+  "verdict": "approved",
+  "identity": {
+    "verified": true,
+    "environment": "production",
+    "protocolVersion": "3.0",
+    "credential": "orb",
+    "checkedAt": "2026-09-26T03:57:56.000Z"
+  },
+  "settlement": {
+    "settled": false,
+    "reason": "settlement is not configured"
+  },
+  "scope": "Local browser-bound visitor demo. Live World verification led to approval of this request. Settlement deliberately disabled. No public deployment or combined on-chain payment is claimed."
+}

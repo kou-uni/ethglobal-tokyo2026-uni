@@ -1,0 +1,14 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>yohaku — Your choice</title>
+<style>
+body{font:17px/1.8 system-ui,sans-serif;background:#f8f7f3;color:#242329;margin:0;padding:28px 18px}
+main{max-width:620px;margin:3vh auto}h1{font-size:28px}p,pre{white-space:pre-wrap;overflow-wrap:anywhere}
+button,a{font:inherit}button{background:#242329;color:white;border:0;border-radius:14px;padding:14px 20px;cursor:pointer}
+button:disabled{opacity:.5}canvas{max-width:100%;height:auto!important}a{color:#4e42a8}
+#status{padding:14px;background:#eeebf7;border-radius:12px}small{color:#6e6c75}
+</style><main><small>yohaku · YOUR CHOICE</small><h1>One last choice.</h1>
+<p><!--REQUEST--></p><input type="hidden" id="snapshot" value="<!--SNAPSHOT-->">
+<p>This is the demo you started. Prove you are human with World ID to approve this request. No personal data is sent to the agent in this demo.</p>
+<button id="start">Approve with World ID</button><p id="status" role="status">Not approved yet.</p>
+<section id="connection" hidden><canvas id="qr"></canvas><p><a id="connect" target="_blank" rel="noopener noreferrer">Open World ID on your phone</a></p><button id="cancel">Cancel verification</button></section>
+<details id="details" hidden><summary>Verification &amp; payment details</summary><pre id="result"></pre></details></main><script type="module" src="/world-approval/app.js"></script></html>

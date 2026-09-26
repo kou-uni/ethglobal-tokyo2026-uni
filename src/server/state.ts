@@ -11,6 +11,8 @@ import type { AgentRequest, Bundle, Decision, HeldRequest } from '../core/types.
 import type { DecisionRecord } from '../core/decisions.js';
 
 export interface Entry {
+  /** Private browser capability: only the visitor who created this demo can approve it. */
+  demoBrowser?: string;
   request: AgentRequest;
   decision: Decision;
   /** Set once the owner has answered, or the deadline has passed. */
