@@ -527,6 +527,43 @@ export function createApp(deps: AppDeps): Server {
         });
       }
 
+      /*
+       * One link that always works.
+       *
+       * The approval screen needs a live request id, and ids do not survive a restart — so a
+       * link to `/approve/<id>` written down anywhere is a link that breaks. This stages a
+       * fresh request through **the real router** and sends her to whatever it decided.
+       *
+       * It is a staging door, not a shortcut: the request goes through `route()` like any
+       * other, and if the rules ever stopped escalating it, this would stop producing an
+       * approval screen — which is the correct failure.
+       */
+      if (req.method === 'GET' && path === '/try') {
+        const request: AgentRequest = {
+          id: `try-${randomUUID().slice(0, 8)}`,
+          who: 'nozomi-labs.eth',
+          what: 'health/sleep-quality',
+          purpose: 'market-research',
+          price: { amount: 4200, currency: 'JPYC' },
+          deadline: new Date(now().getTime() + 6 * 3_600_000).toISOString(),
+        };
+        const screened = await deps.screening.scan('');
+        const decision = route(request, deps.policy, {
+          now: now(),
+          seenBefore: (who) => deps.store.hasSeen(who),
+          screen: () => screened,
+        });
+        deps.store.add({ request, decision, receivedAt: now().toISOString() });
+        if (decision.verdict !== 'human') {
+          return json(res, 200, {
+            note: 'the router did not escalate this one, so there is no screen to show',
+            decision,
+          });
+        }
+        res.writeHead(302, { location: `/approve/${encodeURIComponent(request.id)}` });
+        return res.end();
+      }
+
       /* ── the page she opens ─────────────────────────────────────────────── */
       if (req.method === 'GET' && /^\/approve\/[^/]+$/.test(path)) {
         const id = decodeURIComponent(path.slice('/approve/'.length));
@@ -663,6 +700,7 @@ export function createApp(deps: AppDeps): Server {
         'POST /requests',
         'POST /approvals/:id',
         'GET /ledger/:name',
+        'GET /try',
         'GET /approve/:id',
         'GET /auth/world/callback',
       ] });

@@ -1,0 +1,307 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Yohaku — the product</title>
+<meta name="description" content="Try the running product: an agent asks, and a verified human answers. World ID at the moment of consent, x402 settlement.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap');
+:root{--ink:#242329;--ink2:#5F5D6B;--ink3:#A6A3B4;--paper:#F8F7F3;--card:#fff;--line:#E8E5DC;
+--lilac:#BCB2FA;--lilacD:#6B5BD6;--lilacL:#EDE9FF;--lime:#DDF691;--limeD:#7FA326;--limeL:#F2FBD9;
+--sh:0 6px 0 rgba(36,35,41,.09),0 12px 28px rgba(36,35,41,.13);
+--shS:0 4px 0 rgba(36,35,41,.08),0 8px 18px rgba(36,35,41,.1)}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:880px;padding:28px 20px 70px;color:var(--ink);
+background:linear-gradient(180deg,#EFEBFF 0%,#F6F4EC 40%,var(--paper) 100%);background-attachment:fixed;
+font-family:"M PLUS Rounded 1c",-apple-system,BlinkMacSystemFont,"Hiragino Maru Gothic ProN",sans-serif;
+font-size:16.5px;line-height:1.75;font-weight:700;-webkit-font-smoothing:antialiased}
+a.back{font-size:14px;color:var(--lilacD);text-decoration:none;font-weight:900}
+h1{font-size:clamp(32px,7.5vw,46px);font-weight:900;letter-spacing:-.02em;margin:14px 0 6px;line-height:1.18}
+h1 em{font-style:normal;display:inline-block;color:#fff;background:var(--lilacD);padding:0 13px 3px;
+border-radius:15px;box-shadow:0 5px 0 #4A3BAE;transform:rotate(-1.4deg)}
+h2{font-size:12px;letter-spacing:.15em;color:var(--ink3);font-weight:900;margin:42px 0 14px}
+p.sub{color:var(--ink2);font-size:16px;margin:12px 0 0;max-width:46ch}
+/* live badge */
+.live{display:inline-flex;align-items:center;gap:9px;background:var(--card);border-radius:99px;
+padding:7px 17px 7px 12px;box-shadow:var(--shS);font-size:14px;font-weight:900;margin-bottom:6px}
+.live i{width:11px;height:11px;border-radius:50%;background:var(--ink3);display:block;font-style:normal}
+.live.up i{background:var(--limeD);box-shadow:0 0 0 4px var(--limeL);animation:pulse 2s infinite}
+.live.down i{background:#FF6B6B;box-shadow:0 0 0 4px #FFE9E9}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
+.try{background:var(--lime);border-radius:28px;padding:24px;box-shadow:0 8px 0 var(--limeD),0 16px 32px rgba(36,35,41,.16);margin:18px 0 8px}
+.try b{font-size:22px;font-weight:900;color:#2F3D09;display:block;margin-bottom:8px;line-height:1.35}
+.try p{margin:0 0 16px;font-size:15.5px;color:#41530F;line-height:1.65}
+.try a.go{display:inline-block;background:var(--ink);color:#fff;text-decoration:none;font-weight:900;
+font-size:18px;padding:15px 26px;border-radius:99px;box-shadow:0 6px 0 #0F0E14}
+.try a.go:active{transform:translateY(5px);box-shadow:0 1px 0 #0F0E14}
+ol.steps{counter-reset:s;list-style:none;padding:0;margin:20px 0 0;display:grid;gap:11px}
+ol.steps li{counter-increment:s;background:var(--card);border-radius:20px;padding:15px 18px 15px 56px;
+box-shadow:var(--shS);position:relative;font-size:15.5px;line-height:1.6}
+ol.steps li::before{content:counter(s);position:absolute;left:15px;top:15px;width:28px;height:28px;
+border-radius:50%;background:var(--lilacD);color:#fff;font-weight:900;font-size:15px;
+display:flex;align-items:center;justify-content:center}
+ol.steps li b{color:var(--lilacD)}
+figure{margin:0;background:var(--card);border-radius:26px;padding:18px;box-shadow:var(--sh);overflow-x:auto}
+figure svg{display:block;width:100%;height:auto;min-width:640px}
+figcaption{font-size:14px;color:var(--ink2);margin-top:12px;line-height:1.6}
+.grid{display:grid;gap:13px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+a.c{display:block;background:var(--card);border-radius:22px;padding:17px 19px;box-shadow:var(--shS);
+text-decoration:none;color:inherit;transition:transform .1s,box-shadow .1s}
+a.c:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(36,35,41,.08)}
+a.c .k{font-size:11px;font-weight:900;letter-spacing:.11em;color:#fff;background:var(--lilacD);
+padding:3px 11px;border-radius:99px;display:inline-block;margin-bottom:9px}
+a.c .k.g{background:var(--limeD)}a.c .k.d{background:var(--ink)}
+a.c b{display:block;font-size:17.5px;font-weight:900;line-height:1.35}
+a.c span{display:block;font-size:14px;color:var(--ink2);margin-top:5px;line-height:1.55}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:22px;overflow:hidden;
+box-shadow:var(--shS);font-size:15px}
+th{background:var(--lilacL);color:#3B3456;text-align:left;padding:11px 15px;font-size:11.5px;letter-spacing:.1em}
+td{padding:12px 15px;border-top:2px solid var(--paper);line-height:1.55;vertical-align:top}
+td:first-child{font-weight:900;white-space:nowrap}
+.ok{color:var(--limeD)}.no{color:#C4504A}
+pre{background:var(--ink);color:#F3F1EC;border-radius:18px;padding:16px 18px;overflow-x:auto;
+font-size:13px;line-height:1.85;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:500}
+pre b{color:var(--lime);font-weight:700}
+.note{background:#FFF6DC;border-radius:18px;padding:14px 17px;font-size:14.5px;color:#6E520A;line-height:1.65}
+.note b{color:#4D3A05}
+footer{margin-top:44px;padding-top:20px;border-top:2px dashed var(--line);font-size:14px;color:var(--ink2)}
+footer a{color:var(--lilacD)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+
+<a class="back" href="./">&larr; Yohaku</a>
+<h1>The product, <em>running</em>.</h1>
+<p class="sub">An agent asks for something it cannot get from the open web. A person is asked
+about it once, proves she is a person <b>at that moment</b>, and the money moves.</p>
+
+<h2>IS IT UP RIGHT NOW?</h2>
+<div class="live" id="live"><i></i><span>checking…</span></div>
+<div class="note" id="offline" style="display:none"><b>The demo server is not answering.</b>
+It runs from a laptop at the event, so it is up while we are. Everything else on this page —
+the console, the diagrams, the code — works without it.</div>
+
+<h2>TRY IT — ONE LINK, NO SETUP</h2>
+<div class="try">
+  <b>Be the person who gets asked.</b>
+  <p>This stages a real request through the real router and sends you to whatever it decided.
+  <b>Open it on your phone</b> — the personhood check is a phone flow.
+  Press <b>Yes</b> and you will be asked to prove you are a person, right then.
+  Press <b>No</b>, or just close it, and watch what the next screen says did <i>not</i> happen.</p>
+  <a class="go" id="tryLink" href="https://mac-studio.taila649e1.ts.net/try">Ask me for my data →</a>
+</div>
+
+<ol class="steps">
+  <li><b>A request arrives</b> with exactly five fields — who, what, purpose, price, deadline.
+  Ten ordered rules decide; the first match wins.</li>
+  <li><b>It was not settled by a rule</b>, so it waits for a person — bundled, ranked, and held
+  to <b>two a day</b>, a cap she set.</li>
+  <li><b>Yes asks her to prove personhood now</b>, not at signup. The screen shows how many
+  <b>seconds</b> ago — a signed claim from the issuer, checked against this server's clock.</li>
+  <li><b>Doing nothing is an answer.</b> The deadline passes and the request is denied. The
+  agent's payment authorization expires with it, so <b>nobody can settle it, including us</b>.</li>
+</ol>
+
+<h2>HOW IT FITS TOGETHER</h2>
+<figure>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 680" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Helvetica, sans-serif">
+  <title>Yohaku — architecture overview</title>
+  <defs>
+    <path id="q" d="M112 92C100 92 92 100 92 112H62C38 112 20 94 20 70V62C20 38 38 20 62 20H70C94 20 112 38 112 62Z"/>
+    <g id="mark">
+      <use href="#q"/><use href="#q" transform="rotate(90 128 128)"/>
+      <use href="#q" transform="rotate(180 128 128)"/><use href="#q" transform="rotate(270 128 128)"/>
+    </g>
+    <marker id="mi" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#242329"/>
+    </marker>
+    <marker id="mm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#A9A7A0"/>
+    </marker>
+    <marker id="ml" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#8F80E8"/>
+    </marker>
+    <marker id="mg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#7C9B32"/>
+    </marker>
+  </defs>
+
+  <rect width="980" height="680" fill="#F8F7F3"/>
+
+  <g transform="translate(36,26) scale(0.105)"><use href="#mark" fill="#242329"/></g>
+  <text x="72" y="45" font-size="21" font-weight="700" fill="#242329" letter-spacing="-0.3">yohaku</text>
+  <text x="152" y="45" font-size="13" fill="#6E6C75">— the layer that was missing</text>
+  <text x="36" y="72" font-size="13" fill="#6E6C75">Identity, permission, settlement and ledger already exist. <tspan fill="#242329" font-weight="600">Nothing stood between an agent's request and a person's attention.</tspan></text>
+  <text x="944" y="45" font-size="11" font-weight="700" fill="#6E6C75" text-anchor="end" letter-spacing="1.3">MAKE ROOM. FOR BEING HUMAN.</text>
+
+  <rect x="236" y="108" width="222" height="76" rx="18" fill="#FFFFFF" stroke="#E2E0D8" stroke-width="1.5"/>
+  <rect x="480" y="108" width="222" height="76" rx="18" fill="#FFFFFF" stroke="#E2E0D8" stroke-width="1.5"/>
+  <text x="256" y="132" font-size="10" font-weight="700" fill="#A9A7A0" letter-spacing="1.3">L1 · IDENTITY</text>
+  <text x="256" y="155" font-size="16" font-weight="700" fill="#242329">World ID</text>
+  <text x="256" y="173" font-size="11.5" fill="#6E6C75">Is this a real person?</text>
+  <rect x="396" y="118" width="46" height="18" rx="9" fill="#242329"/>
+  <text x="419" y="131" font-size="9.5" font-weight="700" fill="#F8F7F3" text-anchor="middle">World</text>
+
+  <text x="500" y="132" font-size="10" font-weight="700" fill="#A9A7A0" letter-spacing="1.3">L2 · PERMISSION</text>
+  <text x="500" y="155" font-size="16" font-weight="700" fill="#242329">ENSv2 + EAC</text>
+  <text x="500" y="173" font-size="11.5" fill="#6E6C75">What may this party ask for?</text>
+  <rect x="654" y="118" width="34" height="18" rx="9" fill="#242329"/>
+  <text x="671" y="131" font-size="9.5" font-weight="700" fill="#F8F7F3" text-anchor="middle">ENS</text>
+
+  <rect x="26" y="214" width="162" height="118" rx="18" fill="#FFFFFF" stroke="#E2E0D8" stroke-width="1.5"/>
+  <text x="44" y="238" font-size="10" font-weight="700" fill="#A9A7A0" letter-spacing="1.3">UNTRUSTED</text>
+  <text x="44" y="261" font-size="15" font-weight="700" fill="#242329">Buyer agents</text>
+  <text x="44" y="279" font-size="11.5" fill="#6E6C75">they never sleep</text>
+  <g fill="#C9C7C0">
+    <circle cx="50" cy="298" r="3.4"/><circle cx="63" cy="298" r="3.4"/><circle cx="76" cy="298" r="3.4"/>
+    <circle cx="89" cy="298" r="3.4"/><circle cx="102" cy="298" r="3.4"/><circle cx="115" cy="298" r="3.4"/>
+    <circle cx="128" cy="298" r="3.4"/><circle cx="141" cy="298" r="3.4"/><circle cx="154" cy="298" r="3.4"/>
+  </g>
+  <text x="44" y="318" font-size="10.5" fill="#A9A7A0">~50 a day · verdict returns at once</text>
+
+  <path d="M192 254 H228" stroke="#242329" stroke-width="2" marker-end="url(#mi)" fill="none"/>
+  <text x="192" y="246" font-size="9.5" fill="#6E6C75">5 fields</text>
+  <path d="M228 284 H194" stroke="#A9A7A0" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#mm)" fill="none"/>
+
+  <rect x="236" y="214" width="466" height="128" rx="22" fill="#BCB2FA"/>
+  <text x="258" y="240" font-size="10" font-weight="700" fill="#4E42A8" letter-spacing="1.3">L3 · ROUTING</text>
+  <text x="258" y="274" font-size="29" font-weight="700" fill="#242329" letter-spacing="-0.6">yohaku</text>
+  <text x="258" y="298" font-size="12.5" fill="#3D3A52">10 ordered rules · bundle · rank · daily cap · deadline</text>
+  <text x="258" y="322" font-size="12.5" font-weight="700" fill="#242329">Pass it, ask her, or drop it — and how much reaches her</text>
+  <rect x="558" y="228" width="126" height="21" rx="10.5" fill="#F8F7F3"/>
+  <text x="621" y="242.5" font-size="9.5" font-weight="700" fill="#4E42A8" text-anchor="middle">the gap nobody filled</text>
+  <g transform="translate(646,278) scale(0.17)" opacity="0.45"><use href="#mark" fill="#4E42A8"/></g>
+
+  <path d="M330 210 V190" stroke="#8F80E8" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ml)" fill="none"/>
+  <path d="M580 210 V190" stroke="#8F80E8" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ml)" fill="none"/>
+  <text x="338" y="204" font-size="9.5" fill="#6E6C75">verifies a person</text>
+  <text x="588" y="204" font-size="9.5" fill="#6E6C75">reads scope, expiry, delegation</text>
+
+  <path d="M312 346 V374" stroke="#7C9B32" stroke-width="2" marker-end="url(#mg)" fill="none"/>
+  <path d="M469 346 V374" stroke="#A9A7A0" stroke-width="2" marker-end="url(#mm)" fill="none"/>
+  <path d="M626 346 V374" stroke="#8F80E8" stroke-width="2.2" marker-end="url(#ml)" fill="none"/>
+
+  <rect x="236" y="378" width="152" height="72" rx="18" fill="#DDF691"/>
+  <rect x="393" y="378" width="152" height="72" rx="18" fill="#ECEAE4"/>
+  <rect x="550" y="378" width="152" height="72" rx="18" fill="#BCB2FA"/>
+
+  <text x="312" y="404" font-size="15" font-weight="700" fill="#242329" text-anchor="middle">auto · ~33</text>
+  <text x="312" y="424" font-size="11.5" font-weight="600" fill="#4A5C1E" text-anchor="middle">creates space</text>
+  <text x="312" y="440" font-size="10.5" fill="#6E7C46" text-anchor="middle">she is never asked</text>
+
+  <text x="469" y="404" font-size="15" font-weight="700" fill="#6E6C75" text-anchor="middle">deny · ~8</text>
+  <text x="469" y="424" font-size="11.5" font-weight="600" fill="#8A8880" text-anchor="middle">protects space</text>
+  <text x="469" y="440" font-size="10.5" fill="#A9A7A0" text-anchor="middle">never reaches her</text>
+
+  <text x="626" y="404" font-size="15" font-weight="700" fill="#242329" text-anchor="middle">human · 2</text>
+  <text x="626" y="424" font-size="11.5" font-weight="600" fill="#4E42A8" text-anchor="middle">occupies space</text>
+  <text x="626" y="440" font-size="10.5" fill="#6257B8" text-anchor="middle">her daily cap</text>
+
+  <rect x="786" y="214" width="164" height="236" rx="18" fill="#FFFFFF" stroke="#E2E0D8" stroke-width="1.5"/>
+  <text x="806" y="238" font-size="10" font-weight="700" fill="#A9A7A0" letter-spacing="1.3">THE OWNER</text>
+  <text x="806" y="261" font-size="15" font-weight="700" fill="#242329">A person</text>
+  <text x="806" y="281" font-size="11.5" fill="#6E6C75">proven human</text>
+  <text x="806" y="299" font-size="11.5" fill="#6E6C75">writes the policy</text>
+  <text x="806" y="317" font-size="11.5" fill="#6E6C75">sets the daily cap</text>
+  <line x1="806" y1="333" x2="930" y2="333" stroke="#ECEAE4" stroke-width="1.5"/>
+  <text x="806" y="356" font-size="12.5" font-weight="700" fill="#4E42A8">she is asleep</text>
+  <text x="806" y="380" font-size="11.5" fill="#6E6C75">07:00 — one notification</text>
+  <text x="806" y="424" font-size="30" font-weight="700" fill="#242329">2<tspan font-size="12" font-weight="500" fill="#A9A7A0" dx="7">of ~50</tspan></text>
+
+  <path d="M708 412 H778" stroke="#8F80E8" stroke-width="2.2" marker-end="url(#ml)" fill="none"/>
+  <text x="722" y="404" font-size="9.5" fill="#6257B8">07:00</text>
+
+  <rect x="236" y="488" width="222" height="78" rx="18" fill="#FFFFFF" stroke="#E2E0D8" stroke-width="1.5"/>
+  <rect x="480" y="488" width="222" height="78" rx="18" fill="#FFFFFF" stroke="#E2E0D8" stroke-width="1.5"/>
+  <text x="256" y="512" font-size="10" font-weight="700" fill="#A9A7A0" letter-spacing="1.3">L4 · SETTLEMENT</text>
+  <text x="256" y="535" font-size="16" font-weight="700" fill="#242329">x402 + MultiBaas</text>
+  <text x="256" y="553" font-size="11.5" fill="#6E6C75">inside her constraints</text>
+  <rect x="386" y="498" width="58" height="18" rx="9" fill="#242329"/>
+  <text x="415" y="511" font-size="9.5" font-weight="700" fill="#F8F7F3" text-anchor="middle">Curvegrid</text>
+
+  <text x="500" y="512" font-size="10" font-weight="700" fill="#A9A7A0" letter-spacing="1.3">L5 · LEDGER</text>
+  <text x="500" y="535" font-size="16" font-weight="700" fill="#242329">what happened overnight</text>
+  <text x="500" y="553" font-size="11.5" fill="#6E6C75">never had to ask: 0.1/day → 6.3/day</text>
+  <rect x="630" y="498" width="58" height="18" rx="9" fill="#242329"/>
+  <text x="659" y="511" font-size="9.5" font-weight="700" fill="#F8F7F3" text-anchor="middle">Curvegrid</text>
+
+  <path d="M312 454 V484" stroke="#7C9B32" stroke-width="2" marker-end="url(#mg)" fill="none"/>
+  <path d="M458 526 H476" stroke="#A9A7A0" stroke-width="2" marker-end="url(#mm)" fill="none"/>
+  <path d="M868 454 V526 H708" stroke="#8F80E8" stroke-width="2" marker-end="url(#ml)" fill="none"/>
+  <text x="726" y="519" font-size="9.5" fill="#6257B8">approved → settle</text>
+
+  <path d="M496 570 Q 360 606 236 572 Q 206 558 210 408 Q 214 300 230 290" stroke="#8F80E8" stroke-width="1.6" stroke-dasharray="6 5" marker-end="url(#ml)" fill="none" opacity="0.75"/>
+  <text x="286" y="596" font-size="10.5" font-weight="600" fill="#6257B8">her past decisions become tomorrow's routing</text>
+
+  <line x1="36" y1="622" x2="944" y2="622" stroke="#E2E0D8" stroke-width="1.5"/>
+  <text x="36" y="644" font-size="10.5" fill="#A9A7A0">Counts are a demo scenario, not measurements — see ASSUMPTIONS.md. The input varies; what this product fixes is the output.</text>
+  <text x="36" y="663" font-size="10.5" font-weight="600" fill="#6E6C75">"The missing layer decides whether money should move." — Jeff Wentworth, Curvegrid, ETHGlobal Tokyo 2026</text>
+</svg>
+
+<figcaption><b>The whole system on one page.</b> Eleven more diagrams — trust boundaries,
+the ten rules, every failure path converging on <code>deny</code>, the permission boundary,
+one night end to end, and three state machines — are in
+<a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/product/ARCHITECTURE.md">ARCHITECTURE.md</a>.</figcaption>
+</figure>
+
+<h2>WHAT IS ACTUALLY WIRED</h2>
+<table>
+<tr><th>Piece</th><th>State</th></tr>
+<tr><td>Routing</td><td><span class="ok">Wired.</span> Ten ordered rules, pure, 150 tests. Every failure path denies</td></tr>
+<tr><td>A model</td><td><span class="ok">Wired.</span> Consulted on rule 9 only — and <b>the value "pass" does not exist in its schema</b></td></tr>
+<tr><td>World ID</td><td><span class="ok">Wired, end to end.</span> A person pressed it on a phone. ID token verified against the issuer's JWKS, <code>acr</code> required, <code>auth_time</code> ≤ 120s</td></tr>
+<tr><td>x402</td><td><span class="ok">Wired</span> against the live facilitator, protocol v2. A signed EIP-3009 authorization reaches it and is refused only for balance</td></tr>
+<tr><td>A transfer landing</td><td><span class="no">Not yet.</span> The buyer's wallet has no testnet balance, so a real authorization returns <code>invalid_exact_evm_insufficient_balance</code> — everything except the money worked</td></tr>
+<tr><td>ENSv2 boundary</td><td><span class="no">Mocked.</span> The delegate can propose and cannot rewrite its own permissions — but against a mock, and <b>the mock says so on screen</b></td></tr>
+</table>
+<p class="sub" style="font-size:15px">The running service says the same thing about itself:
+<a href="https://mac-studio.taila649e1.ts.net/health">/health</a> lists what is wired, and
+<a href="https://mac-studio.taila649e1.ts.net/">/</a> tells an agent what it <b>refuses</b> to do.</p>
+
+<h2>IF YOU ARE AN AGENT, BUY SOMETHING</h2>
+<pre>curl -s https://mac-studio.taila649e1.ts.net/ | jq        <b># what this is, and what it refuses</b>
+
+curl -s -X POST https://mac-studio.taila649e1.ts.net/requests \
+  -H 'content-type: application/json' \
+  -d '{"who":"you.eth","what":"purchase-intent/groceries",
+       "purpose":"demand-estimation","price":{"amount":120,"currency":"JPYC"},
+       "deadline":"2026-09-27T00:00:00Z"}'
+
+<b># 402 → sign the authorization in PAYMENT-REQUIRED → retry → the data
+# 202 → held for her. Authorize anyway: it moves nothing while she sleeps,
+#       settles the moment she approves, and expires if she never answers.</b></pre>
+
+<h2>MORE</h2>
+<div class="grid">
+  <a class="c" href="console.html"><span class="k g">OFFLINE</span><b>The console</b>
+    <span>One file, no server. Ask her for health data with your own hands, then try to widen a delegate's permissions</span></a>
+  <a class="c" href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/product/JOURNEY.md"><span class="k">JOURNEY</span><b>Two customers</b>
+    <span>The agent and the human, and exactly what passes at each handoff</span></a>
+  <a class="c" href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/product/STORY.md"><span class="k">STORY</span><b>Why it exists</b>
+    <span>16 diagrams: thought → market → journey → authority → the gap → value</span></a>
+  <a class="c" href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/build/STATUS.md"><span class="k d">STATUS</span><b>What changed, and who is on what</b>
+    <span>Kept current. This page follows it</span></a>
+</div>
+
+<footer>
+<b>Yohaku</b> — <a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni">source</a> ·
+<a href="llms.txt">llms.txt</a> · <a href="claims.json">claims.json</a> · MIT<br>
+Product updates land here. The demo server runs from a laptop at the event.
+</footer>
+
+<script>
+/* Ask the service whether it is up, and say so plainly rather than leaving a dead button. */
+const ORIGIN = 'https://mac-studio.taila649e1.ts.net';
+const el = document.getElementById('live'), off = document.getElementById('offline');
+const ctrl = new AbortController(); setTimeout(() => ctrl.abort(), 6000);
+fetch(ORIGIN + '/health', { signal: ctrl.signal })
+  .then(r => r.json())
+  .then(h => {
+    const on = Object.entries(h.wired).filter(([, v]) => v).map(([k]) => k);
+    el.className = 'live up';
+    el.innerHTML = '<i></i><span>Live &middot; ' + on.join(' &middot; ') + '</span>';
+  })
+  .catch(() => {
+    el.className = 'live down';
+    el.innerHTML = '<i></i><span>Not answering right now</span>';
+    off.style.display = '';
+  });
+</script>
+</body></html>
