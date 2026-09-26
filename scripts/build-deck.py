@@ -2,8 +2,8 @@
 # Slide text is deliberately tiny in volume: the speaking is the content.
 import html, io, subprocess, json
 
-LINES = {'era': ('Agents are not assistants any more. / They are becoming <b>customers.</b><br>And the person they buy from / is <b>you.</b><br>A model can write anything. / What it cannot do / is live a day / and tell you what happened.<br>So the scarce thing is no longer information. — It is <b>an answer only a person can give.</b>', 'エージェントはもう「アシスタント」ではありません。顧客になりつつあります。そして、その顧客が買う相手が、あなたです。モデルは何でも書けます。できないのは、一日を生きて、何が起きたかを語ること。だから希少なのはもう情報ではない。その人にしか出せない答えです。'), 'mkt': ('A large market is expected. — And <b>the supply it runs on is running out.</b>', '大きな市場が見込まれています。そして、それを支えている供給のほうが先に尽きます。'), 'night': ('Which means demand arrives at a person, / all night, / at machine speed.<br>Fifty-two requests reached one seller / in one night. — She was <b>asleep.</b><br>That is not a problem to block. — It is <b>a market with nobody at the counter.</b>', 'つまり需要は、一人の人間に、一晩中、機械の速さで届きます。ある売り手には、一晩で52件届きました。本人は寝ています。これは防ぐべき問題ではありません。カウンターに誰も立っていない市場です。'), 'yohaku': ('So the question is not how to answer more. — It is <b>what a person should never have to see.</b><br>What we are building is <b>room.</b> / Room to stay a person.<br>In Japanese we call that <b>yohaku</b> — / the space a painter decides <b>not to fill.</b>', '問いは「どうやってもっと答えるか」ではありません。その人が見なくていいものは何か、です。私たちが作っているのは、ゆとりです。人間のままでいるためのゆとり。日本語では、これを余白と言います。絵師が、描かないと決めた場所です。'), 'proto': ('Here is one night. / Agents arrive over an open agent-to-agent protocol.<br><b>Most never reach a judgement at all.</b> / They are refused / before anyone is asked.<br>A security check decides / whether the money may move.<br>A decision model sorts the rest — / and it can only <b>ask,</b> / or <b>refuse.</b> — <b>It cannot say yes.</b><br>What clears / settles itself / over x402.', 'これがある一晩です。エージェントは公開のエージェント間プロトコルでやってきます。その大半は、判断にすら届きません。誰かに聞く前に断られます。セキュリティの検査が「この金は動いていいのか」を決めます。判定モデルが残りを仕分けます。ただし返せるのは「聞く」か「断る」だけ。「通す」という答えは存在しません。通ったものは、x402 で自分で決済まで終わります。'), 'world': ('Two are left. — Only <b>two.</b><br>When she answers, / she proves she is a person / <b>at that moment</b> — with World ID.<br>That is what an agent is actually buying: / <b>an answer a human is proven to have given.</b>', '残るのは2件。2件だけです。答えるとき、彼女はその瞬間に人間であることを証明します。World ID で。エージェントが本当に買っているのはこれです — 人間が答えたと証明された答え。'), 'money': ('Money arrived / while she did nothing.<br>Money arrived again / because she <b>decided.</b><br><b>Check your own balance.</b> — Not our screen.', '何もしていない間に、お金が入りました。決めたから、もう一度入りました。ご自分の残高で確かめてください。私たちの画面ではなく。'), 'close': ("She spent <b>two taps</b> / and kept the rest of the night.<br>We take one unit / for the decision we handled — / never a share of what she earned.<br>And what agents spend / has to be governed somewhere.<br><b>That is where a treasury layer begins — Curvegrid's — / and where we stop.</b>", '使ったのはタップ2回。残ったのはその夜の残り全部。私たちは捌いた判断1件につき1単位だけ受け取ります。彼女の売上の取り分ではありません。そして、エージェントが使う金は、どこかで統治されなければならない。そこから先が財務の層 — Curvegrid の層 — で、私たちはそこで止まります。')}
-CUE = {'mkt': 'スライド2へ。読み上げない', 'night': 'スライド3', 'yohaku': 'スライド4。ここで一拍長く', 'proto': 'アニメーションを流し始めてから喋る', 'world': 'スライド6', 'money': '事前に用意したスマホへ。読み取り操作はしない', 'close': 'スライド8'}
+LINES = {'era': ('Agents are not assistants any more. / They are becoming <b>customers.</b><br>And the person they buy from / is <b>you.</b><br>A model can write anything. / What it cannot do / is live a day / and tell you what happened.<br>So the scarce thing is no longer information. — It is <b>an answer only a person can give.</b>', 'エージェントはもう「アシスタント」ではありません。顧客になりつつあります。そして、その顧客が買う相手が、あなたです。モデルは何でも書けます。できないのは、一日を生きて、何が起きたかを語ること。だから希少なのはもう情報ではない。その人にしか出せない答えです。'), 'mkt': ('A large market is expected. — And <b>the supply it runs on is running out.</b>', '大きな市場が見込まれています。そして、それを支えている供給のほうが先に尽きます。'), 'night': ('Which means demand arrives at a person, / all night, / at machine speed.<br>Fifty-two requests reached one seller / in one night. — She was <b>asleep.</b><br>That is not a problem to block. — It is <b>a market with nobody at the counter.</b>', 'つまり需要は、一人の人間に、一晩中、機械の速さで届きます。ある売り手には、一晩で52件届きました。本人は寝ています。これは防ぐべき問題ではありません。カウンターに誰も立っていない市場です。'), 'yohaku': ('So the question is not how to answer more. — It is <b>what a person should never have to see.</b><br>What we are building is <b>room.</b> / Room to stay a person.<br>In Japanese we call that <b>yohaku</b> — / the space a painter decides <b>not to fill.</b>', '問いは「どうやってもっと答えるか」ではありません。その人が見なくていいものは何か、です。私たちが作っているのは、ゆとりです。人間のままでいるためのゆとり。日本語では、これを余白と言います。絵師が、描かないと決めた場所です。'), 'proto': ('Here is one night. / Agents arrive over an open agent-to-agent protocol.<br><b>Most never reach a judgement at all.</b> / They are refused / before anyone is asked.<br>A security check decides / whether the money may move.<br>A decision model sorts the rest — / and it can only <b>ask,</b> / or <b>refuse.</b> — <b>It cannot say yes.</b><br>What clears / settles itself / over x402.', 'これがある一晩です。エージェントは公開のエージェント間プロトコルでやってきます。その大半は、判断にすら届きません。誰かに聞く前に断られます。セキュリティの検査が「この金は動いていいのか」を決めます。判定モデルが残りを仕分けます。ただし返せるのは「聞く」か「断る」だけ。「通す」という答えは存在しません。通ったものは、x402 で自分で決済まで終わります。'), 'world': ('Two are left. — Only <b>two.</b><br>When she answers, / she proves she is a person / <b>at that moment</b> — with World ID.<br>That is what an agent is actually buying: / <b>an answer a human is proven to have given.</b>', '残るのは2件。2件だけです。答えるとき、彼女はその瞬間に人間であることを証明します。World ID で。エージェントが本当に買っているのはこれです — 人間が答えたと証明された答え。'), 'money': ('Money arrived / while she did nothing.<br>Money arrived again / because she <b>decided.</b><br><b>Check your own balance.</b> — Not our screen.', '何もしていない間に、お金が入りました。決めたから、もう一度入りました。ご自分の残高で確かめてください。私たちの画面ではなく。'), 'close': ("She spent <b>two taps</b> / and kept the rest of the night.<br>We take one unit / for the decision we handled — / never a share of what she earned.<br>And what agents spend / has to be governed somewhere. — <b>That is where a treasury layer begins — Curvegrid's — / and where we stop.</b>", '使ったのはタップ2回。残ったのはその夜の残り全部。私たちは捌いた判断1件につき1単位だけ受け取ります。彼女の売上の取り分ではありません。そして、エージェントが使う金は、どこかで統治されなければならない。そこから先が財務の層 — Curvegrid の層 — で、私たちはそこで止まります。'), 'end': ('<b>AI works.</b> — <b>You breathe.</b>', 'AIが働く。あなたは、息をする。')}
+CUE = {'mkt': 'スライド2へ。読み上げない', 'night': 'スライド3', 'yohaku': 'スライド4。ここで一拍長く', 'proto': 'アニメーションを流し始めてから喋る', 'world': 'スライド6', 'money': '事前に用意したスマホへ。読み取り操作はしない', 'close': 'スライド8', 'end': 'ここで止める。ロゴを出したまま黙る'}
 
 S = [
  dict(k='era', big=['Agents are not assistants.', 'They are <em>customers.</em>'],
@@ -26,12 +26,15 @@ S = [
  dict(k='close', big=['Two taps.', 'She kept the rest of the night.'],
       notes=['<b>one unit per decision we handled</b> — never a share of what she earned',
              'what agents spend has to be governed somewhere → <b>Curvegrid</b>']),
+ dict(k='end', mark=True, big=['AI works.', 'You breathe.']),
 ]
 
 def slide(i, d):
-    c = ['<section class="s%s"%s>' % (' inv' if d.get('invert') else '',
+    c = ['<section class="s%s"%s>' % ((' inv' if d.get('invert') else '') + (' lime' if d.get('mark') else ''),
          ' data-i="%d"' % i)]
     if d.get('label'): c.append('<p class="lbl">%s</p>' % d['label'])
+    if d.get('mark'):
+        c.append('<img class="mark" src="launch/mark.svg" alt="yohaku">')
     if d.get('huge'): c.append('<p class="huge">%s</p>' % d['huge'])
     c.append('<h2>%s</h2>' % '<br>'.join(d['big']))
     if d.get('roman'): c.append('<p class="rom">%s</p>' % d['roman'])
@@ -74,6 +77,9 @@ padding:6vmin 8vmin;opacity:0;pointer-events:none;transition:opacity .22s;
 background:linear-gradient(160deg,#E9F0FF 0%,#F4EDFF 48%,#FFEAF6 100%)}
 section.on{opacity:1;pointer-events:auto}
 section.inv{background:#5B4BE0;color:#fff;align-items:center;text-align:center}
+section.lime{background:#DDF691;color:#242329;align-items:center;text-align:center;justify-content:center;gap:5vmin}
+section.lime h2{font-size:clamp(40px,9vmin,120px);color:#242329;line-height:1.14}
+.mark{width:min(30vmin,34vh);height:auto;display:block}
 h2{font-size:clamp(34px,7.6vmin,104px);font-weight:900;line-height:1.1;letter-spacing:-.025em}
 h2 em{font-style:normal;color:var(--violet)}
 section.inv h2{font-size:clamp(70px,20vmin,260px);letter-spacing:.04em}
@@ -226,7 +232,7 @@ def _accent(v):
     if isinstance(v, (list, tuple)): v = ' '.join(v)
     return [_plain(m) for m in _re.findall(r'<em>(.*?)</em>', v)]
 
-TIMES = ['0:00–0:25','0:25–0:35','0:35–0:55','0:55–1:15','1:15–1:55','1:55–2:10','2:10–2:25','2:25–2:35']
+TIMES = ['0:00–0:25','0:25–0:35','0:35–0:55','0:55–1:15','1:15–1:55','1:55–2:10','2:10–2:25','2:25–2:33','2:33–2:40']
 SIZES = {'huge':'420px','h2':'170px','sub':'46px','notes':'38px','lbl':'26px','punch':'70px','foot':'30px'}
 
 cards = []
