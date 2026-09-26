@@ -11,15 +11,13 @@ S = [
  dict(k='mkt', big=['It gets bigger.', 'The supply <em>runs out</em> first.'],
       notes=['<b>2026–2032</b> the stock of public human text is used up — Epoch AI',
              '<b>$60M / year</b> Google → Reddit, for what people wrote. None of it reaches them']),
- dict(k='night', big=['<em>52</em> requests.', 'One night.', 'She was asleep.'],
+ dict(k='night', huge='52', big=['requests. One night.', 'She was <em>asleep.</em>'],
       sub='A market with nobody at the counter.'),
  dict(k='yohaku', invert=True, big=['余白'], roman='yohaku',
       sub='the space a painter decides not to fill'),
  dict(k='proto', label='ONE NIGHT', big=['Refused', 'before anyone <em>is asked.</em>'],
-      chips=[('Intercepta', 'may this money move?'),
-             ('Jev', 'ask or drop — never yes'),
-             ('ENSv2', 'the delegate cannot widen its own rights'),
-             ('x402', 'what clears, settles itself')]),
+      embed='launch.html#trafficPlayer',
+      ),
  dict(k='world', big=['Two are left.'],
       sub='What an agent is buying:',
       punch='an answer a human is <em>proven</em> to have given',
@@ -34,6 +32,7 @@ def slide(i, d):
     c = ['<section class="s%s"%s>' % (' inv' if d.get('invert') else '',
          ' data-i="%d"' % i)]
     if d.get('label'): c.append('<p class="lbl">%s</p>' % d['label'])
+    if d.get('huge'): c.append('<p class="huge">%s</p>' % d['huge'])
     c.append('<h2>%s</h2>' % '<br>'.join(d['big']))
     if d.get('roman'): c.append('<p class="rom">%s</p>' % d['roman'])
     if d.get('qr'):
@@ -45,6 +44,10 @@ def slide(i, d):
         c.append('<div class="qrbox">%s<p class="qurl">%s</p></div>' % (svg, d['qr'].replace('https://','')))
     if d.get('sub'): c.append('<p class="sub">%s</p>' % d['sub'])
     if d.get('punch'): c.append('<p class="punch">%s</p>' % d['punch'])
+    if d.get('embed'):
+        c.append('<div class="embed"><iframe src="%s" title="one night" loading="lazy"></iframe>'
+                 '<a class="full" href="%s" target="_blank" rel="noopener">open it full &rarr;</a></div>'
+                 % (d['embed'], d['embed']))
     if d.get('chips'):
         c.append('<div class="chips">' + ''.join(
             '<div class="chip"><b>%s</b><span>%s</span></div>' % (n, t) for n, t in d['chips']) + '</div>')
@@ -85,6 +88,12 @@ section.inv .sub{color:#CFC6FF;max-width:30ch;margin-top:4vmin}
 .notes{margin-top:5vmin;display:flex;flex-direction:column;gap:1.6vmin}
 .notes p{font-size:clamp(14px,2.2vmin,30px);color:var(--ink2);line-height:1.4}
 .notes b{color:var(--ink)}
+.huge{font:900 clamp(78px,26vmin,300px)/0.86 "M PLUS Rounded 1c",sans-serif;color:#5B4BE0;letter-spacing:-.04em}
+section:has(.embed) h2{font-size:clamp(24px,4.6vmin,58px)}
+section:has(.embed) .lbl{margin-bottom:1.4vmin}
+.embed{margin-top:1.8vmin;flex:1;min-height:0;display:flex;flex-direction:column;gap:1vmin}
+.embed iframe{flex:1;width:100%;border:0;border-radius:2.4vmin;background:#12101C;min-height:44vh}
+.full{align-self:flex-end;font-size:clamp(13px,2vmin,24px);font-weight:900;color:var(--violet);text-decoration:none}
 .chips{margin-top:5vmin;display:grid;gap:1.6vmin;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
 .chip{background:rgba(255,255,255,.7);border-radius:3vmin;padding:2.4vmin 3vmin}
 .chip b{display:block;font-size:clamp(18px,3vmin,38px);font-weight:900}
