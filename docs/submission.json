@@ -85,8 +85,8 @@
     {
       "id": "design",
       "label": "Design tools",
-      "text": "⚠️ ここだけ私が事実を持っていません。ロゴは minta さん作（design/yohaku-v3）。\nFigma などを使ったなら選ぶ。使っていなければ None。推測で埋めない",
-      "chars": 91
+      "text": "None\n\n（minta さん回答：ロゴは Astra モデルで生成。Figma / Sketch など、フォームの選択肢にあるデザインツールは使っていないので None。AI の使い方そのものは「How AI tools were used」欄が受け持つ）",
+      "chars": 129
     },
     {
       "id": "other",
