@@ -24,7 +24,7 @@ non-agentic surface that obtains informed human consent before a mandate is sign
 - [Overview, with 16 diagrams](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/product/STORY.md): thought → market → journey → authority → the gap → value → layers
 - [Two customers' journeys](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/product/JOURNEY.md): the agent and the verified human, and what information passes at each handoff
 - [Every number and where it came from](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/product/ASSUMPTIONS.md): including two claims we measured, found false, and withdrew
-- [Ask about the build](https://kou-uni.github.io/ethglobal-tokyo2026-uni/ask.html): 28 answers with evidence links; the raw set is [ask/answers.json](https://kou-uni.github.io/ethglobal-tokyo2026-uni/ask/answers.json), which you can fetch instead of parsing the page. It answers only from that set and says so when it has nothing.
+- [Ask about the build](https://kou-uni.github.io/ethglobal-tokyo2026-uni/ask.html): 28 answers with evidence links; the raw set is [ask/answers.json](https://kou-uni.github.io/ethglobal-tokyo2026-uni/ask/answers.json), which you can fetch instead of parsing the page. All of them are also on one page at [faq.html](https://kou-uni.github.io/ethglobal-tokyo2026-uni/faq.html). It answers only from that set and says so when it has nothing.
 - [Machine-readable claims](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/claims.json): the output of `npm run verify -- --json`, not a hand-written list
 
 ## Why this is a layer, not a feature of one marketplace

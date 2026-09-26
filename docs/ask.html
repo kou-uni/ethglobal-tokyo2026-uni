@@ -26,6 +26,7 @@ border-radius:11px;padding:2px 10px;margin-bottom:9px}
 .RUNNING{background:var(--limeD)}.DESIGNED{background:var(--lilacD)}.NOT{background:var(--amber)}
 .me p{margin:0 0 12px;font-size:15.5px;line-height:1.72}
 .ev{display:flex;flex-wrap:wrap;gap:8px}
+.ev a.all{background:var(--ink);color:#fff;font-size:13.5px;padding:7px 14px}
 .ev a{font-size:12.5px;font-weight:900;text-decoration:none;color:var(--lilacD);background:var(--lilacL);
 border-radius:11px;padding:5px 11px}
 .rel{margin-top:13px;padding-top:12px;border-top:2px solid var(--line);display:flex;flex-wrap:wrap;gap:8px}
@@ -47,6 +48,7 @@ background:var(--ink);color:#fff;cursor:pointer;box-shadow:var(--shS)}
 nothing, it says so rather than inventing one.</p>
 
 <div class="starter" id="starters"></div>
+<p class="note" style="margin:-8px 0 20px"><a href="faq.html">Or read all 28 answers on one page &rarr;</a></p>
 <div id="log"></div>
 
 <form id="f" autocomplete="off">
@@ -114,9 +116,11 @@ function render(entry, related) {
 }
 
 function nothing(near) {
-  return '<div class="me"><p><b>I do not have that one.</b> This answers from a fixed set rather than a model, '
-    + 'so when it has nothing it says nothing. The closest it holds:</p><div class="rel" style="border:0;padding:0;margin:0">'
-    + near.map(r => '<button class="q" data-id="' + r.id + '">' + r.q + '</button>').join('') + '</div></div>';
+  return '<div class="me"><p><b>I do not have that one.</b> This answers from a fixed set rather than '
+    + 'a model, so it will not stretch an answer to fit.</p>'
+    + '<div class="ev"><a class="all" href="faq.html">See all 28 answers &rarr;</a></div>'
+    + '<div class="rel">' + near.map(r => '<button class="q" data-id="' + r.id + '">' + r.q + '</button>').join('')
+    + '</div></div>';
 }
 
 function ask(text, id) {

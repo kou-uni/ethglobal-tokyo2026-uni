@@ -42,5 +42,13 @@ for (const [q, want] of ASK) {
   if (got === want) pass++;
   else fail.push(`  "${q}"  want ${want ?? 'NO MATCH'}, got ${got ?? 'NO MATCH'} (top ${ranked[0][0].toFixed(2)} ${ranked[0][1].id})`);
 }
+// faq.html is generated from the same file; a stale copy is a page that disagrees with the bot
+const faq = readFileSync('docs/faq.html', 'utf8');
+const missing = DB.filter(e => !faq.includes('id="' + e.id + '"') || !faq.includes(e.a.slice(0, 60)));
+if (missing.length) {
+  console.log(`docs/faq.html is stale for: ${missing.map(e => e.id).join(', ')} — run npm run build:faq`);
+  process.exit(1);
+}
+console.log(`docs/faq.html carries all ${DB.length} answers`);
 console.log(`${pass}/${ASK.length} routed as intended`);
 if (fail.length) { console.log('misses:'); fail.forEach(f => console.log(f)); process.exit(1); }

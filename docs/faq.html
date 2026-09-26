@@ -1,0 +1,275 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Yohaku — every answer we have</title>
+<meta name="description" content="The full set the question box answers from. 28 entries, each with a link you can check.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap');
+:root{--ink:#242329;--ink2:#5F5D6B;--ink3:#A6A3B4;--paper:#F8F7F3;--card:#fff;--line:#E8E5DC;
+--lilac:#BCB2FA;--lilacD:#6B5BD6;--lilacL:#EDE9FF;--limeD:#7FA326;--amber:#B08900;
+--shS:0 4px 0 rgba(36,35,41,.08)}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:820px;padding:26px 18px 80px;color:var(--ink);
+background:linear-gradient(180deg,#EFEBFF 0%,#F6F4EC 40%,var(--paper) 100%);background-attachment:fixed;
+font-family:"M PLUS Rounded 1c",-apple-system,BlinkMacSystemFont,"Hiragino Maru Gothic ProN",sans-serif;
+font-size:16px;line-height:1.7;font-weight:700;-webkit-font-smoothing:antialiased}
+a.back{font-size:14px;color:var(--lilacD);text-decoration:none;font-weight:900}
+h1{font-size:clamp(28px,6.4vw,42px);font-weight:900;letter-spacing:-.02em;margin:12px 0 6px;line-height:1.2}
+h1 em{font-style:normal;display:inline-block;color:#fff;background:var(--lilacD);padding:0 12px 3px;
+border-radius:15px;box-shadow:0 5px 0 #4A3BAE;transform:rotate(-1.4deg)}
+p.sub{color:var(--ink2);font-size:16px;margin:10px 0 20px;max-width:52ch}
+h2{font-size:12px;letter-spacing:.15em;color:var(--ink3);font-weight:900;margin:34px 0 12px}
+nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+a.q{font-size:13px;font-weight:800;text-decoration:none;color:var(--ink2);background:#fff;
+border:2px solid var(--line);border-radius:14px;padding:6px 13px}
+a.q:hover{border-color:var(--lilac);color:var(--lilacD)}
+article{background:var(--card);border-radius:22px;padding:18px 21px;box-shadow:var(--shS);margin:12px 0;scroll-margin-top:18px}
+.chip{display:inline-block;font-size:11px;font-weight:900;letter-spacing:.08em;color:#fff;border-radius:11px;padding:2px 10px}
+.RUNNING{background:var(--limeD)}.DESIGNED{background:var(--lilacD)}.NOT{background:var(--amber)}
+h3{font-size:18.5px;font-weight:900;margin:9px 0 7px;line-height:1.35;letter-spacing:-.2px}
+article p{margin:0 0 12px;font-size:15.5px;color:var(--ink2);line-height:1.72}
+.ev{display:flex;flex-wrap:wrap;gap:8px}
+.ev a{font-size:12.5px;font-weight:900;text-decoration:none;color:var(--lilacD);background:var(--lilacL);
+border-radius:11px;padding:5px 11px}
+footer{margin-top:40px;padding-top:18px;border-top:2px dashed var(--line);font-size:13.5px;color:var(--ink2)}
+footer a{color:var(--lilacD)}
+</style></head><body>
+<a class="back" href="ask.html">&larr; the question box</a>
+<h1>Everything it <em>can answer.</em></h1>
+<p class="sub">28 entries, each with a link you can check. This is the whole set
+&mdash; there is no larger one behind it.</p>
+
+<h2>JUMP</h2>
+<nav>
+  <a class="q" href="#what">What is Yohaku?</a>
+  <a class="q" href="#why-layer">Why is this a layer and not a feature of one marketplace?</a>
+  <a class="q" href="#rules">How does the routing actually decide?</a>
+  <a class="q" href="#fail-closed">What happens when something breaks?</a>
+  <a class="q" href="#prompt-injection">What stops prompt injection from widening access?</a>
+  <a class="q" href="#world">How is World ID used?</a>
+  <a class="q" href="#amr">What is the amr pop problem?</a>
+  <a class="q" href="#ens">Why ENSv2, and what is on chain?</a>
+  <a class="q" href="#ens-claim">Isn't revocation possible in ENS v1 too?</a>
+  <a class="q" href="#x402">Did money actually move?</a>
+  <a class="q" href="#silence-money">What happens to a payment she never answers?</a>
+  <a class="q" href="#screening">What is rule 4 and how does screening work?</a>
+  <a class="q" href="#screening-limits">Is the screening API a sanctions oracle?</a>
+  <a class="q" href="#fees">How does Yohaku make money?</a>
+  <a class="q" href="#fees-collected">How much have you collected?</a>
+  <a class="q" href="#curvegrid">Where does Curvegrid fit?</a>
+  <a class="q" href="#koe">What is Koe?</a>
+  <a class="q" href="#a2a">What protocol do agents use to reach you?</a>
+  <a class="q" href="#mcp-gap">Doesn't MCP already let an agent ask a human?</a>
+  <a class="q" href="#cap">How many requests actually reach the person?</a>
+  <a class="q" href="#learning">Does it learn?</a>
+  <a class="q" href="#privacy">What do you store about the person?</a>
+  <a class="q" href="#not-built">What is not built?</a>
+  <a class="q" href="#embarrass">What would embarrass you if a judge found it?</a>
+  <a class="q" href="#verify">How do I check your numbers myself?</a>
+  <a class="q" href="#drift">How do you stop the docs drifting from the code?</a>
+  <a class="q" href="#oss">What is the licence?</a>
+  <a class="q" href="#try">Can I try it?</a>
+</nav>
+
+<h2>THE ANSWERS</h2>
+<article id="what">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>What is Yohaku?</h3>
+  <p>An escalation router for the agent economy. Agents buy information from people around the clock, and a person cannot answer fifty requests a night. Yohaku sorts each incoming request into auto, human or deny, and holds what reaches a person to a cap she sets.</p>
+  <div class="ev"><a href="../">the overview &rarr;</a><a href="../llms.txt">llms.txt &rarr;</a></div>
+</article>
+
+<article id="why-layer">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>Why is this a layer and not a feature of one marketplace?</h3>
+  <p>Once agents are the customers, counters multiply — panel companies, jobs boards, research marketplaces — and they all speak A2A, because that is how an agent that has never heard of you arrives. A person cannot hold an account, a policy and a notification stream per platform. The A2A Agent Card belongs to the person, so however many counters exist the requests land in one router.</p>
+  <div class="ev"><a href="../inflow.html">where requests come from &rarr;</a></div>
+</article>
+
+<article id="rules">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>How does the routing actually decide?</h3>
+  <p>Ten ordered rules, first match wins. Rule 0 judges the delegate on the inside; rules 1 to 9 judge requests arriving from outside. Rule 9 is the only place a model is consulted, and rule 9 with no answer means a human, never an automatic yes.</p>
+  <div class="ev"><a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/src/core/rules.ts" target="_blank" rel="noopener">rules.ts &rarr;</a><a href="../stack.html">the layer map &rarr;</a></div>
+</article>
+
+<article id="fail-closed">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>What happens when something breaks?</h3>
+  <p>Everything falls to deny. Engine down, screening unreachable, identity check failed, deadline passed with no answer — all of them refuse. Silence is not consent, and no configuration turns an unavailable check into a pass.</p>
+  <div class="ev"><a href="../product/ARCHITECTURE.md#5-failure-everything-falls-to-deny">the failure diagram &rarr;</a></div>
+</article>
+
+<article id="prompt-injection">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>What stops prompt injection from widening access?</h3>
+  <p>The guarantee is in the schema, not in the prompt. The model is asked one typed question whose options are ask and drop. There is no value meaning pass, so a model that is completely talked into approving something still cannot express approval.</p>
+  <div class="ev"><a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/src/ports/classifier.ts" target="_blank" rel="noopener">the classifier port &rarr;</a></div>
+</article>
+
+<article id="world">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>How is World ID used?</h3>
+  <p>At the moment of consent, not at signup. When she presses yes, the backend verifies the proof: discovery read live, PKCE S256, the ID token checked against the issuer's JWKS, acr required to be the orb level, and auth_time checked against our clock with a 120-second ceiling. We store verifiedAt and acr, never the subject identifier.</p>
+  <div class="ev"><a href="../build/evidence/world-idkit.json">the production proof &rarr;</a><a href="../knowledge/WORLD-SANDBOX.md">what we found &rarr;</a></div>
+</article>
+
+<article id="amr">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>What is the amr pop problem?</h3>
+  <p>Sending both prompt=login and max_age=0, the sandbox answers amr: pop with auth_time re-stamped, and never hands off to the World ID app. We first read auth_time as evidence that someone had just approved something. That was wrong, and amr cannot settle it either — the specification says pop for every authentication. What we claim now is only that a credential only an orb-verified person holds was presented at that moment.</p>
+  <div class="ev"><a href="../build/STATUS.md">the correction &rarr;</a></div>
+</article>
+
+<article id="ens">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>Why ENSv2, and what is on chain?</h3>
+  <p>You can delegate to an AI without letting the AI rewrite what it is allowed to do. The delegate holds the setter role for one key and nothing on the policy, payout, price or licence keys. Six receipts on Ethereum Sepolia: a proposal that succeeded, a policy write that reverted, and a proposal that reverted after revocation. Simulating the same write today still reverts.</p>
+  <div class="ev"><a href="../build/evidence/ens-delegation.json">the six receipts &rarr;</a><a href="../knowledge/ENSV2-ONCHAIN.md">what we learned &rarr;</a></div>
+</article>
+
+<article id="ens-claim">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>Isn't revocation possible in ENS v1 too?</h3>
+  <p>Yes, and we say so. Revocation is not new to ENSv2 and comparable setups exist in v1. The narrow claim we do make is the delegation boundary: a delegate that can propose but cannot widen its own authority, refused by the contract rather than by our server.</p>
+  <div class="ev"><a href="../build/STATUS.md">the claim, written narrow &rarr;</a></div>
+</article>
+
+<article id="x402">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>Did money actually move?</h3>
+  <p>Yes, on Base Sepolia, and read back from the chain rather than taken from the facilitator's reply. The most recent run screened clean and settled 120 atomic USDC in transaction 0xa6b97b7c, status 0x1, with 85,756 gas paid by the relayer. The buyer's ETH balance is zero, so 'the buyer needs no gas' is measured.</p>
+  <div class="ev"><a href="https://sepolia.basescan.org/tx/0xa6b97b7c07716a8456c9f6b78157366e3ac760f2be3dfbb77b63eedcbb8d0087" target="_blank" rel="noopener">the receipt &rarr;</a><a href="../build/evidence/screening-with-settlement.json">the run &rarr;</a></div>
+</article>
+
+<article id="silence-money">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>What happens to a payment she never answers?</h3>
+  <p>The EIP-3009 authorization carries validBefore, and we set it to the request's deadline. The agent signs before she wakes; the authorization moves nothing while it waits; if she never answers it expires and nobody can settle it — not the agent, not us. Silence is not consent becomes a property of the money rather than a server behaviour.</p>
+  <div class="ev"><a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/src/ports/settlement.ts" target="_blank" rel="noopener">the settlement port &rarr;</a></div>
+</article>
+
+<article id="screening">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>What is rule 4 and how does screening work?</h3>
+  <p>Rule 4 is the only refusal that is not about permission: the grant is valid and the amount is fine, and the payment still does not go because of where the money would come from. A live call decides it before we settle. The refusal shows the provider's own sentence rather than one we wrote.</p>
+  <div class="ev"><a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/src/adapters/intercepta.ts#L130" target="_blank" rel="noopener">the call &rarr;</a><a href="../build/evidence/intercepta-live.json">what it answered &rarr;</a></div>
+</article>
+
+<article id="screening-limits">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>Is the screening API a sanctions oracle?</h3>
+  <p>No, and we would not sell it as one. An OFAC-listed Tornado Cash router comes back at toxicScore 0, and a sanctioned contract answers 404 because the endpoint is account-scoped — the response that most looks like 'nothing wrong here'. We map 404 to unavailable, which denies. It is one input to a routing decision, never a judgement about a person.</p>
+  <div class="ev"><a href="../build/evidence/intercepta-live.json">the raw bodies &rarr;</a></div>
+</article>
+
+<article id="fees">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>How does Yohaku make money?</h3>
+  <p>One atomic unit per decision, carried as an optional extension on the payment the buyer was already making. Not a share of the sale — the seller's proceeds never enter that ledger. The buyer can decline it and the request is still routed.</p>
+  <div class="ev"><a href="../business.html">the business model &rarr;</a></div>
+</article>
+
+<article id="fees-collected">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>How much have you collected?</h3>
+  <p>Nothing. Vouchers accrue and none has been broadcast, because below ten thousand atomic units the gas costs more than the fee. The ledger's summary type is literally broadcast: false, so it cannot report collected funds even if we wanted it to.</p>
+  <div class="ev"><a href="https://mac-studio.taila649e1.ts.net/fees" target="_blank" rel="noopener">/fees on the live server &rarr;</a></div>
+</article>
+
+<article id="curvegrid">
+  <span class="chip DESIGNED">DESIGNED</span>
+  <h3>Where does Curvegrid fit?</h3>
+  <p>We do not use MultiBaas and do not claim to. Execution and record-keeping are their layer; what we built is the half-step before it — deciding whether money should move means deciding, first, whether to ask. An agent treasury has to answer exactly that question.</p>
+  <div class="ev"><a href="../stack.html">the layer map &rarr;</a></div>
+</article>
+
+<article id="koe">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>What is Koe?</h3>
+  <p>A small agent-facing directory built to show where requests come from. It is a supporting demo, not the product — Yohaku is the product. Listings are memory-only with a one-hour expiry, and registering uses a real World ID proof kept separate from request approval.</p>
+  <div class="ev"><a href="../koe.html">Koe &rarr;</a></div>
+</article>
+
+<article id="a2a">
+  <span class="chip DESIGNED">DESIGNED</span>
+  <h3>What protocol do agents use to reach you?</h3>
+  <p>A2A. Discovery is an Agent Card at a well-known path, and payment rides the x402 transport A2A already defines, so we did not invent a protocol for the arriving side. In AP2's language Yohaku is a Trusted Surface — the non-agentic surface that obtains consent before a mandate is signed.</p>
+  <div class="ev"><a href="../knowledge/AGENT-TO-HUMAN-PROTOCOLS.md">the protocol research &rarr;</a></div>
+</article>
+
+<article id="mcp-gap">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>Doesn't MCP already let an agent ask a human?</h3>
+  <p>MCP elicitation is the one standard place an agent asks a person for something, and it explicitly must not request personal data. AP2, UCP and ACP all assume the counterparty is a merchant. Nobody has defined how many times a day an agent economy may interrupt one person — that number is what Yohaku holds.</p>
+  <div class="ev"><a href="../knowledge/AGENT-TO-HUMAN-PROTOCOLS.md">the protocol research &rarr;</a></div>
+</article>
+
+<article id="cap">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>How many requests actually reach the person?</h3>
+  <p>In the seeded night, 52 arrive and 2 reach her — the cap she set. Across twenty seeds the arrivals wander between 46 and 54 and the number reaching her is the cap in every single run. That sentence is the output of npm run verify, not a claim.</p>
+  <div class="ev"><a href="../claims.json">the verified claims &rarr;</a></div>
+</article>
+
+<article id="learning">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>Does it learn?</h3>
+  <p>It learns the shape of her refusals — which categories, which askers, which prices she keeps turning down — not her words. Replaying thirty nights, the cap binds for the first two weeks and being spared grows from near zero to several a day. She can pull any of it back.</p>
+  <div class="ev"><a href="../business.html">the value loop &rarr;</a></div>
+</article>
+
+<article id="privacy">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>What do you store about the person?</h3>
+  <p>For identity, verifiedAt and acr — never the subject identifier. A router that decides what a person never sees should not also accumulate who they are. The aggregate we could one day compute is the shape of demand, not anyone's answers, and today nothing is aggregated or shared.</p>
+  <div class="ev"><a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/src/ports/identity.ts" target="_blank" rel="noopener">the identity port &rarr;</a></div>
+</article>
+
+<article id="not-built">
+  <span class="chip NOT">NOT BUILT</span>
+  <h3>What is not built?</h3>
+  <p>Seller signup and actual content delivery. The contributor revenue share, where a filter rule that becomes a default earns its author a share — nothing of it exists. And a fresh in-app World approval, which the platform gives us no way to require or detect.</p>
+  <div class="ev"><a href="../build/STATUS.md">the status page &rarr;</a></div>
+</article>
+
+<article id="embarrass">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>What would embarrass you if a judge found it?</h3>
+  <p>Three, and we would rather say them first. amr: pop cannot show that anyone approved anything in the app. The ENS delegate is revoked, so we can only show the boundary refusing, not a fresh success. And two numbers in our own documents were measured, found false, and withdrawn in place.</p>
+  <div class="ev"><a href="../product/ASSUMPTIONS.md">what we withdrew &rarr;</a></div>
+</article>
+
+<article id="verify">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>How do I check your numbers myself?</h3>
+  <p>npm install, then npm run check. It typechecks, runs 342 tests, and re-derives 12 claims by running the code. It also fails on a hardcoded model id, endpoint or address, on a line citation that no longer points anywhere, and on any document quoting a test count the run did not produce.</p>
+  <div class="ev"><a href="../claims.json">the claims, as JSON &rarr;</a><a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/scripts/verify.ts" target="_blank" rel="noopener">verify.ts &rarr;</a></div>
+</article>
+
+<article id="drift">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>How do you stop the docs drifting from the code?</h3>
+  <p>By making it fail the build rather than remembering to check. Adding the count guard found seventeen stale numbers in one afternoon, three of them on the live site, and it caught its own author twice within the hour.</p>
+  <div class="ev"><a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/scripts/verify.ts" target="_blank" rel="noopener">verify.ts &rarr;</a></div>
+</article>
+
+<article id="oss">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>What is the licence?</h3>
+  <p>MIT. A surface that decides what a person never sees has to be one they can read.</p>
+  <div class="ev"><a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni" target="_blank" rel="noopener">the repository &rarr;</a></div>
+</article>
+
+<article id="try">
+  <span class="chip RUNNING">RUNNING</span>
+  <h3>Can I try it?</h3>
+  <p>Yes. Start your own demo, look at the request, approve it with World ID on your phone, and watch the balance of whatever wallet you typed in. Cancel instead and the request stays unapproved.</p>
+  <div class="ev"><a href="../try-it.html">try it &rarr;</a><a href="https://mac-studio.taila649e1.ts.net/try" target="_blank" rel="noopener">the live demo &rarr;</a></div>
+</article>
+
+<footer><b>Yohaku</b> &mdash; <a href="./">overview</a> &middot;
+<a href="ask.html">ask a question</a> &middot;
+<a href="ask/answers.json">the raw set</a> &middot;
+<a href="llms.txt">llms.txt</a><br>
+Generated from <code>docs/ask/answers.json</code> by <code>npm run build:faq</code>. Do not edit by hand.</footer>
+</body></html>
