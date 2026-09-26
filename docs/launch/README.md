@@ -9,17 +9,26 @@ The single-request journey starts only when requested. The two players do not ru
 
 ## Many requests, a bounded morning
 
-`traffic.js`, `traffic.css` and `traffic-copy.js` add a 36-second bilingual explanation before
+`traffic.js`, `traffic.css` and `traffic-copy.js` add a 40-second bilingual explanation before
 the single-request journey:
 
 - Each particle is one request from an agent, not a distinct agent or a payment.
-- The real seed-2 night routes 52 requests: 32 auto, 12 deny and 8 human.
-- The 8 held requests animate into 4 category bundles. The default cap surfaces 2 bundles
-  containing 6 requests, with 2 other bundles deferred until their deadlines. A notification
+- The fixed presentation has 50 requests: the first 48 from seed 2, plus two unknown-category
+  requests with illustrative `ask` / `drop` choices. Real `route()` and `applyClassification()`
+  give 28 auto, 13 deny and 9 human. The canonical seed-2 demo remains 52; this page uses an
+  explicitly different explanatory sample rather than changing the shared generator.
+- The 9 held requests animate into 5 category bundles. The default cap surfaces 2 bundles
+  containing 6 requests, with 3 other bundles deferred until their deadlines. A notification
   is not approval. The cap selector shares state with the earlier attention-cap slider.
-- Rules 1–8 decide this night; no AI result is invented inside that replay.
-- A separate unknown-category example uses the real `applyClassification()` to illustrate
-  `ask → human` and `drop → deny`. No model is called, and no auto choice is offered.
+- All requests pass the Intercepta checkpoint before routing. This follows the server's
+  `screenDeclared()` placement, but the replay uses mocked screening, not live calls.
+  ENSv2 is labeled at the delegation boundary. Only the two rule-9 requests enter the
+  animated Jev branch. Neither Jev exit connects to auto.
+- A separate interactive example lets the viewer switch the same `ask → human` and
+  `drop → deny` choices. No model is called, and no auto choice is offered.
+- World ID is placed at human approval; x402 at settlement after the conditions are met.
+  No approval or payment is executed here. NEO is a dashed, explicitly proposed treasury
+  connection, with no execution particles entering it.
 
 The paths, particles, trails and bundle grouping all use one SVG coordinate system.
 Presentation mode keeps the controls and language switch in view. Narrow screens scroll the
@@ -47,21 +56,27 @@ nullifier, real profile or settlement payload. It is not a NEO API contract or a
 
 ## Copy and sources
 
-Main `1778364`, Kou's product / architecture / Curvegrid discussion, actual core and adapters,
+Main through `9182afa`, Kou's product / architecture / Curvegrid discussion, actual core and adapters,
 and existing evidence informed the page. The user set the customer as the agent and sponsor
 priority as Curvegrid → Intercepta → World. See `../build/LAUNCH-PRIZE-MAP.md` for exact official
 categories, requirement mapping, technical scope and remaining work.
 
 We do not repeat unsupported market-size, traction or world-first claims from older materials.
 The risk-screening input is currently declared; payer binding is an explicit gap. World proves
-personhood, not answer truth. NEO is proposed, not connected. The 52→2 display is a generated
-night, not observed customer usage. No live backend availability is asserted by this static page.
+personhood, not answer truth. NEO is proposed, not connected. The 50→2 display is an explanatory
+sample, not observed customer usage. No live backend availability is asserted by this static page.
 
 ## Validation
 
-- Many-request flow: Chrome review at the observed 917×768 window covered ongoing particles,
-  the final 52 / 32 / 12 / 8 counts and 2 surfaced bundles, presentation mode, English
+- Initial many-request flow: Chrome review at the observed 917×768 window covered ongoing
+  particles, the earlier 52-request result and 2 surfaced bundles, presentation mode, English
   switching, caps 0 and 4, and the separate `ask → human` / `drop → deny` controls.
+- The subsequent 50-request / Intercepta / Jev version has regenerated core fixtures, checked
+  JavaScript and matched translation keys. Its actual animation path selector and timing were
+  evaluated against all 50 fixtures: only the two model requests traverse Jev, neither
+  traverses auto, and every request completes routing before bundling begins.
+  Its browser rendering review remains outstanding:
+  the computer-use surface stopped returning page state or screenshots.
 - Checked both translation key sets, every markup translation reference, unique membership
   of all held requests in bundles, and all cap results. `build.ts` also checks those core
   boundaries that the animation relies on.
