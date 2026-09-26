@@ -178,9 +178,10 @@ the console, the diagrams, the code — works without it.</div>
   <div class="jy-note"><b>右の4つを、あなた自身で通せます。実際に金が動きます。</b>財布の住所を渡す → エージェントが
   依頼してくる → 朝の画面で答える → <b>World ID で「いま人である」ことを証明</b>する →
   <b>その住所に着金する</b>。確かめるのは我々の言葉ではなく、あなたの残高です。<br><br>
-  <b>いま欠けているのは1つだけ。</b>左端の「売り手として自分で登録する」画面はまだです。
-  <b>着金は通りました</b> — Base Sepolia で2件、チェーンから確認済み。うち4,200 atomic は
-  <b>人が Yes を押した瞬間にだけ</b>動いています。</div>
+  <b>右の4つは全部チェーンの上で成立しています。</b>着金は Base Sepolia で2件、うち4,200 atomic は
+  <b>人が Yes を押した瞬間にだけ</b>動きました。委任の境界も Ethereum Sepolia で、
+  <b>コントラクトが委任先を拒否しています。</b><br><br>
+  <b>残っているのは左端だけ</b> — 「売り手として自分で登録する」画面はまだ作っていません。</div>
 </div></div>
 
 <h2>TRY IT — ONE LINK, NO SETUP</h2>
@@ -360,6 +361,8 @@ one night end to end, and three state machines — are in
 </figure>
 
 <h2>WHAT IS ACTUALLY WIRED</h2>
+<p class="sub" style="font-size:15px;margin-bottom:12px">Each of these has a transaction or a
+live endpoint behind it — <a href="stack.html"><b>the map shows which, and links straight to it</b></a>.</p>
 <table>
 <tr><th>Piece</th><th>State</th></tr>
 <tr><td>Routing</td><td><span class="ok">Wired.</span> Ten ordered rules, pure, 150 tests. Every failure path denies</td></tr>
@@ -367,7 +370,7 @@ one night end to end, and three state machines — are in
 <tr><td>World ID</td><td><span class="ok">Wired, end to end.</span> A person pressed it on a phone; ID token verified against the issuer's JWKS, <code>acr</code> required, <code>auth_time</code> ≤ 120s. <b>Measured caveat:</b> the sandbox answers <code>amr: pop</code> — a held credential presented freshly, <b>not an approval in World ID app</b>. The screen says so itself</td></tr>
 <tr><td>x402</td><td><span class="ok">Wired,</span> protocol v2, against the live facilitator</td></tr>
 <tr><td>Money actually moving</td><td><span class="ok">Done, twice, on Base Sepolia.</span> <a href="https://sepolia.basescan.org/tx/0x79c1e3239ef89cdc1b8a5fc14321093b06504a3c68a24644ba6390caf90393fa">120 atomic settled inside the request</a>, and <a href="https://sepolia.basescan.org/tx/0x5c79fddfc8d6e6f64c1dd23752fae688a9b94ec5bc770f24fd1c2595b00d1d88">4,200 atomic that moved only when a person pressed Yes</a>. <b>The buyer's ETH balance is still 0</b> — the facilitator paid the 102,844 gas</td></tr>
-<tr><td>ENSv2 boundary</td><td><span class="no">Mocked.</span> The delegate can propose and cannot rewrite its own permissions — but against a mock, and <b>the mock says so on screen</b></td></tr>
+<tr><td>ENSv2 boundary</td><td><span class="ok">On chain, Ethereum Sepolia.</span> The delegate wrote <a href="https://sepolia.etherscan.io/tx/0x16873dfa2a63a0e6dc1edb1903488499686d25628d17352dca14449ed24ee8d0"><code>yh:proposal</code> and succeeded</a>, wrote <a href="https://sepolia.etherscan.io/tx/0xb459618bfdd9d0ab78cf34ee64723e04ef227546208d6502b23cf6e72e73ce4f"><code>yh:policy</code> and reverted</a>, and <a href="https://sepolia.etherscan.io/tx/0x2380d0feb0cade3b3e224fa12960f2d2d4d130609d00d7437729789b6bb3faae">after revocation the proposal write reverted too</a>. <b>Simulating it today still reverts</b> — the contract refuses it right now</td></tr>
 </table>
 <p class="sub" style="font-size:15px">The running service says the same thing about itself:
 <a href="https://mac-studio.taila649e1.ts.net/health">/health</a> lists what is wired, and

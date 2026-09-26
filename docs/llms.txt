@@ -26,6 +26,10 @@ non-agentic surface that obtains informed human consent before a mandate is sign
 - [Every number and where it came from](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/product/ASSUMPTIONS.md): including two claims we measured, found false, and withdrew
 - [Machine-readable claims](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/claims.json): the output of `npm run verify -- --json`, not a hand-written list
 
+## The map, with a link behind every claim
+
+- [What is connected](https://kou-uni.github.io/ethglobal-tokyo2026-uni/stack.html): World ID, ENSv2, x402 and screening — each box links to the transaction or the live endpoint rather than to a description
+
 ## See it in twenty seconds
 
 - [One night, animated](https://kou-uni.github.io/ethglobal-tokyo2026-uni/flow.html): the agents, the person asleep, the router, and the two that reach her. No reading required
@@ -61,8 +65,13 @@ Wired: the ten rules, queue control, the morning ledger, a model on rule 9, Worl
 end, and **x402 settlement that actually moved money** — two transfers on Base Sepolia,
 verified from the chain. The held one moved **only after a person pressed Yes**.
 
-Not wired: **the ENSv2 permission boundary on chain** — it runs against a mock, and the mock
-says so on screen.
+**The ENSv2 delegate boundary now runs on chain too** (Ethereum Sepolia): the delegate wrote
+`yh:proposal` and succeeded, wrote `yh:policy` and reverted with
+`EACUnauthorizedAccountRoles`, and after revocation the proposal write reverted as well.
+Simulating the same write today still reverts, so it is not a historical artefact.
+
+Not wired: the seller's own sign-up screen, and live payment screening (a stand-in is used,
+and `/health` reports it false rather than pretending).
 
 **One correction worth repeating, because a summary that drops it is wrong.** We used to say
 a person "proves she is a person at that moment". Measured against the sandbox issuer, the

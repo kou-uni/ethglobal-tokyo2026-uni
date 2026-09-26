@@ -1,0 +1,195 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Yohaku — what is connected</title>
+<meta name="description" content="Identity, permissions, screening and settlement all have owners. The one in the middle does not. Every claim here links to the thing itself.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap');
+:root{--ink:#242329;--ink2:#5F5D6B;--ink3:#A6A3B4;--paper:#F8F7F3;--card:#fff;--line:#E8E5DC;
+--lilac:#BCB2FA;--lilacD:#6B5BD6;--lilacL:#EDE9FF;--lime:#DDF691;--limeD:#7FA326;--limeL:#F2FBD9;
+--sh:0 6px 0 rgba(36,35,41,.09),0 12px 28px rgba(36,35,41,.13);
+--shS:0 4px 0 rgba(36,35,41,.08),0 8px 18px rgba(36,35,41,.1)}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:900px;padding:28px 18px 70px;color:var(--ink);
+background:linear-gradient(180deg,#EFEBFF 0%,#F6F4EC 40%,var(--paper) 100%);background-attachment:fixed;
+font-family:"M PLUS Rounded 1c",-apple-system,BlinkMacSystemFont,"Hiragino Maru Gothic ProN",sans-serif;
+font-size:16px;line-height:1.7;font-weight:700;-webkit-font-smoothing:antialiased}
+a.back{font-size:14px;color:var(--lilacD);text-decoration:none;font-weight:900}
+h1{font-size:clamp(30px,7vw,44px);font-weight:900;letter-spacing:-.02em;margin:12px 0 6px;line-height:1.18}
+h1 em{font-style:normal;display:inline-block;color:#fff;background:var(--lilacD);padding:0 13px 3px;
+border-radius:15px;box-shadow:0 5px 0 #4A3BAE;transform:rotate(-1.4deg)}
+p.sub{color:var(--ink2);font-size:16px;margin:12px 0 0;max-width:48ch}
+h2{font-size:12px;letter-spacing:.15em;color:var(--ink3);font-weight:900;margin:40px 0 14px}
+
+/* ── the ring ─────────────────────────────────────── */
+.ring{display:grid;gap:13px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin-top:6px}
+.lay{background:var(--card);border-radius:24px;padding:18px 19px;box-shadow:var(--shS);
+display:flex;flex-direction:column}
+.lay .top{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.lay .ic{font-size:24px}
+.lay .nm{font-size:18px;font-weight:900;line-height:1.25}
+.lay .q{font-size:14.5px;color:var(--ink2);margin:6px 0 10px;line-height:1.55;flex:1}
+.lay .q b{color:var(--ink)}
+.lay .ev{background:var(--limeL);border-radius:14px;padding:10px 13px;font-size:13.5px;
+color:#41530F;line-height:1.55;font-weight:800}
+.lay .ev.warn{background:#FFF6DC;color:#6E520A}
+.lay .ev b{color:#2F3D09}
+.lay .ev.warn b{color:#4D3A05}
+.lay .go{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}
+.lay .go a{font-size:13px;font-weight:900;color:#fff;background:var(--ink);padding:8px 14px;
+border-radius:99px;text-decoration:none;white-space:nowrap}
+.lay .go a.g{background:var(--limeD)}
+.lay .go a:active{transform:translateY(3px)}
+
+/* ── the middle ───────────────────────────────────── */
+.mid{background:var(--lilac);border-radius:28px;padding:24px 22px;margin:14px 0;
+box-shadow:0 8px 0 var(--lilacD),0 16px 32px rgba(36,35,41,.18)}
+.mid .k{font-size:11.5px;font-weight:900;letter-spacing:.14em;color:#3B2F7A}
+.mid b.t{display:block;font-size:clamp(21px,5vw,28px);font-weight:900;color:#241f3d;
+line-height:1.3;margin:6px 0 8px}
+.mid p{margin:0 0 14px;font-size:15.5px;color:#332C5E;line-height:1.6}
+.mid .go{display:flex;gap:9px;flex-wrap:wrap}
+.mid .go a{font-size:14.5px;font-weight:900;color:#fff;background:var(--ink);padding:11px 18px;
+border-radius:99px;text-decoration:none;box-shadow:0 4px 0 #0F0E14}
+.mid .go a:active{transform:translateY(3px);box-shadow:0 1px 0 #0F0E14}
+
+/* ── the route ────────────────────────────────────── */
+.route{display:grid;gap:11px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.rt{background:var(--card);border-radius:22px;padding:17px 18px;box-shadow:var(--shS)}
+.rt .n{width:30px;height:30px;border-radius:50%;background:var(--lilacD);color:#fff;
+display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;margin-bottom:9px}
+.rt b{display:block;font-size:17px;font-weight:900;line-height:1.3}
+.rt span{display:block;font-size:14px;color:var(--ink2);margin-top:6px;line-height:1.55}
+.rt.last{background:var(--lime);box-shadow:0 6px 0 var(--limeD),0 12px 24px rgba(36,35,41,.14)}
+.rt.last .n{background:#2F3D09}
+.rt.last b,.rt.last span{color:#2F3D09}
+.quote{background:var(--card);border-left:8px solid var(--lilacD);border-radius:18px;
+padding:16px 19px;margin:16px 0;font-size:16.5px;font-weight:900;line-height:1.6;box-shadow:var(--shS)}
+.quote cite{display:block;font-style:normal;font-size:13px;color:var(--ink3);margin-top:8px;font-weight:800}
+.note{background:#FFF6DC;border-radius:18px;padding:14px 17px;font-size:14.5px;color:#6E520A;line-height:1.65}
+.note b{color:#4D3A05}
+footer{margin-top:44px;padding-top:20px;border-top:2px dashed var(--line);font-size:14px;color:var(--ink2)}
+footer a{color:var(--lilacD)}
+</style></head><body>
+
+<a class="back" href="./">&larr; Yohaku</a>
+<h1>Everything around it<br>has an owner. <em>The middle</em><br>does not.</h1>
+<p class="sub">Identity, permissions, screening and settlement are all somebody's product
+already. <b>Nobody owns the decision of how many times a day an agent economy may interrupt
+one person.</b> Every box below links to the thing itself — not to our description of it.</p>
+
+<h2>THE LAYERS, AND HOW TO CHECK EACH ONE</h2>
+<div class="ring">
+
+  <div class="lay">
+    <div class="top"><span class="ic">🌍</span><span class="nm">World ID</span></div>
+    <div class="q"><b>Is a person here — now?</b> Not at signup. The check runs at the moment
+    of approval, and fails closed.</div>
+    <div class="ev warn"><b>Measured caveat.</b> The sandbox answers <code>amr: pop</code> —
+    a held credential presented freshly, <b>not an approval in the app</b>. We asked for more
+    with <code>prompt=login</code> and <code>max_age=0</code>. The screen says so itself.</div>
+    <div class="go">
+      <a href="https://mac-studio.taila649e1.ts.net/try">Press it yourself</a>
+      <a class="g" href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/knowledge/WORLD-SANDBOX.md">The measurement</a>
+    </div>
+  </div>
+
+  <div class="lay">
+    <div class="top"><span class="ic">⛓️</span><span class="nm">ENSv2</span></div>
+    <div class="q"><b>What may the delegate do?</b> It can propose. <b>It cannot rewrite what
+    it is allowed to do</b> — and that is the contract's answer, not ours.</div>
+    <div class="ev"><b>On Ethereum Sepolia.</b> The delegate wrote <code>yh:proposal</code> and
+    <b>succeeded</b>; wrote <code>yh:policy</code> and <b>reverted</b> with
+    <code>EACUnauthorizedAccountRoles</code>; after revocation the proposal write
+    <b>reverted too</b>. Simulating it today still reverts.</div>
+    <div class="go">
+      <a href="https://sepolia.etherscan.io/tx/0x16873dfa2a63a0e6dc1edb1903488499686d25628d17352dca14449ed24ee8d0">proposal ✓</a>
+      <a href="https://sepolia.etherscan.io/tx/0xb459618bfdd9d0ab78cf34ee64723e04ef227546208d6502b23cf6e72e73ce4f">policy ✗</a>
+      <a href="https://sepolia.etherscan.io/tx/0x2380d0feb0cade3b3e224fa12960f2d2d4d130609d00d7437729789b6bb3faae">after revoke ✗</a>
+    </div>
+  </div>
+
+  <div class="lay">
+    <div class="top"><span class="ic">💸</span><span class="nm">x402</span></div>
+    <div class="q"><b>How does an agent pay a person?</b> HTTP 402, protocol v2, stablecoin.
+    The buyer needs no ETH — the facilitator pays the gas.</div>
+    <div class="ev"><b>Money actually moved, on Base Sepolia.</b> 120 atomic settled inside
+    the request. <b>4,200 moved only when a person pressed Yes</b> — the seller's balance was
+    120 before and 4,320 after, and the buyer's ETH balance is still zero.</div>
+    <div class="go">
+      <a href="https://sepolia.basescan.org/tx/0x79c1e3239ef89cdc1b8a5fc14321093b06504a3c68a24644ba6390caf90393fa">auto</a>
+      <a href="https://sepolia.basescan.org/tx/0x5c79fddfc8d6e6f64c1dd23752fae688a9b94ec5bc770f24fd1c2595b00d1d88">after her yes</a>
+      <a class="g" href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/knowledge/X402-ONCHAIN.md">How it works</a>
+    </div>
+  </div>
+
+  <div class="lay">
+    <div class="top"><span class="ic">🛡️</span><span class="nm">Screening</span></div>
+    <div class="q"><b>Is this money allowed to move?</b> Checked before signing — and
+    <b>an unreachable screening call refuses</b>, it does not pass.</div>
+    <div class="ev warn"><b>A stand-in.</b> The shape is wired and tested; the live provider
+    is not connected, and <code>/health</code> reports it as false rather than pretending.</div>
+    <div class="go">
+      <a href="https://mac-studio.taila649e1.ts.net/health">/health</a>
+    </div>
+  </div>
+</div>
+
+<div class="mid">
+  <div class="k">AND IN THE MIDDLE</div>
+  <b class="t">⬜ Yohaku — how many times today may we interrupt this person?</b>
+  <p>Ten ordered rules, first match wins. Everything fails to <code>deny</code>. What reaches
+  her is held to a cap <b>she</b> set — about fifty arrive, two are raised, and across twenty
+  runs that second number never moved. <b>The refusals are inspectable</b>, because a refusal
+  nobody can look at is the same as never having been asked.</p>
+  <div class="go">
+    <a href="https://mac-studio.taila649e1.ts.net/dropped">What was refused</a>
+    <a href="https://mac-studio.taila649e1.ts.net/">What it refuses to do</a>
+    <a href="claims.json">The claims, as data</a>
+  </div>
+</div>
+
+<h2>WHERE THIS GOES — AN AGENT'S FINANCES</h2>
+<div class="quote">An agent that works around the clock spends and earns around the clock.
+The question that decides everything is not <i>how much</i> — it is <b>where a person still
+has to be involved.</b>
+<cite>Which is the half-step before execution, and the part nobody has built.</cite></div>
+
+<div class="route">
+  <div class="rt"><div class="n">1</div><b>One seller</b>
+    <span>A morning screen: what an agent moved overnight, and the two things that needed a
+    person. That is today.</span></div>
+  <div class="rt"><div class="n">2</div><b>A team</b>
+    <span>The same shape, more people. The cap stops being one person's tolerance and becomes
+    a policy — who may be interrupted, for what, how often.</span></div>
+  <div class="rt last"><div class="n">3</div><b>A company's agent treasury</b>
+    <span>Agents moving money continuously. <b>The layer that decides which movements a human
+    must see at all</b> — and holds the evidence that a person consented, which is where
+    liability actually lands.</span></div>
+</div>
+
+<div class="note" style="margin-top:16px"><b>We did not build the execution layer, and we are
+not claiming it.</b> Wallets, treasury, custody and execution all have owners. Yohaku is the
+half-step before them: deciding whether money should move means deciding, first,
+<b>whether to ask</b>. Spain's data protection authority said in February 2026 that an
+agent's autonomy creates no new legal category and the deploying organisation keeps full
+responsibility — so <b>whoever holds the record of consent holds the part that matters.</b></div>
+
+<h2>SEE IT MOVE</h2>
+<div class="ring">
+  <div class="lay"><div class="top"><span class="ic">▶</span><span class="nm">One night, animated</span></div>
+    <div class="q">Twenty seconds, no reading. The agents, the person asleep, the router, and
+    the two that reach her.</div>
+    <div class="go"><a href="flow.html">Play it</a></div></div>
+  <div class="lay"><div class="top"><span class="ic">🧪</span><span class="nm">The running product</span></div>
+    <div class="q">Live status, one link that stages a real request, and an honest list of
+    what is and is not wired.</div>
+    <div class="go"><a href="product.html">Open it</a></div></div>
+</div>
+
+<footer>
+<b>Yohaku</b> — <a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni">source</a> ·
+<a href="llms.txt">llms.txt</a> · MIT<br>
+Every number on this page is re-derived by <code>npm run verify</code>. Change a rule and the
+claims fail.
+</footer>
+</body></html>
