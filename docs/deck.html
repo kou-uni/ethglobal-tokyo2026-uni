@@ -30,10 +30,6 @@ section.inv .sub{color:#CFC6FF;max-width:30ch;margin-top:4vmin}
 .notes{margin-top:5vmin;display:flex;flex-direction:column;gap:1.6vmin}
 .notes p{font-size:clamp(14px,2.2vmin,30px);color:var(--ink2);line-height:1.4}
 .notes b{color:var(--ink)}
-.qrbox{margin-top:4vmin;display:flex;align-items:center;gap:5vmin;flex-wrap:wrap}
-.qr{width:min(42vmin,46vh);height:auto;background:#fff;border-radius:2vmin;padding:1.4vmin;display:block}
-.qr path,.qr rect{shape-rendering:crispEdges}
-.qurl{font:900 clamp(13px,2.1vmin,26px) ui-monospace,Menlo,monospace;color:#5B4BE0;word-break:normal;max-width:52vmin;line-height:1.5}
 .chips{margin-top:5vmin;display:grid;gap:1.6vmin;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
 .chip{background:rgba(255,255,255,.7);border-radius:3vmin;padding:2.4vmin 3vmin}
 .chip b{display:block;font-size:clamp(18px,3vmin,38px);font-weight:900}
@@ -74,21 +70,15 @@ body.inv #dots i.on{background:#fff}
 <p class="foot">World ID · at the moment of consent, not at signup</p>
 </section>
 <section class="s" data-i="6">
-<h2>Scan it.<br>It is <em>your</em> phone.</h2>
-<div class="qrbox"><svg class="qr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35" shape-rendering="crispEdges"><path fill="#ffffff" d="M0 0h35v35H0z"/><path stroke="#000000" d="M1 1.5h7m2 0h1m8 0h3m1 0h2m2 0h7M1 2.5h1m5 0h1m2 0h3m3 0h2m1 0h1m1 0h1m1 0h1m3 0h1m5 0h1M1 3.5h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m1 0h2m5 0h1m1 0h2m1 0h1m1 0h3m1 0h1M1 4.5h1m1 0h3m1 0h1m1 0h1m1 0h2m3 0h1m2 0h1m3 0h1m1 0h1m1 0h1m1 0h3m1 0h1M1 5.5h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h5m2 0h2m1 0h1m2 0h1m1 0h3m1 0h1M1 6.5h1m5 0h1m1 0h7m3 0h2m1 0h2m3 0h1m5 0h1M1 7.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M9 8.5h1m7 0h1m2 0h3M1 9.5h1m1 0h5m2 0h2m2 0h2m1 0h2m1 0h1m2 0h1m3 0h5M1 10.5h2m1 0h1m4 0h1m3 0h3m2 0h7m2 0h2m1 0h2m1 0h1M2 11.5h2m1 0h3m1 0h1m1 0h2m1 0h5m8 0h1m1 0h1m1 0h2M1 12.5h1m1 0h2m3 0h1m1 0h2m2 0h1m1 0h4m1 0h3m5 0h3m1 0h1M1 13.5h2m2 0h5m1 0h1m3 0h3m3 0h1m1 0h4m2 0h2m1 0h2M1 14.5h1m1 0h3m2 0h2m2 0h2m2 0h1m1 0h2m2 0h1m1 0h1m1 0h2m2 0h1m1 0h2M1 15.5h1m2 0h2m1 0h1m2 0h1m4 0h3m3 0h3m2 0h2m4 0h1M5 16.5h2m5 0h2m1 0h2m2 0h1m2 0h2m1 0h3m2 0h2M2 17.5h1m1 0h4m1 0h2m1 0h3m1 0h1m1 0h1m2 0h1m1 0h4m1 0h2m3 0h1M1 18.5h1m3 0h1m3 0h5m3 0h1m1 0h4m1 0h2m1 0h2m1 0h2m1 0h1M1 19.5h1m2 0h1m2 0h1m1 0h1m6 0h2m1 0h1m2 0h2m4 0h2m1 0h1M3 20.5h1m1 0h1m2 0h1m1 0h1m5 0h1m3 0h6m2 0h6M1 21.5h1m1 0h5m1 0h5m1 0h1m3 0h2m1 0h1m2 0h2m1 0h3M1 22.5h1m1 0h3m3 0h1m1 0h1m1 0h5m3 0h2m1 0h1m2 0h1m2 0h2m1 0h1M1 23.5h1m2 0h4m2 0h2m1 0h2m4 0h2m1 0h2m1 0h3m1 0h4M1 24.5h1m1 0h1m4 0h2m1 0h1m2 0h1m2 0h1m2 0h3m1 0h3m2 0h5M1 25.5h1m1 0h2m2 0h1m1 0h1m7 0h4m2 0h1m1 0h6m1 0h2M9 26.5h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m4 0h1m3 0h1m1 0h3M1 27.5h7m4 0h2m1 0h2m1 0h1m2 0h1m1 0h3m1 0h1m1 0h1m1 0h2M1 28.5h1m5 0h1m1 0h1m1 0h1m1 0h9m2 0h2m3 0h3M1 29.5h1m1 0h3m1 0h1m1 0h2m2 0h1m1 0h3m2 0h4m1 0h6m1 0h1M1 30.5h1m1 0h3m1 0h1m1 0h1m1 0h2m3 0h1m2 0h1m4 0h3m2 0h3m1 0h1M1 31.5h1m1 0h3m1 0h1m1 0h1m4 0h1m1 0h3m2 0h2m2 0h1m1 0h2m2 0h1M1 32.5h1m5 0h1m2 0h3m3 0h1m2 0h1m2 0h3m1 0h1m2 0h1m1 0h1M1 33.5h7m1 0h1m1 0h3m1 0h5m3 0h4m1 0h1m3 0h1"/></svg>
-<p class="qurl">mac-studio.taila649e1.ts.net/experience</p></div>
-<p class="sub">Koe · your own night · World ID · the money arrives</p>
-</section>
-<section class="s" data-i="7">
 <h2>Check your <em>own</em> balance.</h2>
 <p class="sub">Not our screen.</p>
 </section>
-<section class="s" data-i="8">
+<section class="s" data-i="7">
 <h2>Two taps.<br>She kept the rest of the night.</h2>
 <div class="notes"><p><b>one unit per decision we handled</b> — never a share of what she earned</p><p>what agents spend has to be governed somewhere → <b>Curvegrid</b></p></div>
 </section>
 </div>
-<div id="dots"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div id="dots"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
 <script>
 var S=document.querySelectorAll('section'), D=document.querySelectorAll('#dots i'), i=0;
 function go(n){i=Math.max(0,Math.min(S.length-1,n));
