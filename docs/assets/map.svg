@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 600" role="img" aria-label="Agents send about fifty requests; Yohaku passes two to the person. ENSv2, World ID, intercepta and x402 attach to Yohaku, and the money it releases lands in a treasury layer.">
+<rect width="100%" height="100%" fill="#F8F7F3"/>
+<defs><marker id="mp-a" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#242329"/></marker>
+<marker id="mp-g" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#7FA326"/></marker></defs>
+<style>
+.mp-n{font:900 30px "M PLUS Rounded 1c",sans-serif;fill:#242329}
+.mp-c{font:900 40px "M PLUS Rounded 1c",sans-serif;fill:#241f3d}
+.mp-num{font:900 34px "M PLUS Rounded 1c",sans-serif;fill:#4A3BAE}
+.mp-num.g{fill:#4D6416}
+.mp-p{font:900 21px "M PLUS Rounded 1c",sans-serif;fill:#242329}
+.mp-s{font:800 17px "M PLUS Rounded 1c",sans-serif;fill:#8C8998}
+</style>
+<rect x="20" y="150" width="250" height="120" rx="26" fill="#fff" stroke="#E8E5DC" stroke-width="3"/>
+<text class="mp-n" x="48" y="222">&#129302; Agents</text>
+<rect x="385" y="120" width="250" height="180" rx="30" fill="#EDE9FF" stroke="#6B5BD6" stroke-width="4"/>
+<text class="mp-c" x="418" y="228">Yohaku</text>
+<rect x="750" y="150" width="250" height="120" rx="26" fill="#fff" stroke="#E8E5DC" stroke-width="3"/>
+<text class="mp-n" x="778" y="222">&#128100; A person</text>
+<path d="M272 210 L378 210" stroke="#242329" stroke-width="4" fill="none" marker-end="url(#mp-a)"/>
+<path d="M637 210 L743 210" stroke="#7FA326" stroke-width="7" fill="none" marker-end="url(#mp-g)"/>
+<text class="mp-num" x="288" y="186">52</text>
+<text class="mp-num g" x="660" y="186">2</text>
+<text class="mp-s" x="385" y="352">it plugs into</text>
+<rect x="20" y="372" width="215" height="66" rx="20" fill="#fff" stroke="#E8E5DC" stroke-width="3"/>
+<text class="mp-p" x="42" y="413">&#9939; ENSv2</text>
+<path d="M127 372 L510 306" stroke="#C7C3D6" stroke-width="2.5" fill="none" stroke-dasharray="6 5"/>
+<rect x="275" y="372" width="215" height="66" rx="20" fill="#fff" stroke="#E8E5DC" stroke-width="3"/>
+<text class="mp-p" x="297" y="413">&#127757; World ID</text>
+<path d="M382 372 L510 306" stroke="#C7C3D6" stroke-width="2.5" fill="none" stroke-dasharray="6 5"/>
+<rect x="530" y="372" width="215" height="66" rx="20" fill="#fff" stroke="#E8E5DC" stroke-width="3"/>
+<text class="mp-p" x="552" y="413">&#128737; intercepta</text>
+<path d="M637 372 L510 306" stroke="#C7C3D6" stroke-width="2.5" fill="none" stroke-dasharray="6 5"/>
+<rect x="785" y="372" width="215" height="66" rx="20" fill="#fff" stroke="#E8E5DC" stroke-width="3"/>
+<text class="mp-p" x="807" y="413">&#128176; x402</text>
+<path d="M892 372 L510 306" stroke="#C7C3D6" stroke-width="2.5" fill="none" stroke-dasharray="6 5"/>
+<path d="M510 438 L510 490" stroke="#7FA326" stroke-width="7" fill="none" marker-end="url(#mp-g)"/>
+<rect x="330" y="506" width="360" height="72" rx="22" fill="#F2FBD9" stroke="#C7E479" stroke-width="3"/>
+<text class="mp-p" x="358" y="550">&#128202; a treasury</text>
+</svg>
