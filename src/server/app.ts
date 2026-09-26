@@ -15,14 +15,13 @@ import { createServer, type IncomingMessage, type Server, type ServerResponse } 
 import { randomUUID } from 'node:crypto';
 import { applyLearned, learn } from '../core/decisions.js';
 import { buildLedger } from '../core/ledger.js';
-import { surface } from '../core/queue.js';
 import { route } from '../core/rules.js';
 import { onDeadline } from '../core/queue.js';
 import type { AgentRequest, Policy, RoutingContext, ScreeningResult } from '../core/types.js';
 import { applyClassification, type ClassifierPort } from '../ports/classifier.js';
 import { mayProceed, type IdentityPort, type VerificationOutcome } from '../ports/identity.js';
 import { FIXTURES, mayMoveMoney, type ScreeningPort } from '../ports/screening.js';
-import { Store, verdictBody, type Entry } from './state.js';
+import { Store, verdictBody, sameRequest, type Entry } from './state.js';
 import { PendingVerifications } from './pending.js';
 import { approvalPage, droppedPage, invitePage, resultPage, type TodaySummary } from './pages.js';
 import { pastNights, type NightSummary } from '../core/history.js';
@@ -37,10 +36,12 @@ import { isAddress, signAuthorization } from '../adapters/eip3009.js';
 import { delegationDisabled } from '../ports/delegation.js';
 import type { PermissionsPort } from '../ports/permissions.js';
 import type { ProductionProbeHandler } from './world-production-probe.js';
-import { createIdkitApproval, beginDemoBrowser, demoBrowser, type IdkitApprovalOptions } from './idkit-approval.js';
+import { createIdkitApproval, beginDemoBrowser, approvalBrowser, type IdkitApprovalOptions } from './idkit-approval.js';
 import { RoutingFees, FEE_HEADER } from './routing-fees.js';
 import { createKoeRegistration } from './koe-registration.js';
 import { createExperience, type ExperienceAssets } from './experience.js';
+import { createA2A } from './a2a.js';
+import { decodePaymentRequiredHeader } from '@x402/core/http';
 
 export interface AppDeps {
   /** Opt-in, browser-owned live journey. Shares the existing demo signing budget. */
@@ -133,9 +134,18 @@ function signedPayment(req: IncomingMessage): unknown | undefined {
 async function settleApproved(
   entry: Entry,
   settlement: SettlementPort | undefined,
+  screening: ScreeningPort,
+  now: () => Date,
+  authorized?: () => Promise<boolean>,
 ): Promise<{ settled: false; reason: string } | { settled: true; transaction: string; network: string }> {
   if (!settlement?.live) return { settled: false, reason: 'settlement is not configured' };
   if (!entry.auth) return { settled: false, reason: 'the agent did not authorize a payment' };
+  if (!(Date.parse(entry.request.deadline) > now().getTime())) return { settled: false, reason: 'the request deadline passed' };
+  const source = entry.paymentSource ?? entry.request.payoutAddress;
+  const checked = await screenDeclared(screening, source, true);
+  if (!mayMoveMoney(checked)) return { settled: false, reason: 'the payment source could not be cleared at approval' };
+  if (authorized && !await authorized()) return { settled: false, reason: 'approval authority changed before settlement' };
+  if (!(Date.parse(entry.request.deadline) > now().getTime())) return { settled: false, reason: 'the request deadline passed during screening' };
   const result = await settlement.settle(entry.auth.payload, entry.auth.requirement);
   if (result.status === 'refused') return { settled: false, reason: result.reason };
   return { settled: true, transaction: result.transaction, network: result.network };
@@ -208,23 +218,16 @@ async function readText(req: IncomingMessage): Promise<string> {
 }
 
 /**
- * Screen the payment address a request declares — and only that.
- *
- * The live adapter is handed an address or it is not called at all. It is never handed an
- * empty string, which it could only answer `unavailable`: **a request that declares no
- * payment address is not a request whose payment source failed a check.** That has always
- * been rule 4's behaviour here — the stand-in answers `clean` for an address it was never
- * given, and so does the demo context the console runs on. What the live call changes is
- * what a *declared* address now means, not what an absent one means.
- *
- * The consequence is worth stating plainly rather than hiding: an agent that declares no
- * payment address is not screened. The two demo paths that settle both declare one.
+ * A connected screening/payment path must have a source. Offline routing fixtures may
+ * omit it; they cannot represent a screened or settled payment. Ordinary signed payments
+ * screen their actual payer, with any declared address required to match.
  */
 async function screenDeclared(
   port: ScreeningPort,
   declared: string | undefined,
+  required = false,
 ): Promise<ScreeningResult> {
-  return declared ? port.scan(declared) : 'clean';
+  return declared ? port.scan(declared) : required ? 'unavailable' : 'clean';
 }
 
 /** The one request `/try` stages. Ordinary enough to be believable, sensitive enough to escalate. */
@@ -259,11 +262,23 @@ async function readJson(req: IncomingMessage): Promise<unknown> {
 
 /** Every field, or a 400 naming the ones missing. Agents deserve a usable error. */
 function validate(body: Record<string, unknown>): { ok: true; request: AgentRequest } | { ok: false; missing: string[] } {
+  if (!body || typeof body !== 'object' || Array.isArray(body)) return { ok: false, missing: [...FIVE_FIELDS] };
   const missing = FIVE_FIELDS.filter((f) => body[f] === undefined);
   if (missing.length) return { ok: false, missing };
   const price = body['price'] as { amount?: unknown; currency?: unknown };
-  if (typeof price?.amount !== 'number' || typeof price?.currency !== 'string') {
+  if (typeof price?.amount !== 'number' || !Number.isFinite(price.amount) || price.amount <= 0 || price.currency !== 'JPYC') {
     return { ok: false, missing: ['price.amount (number)', 'price.currency (string)'] };
+  }
+  if (typeof body.deadline !== 'string' || !Number.isFinite(Date.parse(body.deadline))) {
+    return { ok: false, missing: ['deadline (valid ISO date)'] };
+  }
+  if (typeof body.who !== 'string' || !body.who.trim() || typeof body.what !== 'string' || !body.what.trim()
+    || !['market-research', 'demand-estimation', 'personalisation', 'ai-training', 'other'].includes(String(body.purpose))) {
+    return { ok: false, missing: ['who, what, purpose (valid strings)'] };
+  }
+  if (body.actingAs !== undefined && !['buyer', 'delegate'].includes(String(body.actingAs))
+    || body.writeTarget !== undefined && !['proposal', 'permission', 'payout'].includes(String(body.writeTarget))) {
+    return { ok: false, missing: ['actingAs or writeTarget (unsupported value)'] };
   }
   return {
     ok: true,
@@ -290,16 +305,27 @@ function validate(body: Record<string, unknown>): { ok: true; request: AgentRequ
 export function createApp(deps: AppDeps): Server {
   const now = deps.now ?? (() => new Date());
   const pending = new PendingVerifications();
-  const idkit = deps.idkitDemo ? createIdkitApproval(deps.idkitDemo, deps.store, async (entry, proof) => {
-    // Claim before settlement awaits: concurrent valid proofs cannot settle twice.
+  const claimApproval = (entry: Entry) => {
     entry.resolution = 'approved';
-    const paid = await settleApproved(entry, deps.settlement);
+    entry.completed = { status: 503, body: { id: entry.request.id, verdict: 'approved',
+      settlement: 'unknown', reason: 'Approval claimed; reconcile any uncertain payment before retrying' } };
+    deps.store.add(entry);
+  };
+  const completeApproval = (entry: Entry, body: Record<string, unknown>) => {
+    entry.completed = { status: 200, body };
+    deps.store.add(entry);
+    return body;
+  };
+  const idkit = deps.idkitDemo ? createIdkitApproval(deps.idkitDemo, deps.store, async (entry, proof, authorized) => {
+    // Claim before settlement awaits: concurrent valid proofs cannot settle twice.
+    claimApproval(entry);
+    const paid = await settleApproved(entry, deps.settlement, deps.screening, now, authorized);
     entry.settlement = paid.settled ? paid.transaction : 'not-wired';
     deps.store.remember({
       who: entry.request.who, what: entry.request.what, outcome: 'approved',
       decidedAt: now().toISOString(), escalatedBy: entry.decision.rule,
     });
-    return { id: entry.request.id, verdict: 'approved', identity: proof, settlement: paid };
+    return completeApproval(entry, { id: entry.request.id, verdict: 'approved', identity: proof, settlement: paid });
   }, () => now().getTime()) : undefined;
   const koe = createKoeRegistration(deps.idkitDemo, deps.policy, () => now().getTime());
 
@@ -347,14 +373,42 @@ export function createApp(deps: AppDeps): Server {
     html(res, 200, resultPage({ outcome, detail }));
   };
 
-  return createServer(async (req, res) => {
+  const a2aOrigin = () => {
+    const address = server.address();
+    if (!address || typeof address === 'string') throw new Error('HTTP intake is not listening');
+    return deps.origin ?? deps.idkitDemo?.origin ?? `http://127.0.0.1:${address.port}`;
+  };
+  const a2a = createA2A({
+    store: deps.store, owner: deps.policy.owner, paid: Boolean(deps.settlement?.live), now,
+    origin: a2aOrigin,
+    intake: async (body, headers) => {
+      const address = server.address();
+      if (!address || typeof address === 'string') throw new Error('HTTP intake is not listening');
+      // Only this process's bound port is used. Caller-controlled URLs are never followed.
+      const response = await fetch(`http://127.0.0.1:${address.port}/requests`, {
+        method: 'POST', headers: { ...headers, 'content-type': 'application/json' },
+        body: JSON.stringify(body), signal: AbortSignal.timeout(30000), redirect: 'error',
+      });
+      const result = await response.json() as Record<string, any>;
+      const encoded = response.headers.get('payment-required');
+      const accepts = result.payment?.accepts;
+      return { status: response.status, body: result,
+        ...(encoded ? { required: decodePaymentRequiredHeader(encoded) }
+          : accepts ? { required: { x402Version: 2, accepts,
+            resource: { url: `${a2aOrigin()}/a2a`, mimeType: 'application/json' },
+          } } : {}) };
+    },
+  });
+  const server = createServer(async (req, res) => {
     const url = new URL(req.url ?? '/', 'http://localhost');
     const path = url.pathname;
 
     try {
       if (await experience(req, res)) return;
+      if (await a2a(req, res)) return;
       if (await koe(req, res)) return;
       if (idkit && await idkit(req, res)) return;
+      if (deps.idkitDemo?.owner && await deps.idkitDemo.owner.handle(req, res, deps.store, deps.policy)) return;
       if (deps.productionProbe && await deps.productionProbe(req, res)) return;
       if (req.method === 'GET' && path === '/fees') {
         return json(res, deps.fees ? 200 : 404, deps.fees?.summary(now().getTime()) ?? { error: 'not_found' });
@@ -373,7 +427,10 @@ export function createApp(deps: AppDeps): Server {
             routing: true,
             classifier: Boolean(deps.classifier),
             identity: Boolean(deps.idkitDemo || (deps.identityWired && deps.identity)),
-            identityMode: deps.idkitDemo ? 'idkit-production-visitor-demo' : 'oidc-or-mock',
+            identityMode: deps.idkitDemo
+              ? deps.idkitDemo.owner ? 'idkit-production-owner-and-visitor' : 'idkit-production-visitor-demo'
+              : 'oidc-or-mock',
+            ownerApproval: Boolean(deps.idkitDemo?.owner),
             koeRegistration: Boolean(deps.idkitDemo?.assets.koePage && deps.idkitDemo?.assets.koeJs),
             experience: Boolean(deps.experience && deps.idkitDemo),
             screening: Boolean(deps.screeningWired),
@@ -396,136 +453,190 @@ export function createApp(deps: AppDeps): Server {
         }
 
         const request = parsed.request;
-
-        // Screening runs before anything can settle, and its result decides the branch.
-        // Awaited here so that `route` stays synchronous and pure.
-        const screened = await screenDeclared(deps.screening, request.payoutAddress);
-        const routingCtx: RoutingContext = {
-          now: now(),
-          seenBefore: (who) => deps.store.hasSeen(who),
-          screen: () => screened,
-          ...(deps.screening.reasonFor
-            ? { screeningReason: () => deps.screening.reasonFor!(request.payoutAddress ?? '') }
-            : {}),
-          ...(request.actingAs === 'delegate'
-            ? { delegationRevoked: await delegationDisabled(deps.policy.owner, deps.delegation) }
-            : {}),
-        };
-
-        let decision = route(request, deps.policy, routingCtx);
-        decision = applyLearned(request, decision, learn(deps.store.history()));
-
-        // The model is consulted in exactly one place.
-        if (decision.verdict === 'human' && decision.rule === 9 && deps.classifier) {
-          decision = applyClassification(decision, await deps.classifier.classify(request));
-        }
-
-        const entry: Entry = { request, decision, receivedAt: now().toISOString() };
-        const feeQuote = deps.fees?.record(request, now().getTime());
-        const extensions = feeQuote ? deps.fees!.extensions(feeQuote) : undefined;
-        const fee = feeQuote ? { optional: true, status: await deps.fees!.receive(feeQuote, req.headers[FEE_HEADER], now().getTime()), paid: false } : undefined;
-        const feeBody = fee ? { fee, ...(extensions ? { extensions } : {}) } : {};
-        const payment = signedPayment(req);
-        const resourceUrl = `${deps.origin ?? ''}/requests`;
-
-        /*
-         * `auto` — the money moves now, or the request does not complete.
-         *
-         * Without a signed authorization this is a 402 rather than a success, which is the
-         * whole point of the status code: the agent is told exactly what to pay and comes
-         * straight back. With one, we settle before returning, so a `200` here always means
-         * a transfer really happened.
-         */
-        if (decision.verdict === 'auto' && mayMoveMoney(screened)) {
-          if (deps.settlement?.live) {
-            const requirement = deps.settlement.quote(
-              request.price.amount,
-              request.price.currency,
-            );
-            if (!payment) {
-              deps.store.add(entry);
-              return paymentRequired(res, requirement, resourceUrl, 'payment is required', {
-                id: request.id,
-                ...feeBody,
-                verdict: 'auto',
-                reason: decision.reason,
-              }, extensions);
-            }
-            const result = await deps.settlement.settle(payment, requirement);
-            if (result.status === 'refused') {
-              deps.store.add(entry);
-              return paymentRequired(res, requirement, resourceUrl, result.reason, {
-                id: request.id,
-                ...feeBody,
-                verdict: 'auto',
-                settlement: 'refused',
-                reason: result.reason,
-              }, extensions);
-            }
-            entry.settlement = result.transaction;
-            deps.store.add(entry);
-            res.writeHead(200, { 'content-type': 'application/json; charset=utf-8' });
-            return res.end(
-              JSON.stringify(
-                { ...verdictBody(entry), ...feeBody, settlement: { ...result, requirement } },
-                null,
-                2,
-              ),
-            );
+        if (!deps.store.acquire(request.id)) return json(res, 409, { error: 'request is already being processed' });
+        try {
+          const previous = deps.store.get(request.id);
+          if (previous && !sameRequest(previous.request, request)) {
+            return json(res, 409, { error: 'request ID already belongs to a different offer' });
           }
-          entry.settlement = 'not-wired';
-        }
+          if (previous?.completed) return json(res, previous.completed.status, previous.completed.body);
+          if (previous?.resolution) return json(res, 200, {
+            id: request.id, verdict: previous.resolution === 'approved' ? 'approved' : 'deny',
+            held: false, resolution: previous.resolution, settlement: previous.settlement ?? null,
+          });
+          const expired = () => !(Date.parse(request.deadline) > now().getTime());
+          const denyExpired = () => {
+            const entry: Entry = previous ?? { request, decision: onDeadline(), receivedAt: now().toISOString() };
+            entry.decision = onDeadline(); entry.resolution = 'expired';
+            const body = { ...verdictBody(entry), held: false };
+            entry.completed = { status: 410, body }; deps.store.add(entry);
+            return json(res, 410, body);
+          };
+          if (expired()) return denyExpired();
+          if (previous?.auth) return json(res, 202, { ...verdictBody(previous), payment: { accepted: true, note: 'authorization already held' } });
+          const payment = signedPayment(req);
+          if ((req.headers['payment-signature'] || req.headers['x-payment']) && !payment) {
+            return json(res, 400, { error: 'invalid payment signature header' });
+          }
+          const payer = (payment as { payload?: { authorization?: { from?: unknown } } } | undefined)?.payload?.authorization?.from;
+          const payerAddress = typeof payer === 'string' && isAddress(payer) ? payer : undefined;
+          const source = payerAddress ?? request.payoutAddress;
+          const sourceMismatch = Boolean(payment && (!payerAddress
+            || request.payoutAddress && request.payoutAddress.toLowerCase() !== payerAddress.toLowerCase()));
 
-        /*
-         * `human` — the agent may authorize now and be charged only if she says yes.
-         *
-         * An EIP-3009 authorization moves nothing until it is settled, so holding one costs
-         * the agent nothing while she sleeps. We only keep it if it outlives the deadline:
-         * accepting a shorter one would mean queueing a request we already know can never
-         * complete. If she never answers, the authorization expires and **nobody** can
-         * settle it — the refusal is enforced by the signature, not by us.
-         */
-        let authNote: Record<string, unknown> = {};
-        if (decision.verdict === 'human' && deps.settlement?.live) {
-          const requirement = deps.settlement.quote(request.price.amount, request.price.currency);
-          if (!payment) {
-            authNote = {
-              payment: {
-                note: 'sign an authorization now and it settles only if she approves',
-                accepts: [requirement],
-              },
-            };
-          } else if (!outlivesDeadline(payment, request.deadline)) {
-            authNote = {
-              payment: {
-                accepted: false,
-                reason: 'authorization expires before the deadline it would be judged against',
-                accepts: [requirement],
-              },
-            };
-          } else {
-            const checked = await deps.settlement.check(payment, requirement);
-            if (checked.status === 'refused') {
-              authNote = { payment: { accepted: false, reason: checked.reason } };
-            } else {
-              entry.auth = {
-                payload: payment,
-                requirement,
-                validBefore: Math.floor(new Date(request.deadline).getTime() / 1000),
-              };
+          // Screening runs before anything can settle, and its result decides the branch.
+          // Awaited here so that `route` stays synchronous and pure.
+          const screened = sourceMismatch ? 'unavailable' : await screenDeclared(
+            deps.screening, source, Boolean(deps.screeningWired || deps.settlement?.live),
+          );
+          if (expired()) return denyExpired();
+          const routingCtx: RoutingContext = {
+            now: now(),
+            seenBefore: (who) => deps.store.hasSeen(who),
+            screen: () => screened,
+            ...(sourceMismatch
+              ? { screeningReason: () => 'the declared source must match the signed payer' }
+              : deps.screening.reasonFor
+              ? { screeningReason: () => deps.screening.reasonFor!(source ?? '') }
+              : {}),
+            ...(request.actingAs === 'delegate'
+              ? { delegationRevoked: await delegationDisabled(deps.policy.owner, deps.delegation) }
+              : {}),
+          };
+
+          let decision = route(request, deps.policy, routingCtx);
+          decision = applyLearned(request, decision, learn(deps.store.history()));
+
+          // The model is consulted in exactly one place.
+          if (decision.verdict === 'human' && decision.rule === 9 && deps.classifier) {
+            decision = applyClassification(decision, await deps.classifier.classify(request));
+          }
+          if (expired()) return denyExpired();
+
+          const entry: Entry = previous ?? { request, decision, receivedAt: now().toISOString() };
+          entry.decision = decision;
+          if (source) entry.paymentSource = source;
+          const feeQuote = deps.fees?.record(request, now().getTime());
+          const extensions = feeQuote ? deps.fees!.extensions(feeQuote) : undefined;
+          const fee = feeQuote ? { optional: true, status: await deps.fees!.receive(feeQuote, req.headers[FEE_HEADER], now().getTime()), paid: false } : undefined;
+          const feeBody = fee ? { fee, ...(extensions ? { extensions } : {}) } : {};
+          const resourceUrl = `${deps.origin ?? ''}/requests`;
+          if (expired()) return denyExpired();
+
+          /*
+           * `auto` — the money moves now, or the request does not complete.
+           *
+           * Without a signed authorization this is a 402 rather than a success, which is the
+           * whole point of the status code: the agent is told exactly what to pay and comes
+           * straight back. With one, we settle before returning, so a `200` here always means
+           * a transfer really happened.
+           */
+          if (decision.verdict === 'auto' && mayMoveMoney(screened)) {
+            if (deps.settlement?.live) {
+              const requirement = deps.settlement.quote(
+                request.price.amount,
+                request.price.currency,
+              );
+              if (!payment) {
+                deps.store.add(entry);
+                return paymentRequired(res, requirement, resourceUrl, 'payment is required', {
+                  id: request.id,
+                  ...feeBody,
+                  verdict: 'auto',
+                  reason: decision.reason,
+                }, extensions);
+              }
+              entry.completed = { status: 503, body: {
+                id: request.id, verdict: 'deny', settlement: 'unknown',
+                reason: 'payment outcome is uncertain; reconcile before creating another request',
+              } };
+              deps.store.add(entry);
+              let result;
+              try {
+                result = await deps.settlement.settle(payment, requirement);
+              } catch {
+                return json(res, entry.completed.status, entry.completed.body);
+              }
+              if (result.status === 'refused') {
+                // The provider may have broadcast before losing its response. Do not try a
+                // new authorization for the same request after an uncertain payment.
+                entry.completed = { status: 402, body: {
+                  id: request.id, verdict: 'auto', settlement: 'refused', reason: result.reason,
+                  ...feeBody, x402Version: 2, accepts: [requirement],
+                } };
+                deps.store.add(entry);
+                return paymentRequired(res, requirement, resourceUrl, result.reason, {
+                  id: request.id,
+                  ...feeBody,
+                  verdict: 'auto',
+                  settlement: 'refused',
+                  reason: result.reason,
+                }, extensions);
+              }
+              entry.settlement = result.transaction;
+              entry.completed = { status: 200, body: {
+                ...verdictBody(entry), ...feeBody, settlement: { ...result, requirement },
+              } };
+              deps.store.add(entry);
+              return json(res, 200, entry.completed.body);
+            }
+            entry.settlement = 'not-wired';
+          }
+
+          /*
+           * `human` — the agent may authorize now and be charged only if she says yes.
+           *
+           * An EIP-3009 authorization moves nothing until it is settled, so holding one costs
+           * the agent nothing while she sleeps. We only keep it if it outlives the deadline:
+           * accepting a shorter one would mean queueing a request we already know can never
+           * complete. If she never answers, the authorization expires and **nobody** can
+           * settle it — the refusal is enforced by the signature, not by us.
+           */
+          let authNote: Record<string, unknown> = {};
+          if (decision.verdict === 'human' && deps.settlement?.live) {
+            const requirement = deps.settlement.quote(request.price.amount, request.price.currency);
+            if (!payment) {
               authNote = {
                 payment: {
-                  accepted: true,
-                  note: 'held. It settles the moment she approves, and expires if she does not',
+                  note: 'sign an authorization now and it settles only if she approves',
+                  accepts: [requirement],
                 },
               };
+            } else if (!outlivesDeadline(payment, request.deadline)) {
+              authNote = {
+                payment: {
+                  accepted: false,
+                  reason: 'authorization expires before the deadline it would be judged against',
+                  accepts: [requirement],
+                },
+              };
+            } else {
+              const checked = await deps.settlement.check(payment, requirement);
+              if (expired()) return denyExpired();
+              if (checked.status === 'refused') {
+                authNote = { payment: { accepted: false, reason: checked.reason } };
+              } else {
+                entry.auth = {
+                  payload: payment,
+                  requirement,
+                  validBefore: Math.floor(new Date(request.deadline).getTime() / 1000),
+                };
+                authNote = {
+                  payment: {
+                    accepted: true,
+                    note: 'held. It settles the moment she approves, and expires if she does not',
+                  },
+                };
+              }
             }
           }
-        }
 
-        deps.store.add(entry);
-        const status = decision.verdict === 'human' ? 202 : 200;
-        return json(res, status, { ...verdictBody(entry), ...feeBody, ...authNote });
+          deps.store.add(entry);
+          const status = decision.verdict === 'human' ? 202 : 200;
+          const response = { ...verdictBody(entry), ...feeBody, ...authNote };
+          if (decision.verdict === 'deny') entry.completed = { status, body: response };
+          return json(res, status, response);
+        } finally { deps.store.release(request.id); }
       }
 
       /* ── the owner answers ──────────────────────────────────────────────── */
@@ -591,8 +702,13 @@ export function createApp(deps: AppDeps): Server {
           }
         }
 
-        entry.resolution = 'approved';
-        const paid = await settleApproved(entry, deps.settlement);
+        if (entry.resolution) return json(res, 409, { error: 'already answered' });
+        if (!(Date.parse(entry.request.deadline) > now().getTime())) {
+          entry.resolution = 'expired';
+          return json(res, 410, { id, verdict: 'deny', settled: false });
+        }
+        claimApproval(entry);
+        const paid = await settleApproved(entry, deps.settlement, deps.screening, now);
         entry.settlement = paid.settled ? paid.transaction : 'not-wired';
         deps.store.remember({
           who: entry.request.who,
@@ -602,7 +718,7 @@ export function createApp(deps: AppDeps): Server {
           escalatedBy: entry.decision.rule,
         });
 
-        return json(res, 200, {
+        return json(res, 200, completeApproval(entry, {
           id,
           verdict: 'approved',
           identity: verification?.status === 'verified'
@@ -613,7 +729,7 @@ export function createApp(deps: AppDeps): Server {
               }
             : 'not wired',
           settlement: paid,
-        });
+        }));
       }
 
       /*
@@ -654,7 +770,7 @@ export function createApp(deps: AppDeps): Server {
           ],
           cannotDo: [
             ...(deps.idkitDemo
-              ? ['IDKit proves personhood only for browser-bound visitor demos; ordinary owner approvals are disabled']
+              ? deps.idkitDemo.owner ? [] : ['IDKit proves personhood only for browser-bound visitor demos; ordinary owner approvals are disabled']
               : deps.identityWired ? [] : ['identity is mocked on this instance']),
             ...(deps.settlement?.live ? [] : ['settlement is not wired on this instance']),
             ...(deps.delegation
@@ -668,8 +784,8 @@ export function createApp(deps: AppDeps): Server {
 
       /* ── what she wakes up to ───────────────────────────────────────────── */
       if (req.method === 'GET' && path.startsWith('/ledger/')) {
+        const morning = deps.store.surface(deps.policy, now());
         const outstanding = deps.store.outstanding();
-        const morning = surface(outstanding, deps.policy, now());
         const ledger = buildLedger({
           date: now().toISOString().slice(0, 10),
           settled: deps.store.byVerdict('auto'),
@@ -747,7 +863,7 @@ export function createApp(deps: AppDeps): Server {
           id: `try-${randomUUID().slice(0, 8)}`,
           deadline: new Date(now().getTime() + 6 * 3_600_000).toISOString(),
         };
-        const screened = await screenDeclared(deps.screening, request.payoutAddress);
+        const screened = await screenDeclared(deps.screening, request.payoutAddress, true);
         let decision = route(request, deps.policy, {
           now: now(),
           seenBefore: (who) => deps.store.hasSeen(who),
@@ -776,7 +892,7 @@ export function createApp(deps: AppDeps): Server {
          * after a verified person says yes.
          */
         const payTo = skipping ? undefined : wanted || undefined;
-        if (payTo && deps.settlement?.live && deps.demoBuyerKey && allowDemoSignature()) {
+        if (decision.verdict === 'human' && payTo && deps.settlement?.live && deps.demoBuyerKey && allowDemoSignature()) {
           const requirement = deps.settlement.quote(
             request.price.amount,
             request.price.currency,
@@ -847,8 +963,8 @@ export function createApp(deps: AppDeps): Server {
         const id = decodeURIComponent(path.slice('/approve/'.length));
         const entry = deps.store.get(id);
         if (!entry) return html(res, 404, resultPage({ outcome: 'refused', detail: 'No such request.' }));
-        if (deps.idkitDemo && (!entry.demoBrowser || entry.demoBrowser !== demoBrowser(req, deps.idkitDemo.origin))) {
-          return html(res, 403, resultPage({ outcome: 'refused', detail: 'Start your own demo from /try in this browser.' }));
+        if (deps.idkitDemo && !approvalBrowser(req, entry, deps.idkitDemo)) {
+          return html(res, 403, resultPage({ outcome: 'refused', detail: 'For ordinary requests, sign in at /owner/login. For visitor demos, use the browser that started /try.' }));
         }
         if (entry.resolution) {
           return html(res, 200, resultPage({
@@ -918,9 +1034,16 @@ export function createApp(deps: AppDeps): Server {
           return html(res, 404, resultPage({ outcome: 'refused', detail: 'Nothing to answer.' }));
         }
         if (deps.idkitDemo && (req.headers.origin !== deps.idkitDemo.origin
-          || !entry.demoBrowser || entry.demoBrowser !== demoBrowser(req, deps.idkitDemo.origin))) {
-          return json(res, 403, { error: 'Only your own visitor demo can be declined here.' });
+          || !approvalBrowser(req, entry, deps.idkitDemo))) {
+          return json(res, 403, { error: 'Sign in as the owner or use your own visitor demo.' });
         }
+        if (deps.idkitDemo && !entry.demoBrowser && !await deps.idkitDemo.owner?.authority()) {
+          return json(res, 403, { error: 'owner_authority_not_verified' });
+        }
+        if (deps.idkitDemo && !approvalBrowser(req, entry, deps.idkitDemo)) {
+          return json(res, 403, { error: 'owner_session_expired' });
+        }
+        if (entry.resolution) return json(res, 409, { error: 'already answered' });
         return refuse(res, entry, 'declined', 'Nothing was sent, and nothing moved.', 'refused');
       }
 
@@ -955,13 +1078,17 @@ export function createApp(deps: AppDeps): Server {
           at: now(),
         });
 
+        if (entry.resolution) return json(res, 409, { error: 'already answered' });
+        if (!(Date.parse(entry.request.deadline) > now().getTime())) {
+          return refuse(res, entry, 'expired', onDeadline().reason, 'ignored');
+        }
         if (outcome.status !== 'verified') {
           // Refusal, staleness and an unreachable issuer all end the same way.
           return refuse(res, entry, 'refused', `${outcome.status}: ${outcome.reason}`, 'ignored');
         }
 
-        entry.resolution = 'approved';
-        const paid = await settleApproved(entry, deps.settlement);
+        claimApproval(entry);
+        const paid = await settleApproved(entry, deps.settlement, deps.screening, now);
         entry.settlement = paid.settled ? paid.transaction : 'not-wired';
         deps.store.remember({
           who: entry.request.who,
@@ -970,6 +1097,7 @@ export function createApp(deps: AppDeps): Server {
           decidedAt: now().toISOString(),
           escalatedBy: entry.decision.rule,
         });
+        completeApproval(entry, { id: entry.request.id, verdict: 'approved', settlement: paid });
         return html(res, 200, resultPage({
           outcome: 'approved',
           detail: entry.request.what,
@@ -1002,9 +1130,9 @@ export function createApp(deps: AppDeps): Server {
       // Anything unexpected denies rather than passing. Failing open here would undo
       // every other guarantee in the system.
       json(res, 500, {
-        error: 'the router could not decide, so nothing was allowed',
-        detail: err instanceof Error ? err.message : String(err),
+        error: 'the operation could not complete; check its recorded outcome before retrying',
       });
     }
   });
+  return server;
 }

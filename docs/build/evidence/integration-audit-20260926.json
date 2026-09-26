@@ -1,0 +1,338 @@
+{
+  "checkedAt": "2026-09-26T11:16:26.125Z",
+  "commit": "6b10c2c51dfb963198da405a691c1b4d96bb6eac",
+  "mode": "local-simulated-providers-and-live-read-only-probes",
+  "fullyIntegrated": false,
+  "counts": {
+    "pass": 22,
+    "gap": 8,
+    "blocked": 1,
+    "fail": 0
+  },
+  "results": [
+    {
+      "name": "x402 v2 support and unpaid quote",
+      "status": "pass",
+      "detail": {
+        "status": 402,
+        "settlements": 0,
+        "provider": "local simulated facilitator"
+      }
+    },
+    {
+      "name": "declared clean source -> real signing -> x402 HTTP -> ledger",
+      "status": "pass",
+      "detail": {
+        "status": 200,
+        "rule": 8,
+        "settlement": "settled",
+        "onchain": false
+      }
+    },
+    {
+      "name": "screening flagged -> deny without settlement",
+      "status": "pass",
+      "detail": {
+        "verdict": "deny",
+        "rule": 4,
+        "settlementsAdded": 0
+      }
+    },
+    {
+      "name": "drop list loses distinct reasons within the same rule",
+      "status": "gap",
+      "detail": {
+        "rule": 4,
+        "secondReason": "screening was unavailable — we do not settle unchecked (the screening API answered 503)",
+        "reason": "The page groups requests by rule and shows only the first request reason."
+      }
+    },
+    {
+      "name": "screening unavailable -> deny without settlement",
+      "status": "pass",
+      "detail": {
+        "verdict": "deny",
+        "rule": 4,
+        "settlementsAdded": 0
+      }
+    },
+    {
+      "name": "delegate permission refusal and revoked proposal refusal",
+      "status": "pass",
+      "detail": {
+        "permission": "deny",
+        "afterRevocation": "deny",
+        "provider": "simulated ENS permission state"
+      }
+    },
+    {
+      "name": "unknown topic -> classifier drop -> no payment",
+      "status": "pass",
+      "detail": {
+        "rule": 9,
+        "verdict": "deny",
+        "provider": "MockClassifier"
+      }
+    },
+    {
+      "name": "ordinary agent -> production owner approval is disconnected",
+      "status": "gap",
+      "detail": {
+        "request": "HTTP 202, authorization retained",
+        "approvalPage": 403,
+        "approvalApi": 403,
+        "reason": "IDKit only authorizes browser-bound /try requests."
+      }
+    },
+    {
+      "name": "ordinary human request holds a checked authorization",
+      "status": "pass",
+      "detail": {
+        "held": true,
+        "settlementsAdded": 0
+      }
+    },
+    {
+      "name": "visitor proof/payment path does not exercise screening or ENS",
+      "status": "gap",
+      "detail": {
+        "screeningCalls": 0,
+        "reason": "/try has no declared payment source and is not a delegate request."
+      }
+    },
+    {
+      "name": "visitor proof -> payment once; replay refused",
+      "status": "pass",
+      "detail": {
+        "proof": "simulated verifier result",
+        "settlement": "local HTTP facilitator",
+        "onchain": false,
+        "replayStatus": 400
+      }
+    },
+    {
+      "name": "visitor cancel -> no payment",
+      "status": "pass",
+      "detail": {
+        "status": 400,
+        "settlementsAdded": 0
+      }
+    },
+    {
+      "name": "visitor reject -> no payment",
+      "status": "pass",
+      "detail": {
+        "status": 403,
+        "settlementsAdded": 0
+      }
+    },
+    {
+      "name": "visitor expire -> no payment",
+      "status": "pass",
+      "detail": {
+        "status": 400,
+        "settlementsAdded": 0
+      }
+    },
+    {
+      "name": "fees remain accounting only",
+      "status": "pass",
+      "detail": {
+        "vouchers": 8,
+        "broadcast": false,
+        "collected": false
+      }
+    },
+    {
+      "name": "A2A Agent Card / SendMessage transport missing",
+      "status": "gap",
+      "detail": {
+        "agentCardStatus": 404,
+        "supportedIntake": "POST /requests"
+      }
+    },
+    {
+      "name": "architecture discovery endpoint",
+      "status": "pass",
+      "detail": {
+        "status": 404
+      }
+    },
+    {
+      "name": "payment can settle without a screening source",
+      "status": "gap",
+      "detail": {
+        "status": 200,
+        "verdict": "auto",
+        "scans": 0,
+        "settlementsAdded": 1,
+        "reason": "Declared address is optional and is not bound to the signed payer."
+      }
+    },
+    {
+      "name": "missing payment source behavior",
+      "status": "pass",
+      "detail": {
+        "status": 200,
+        "scans": 0
+      }
+    },
+    {
+      "name": "intake deadline is not enforced before automatic settlement",
+      "status": "gap",
+      "detail": [
+        {
+          "deadline": "2026-09-26T11:17:22.948Z",
+          "status": 200,
+          "verdict": "auto",
+          "settlementsAdded": 1
+        },
+        {
+          "deadline": "not-a-date",
+          "status": 200,
+          "verdict": "auto",
+          "settlementsAdded": 1
+        }
+      ]
+    },
+    {
+      "name": "expired or malformed intake deadline behavior",
+      "status": "pass",
+      "detail": [
+        {
+          "deadline": "2026-09-26T11:17:22.948Z",
+          "status": 200,
+          "verdict": "auto",
+          "settlementsAdded": 1
+        },
+        {
+          "deadline": "not-a-date",
+          "status": 200,
+          "verdict": "auto",
+          "settlementsAdded": 1
+        }
+      ]
+    },
+    {
+      "name": "one request ID can settle multiple authorizations; ledger overwrites",
+      "status": "gap",
+      "detail": {
+        "payments": 2,
+        "entriesForId": 1
+      }
+    },
+    {
+      "name": "same request ID with fresh payment authorization",
+      "status": "pass",
+      "detail": {
+        "payments": 2
+      }
+    },
+    {
+      "name": "daily cap is a per-response slice, without daily delivery accounting",
+      "status": "gap",
+      "detail": {
+        "firstBundles": 2,
+        "additionalBundlesSameDay": 2,
+        "note": "Resolution was advanced in the fixture; no notification sender exists."
+      }
+    },
+    {
+      "name": "queue cap after previous requests were answered",
+      "status": "pass",
+      "detail": {
+        "first": 2,
+        "second": 2
+      }
+    },
+    {
+      "name": "live public deployment health",
+      "status": "blocked",
+      "detail": {
+        "error": "TypeError",
+        "code": "ECONNRESET",
+        "note": "Raw provider errors omitted because they may contain credentials."
+      }
+    },
+    {
+      "name": "live Intercepta -> HTTP router clean/flagged",
+      "status": "pass",
+      "detail": {
+        "observations": [
+          {
+            "fixture": "clean",
+            "status": 200,
+            "verdict": "auto",
+            "rule": 8,
+            "reason": "within the standing grant for \"experience/why-you-put-it-back\""
+          },
+          {
+            "fixture": "flagged",
+            "status": 200,
+            "verdict": "deny",
+            "rule": 4,
+            "reason": "the payment source failed screening — known_scammer — The address has a confirmed history of malicious activity, including scams, phishing, or other harmful behavior."
+          }
+        ],
+        "payment": "disabled"
+      }
+    },
+    {
+      "name": "live ENS -> HTTP revoked delegation denial",
+      "status": "pass",
+      "detail": {
+        "name": "yohaku-minta-2026.eth",
+        "revoked": true,
+        "blockNumber": "11785883",
+        "verdict": "deny",
+        "rule": 0
+      }
+    },
+    {
+      "name": "live World RP registration and local approval configuration",
+      "status": "pass",
+      "detail": {
+        "rpStatus": "registered",
+        "signerAndBundle": "valid",
+        "freshHumanProof": "not performed"
+      }
+    },
+    {
+      "name": "live x402 facilitator support",
+      "status": "pass",
+      "detail": {
+        "network": "eip155:84532",
+        "x402Version": 2,
+        "scheme": "exact",
+        "newPayment": false
+      }
+    },
+    {
+      "name": "re-read historical World/payment and screening/payment receipts",
+      "status": "pass",
+      "detail": {
+        "observations": [
+          {
+            "transaction": "0xa87231ba7d9a46c15764f1f875aa9619f060101fb49e369e67f896e8741df8c4",
+            "blockNumber": "47316550",
+            "amountAtomic": "4200",
+            "transferMatches": true
+          },
+          {
+            "transaction": "0xa6b97b7c07716a8456c9f6b78157366e3ac760f2be3dfbb77b63eedcbb8d0087",
+            "blockNumber": "47318256",
+            "amountAtomic": "120",
+            "transferMatches": true
+          }
+        ],
+        "newPayment": false,
+        "note": "Receipts re-read now; World proof is historical evidence only."
+      }
+    }
+  ],
+  "limitations": [
+    "Local proof verifier and facilitator are simulated; no new human proof or blockchain payment.",
+    "No private key, browser cookie, raw proof or payment authorization is included.",
+    "Live health describes configuration, not successful end-to-end execution."
+  ]
+}

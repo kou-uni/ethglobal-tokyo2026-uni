@@ -25,11 +25,13 @@ import { WorldIdentity } from '../adapters/world-oidc.js';
 import { createApp } from './app.js';
 import { X402Settlement, x402FromEnv } from '../adapters/x402.js';
 import { Store } from './state.js';
+import { AttentionBudget } from './attention.js';
 import { createPublicClient, http, isAddress } from 'viem';
 import { sepolia } from 'viem/chains';
 import { EnsPermissions } from '../adapters/ens-permissions.js';
 import { productionProbeFromEnv } from './world-production-config.js';
 import { idkitApprovalFromEnv } from './idkit-config.js';
+import { ownerAuthFromEnv } from './owner-config.js';
 
 const PORT = Number(process.env['PORT'] ?? 8402);
 
@@ -93,9 +95,15 @@ const delegation = ensRpc && ensName
  * it never made.
  */
 const intercepta = interceptaFromEnv(process.env);
+if (settlement && !intercepta) throw new Error('Live settlement requires live screening configuration');
 const screening = intercepta ? new InterceptaScreening(intercepta) : new MockScreening();
 
 const idkitDemo = await idkitApprovalFromEnv(process.env);
+if (settlement && !idkitDemo) throw new Error('Live settlement requires production IDKit approval; mock identity is not allowed');
+if (idkitDemo) {
+  const owner = ownerAuthFromEnv(process.env, idkitDemo.origin);
+  if (owner) idkitDemo.owner = owner;
+}
 const app = createApp({
   ...(fees ? { fees } : {}),
   ...(idkitDemo ? { idkitDemo } : {}),
@@ -105,7 +113,8 @@ const app = createApp({
   productionProbe: productionProbeFromEnv(process.env),
   ...(delegation ? { delegation } : {}),
   policy,
-  store: new Store(KNOWN_PARTIES),
+  store: new Store(KNOWN_PARTIES, new AttentionBudget(process.env.ATTENTION_STATE_FILE ?? '.yohaku/attention.json'),
+    process.env.REQUEST_STATE_FILE ?? '.yohaku/requests.json'),
   screening,
   screeningWired: Boolean(intercepta),
   // Replayed through the same route(), so the fold shows the router's output, not a fixture.
@@ -150,7 +159,7 @@ app.listen(PORT, () => {
   console.log(`    daily cap   ${policy.dailyCap}`);
   console.log(`    ENS reader  ${delegation ? `configured for ${policy.owner}` : 'not configured — delegate requests are denied'}`);
   console.log(`    classifier  ${provider.live ? `${provider.provider} / ${provider.model}` : 'not configured — rule 9 stays with the owner'}`);
-  console.log(`    identity    ${idkitDemo ? 'IDKit production — browser-bound visitor demos only' : worldConfigured && redirectUri ? `World ID → ${redirectUri}` : 'mock — approvals are not proving anything yet'}`);
+  console.log(`    identity    ${idkitDemo ? `IDKit production — visitor demos${idkitDemo.owner ? ' and wallet-authenticated owner inbox at /owner' : ' only'}` : worldConfigured && redirectUri ? `World ID → ${redirectUri}` : 'mock — approvals are not proving anything yet'}`);
   console.log(
     `    screening   ${
       intercepta

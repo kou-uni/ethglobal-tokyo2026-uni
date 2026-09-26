@@ -82,7 +82,17 @@ export function surface(held: HeldRequest[], policy: Policy, now: Date): Surface
 
 /** Is it the hour at which held requests are shown? */
 export function isNotificationHour(policy: Policy, now: Date): boolean {
-  return now.getHours() === policy.notifyHour;
+  return policyClock(policy, now).hour === policy.notifyHour;
+}
+
+/** Calendar boundaries belong to the owner, never to the deployment machine. */
+export function policyClock(policy: Policy, now: Date) {
+  const timeZone = policy.timeZone ?? 'Asia/Tokyo';
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', hourCycle: 'h23',
+  }).formatToParts(now);
+  const value = (name: string) => parts.find(p => p.type === name)!.value;
+  return { timeZone, day: `${value('year')}-${value('month')}-${value('day')}`, hour: Number(value('hour')) };
 }
 
 /**

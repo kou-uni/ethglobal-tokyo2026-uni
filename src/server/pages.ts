@@ -642,13 +642,14 @@ so &ldquo;we protected you&rdquo; is something you can check rather than take ou
     : rules
         .map(
           ([rule, items]) => `<div class="rgrp">
-  <div class="rhd"><span class="rno">RULE ${rule}</span>${esc(items[0]!.reason.replace(/^"[^"]*"\s*/, ''))}</div>
+  <div class="rhd"><span class="rno">RULE ${rule}</span>${items.length} refused request${items.length === 1 ? '' : 's'}</div>
   ${items
     .map(
       (it) => `<div class="drop">
     <div class="dq">${esc(it.question)}</div>
     <div class="dm"><b>${esc(it.who)}</b> offered ${num(it.amount)} ${esc(it.currency)}</div>
     <div class="dslug">${esc(it.what)}</div>
+    <div class="why">${esc(it.reason)}</div>
   </div>`,
     )
     .join('')}

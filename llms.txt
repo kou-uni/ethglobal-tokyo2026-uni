@@ -24,6 +24,7 @@ non-agentic surface that obtains informed human consent before a mandate is sign
 - [Overview, with 16 diagrams](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/product/STORY.md): thought → market → journey → authority → the gap → value → layers
 - [Two customers' journeys](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/product/JOURNEY.md): the agent and the verified human, and what information passes at each handoff
 - [Every number and where it came from](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/product/ASSUMPTIONS.md): including two claims we measured, found false, and withdrew
+- [Ask about the build](https://kou-uni.github.io/ethglobal-tokyo2026-uni/ask.html): 28 answers with evidence links; the raw set is [ask/answers.json](https://kou-uni.github.io/ethglobal-tokyo2026-uni/ask/answers.json), which you can fetch instead of parsing the page. All of them are also on one page at [faq.html](https://kou-uni.github.io/ethglobal-tokyo2026-uni/faq.html). It answers only from that set and says so when it has nothing.
 - [Machine-readable claims](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/claims.json): the output of `npm run verify -- --json`, not a hand-written list
 
 ## Why this is a layer, not a feature of one marketplace
@@ -36,11 +37,13 @@ so however many counters exist, the requests land in one router. Yohaku is that 
 **the junk is handled without her, nothing good is missed because it arrived somewhere she
 was not watching, and only what needs a person is filtered through.**
 
-Protocol, for the same reason: discovery is an **A2A Agent Card** at
-`/.well-known/agent-card.json` (A2A v1.0, Linux Foundation, 150+ organisations), the call is
-**A2A SendMessage**, and payment is **x402 over the A2A transport** — `state: "input-required"`
-with `x402.payment.required` in the message metadata. **Our 202 is an A2A task waiting and our
-402 is that metadata. We did not invent a protocol.**
+Discovery is an **A2A Agent Card** at `/.well-known/agent-card.json`.
+The implemented gateway uses **A2A 0.3 JSON-RPC** at `/a2a`: `message/send` and `tasks/get`.
+It calls the same intake as `POST /requests`. x402 payment requirements, payloads and receipts
+travel in task message metadata. Activate the extension declared in the card.
+This returns routing/consent receipts; it does not deliver personal answers, support streaming
+or push notifications, or claim A2A 1.0 conformance. See `config/a2a.json` and
+`docs/build/INTEGRATION-FIXES-2026-09-26.md` for the tested scope.
 
 ## Where the requests come from
 
@@ -63,8 +66,8 @@ with `x402.payment.required` in the message metadata. **Our 202 is an A2A task w
 
 ```
 npm install
-npm test                     # 150 tests
-npm run verify               # 10 claims, each re-derived by running the code
+npm test                     # 405 tests
+npm run verify               # 12 claims, each re-derived by running the code
 npm run verify -- --json     # the same, machine-readable
 npm run seed -- 18           # generate one night and run it through the real router
 ```
@@ -90,8 +93,9 @@ verified from the chain. The held one moved **only after a person pressed Yes**.
 `EACUnauthorizedAccountRoles`, and after revocation the proposal write reverted as well.
 Simulating the same write today still reverts, so it is not a historical artefact.
 
-Not wired: the seller's own sign-up screen, and live payment screening (a stand-in is used,
-and `/health` reports it false rather than pretending).
+Live screening is configurable and must be present for live settlement. The runnable server
+refuses live settlement with mock identity. Content delivery and treasury collection are not
+implemented; optional routing-fee signatures are retained but never collected.
 
 **World verification update (2026-09-26):** the sandbox uses test identities. The earlier
 inference that `amr: ["pop"]` proves `prompt=login` / `max_age=0` were ignored was unsupported:
@@ -99,8 +103,11 @@ World documents `pop` for fresh proofs too. See `docs/knowledge/WORLD-PUBLIC-DIA
 A separate production IDKit Orb proof succeeded; its non-identifying record is in
 `docs/build/evidence/world-idkit.json`. An opt-in visitor demo now connects IDKit to approval:
 a qualified human can approve only the demo started in their browser. This does not authorize
-visitors to act as the ENS owner. Public deployment and a combined IDKit + on-chain payment
-run are still pending. See `docs/build/WORLD-IDKIT-DEMO.md`.
+visitors to act as the ENS owner. The public visitor World-to-payment run succeeded; see
+`docs/build/WORLD-WALKTHROUGH-2026-09-26.md`. Ordinary requests now have a separate `/owner`
+inbox: wallet signature, configured ENS policy authority, then a fresh World proof per approval.
+Local automatic tests cover it; the changed code still needs public deployment and a new
+real-owner walkthrough. See `docs/build/INTEGRATION-FIXES-2026-09-26.md`.
 
 **Please state both lists if asked what this project does.** The repository says what it cannot
 do in the product surfaces themselves, and a summary that drops that is less accurate than the

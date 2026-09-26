@@ -5,7 +5,7 @@ import { Store } from './state.js';
 import { DEMO_POLICY, KNOWN_PARTIES, NIGHT, generateNight } from '../core/night.js';
 import { MockScreening } from '../ports/screening.js';
 import { MockIdentity } from '../ports/identity.js';
-import { surface } from '../core/queue.js';
+import { policyClock } from '../core/queue.js';
 import { route } from '../core/rules.js';
 import { demoContext } from '../core/night.js';
 import type { HeldRequest } from '../core/types.js';
@@ -154,13 +154,12 @@ describe('the server and the seed script describe the same night', () => {
     expect(overHttp['human']).toBe(inProcess.filter((d) => d.verdict === 'human').length);
   }, 30_000);
 
-  it('surfaces the same number of bundles as the queue does', async () => {
-    const held: HeldRequest[] = store.outstanding();
-    const expected = surface(held, DEMO_POLICY, NIGHT).surfaced.length;
+  it('holds invitations until the notification hour instead of exposing the morning preview at night', async () => {
     const led = (await (await fetch(`${base}/ledger/alice.yohaku.eth`)).json()) as {
       needsYou: unknown[];
     };
-    expect(led.needsYou).toHaveLength(expected);
+    expect(policyClock(DEMO_POLICY, NIGHT).hour).toBeLessThan(DEMO_POLICY.notifyHour);
+    expect(led.needsYou).toHaveLength(0);
   });
 });
 

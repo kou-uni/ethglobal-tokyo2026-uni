@@ -2,21 +2,28 @@
 
 ## 最新の追加：依頼から回答・報酬までのデモ
 
-作業ブランチは `minta/live-human-journey`。PR #23の
-`minta/agent-traffic-animation` の上にPR #28として積んでいます。
-公開前に別PR #27の決済・永続化修正との統合確認が必要です。
-保存ファイルの移行とコンテナの永続ディスク設定を移行手順へ追記しています。
-公開先はminta側でRenderに絞る方針。Kouへは公開先選定ではなく、
-Studioの設定移行・Renderでの公開・提出用URLの共有を依頼しています。実サービスはまだ未作成です。
+作業ブランチは `minta/live-human-journey`。PR #28にPR #23の説明ページも含めています。
+別PR #27を統合し、コードと件数の競合を解消。追加の下書き・USDC表示確認を含め、
+型検査と405 testsが通っています。保存ファイルと永続ディスクの設定は移行手順を参照。
+Kouの22:42 JSTの返答はRender移行案でしたが、mintaの最新希望で**既存Studioの公開URLを優先**します。
+狙いは「映えて、分かりやすく、リアルに一連を流せるデモ」。移行自体は目的ではありません。
+Renderアカウントは作成済みですが、サービス・課金・招待・秘密値移送は未実施です。
 
-- 新しい `/experience`：50件の生成依頼 → 実ルール・審査 → Worldログイン →
-  委任分1件の報酬 → 本人回答1件の報酬・買い手受信箱 → Koe。日英切替あり。
+- 新しい `/experience`：Koe名簿 → 50件の実判定モニター → Worldログイン →
+  アプリ型の本人回答画面 → テストUSDCの受取履歴・Explorer。日英切替と任意のKoe登録あり。
+- ローカル8413でWorld認証は成功していましたが、Jevと送金のキーがなく、質問まで非表示になる問題がありました。
+  未設定の状態を認証前に表示し、未入金でもWorld認証後に質問確認・非公開の下書き保存をできるよう修正。
+  下書きは未配信であり、報酬に加算しません。Kouの設定済みStudioはまだ旧版です。
 - [LIVE-EXPERIENCE.md](LIVE-EXPERIENCE.md) に実処理とエミュレーションの範囲、
   実機確認の残りを記載。Worldとfacilitatorのテストはスタブで、新経路の実送金完走は未確認。
 - [HOSTING-MIGRATION.md](HOSTING-MIGRATION.md) にKouへの公開移行依頼。
-  Dockerfileを追加。クラウドの契約、設定移送、公開切替はまだ行っていない。
+  現在はStudio更新の依頼に変更。既存の秘密設定を維持して `YOHAKU_EXPERIENCE_ENABLED=true` を追加する。
+  Dockerfileは将来の移行用。Render作成作業を再開しない。
 - `docs/experience.html` は公開healthの `wired.experience` を確認する入口。
-  新サーバー反映までは準備中表示。移行先URLは未確定。
+  新コード反映までは準備中表示。実演予定URLは既存Studioの `/experience`。
+- アニメーションはYOHAKU内のIntercepta→方針→3方向の判定をSVG内で描く。
+  Jevは未分類のask/drop補助であり、autoを出せないことを表示。
+  記録済み判定の再生は読み取りのみで、認証や送金を再実行しない。
 - 公開中の旧 `/try` や `/world-approval` は別経路。
   ユーザーが認証中ならブラウザ遷移・サーバー再起動を行わない。
 

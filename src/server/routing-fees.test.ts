@@ -9,12 +9,14 @@ import { createApp } from './app.js';
 import { Store } from './state.js';
 import { DEMO_POLICY, KNOWN_PARTIES } from '../core/night.js';
 import { MockScreening } from '../ports/screening.js';
+import { privateKeyToAccount } from 'viem/accounts';
 import type { PaymentRequirement } from '../ports/settlement.js';
 const address = (c: string) => '0x' + c.repeat(40);
 const feeAddress = address('2'), seller = address('3');
 const template: PaymentRequirement = { scheme: 'exact', network: 'eip155:84532', asset: address('4'), payTo: seller, amount: '80', maxTimeoutSeconds: 60, extra: { name: 'USDC', version: '2' } };
 // Public, unfunded test fixture; never loaded from a real wallet.
 const key = '0x' + '1'.repeat(64);
+const payer = privateKeyToAccount(key as `0x${string}`).address;
 const agentEnv = { AGENT_PAY_ROUTING_FEE: 'true', AGENT_PRIVATE_KEY: key, AGENT_FEE_ADDRESS: feeAddress, AGENT_FEE_MAX_ATOMIC: '1', X402_NETWORK: template.network, X402_ASSET: template.asset, X402_ASSET_NAME: 'USDC', X402_ASSET_VERSION: '2' };
 const servers: Server[] = [];
 afterEach(async () => { for (const s of servers.splice(0)) { s.closeAllConnections(); await new Promise<void>(r => s.close(() => r())); } });
@@ -26,7 +28,7 @@ async function boot(enabled = true) {
   const server = createApp({ policy: DEMO_POLICY, store: new Store(KNOWN_PARTIES), screening: new MockScreening(), now: () => new Date(time), ...(enabled ? { fees } : {}), settlement: { live: true, settle, check, quote: amount => ({ ...template, amount: String(amount) }) } });
   servers.push(server); await new Promise<void>(r => server.listen(0, '127.0.0.1', r));
   const base = `http://127.0.0.1:${(server.address() as { port: number }).port}`;
-  const request = (id: string, what = DEMO_POLICY.allow[0]!) => ({ id, who: KNOWN_PARTIES[0], what, purpose: 'market-research', price: { amount: 80, currency: 'JPYC' }, deadline: new Date(time + 3600_000).toISOString() });
+  const request = (id: string, what = DEMO_POLICY.allow[0]!) => ({ id, who: KNOWN_PARTIES[0], what, purpose: 'market-research', price: { amount: 80, currency: 'JPYC' }, deadline: new Date(time + 3600_000).toISOString(), payoutAddress: payer });
   const post = (body: unknown, fee?: string, main?: string) => fetch(base + '/requests', { method: 'POST', headers: { 'content-type': 'application/json', ...(fee ? { 'YOHAKU-FEE-AUTHORIZATION': fee } : {}), ...(main ? { 'PAYMENT-SIGNATURE': main } : {}) }, body: JSON.stringify(body) }) as Promise<Omit<Response, 'json'> & { json(): Promise<any> }>;
   const summary = async () => await (await fetch(base + '/fees')).json();
   const offer = async (req: unknown) => await (await post(req)).json();
@@ -66,10 +68,10 @@ describe('optional routing-fee HTTP flow', () => {
   it('keeps optional fees separate from the seller transfer', async () => {
     const b = await boot(), req = b.request('paid');
     const first = await b.offer(req), fee = await b.sign(first.extensions);
-    const main = encodePaymentSignatureHeader({ x402Version: 2, accepted: template, payload: { fixture: 'seller authorization' } } as never);
+    const main = encodePaymentSignatureHeader({ x402Version: 2, accepted: template, payload: { fixture: 'seller authorization', authorization: { from: payer } } } as never);
     const r = await b.post(req, fee, main); expect(r.status).toBe(200);
     expect(b.settle).toHaveBeenCalledOnce();
-    expect(b.settle).toHaveBeenCalledWith(expect.objectContaining({ payload: { fixture: 'seller authorization' } }), expect.objectContaining({ payTo: seller, amount: '80' }));
+    expect(b.settle).toHaveBeenCalledWith(expect.objectContaining({ payload: expect.objectContaining({ fixture: 'seller authorization' }) }), expect.objectContaining({ payTo: seller, amount: '80' }));
     const result = await r.json(); expect(result.settlement.requirement.payTo).toBe(seller);
     expect(result.fee.paid).toBe(false);
     expect(await b.summary()).toMatchObject({ authorizedVouchers: 1, broadcast: false });
@@ -84,7 +86,7 @@ describe('optional routing-fee HTTP flow', () => {
   it('binds signatures to the request; rejects changed content, amount, nonce, recipient and signature', async () => {
     const b = await boot(), req = b.request('bound'), first = await b.offer(req), raw = await b.sign(first.extensions);
     const altered = { ...req, what: DEMO_POLICY.allow[1] };
-    expect((await (await b.post(altered, raw)).json()).fee.status).toContain('rejected');
+    expect((await b.post(altered, raw)).status).toBe(409);
     const p = decodePaymentSignatureHeader(raw) as any;
     for (const change of [
       (v: any) => { v.payload.authorization.value = '2'; },

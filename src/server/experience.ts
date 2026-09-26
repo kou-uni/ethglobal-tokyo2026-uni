@@ -26,9 +26,9 @@ type Payment = {
 };
 interface Item {
   request: AgentRequest; decision?: Decision; screening?: ScreeningResult;
-  screeningReason?: string; model?: string; payment: Payment;
+  screeningReason?: string; model?: string; modelReason?: string; decidedAt?: string; payment: Payment;
   kind: 'standing' | 'question' | 'forbidden' | 'risk';
-  answer?: string; delivered?: string; resolved?: 'answered' | 'declined';
+  answer?: string; draft?: string; delivered?: string; resolved?: 'answered' | 'declined';
 }
 interface Run {
   id: string; browser: string; receiver: string; policy: Policy; expires: number;
@@ -49,6 +49,32 @@ export function createExperience(deps: AppDeps, allowSignature: () => boolean) {
   const runs = new Map<string, Run>();
   const payer = assets && deps.demoBuyerKey ? privateKeyToAccount(deps.demoBuyerKey as `0x${string}`).address : undefined;
   const authenticated = (run: Run) => Boolean(run.proof && run.proofExpires! > now() && run.expires > now());
+  const supported = (q: PaymentRequirement) => q.network === tokenConfig.values.X402_NETWORK.value
+    && q.asset.toLowerCase() === tokenConfig.values.X402_ASSET.value.toLowerCase();
+  function configuration() {
+    let payment = false;
+    try {
+      payment = Boolean(identity && deps.screeningWired && payer && deps.settlement?.live
+        && supported(deps.settlement.quote(1, 'JPYC', payer)));
+    } catch { /* Incomplete configuration never grants a payment. */ }
+    return { screening: Boolean(deps.screeningWired), classifier: Boolean(deps.classifier),
+      classifierProvider: deps.classifierName ?? (deps.classifier ? 'configured' : 'none'),
+      identity: Boolean(identity), payment, payerBound: Boolean(payer) };
+  }
+  const links = () => ({
+    koe: deps.homeUrl ? `${deps.homeUrl.replace(/\/$/, '')}/koe.html` : '/koe-registration',
+    koeDirectory: deps.homeUrl ? `${deps.homeUrl.replace(/\/$/, '')}/koe/directory.json` : null,
+    koeRegistration: '/koe-registration', liveDirectory: '/koe-registration/directory.json',
+  });
+  function displayReward(amount: number, receiver: string) {
+    if (configuration().payment) {
+      const q = deps.settlement!.quote(amount, 'JPYC', receiver);
+      return { amount: q.amount, asset: q.asset, network: q.network, preview: false };
+    }
+    // A labelled example quote, never added to received money or used to authorize payment.
+    return { amount: String(amount * Number(tokenConfig.values.X402_ATOMIC_PER_UNIT.value)),
+      asset: tokenConfig.values.X402_ASSET.value, network: tokenConfig.values.X402_NETWORK.value, preview: true };
+  }
   function seeds(id: string, policy: Policy): Item[] {
     return Array.from({ length: 50 }, (_, i) => {
       const kind: Item['kind'] = i < 32 ? 'standing' : i < 38 ? 'question' : i < 48 ? 'forbidden' : 'risk';
@@ -85,23 +111,26 @@ export function createExperience(deps: AppDeps, allowSignature: () => boolean) {
       id: run.id, expires: new Date(run.expires).toISOString(), receiver: run.receiver,
       complete: run.complete, processed: run.items.filter(i => i.decision).length, total: run.items.length,
       authenticated: unlocked, identity: unlocked ? run.proof : null,
-      policy: { cap: run.policy.dailyCap, threshold: run.policy.amountThreshold, allow: run.policy.allow, forbid: run.policy.forbid },
+      policy: { cap: run.policy.dailyCap, threshold: run.policy.amountThreshold,
+        displayThreshold: displayReward(run.policy.amountThreshold, run.receiver), allow: run.policy.allow, forbid: run.policy.forbid },
       surfaced: unlocked ? run.surfaced : [],
-      wired: { screening: Boolean(deps.screeningWired), classifier: Boolean(deps.classifier),
-        classifierProvider: deps.classifierName ?? (deps.classifier ? 'configured' : 'none'),
-        identity: Boolean(identity), payment: run.items.some(i => i.payment.requirement), payerBound: Boolean(payer) },
+      wired: configuration(),
       tokenDisplay: { asset: tokenConfig.values.X402_ASSET.value, network: tokenConfig.values.X402_NETWORK.value,
         symbol: 'test USDC', decimals: 6 },
       totals: unlocked ? [...totals.values()].map(t => ({ ...t, amount: String(t.amount), automated: String(t.automated), answered: String(t.answered) })) : [],
-      koe: deps.homeUrl ? `${deps.homeUrl.replace(/\/$/, '')}/koe.html` : '/koe-registration',
+      ...links(),
       items: run.items.map(i => ({
         id: i.request.id, who: i.request.who, category: i.request.what, question: asQuestion(i.request.what),
         price: i.request.price, deadline: i.request.deadline, kind: i.kind,
         decision: i.decision ?? null, screening: i.screening ?? null,
-        screeningReason: i.screeningReason, model: i.model,
+        screeningReason: i.screeningReason, model: i.model, modelReason: i.modelReason, decidedAt: i.decidedAt,
+        reward: displayReward(i.request.price.amount, run.receiver),
         payment: unlocked ? i.payment : { status: i.payment.status, requirement: i.payment.requirement },
+        ...(unlocked && i.draft ? { draft: i.draft } : {}),
         resolved: i.resolved, ...(unlocked && i.delivered ? { delivered: i.delivered } : {}),
-        ...(unlocked && i.payment.transaction && deps.explorerUrl ? { explorer: deps.explorerUrl + encodeURIComponent(i.payment.transaction) } : {}),
+        ...(unlocked && i.payment.transaction ? {
+          explorer: (deps.explorerUrl ?? tokenConfig.values.X402_EXPLORER_URL.value) + encodeURIComponent(i.payment.transaction),
+        } : {}),
       })),
     };
   }
@@ -116,11 +145,10 @@ export function createExperience(deps: AppDeps, allowSignature: () => boolean) {
     const human = run.items.find(i => i.request.id === run.surfaced[0]);
     // Two funded demonstration requests, not fifty fabricated payments.
     for (const i of [auto, human]) {
-      if (!i || !deps.settlement?.live || !payer) continue;
+      if (!i || !configuration().payment || !deps.settlement) continue;
       const requirement = deps.settlement.quote(i.request.price.amount, i.request.price.currency, run.receiver);
       // These visitor rewards are testnet-only, regardless of another endpoint's config.
-      if (requirement.network !== tokenConfig.values.X402_NETWORK.value
-        || requirement.asset.toLowerCase() !== tokenConfig.values.X402_ASSET.value.toLowerCase()) continue;
+      if (!supported(requirement)) continue;
       i.payment = { status: 'ready', requirement };
     }
     run.complete = true;
@@ -145,7 +173,7 @@ export function createExperience(deps: AppDeps, allowSignature: () => boolean) {
       const result = await deps.settlement.settle(payload, p.requirement);
       if (result.status !== 'settled' || !result.transaction) throw new Error('settlement_not_confirmed');
       p.status = 'settled'; p.transaction = result.transaction; p.network = result.network;
-      item.delivered = answer; item.resolved = 'answered';
+      item.delivered = answer; item.resolved = 'answered'; delete item.draft;
     } catch (e) {
       p.status = 'failed';
       p.error = e instanceof Error && /^[a-z_]+$/.test(e.message) ? e.message : 'payment_not_confirmed';
@@ -175,7 +203,7 @@ export function createExperience(deps: AppDeps, allowSignature: () => boolean) {
     if (!browser) { json(403, { error: 'open_demo_first' }); return true; }
     let run = runs.get(browser);
     if (req.method === 'GET' && url.pathname === base + '/state') {
-      json(200, run ? publicState(run) : { started: false, koe: deps.homeUrl ? `${deps.homeUrl.replace(/\/$/, '')}/koe.html` : '/koe-registration' }); return true;
+      json(200, run ? publicState(run) : { started: false, wired: configuration(), ...links() }); return true;
     }
     if (req.method !== 'POST' || req.headers.origin !== identity.origin) { json(403, { error: 'wrong_origin' }); return true; }
     try {
@@ -211,10 +239,10 @@ export function createExperience(deps: AppDeps, allowSignature: () => boolean) {
             if (decision.rule === 9 && decision.verdict === 'human' && deps.classifier) {
               try {
                 const c = await deps.classifier.classify(item.request);
-                item.model = c.suggestion; decision = applyClassification(decision, c);
+                item.model = c.suggestion; item.modelReason = c.reasoning; decision = applyClassification(decision, c);
               } catch { decision = { verdict: 'deny', rule: 9, reason: 'decision support unavailable' }; item.model = 'unavailable'; }
             }
-            item.decision = decision;
+            item.decision = decision; item.decidedAt = new Date(now()).toISOString();
           }
           if (!run.complete && run.items.every(i => i.decision)) plan(run);
         } finally { run.processing = false; }
@@ -258,7 +286,7 @@ export function createExperience(deps: AppDeps, allowSignature: () => boolean) {
         if (item.payment.status === 'ready') await pay(run, item, 'DEMO SAMPLE / I put it back because the packaging was too large for one person.');
         json(200, publicState(run)); return true;
       }
-      if (url.pathname === base + '/answer' || url.pathname === base + '/decline') {
+      if (url.pathname === base + '/answer' || url.pathname === base + '/decline' || url.pathname === base + '/draft') {
         const item = run.items.find(i => i.request.id === body.id);
         if (!item || item.decision?.verdict !== 'human' || !run.surfaced.includes(item.request.id) || Date.parse(item.request.deadline) <= now()) throw new Error('request_not_available');
         if (item.resolved || item.payment.status === 'processing' || item.payment.status === 'settled' || item.payment.status === 'failed') { json(409, { error: 'already_decided' }); return true; }
@@ -266,6 +294,9 @@ export function createExperience(deps: AppDeps, allowSignature: () => boolean) {
           item.resolved = 'declined'; item.payment.status = 'not-funded'; json(200, publicState(run)); return true;
         }
         if (typeof body.answer !== 'string' || body.answer.trim().length < 3 || body.answer.length > 1000 || body.consent !== true) throw new Error('answer_and_consent_required');
+        if (url.pathname.endsWith('/draft')) {
+          item.draft = body.answer.trim(); json(200, publicState(run)); return true;
+        }
         await pay(run, item, body.answer.trim());
         json(200, publicState(run)); return true;
       }

@@ -90,6 +90,7 @@ describe('browser-owned live journey',()=>{
     expect(payload.payload.authorization.from).toBe(b.payer);
     expect(payload.payload.authorization.value).toBe(quote.amount);
     expect(result.items.find((i:any)=>i.id===item.id).delivered).toBe('I needed a smaller pack.');
+    expect(result.items.find((i:any)=>i.id===item.id).explorer).toBe(config.X402_EXPLORER_URL.value+'test-receipt');
     expect(result.totals[0].answered).toBe(quote.amount);
   });
   it('rejects another browser, another origin, denied requests and requests outside the fixed cap',async()=>{
@@ -170,5 +171,37 @@ describe('browser-owned live journey',()=>{
     const v=await b.visit(),unknown=v.state.items.find((i:any)=>i.category==='experience/what-changed-your-mind');
     expect(unknown.decision).toMatchObject({verdict:'deny',rule:9});
     expect(unknown.payment.requirement).toBeUndefined();
+  });
+  it('allows a private World-gated draft without funding, but never pays or delivers it',async()=>{
+    const b=await boot({demoBuyerKey:''}),v=await b.visit();
+    expect(v.state.wired.payment).toBe(false);
+    expect(v.state.items.every((i:any)=>i.reward.preview&&!i.payment.requirement)).toBe(true);
+    expect((await v.call('draft',{id:v.state.items[0].id,answer:'private draft',consent:true})).status).toBe(403);
+    const s=await v.login(),id=s.surfaced[0];
+    expect((await v.call('draft',{id,answer:'private draft'})).status).toBe(400);
+    const saved=await (await v.call('draft',{id,answer:'private draft',consent:true})).json();
+    expect(saved.items.find((i:any)=>i.id===id).draft).toBe('private draft');
+    expect(saved.items.find((i:any)=>i.id===id).delivered).toBeUndefined();
+    expect(saved.totals).toEqual([]);expect(b.settle).not.toHaveBeenCalled();
+    const other=await b.visit();
+    expect((await b.post('draft',{run:v.run,id,answer:'overwrite',consent:true},other.cookie)).status).toBe(409);
+    expect(JSON.stringify(await other.get())).not.toContain('private draft');
+    b.advance(16*60*1000);
+    expect(JSON.stringify(await v.get())).not.toContain('private draft');
+    expect((await v.call('draft',{id,answer:'expired edit',consent:true})).status).toBe(403);
+  });
+  it('displays the configured USDC quote, including a non-default scale, without counting offers as receipts',async()=>{
+    const settle=vi.fn(async()=>({status:'settled' as const,transaction:'test-display',network:config.X402_NETWORK.value}));
+    const b=await boot({settlement:{live:true,settle,check:async()=>({status:'settled',transaction:'',network:config.X402_NETWORK.value}),
+      quote:(amount,_currency,payTo)=>({scheme:'exact',amount:String(amount*17),payTo:payTo!,
+        asset:config.X402_ASSET.value,network:config.X402_NETWORK.value,maxTimeoutSeconds:60,
+        extra:{name:config.X402_ASSET_NAME.value,version:'2'}})}});
+    const v=await b.visit(),s=await v.login();
+    const automatic=s.items.find((i:any)=>i.decision?.verdict==='auto'&&i.payment.requirement);
+    expect(automatic.reward).toMatchObject({amount:'2040',preview:false});
+    expect(automatic.payment.requirement.amount).toBe(automatic.reward.amount);
+    expect(s.policy.displayThreshold.amount).toBe('17000');expect(s.totals).toEqual([]);
+    const paid=await (await v.call('collect')).json();
+    expect(paid.totals[0].amount).toBe('2040');
   });
 });

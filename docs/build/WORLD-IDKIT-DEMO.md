@@ -3,6 +3,10 @@
 2026-09-26。minta本人への固定はしない。対応するOrb資格を持つ来場者が、
 自分で始めたデモの依頼について、人間であることを証明して承認できる。
 
+追記：通常依頼には別の`/owner/login`を追加した。設定された所有者ウォレットの署名、
+ENSのpolicy権限、World証明を順に確認する。来場者の権限を所有者へ拡張するものではない。
+設定・再試験・未完了の実機確認は[INTEGRATION-FIXES](INTEGRATION-FIXES-2026-09-26.md)を参照。
+
 ## 体験
 
 1. 審査員が `/try` を開く。送金を試すなら自分のBase Sepolia受取アドレスを入力する。
@@ -45,11 +49,13 @@ WORLD_IDKIT_SIGNING_KEY=<kouの公開サーバーで生成済みの専用秘密�
   IDKit有効時は来場者デモの承認がIDKitを使い、旧OIDC callbackと生コードの承認APIは拒否する。
 - reverse proxyは公開サイトのHostを保持すること。信頼できないforwardedヘッダーでHost検査を迂回しない。
 - 普段の起動方法で再起動する。未設定・不正設定なら起動時に失敗し、sandboxへ自動退避しない。
-- `/health` の `wired.identityMode` が `idkit-production-visitor-demo` になったことを確認する。
+- `/health`の`wired.identityMode`が`idkit-production-visitor-demo`、
+  所有者経路も有効なら`idkit-production-owner-and-visitor`になったことを確認する。
 - `/try` を最初から試す。プロセス再起動前の依頼はメモリーから消えている。
 
-ロールバックは `WORLD_IDKIT_DEMO_ENABLED=false` に戻して再起動する。
-既存のOIDC設定がそのまま残っていれば従来のsandboxデモへ戻せる。
+修正版は実決済とmock/sandbox承認の組み合わせでは起動しない。
+IDKitを無効にしてsandboxデモへ戻す場合は実決済の設定も無効にする。
+決済開始・完了記録を消すようなロールバックは行わず、結果不明の取引を先に照合する。
 
 ## 保護している境界
 
@@ -79,8 +85,9 @@ WORLD_IDKIT_SIGNING_KEY=<kouの公開サーバーで生成済みの専用秘密�
   [world-idkit-approval.json](evidence/world-idkit-approval.json)。
 - このMacの承認テストでは送金を無効にしている。
   x402の既存オンチェーン証跡と、今回のIDKit＋送金一体の実証を混同しない。
-- 公開専用RPの登録は公式status APIで確認済み。公開サーバーでの設定切替・再起動と、
-  その新しいアプリでの実機認証・送金一体試験は未確認。World ID for Agents賞の適合性は別途確認する。
+- 公開専用RPの登録を公式status APIで確認済み。公開での本番World＋送金一体試験も
+  [後続のウォークスルー](WORLD-WALKTHROUGH-2026-09-26.md)で成功した。
+  新しい通常依頼のownerログイン経路と混同しない。World ID for Agents賞の適合性は別途確認する。
 
 ## Koeへの登録（追加）
 

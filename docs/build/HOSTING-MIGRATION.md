@@ -1,129 +1,86 @@
-# Studioから固定HTTPS URLへ移す
+# 公開デモは既存Studioを更新する
 
-2026-09-26。新デモと同じPRで、Kou向けの移行依頼とDockerfileを用意。
-クラウドサービスの作成、課金プランの契約、秘密値の移送、公開切替はまだ行っていません。
+2026-09-26。mintaの最新方針は、移行よりも「映えて、分かりやすく、実処理で一連を完走するデモ」を優先すること。
+**当面は既存のStudioの公開HTTPS URLを使用します。Renderへの移行は必須ではありません。**
+Renderアカウントは作成済みですが、サービス作成・課金契約・秘密値の移送・公開切替は行っていません。
 
-## 公開前に取り込むPR
+## 反映する内容
 
-PR #23（説明・アニメーション）と、このデモのPR #28に加え、
-**PR #27（通常依頼の決済・所有者認証・永続化修正）を公開前に取り込んでください。**
-このブランチ単体の確認はPR #27との統合確認を含みません。共通の `app.ts`、
-`idkit-approval.ts`、`main.ts` とドキュメントのテスト件数を照合し、統合後に
-`npm run check` を再実行してください。#27の修正を落とした公開切替は行わないでください。
+このPR #28に、PR #23（説明・アニメーション）とPR #27（通常依頼の決済・所有者認証・永続化修正）を統合しています。
+Koe名簿、実判定モニター、Worldログイン、本人回答、テストUSDC報酬とExplorerを `/experience` でつなぎます。
+Kouの22:42 JSTの返答は設定情報の引き継ぎです。新しいデモの公開完了ではありません。
 
-## 提出URLについて
-
-公式イベントページで提出期限とFAQは確認しましたが、公開ページだけでは「デプロイURL欄が必須」
-かどうかは確認できませんでした。ログイン後の提出フォームで必須／任意を照合してください。
-必須の断定とは別に、審査員が開いて操作できる固定HTTPS URLを用意する方針です。
-説明ページはGitHub Pages、実演の提出先は新バックエンドの `/experience` を想定します。
-
-## 今回の公開先と役割分担
-
-公開先の選定はminta側で行い、**Render Web Serviceへ移す方針**にします。
-GitHub Pages（説明・Koe）→ Renderの常駐Nodeコンテナ1台＋永続ディスク
-（World、依頼、回答、x402）という構成です。Kouの公開先選定を待つ必要はありません。
-
-| 担当 | 作業 |
+| 項目 | 確認できた状態 |
 | --- | --- |
-| minta側 | 公開先の選定、デモ実装、Dockerfile、移行手順を用意。このPRで反映 |
-| Kouへ依頼 | PR統合、Renderサービス作成、Studioの既存設定と必要な保存ファイルの移行、公開URLの共有 |
-| 公開後に共同確認 | 新URLでWorld認証・実送金・回答受渡しを確認して提出リンクを確定 |
+| 公開origin | `https://mac-studio.taila649e1.ts.net` |
+| Kou報告の稼働commit | `9182afa`。新しい体験画面より古い |
+| 起動 | リポ直下の `npm start`、PORT 8402、Tailscale Funnel経由 |
+| 接続 | Jev・Intercepta・production World・x402・ENS読取は既存healthで有効 |
+| 新しい体験画面 | healthに `experience` がまだない。反映が必要 |
+| PR #27の保存ファイル | Kou報告時点では未使用。移す旧ファイルはない |
 
-Kouに公開操作を依頼するのは、Studioの稼働設定を照合してそのまま移せるためです。
-Renderアカウントや契約を用意できない場合は、その点だけ共有してください。
-minta側でサービスを作成する進め方に切り替えられます。アカウント・有料プランの契約は未実施です。
+## Kouへお願いする公開作業
 
-このPRのベースではStore、Worldの認証待ち、Koeの一時掲載、新デモの回答、
-署名回数制限はプロセス内です。PR #27は通常依頼と日次表示枠をファイルへ保存しますが、
-World待ちと新デモの一時セッションをすべて永続化する変更ではありません。
-そのため今回は常駐プロセスを1インスタンスで動かします。Vercelでも実装は可能ですが、
-この状態をそのまま複数のFunctionへ分散させないでください。永続DBへの移行と原子的な
-認証消費・支払い確保が必要になります。特に支払い途中の再起動を「もう一度署名」で復旧すると、
-二重送金の危険があります。Vercel Workflowsを利用する場合も、既存Mapからの移植は必要です。
+1. このPRの統合内容をmainへ反映する。#23や#27との競合はこのブランチで解消済み。
+2. 現在認証中・決済中のデモがないことを確認してから、Studioのコードを更新する。
+3. **`YOHAKU_EXPERIENCE_ENABLED=true` を追加する。** 既存のJev・Intercepta・買い手鍵・x402設定は維持する。
+   Worldは `WORLD_IDKIT_DEPLOYMENT=public`、`WORLD_IDKIT_DEMO_ENABLED=true`、
+   `WORLD_IDKIT_ORIGIN=https://mac-studio.taila649e1.ts.net` を維持する。秘密値をGitHubへ転記する必要はない。
+4. PR #27用の `REQUEST_STATE_FILE` と `ATTENTION_STATE_FILE` をStudio内の非公開・書込可能な保存先へ設定する。
+   例はリポ直下の `.yohaku/requests.json` と `.yohaku/attention.json`。通常依頼と日次表示枠を保存する。
+   新しい体験のWorld待ち・回答・セッションは一時データのまま。保存範囲を混同しない。
+5. 支払いに使うプロセスは1つで起動する。`DEMO_SIGNS_PER_HOUR` を確認し、デモ中の自動再起動を避ける。
+6. `/health` の `experience / classifier / identity / screening / settlement` を確認する。
+7. `/experience` を外部端末から開けることを確認して、反映commitとhealthの非秘密の結果をPRへ返す。
 
-DockerfileはNode 22、`npm ci --include=dev`、非root実行、`npm start`を使用します。
-tsxとesbuildは現行サーバーの起動時に必要なので、devDependenciesを省略していません。
-`.env`やローカルのログはイメージへコピーしません。
+Funnelの自動復旧スクリプトが古いtailscaledを指していた件は、Kou側で修正予定との返答でした。
+大会中のスリープ防止・Funnelの稼働と、外部のスマホからの到達を確認してください。
 
-## Kouへ依頼する情報
+## 公開反映後の実機確認
 
-秘密値をGitHubへ貼らず、以下を確認してPRへ非秘密の結果だけ返してください。
+審査で開く予定のURL：**`https://mac-studio.taila649e1.ts.net/experience`**。
+反映前は旧版のため、新しいデモが稼働済みとは扱いません。
 
-| 確認したいこと | 必要な理由 |
-| --- | --- |
-| Studioで稼働中のcommit、未コミット修正の有無、起動手順 | 公開版だけの変更を移行で落とさないため |
-| RenderでWeb Serviceを作成するアカウントと、発行された公開origin | Worldと同一origin制御を新URLに合わせるため |
-| public用World app/RPの設定・署名者が現在のconfigと一致しているか | local用の鍵をpublic用として移さないため |
-| 既存環境変数の設定有無 | 下の必須設定を移行先へ入れるため。値はホストのSecret欄へ直接入力 |
-| PR #27の保存ファイルがStudioで使用されているか | 使用中なら通常依頼・表示枠の状態を失わず移すため |
-| 買い手ウォレットの公開アドレス、テストUSDC残高、デモ署名予算 | 再発行せず、既存の資金と上限を引き継ぐため |
-| 現在認証中／決済中のデモがないこと | 移行時に途中の状態を破棄しないため |
+1. Koeでエージェントが人の体験を発見する場面を見せる。登録は任意で、実演の必須手順にはしない。
+2. 受取先を指定し50件を生成。実処理の件数・理由と、それに対応するアニメーションを見る。
+3. 表示された2件のテストUSDC額を確認してWorld認証。委任分1件を受け取る。
+4. 人間の受信箱で本人回答を入力して送信する。再審査・x402決済後、報酬と買い手の受信箱を確認する。
+5. ExplorerまたはRPCで2取引の受取先・金額を独立照合する。
 
-オンチェーンの資産・記録とリポの証拠JSONは残ります。旧サーバーのメモリ内セッション、
-生proof、cookie、保留中の署名認可をPRへ吸い出す必要はありません。
-旧セッションは完了させてから切り替え、新環境では新規デモ・Koe登録を行います。
-PR #27の `requests.json` と `attention.json` はこの一時セッションとは別です。
-すでに運用している場合は停止後に非公開の保存先へ移し、GitHubへ公開しないでください。
-旧APIと新APIの同時開催は、署名上限が別プロセスごとになるため避けてください。
+実行結果・取引リンクを記録してください。旧 `/try` の成功を新経路の完走証拠にはしません。
+失敗や不明な送金を、新しい署名を作る自動再送で回復させません。
 
-## 移す設定
+説明ページはGitHub Pages、操作するデモはStudioの `/experience` に揃えます。
+`docs/experience-origin.js` は既にStudioを向いているため、今回ホスト移行のためのリンク変更は不要です。
+提出フォームのデプロイURL欄が必須かはログイン後のフォームで要確認です。公開URLの存在と、実演の完走確認は別です。
+
+## 接続設定の所在
 
 | 用途 | 環境変数 |
 | --- | --- |
 | 新デモ | `YOHAKU_EXPERIENCE_ENABLED=true` |
-| World | `WORLD_IDKIT_DEMO_ENABLED=true`, `WORLD_IDKIT_DEPLOYMENT=public`, `WORLD_IDKIT_ORIGIN`, `WORLD_IDKIT_SIGNING_KEY` |
+| World | `WORLD_IDKIT_DEMO_ENABLED`, `WORLD_IDKIT_DEPLOYMENT`, `WORLD_IDKIT_ORIGIN`, `WORLD_IDKIT_SIGNING_KEY` |
 | 署名と上限 | `AGENT_PRIVATE_KEY`, `DEMO_SIGNS_PER_HOUR` |
 | x402 | `X402_FACILITATOR_URL`, `X402_NETWORK`, `X402_ASSET`, `X402_PAYOUT_ADDRESS`, `X402_ASSET_NAME`, `X402_ASSET_VERSION`, `X402_ATOMIC_PER_UNIT`, `X402_EXPLORER_URL` |
 | Intercepta | `INTERCEPTA_API_KEY`, `INTERCEPTA_BASE_URL`, `INTERCEPTA_SCAN_PATH`, `INTERCEPTA_AUTH_HEADER` |
-| Jev | `JEV_API_KEY`, `JEV_BASE_URL`, `JEV_MODEL`, `YOHAKU_PROVIDER=jev`。model IDは現在使える値を引き継ぐ |
+| Jev | `JEV_API_KEY`, `JEV_BASE_URL`, `JEV_MODEL`, `YOHAKU_PROVIDER=jev` |
 | ENS読取 | `SEPOLIA_RPC_URL`, `ENS_NAME`, `ENS_RESOLVER_ADDRESS`, `ENS_DELEGATE_ADDRESS` |
-| PR #27の所有者・保存先 | 必要に応じて `OWNER_WALLET_ADDRESS`。`REQUEST_STATE_FILE=/app/.yohaku/requests.json`, `ATTENTION_STATE_FILE=/app/.yohaku/attention.json` |
-| 既存機能を残す場合 | OIDCの `WORLD_*` と任意のfee設定。callback/originが旧Studioを向かないよう照合 |
+| PR #27の所有者・保存先 | 必要に応じて `OWNER_WALLET_ADDRESS`、`REQUEST_STATE_FILE`、`ATTENTION_STATE_FILE` |
 
-秘密値はサーバー専用です。`NEXT_PUBLIC_*`、`VITE_*`などの公開変数にはしません。
-Worldの署名鍵、買い手の支払い鍵、APIキーは別のものです。移行で新しい鍵を生成する必要はありません。
+秘密値はサーバー専用。買い手の支払い鍵、World署名鍵、APIキーは別のものです。
+元のホストを使い続けるため、秘密値の移送・新しい鍵・Render招待は今回不要です。
 
-## Renderでの作業手順
+## Renderを使う場合の予備手順
 
-1. #23、#27、#28を統合し、全チェックを実行。Web Serviceをリポから作成し、Docker runtimeとルートのDockerfileを指定。
-2. 1インスタンス・スリープしない稼働条件を選択。プランと費用は所有者が確認して選ぶ。
-   `/app/.yohaku` に永続ディスクをマウントし、実行ユーザーnodeの書込権限を確認する。
-   Dockerfileのディレクトリ作成だけでは再デプロイ時の永続性は得られない。
-   ヘルスチェックは `/health`。デモ中に再起動しないよう自動デプロイを止める。
-3. 公開URLを確定し、`WORLD_IDKIT_ORIGIN`をそのoriginへ設定。末尾スラッシュ・pathは付けない。
-   World Portal側のアプリURL／許可origin等も、新しい公開URLとの整合を確認する。
-4. 上の非秘密設定とSecretを入力してデプロイ。ポートはホスト指定の`PORT`を使う。
-5. `/health`でexperience・production IDKit・screening・classifier・settlementが有効なことを確認。
-6. 別ブラウザで新規デモを開始し、World認証→委任報酬→本人回答報酬の2取引を確認。
-   エクスプローラーまたはRPCで、金額と受取先を独立照合する。取消と未回答では送金しないことも確認。
-7. 新URLを `docs/experience-origin.js`、`docs/koe/directory.json`のrouterとliveDirectory/registrationUrl、
-   `docs/product.html`の稼働リンク、提出フォーム、README等へ反映。証拠JSONの過去のURLは変更しない。
-   旧サーバーを止める。
+後日移行する場合、mintaのアカウントでサービスを作り、KouがEnvironmentへ秘密設定を直接入力する案があります。
+移行時点でプラン・費用・必要なアクセスを確認します。今は実行しません。
 
-Renderの新規URLはまだ未確定です。PRに架空のデプロイURLを記載していません。
-この環境にはDocker CLIがないため、Dockerイメージ自体のビルド検証は移行先で必要です。
+- DockerfileはNode 22、非root、`npm ci --include=dev`、`npm start`。tsx/esbuildが起動に必要です。
+- 1インスタンスと永続ディスクを使用し、`/app/.yohaku` をnodeユーザーが書き込めるようにします。
+- Worldのorigin、既存OIDCのcallback、公開リンクを新URLと照合します。
+- 進行中の決済を完了してから切替。使用済みの通常依頼・日次表示枠のファイルは非公開で移します。
+- 同じ支払い鍵を使うStudioとRenderを、両方とも実演の入口として同時運用しません。
+- Docker CLIがこの作業環境にないため、イメージのビルドは未検証です。
 
-## 公開後にPRへ返してほしいもの
-
-- 発行された公開originと、審査員が開く `/experience` の完全なURL。
-- デプロイしたcommitと、`/health` の各接続状態。
-- 新経路のWorld認証・2件の送金・回答受渡しを確認した結果。
-  未確認のものは未確認と明記し、取引は公開Explorerのリンクで共有する。
-
-このURLを実機確認して、提出フォームのデモURL欄へ記入します。
-
-## 長期運用するなら
-
-単一プロセスでも再起動で状態を失います。恒久的なアカウントや複数台の運用には、
-DBでrun、回答、認証チャレンジ、支払い意図、送金結果を保持し、原子的な一度だけの処理を実装します。
-支払いが不明なものはチェーンで照合し、元の認可を確認せず新規署名を作らない設計にします。
-今のPRは大会用の一時セッションの移設であり、永続化を実装済みとはしていません。
-
-## 公式確認先
-
-- ETHGlobal Tokyo 2026: https://ethglobal.com/events/tokyo2026
-- RenderのNodeサービス: https://render.com/docs/deploy-node-express-app
-- Vercel Functionsの制限とWorkflowsへの案内: https://vercel.com/docs/functions/limitations
-
-この日の公開情報とリポの実装に基づく移行案です。提出フォームの必須項目は未確認です。
+複数台や長期運用には、認証・回答・支払い意図と結果のDB保存、原子的な一度だけの処理が必要です。
+今回のデモは単一プロセス・ブラウザごとの一時セッションです。

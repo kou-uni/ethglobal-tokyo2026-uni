@@ -46,6 +46,7 @@ export const DEMO_POLICY: Policy = {
   amountThreshold: 1000,
   dailyCap: 2,
   notifyHour: 7,
+  timeZone: 'Asia/Tokyo',
   grants: [
     { category: 'experience/why-you-put-it-back', expiresAt: '2026-12-31T00:00:00Z', revoked: false },
     { category: 'experience/first-five-minutes', expiresAt: '2026-12-31T00:00:00Z', revoked: false },

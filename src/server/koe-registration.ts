@@ -76,7 +76,9 @@ export function createKoeRegistration(options: IdkitApprovalOptions | undefined,
     }
     if (req.method === 'GET' && url.pathname === base) {
       beginDemoBrowser(req, res, options.origin);
-      res.setHeader('Content-Type', 'text/html; charset=utf-8'); res.end(options.assets.koePage); return true;
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      res.end(options.assets.koePage.replace('<!-- EXPERIENCE_LINK -->', options.assets.experiencePage
+        ? '<p><a href="/experience?view=work">← YOHAKUの受信箱へ戻る / Back to my inbox</a></p>' : '')); return true;
     }
     const browser = demoBrowser(req, options.origin);
     if (!browser) { json(403, { error: 'Open the registration page in this browser first.' }); return true; }

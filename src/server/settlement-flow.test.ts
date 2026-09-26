@@ -52,7 +52,7 @@ const signed = (validBefore: number) =>
     JSON.stringify({
       x402Version: 2,
       accepted: REQUIREMENT,
-      payload: { signature: '0xsig', authorization: { validBefore: String(validBefore) } },
+      payload: { signature: '0xsig', authorization: { from: '0x' + 'a'.repeat(40), validBefore: String(validBefore) } },
     }),
   ).toString('base64');
 
@@ -66,6 +66,7 @@ const routine = (id: string) => ({
   purpose: 'demand-estimation',
   price: { amount: 120, currency: 'JPYC' },
   deadline: DEADLINE,
+  payoutAddress: '0x' + 'a'.repeat(40),
 });
 
 const sensitive = (id: string) => ({ ...routine(id), what: 'experience/the-time-it-failed-you', price: { amount: 4200, currency: 'JPYC' } });

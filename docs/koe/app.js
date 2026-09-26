@@ -57,8 +57,8 @@ function card(person) {
     block.append(buttons); topics.append(block);
   }
   const terms = element('div', undefined, 'terms');
-  const price = element('span', 'From ');
-  price.append(element('strong', `${person.priceFrom.amount.toLocaleString()} ${person.priceFrom.currency}`));
+  const price = element('span', 'Reward: ');
+  price.append(element('strong', 'test USDC — quoted in Yohaku'));
   terms.append(price, element('span', `${person.interruptionsPerDay} notification slots / day`));
   article.append(topics, terms);
   return article;

@@ -121,5 +121,7 @@ describe('silence', () => {
   it('notification hour is the owner’s setting', () => {
     expect(isNotificationHour(policy, new Date('2026-09-26T07:30:00+09:00'))).toBe(true);
     expect(isNotificationHour(policy, new Date('2026-09-26T02:00:00+09:00'))).toBe(false);
+    expect(isNotificationHour({ ...policy, timeZone: 'America/New_York' }, new Date('2026-09-26T07:30:00-04:00'))).toBe(true);
+    expect(isNotificationHour(policy, new Date('2026-09-26T07:30:00-04:00'))).toBe(false);
   });
 });

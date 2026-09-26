@@ -46,7 +46,10 @@ export async function probeResolver(client: PublicClient, resolver: Address) {
   const blockNumber = await client.getBlockNumber();
   const code = await client.getCode({ address: resolver, blockNumber });
   if (!code || code === '0x') throw new Error('No resolver code');
-  const keys = await Promise.all(Object.values(KEYS).map(async (key) => {
+  const keys = [];
+  // Public RPCs may refuse a burst of parallel eth_call requests. Keep the probe
+  // sequential; every permission decision still reads the current block.
+  for (const key of Object.values(KEYS)) {
     // The decoder ignores the name and value; confirm this using the root name.
     const [arg, resource, roleBitmap] = await client.readContract({
       address: resolver, abi: resolverAbi, functionName: 'decodeSetter',
@@ -55,7 +58,7 @@ export async function probeResolver(client: PublicClient, resolver: Address) {
     if (arg !== toHex(key) || resource !== BigInt(keyResource(key)) || roleBitmap !== ROLE.SET_TEXT) {
       throw new Error('Resolver does not match the expected key-scoped text permissions');
     }
-    return { key, arg, resource, roleBitmap };
-  }));
+    keys.push({ key, arg, resource, roleBitmap });
+  }
   return { chainId: 11155111, resolver, blockNumber, codeBytes: (code.length - 2) / 2, keys };
 }
