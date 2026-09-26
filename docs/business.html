@@ -1,0 +1,125 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Yohaku — the business model</title>
+<meta name="description" content="Never paid out of the seller's money. Charged per decision, not as a share. Redeemed in one transaction, because the fee is smaller than gas.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap');
+:root{--ink:#242329;--ink2:#5F5D6B;--ink3:#A6A3B4;--paper:#F8F7F3;--card:#fff;--line:#E8E5DC;
+--lilac:#BCB2FA;--lilacD:#6B5BD6;--lilacL:#EDE9FF;--lime:#DDF691;--limeD:#7FA326;--limeL:#F2FBD9;
+--sh:0 6px 0 rgba(36,35,41,.09),0 12px 28px rgba(36,35,41,.13);--shS:0 4px 0 rgba(36,35,41,.08),0 8px 18px rgba(36,35,41,.1)}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:960px;padding:28px 18px 70px;color:var(--ink);
+background:linear-gradient(180deg,#EFEBFF 0%,#F6F4EC 40%,var(--paper) 100%);background-attachment:fixed;
+font-family:"M PLUS Rounded 1c",-apple-system,BlinkMacSystemFont,"Hiragino Maru Gothic ProN",sans-serif;
+font-size:16px;line-height:1.7;font-weight:700;-webkit-font-smoothing:antialiased}
+a.back{font-size:14px;color:var(--lilacD);text-decoration:none;font-weight:900}
+h1{font-size:clamp(29px,6.6vw,44px);font-weight:900;letter-spacing:-.02em;margin:12px 0 8px;line-height:1.2}
+h1 em{font-style:normal;display:inline-block;color:#fff;background:var(--lilacD);padding:0 13px 3px;
+border-radius:15px;box-shadow:0 5px 0 #4A3BAE;transform:rotate(-1.4deg)}
+p.sub{color:var(--ink2);font-size:16.5px;margin:12px 0 0;max-width:52ch}
+h2{font-size:12px;letter-spacing:.15em;color:var(--ink3);font-weight:900;margin:40px 0 14px}
+.warn{background:#FFF6DC;border-radius:18px;padding:16px 19px;font-size:15px;color:#6E520A;
+line-height:1.65;margin:18px 0}
+.warn b{color:#4D3A05}
+.flowbox{background:var(--card);border-radius:26px;padding:22px;box-shadow:var(--sh);margin:6px 0 18px}
+.row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.n{width:34px;height:34px;border-radius:50%;background:var(--lilacD);color:#fff;display:flex;
+align-items:center;justify-content:center;font-weight:900;font-size:16px;flex:0 0 auto}
+.row .txt{flex:1;min-width:220px;font-size:15.5px;line-height:1.55;color:var(--ink2)}
+.row .txt b{color:var(--ink)}
+.row .tag{font-size:12px;font-weight:900;letter-spacing:.07em;color:#fff;padding:5px 13px;
+border-radius:99px;white-space:nowrap}
+.tag.g{background:var(--limeD)}.tag.p{background:var(--lilacD)}.tag.n{background:#A6A3B4}
+.grid{display:grid;gap:13px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.c{background:var(--card);border-radius:22px;padding:18px 19px;box-shadow:var(--shS)}
+.c .k{font-size:11px;font-weight:900;letter-spacing:.11em;color:#fff;background:var(--ink);
+padding:3px 11px;border-radius:99px;display:inline-block;margin-bottom:9px}
+.c .k.g{background:var(--limeD)}.c .k.p{background:var(--lilacD)}
+.c b.t{display:block;font-size:18px;font-weight:900;line-height:1.35}
+.c span{display:block;font-size:14.5px;color:var(--ink2);margin-top:7px;line-height:1.6}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:20px;overflow:hidden;
+box-shadow:var(--shS);font-size:15px}
+th{background:var(--lilacL);color:#3B3456;text-align:left;padding:11px 15px;font-size:11.5px;letter-spacing:.1em}
+td{padding:12px 15px;border-top:2px solid var(--paper);line-height:1.55;vertical-align:top}
+td:first-child{font-weight:900}
+.ok{color:var(--limeD)}.no{color:#C4504A}
+footer{margin-top:44px;padding-top:20px;border-top:2px dashed var(--line);font-size:14px;color:var(--ink2)}
+footer a{color:var(--lilacD)}
+</style></head><body>
+<a class="back" href="./">&larr; Yohaku</a>
+<h1>We are never paid out of<br>the <em>seller&rsquo;s money.</em></h1>
+<p class="sub">Their payment is a direct transfer to them. We are not a destination on it and we
+never hold it. What we charge for is the work we did &mdash; and it is charged the way the
+protocol says to charge something smaller than gas.</p>
+
+<div class="warn"><b>&#9888; None of this is implemented.</b> Yohaku takes <b>nothing</b> today.
+This page is the design, and the repository says so everywhere it comes up.
+<a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/product/ECONOMICS.md"><b>The full version, including where it rubs against our own principles &rarr;</b></a></div>
+
+<h2>WHERE THE MONEY GOES</h2>
+<div class="flowbox">
+  <div class="row"><div class="n">1</div>
+    <div class="txt"><b>The agent pays the person. Directly.</b> An <code>exact</code> transfer to
+    their address. <b>We are not on it.</b></div><span class="tag g">DONE &#183; ON CHAIN</span></div>
+  <div class="row"><div class="n">2</div>
+    <div class="txt"><b>We take a voucher, not a cut.</b> One per decision &mdash; gas-sized, and
+    signed by the agent if it chooses to.</div><span class="tag n">DESIGNED</span></div>
+  <div class="row"><div class="n">3</div>
+    <div class="txt"><b>Redeemed later, in one transaction.</b> Which is what
+    <code>batch-settlement</code> exists for: <i>&ldquo;gas fees exceed the value of individual
+    requests.&rdquo;</i></div><span class="tag n">DESIGNED</span></div>
+</div>
+
+<h2>WHY PER DECISION, AND NOT A SHARE</h2>
+<div class="grid">
+  <div class="c"><span class="k p">THE INCENTIVE</span><b class="t">A share would grow when we
+  interrupt her</b><span>Take a percentage and an expensive request becomes worth escalating.
+  <b>We would rather not have that incentive than promise to resist it.</b></span></div>
+  <div class="c"><span class="k">THE UNIT</span><b class="t">Ten rules, a bundle, a cap, a
+  personhood check</b><span>That is the work, and it is the same work whether the request was
+  worth 80 or 6,000. <b>A refusal costs us the same, so it costs the same.</b></span></div>
+  <div class="c"><span class="k g">THE ALIGNMENT</span><b class="t">A fee she notices closes the
+  counter</b><span>And a closed counter pays us nothing. <b>Keeping it invisible is not
+  generosity — it is the only version that works.</b></span></div>
+</div>
+
+<h2>HOW IT GROWS</h2>
+<table>
+<tr><th>Stage</th><th>Charged</th><th>Why</th></tr>
+<tr><td>Small</td><td><b>Nothing</b></td><td>Charging for something nobody uses teaches you nothing</td></tr>
+<tr><td>Traffic</td><td>Per decision handled</td><td>Priced against the thing being bought: <b>how many times she was not asked</b></td></tr>
+<tr><td>Learned filtering</td><td>A little more</td><td>Fewer interruptions, and a share of what that saved. <b>Not on day one</b> — we measured thirty nights and the mornings only got quieter in week four</td></tr>
+</table>
+
+<h2>AND THE PART THAT COMPOUNDS</h2>
+<div class="grid">
+  <div class="c"><span class="k p">CONTRIBUTE</span><b class="t">The shape of your refusals</b>
+  <span>Not what you refused. <b>What kind of asking you tend to refuse.</b> Opt-in, and you can
+  leave.</span></div>
+  <div class="c"><span class="k">BECOMES</span><b class="t">Someone else&rsquo;s first day</b>
+  <span>A person who opens a counter tomorrow is <b>quiet from the start</b>, because other
+  people&rsquo;s judgement is already in the defaults.</span></div>
+  <div class="c"><span class="k g">AND RETURNS</span><b class="t">Paid back, per use</b>
+  <span>Each time it becomes a default, the contributor gets some of the fee. <b>The platform
+  gets cheaper as it gets better.</b></span></div>
+</div>
+
+<div class="warn"><b>&#9888; This is the part that rubs against us.</b> We said the scarce thing is
+a person&rsquo;s judgement &mdash; so asking for it back needs conditions, set before the money:
+<b>opt-in only, patterns not contents, leavable, and never a summarised portrait of a person.</b>
+<b>If that stays vague, this section should not ship at all.</b></div>
+
+<h2>WHAT WE WILL NOT SAY</h2>
+<table>
+<tr><th>We say</th><th>We do not say</th></tr>
+<tr><td>&ldquo;This is the fee model&rdquo;</td><td class="no"><b>&ldquo;We take a fee&rdquo;</b> &mdash; we take nothing</td></tr>
+<tr><td>&ldquo;Free while small, traffic-priced later&rdquo;</td><td class="no">&ldquo;It costs this much&rdquo; &mdash; not decided</td></tr>
+<tr><td>&ldquo;The design keeps their money off our books&rdquo;</td><td class="no">&ldquo;It works that way today&rdquo; &mdash; <b><code>batch-settlement</code> has never been called</b></td></tr>
+<tr><td>&ldquo;Being asked less is what we sell&rdquo;</td><td class="no">&ldquo;It learns and your mornings shrink&rdquo; &mdash; week four, measured</td></tr>
+</table>
+
+<footer><b>Yohaku</b> &mdash; <a href="./">overview</a> &middot;
+<a href="stack.html">the layer map</a> &middot; <a href="product.html">the running product</a> &middot;
+<a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/product/ECONOMICS.md">ECONOMICS.md</a>
+&middot; MIT</footer>
+</body></html>

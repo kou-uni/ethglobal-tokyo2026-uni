@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1020 1100" role="img" aria-label="Yohaku を中心にした関係図">
+<rect width="100%" height="100%" fill="#F8F7F3"/>
+<defs>
+<marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#242329"/></marker>
+<marker id="arL" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#8C8998"/></marker>
+<marker id="arG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#7FA326"/></marker>
+</defs>
+<style>
+.lnm{font:900 14px "M PLUS Rounded 1c",sans-serif;fill:#8C8998;letter-spacing:.1em}
+.t0{font:900 30px "M PLUS Rounded 1c",sans-serif;fill:#241f3d}
+.t1{font:900 20px "M PLUS Rounded 1c",sans-serif;fill:#242329}
+.t2{font:800 15.5px "M PLUS Rounded 1c",sans-serif;fill:#5F5D6B}
+.t3{font:900 13px "M PLUS Rounded 1c",sans-serif;fill:#fff;letter-spacing:.05em}
+.io{font:800 14px "M PLUS Rounded 1c",sans-serif;fill:#6B5BD6}
+.warn{font:800 14px "M PLUS Rounded 1c",sans-serif;fill:#8A6A12}
+.ev{font:900 12.5px ui-monospace,Menlo,monospace;fill:#6F9022}
+.flow{stroke:#242329;stroke-width:3;fill:none;marker-end:url(#ar)}
+.hook{stroke:#8C8998;stroke-width:2.5;fill:none;stroke-dasharray:7 5;marker-end:url(#arL)}
+.go{stroke:#7FA326;stroke-width:5;fill:none;marker-end:url(#arG)}
+
+</style>
+<text class="lnm" x="20" y="50">THE TWO IT STANDS BETWEEN</text>
+<rect x="20" y="96" width="252" height="150" rx="18" fill="#F8F7F3" stroke="#E8E5DC" stroke-width="2"/>
+<text class="t1" x="40" y="128">&#129302; Agents</text>
+<text class="t2" x="40" y="152">the new customer. Never</text>
+<text class="t2" x="40" y="174">sleeps, pays for itself</text>
+<text class="io" x="40" y="206">&#8594; a request + a signed</text>
+<text class="io" x="40" y="226">&#160;&#160;&#160; payment</text>
+<path class="flow" d="M146.0 246 L146.0 272"/>
+
+<rect x="20" y="278" width="252" height="152" rx="18" fill="#FFF6DC" stroke="#E8C766" stroke-width="2"/>
+<path d="M20 296 a18 18 0 0 1 18 -18 h216 a18 18 0 0 1 18 18 z" fill="#B37C00"/>
+<text class="t3" x="34" y="292">DECISION MODEL &#183; NEW</text>
+<text class="t1" x="34" y="326">&#129513; Jev &amp; friends</text>
+<text class="t2" x="34" y="350">what the agent uses to</text>
+<text class="t2" x="34" y="370">decide what to ask for</text>
+<text class="warn" x="34" y="398">&#9888; injection moved a</text>
+<text class="warn" x="34" y="418">&#160;&#160; verdict 0.76 &#8594; 0.48</text>
+
+<path class="flow" d="M272 350 L316 350"/>
+<rect x="20" y="470" width="252" height="168" rx="18" fill="#F2FBD9" stroke="#DDF691" stroke-width="2"/>
+<text class="t1" x="40" y="502">&#129489; The person</text>
+<text class="t2" x="40" y="526">asleep. The cap is hers,</text>
+<text class="t2" x="40" y="548">not ours</text>
+<text class="io" x="40" y="580">&#8592; one notification</text>
+<text class="io" x="40" y="600">&#160;&#160;&#160; about 2, not 50</text>
+<text class="io" x="40" y="624">&#8594; yes / no / silence</text>
+<path class="flow" d="M316 534 L272 534"/>
+<path class="flow" d="M272 584 L316 584"/>
+<rect x="324" y="96" width="372" height="560" rx="26" fill="#EDE9FF" stroke="#6B5BD6" stroke-width="4"/>
+<text class="t0" x="348" y="144">&#11036; Yohaku</text>
+<text class="t2" x="348" y="172">the layer nobody owns yet</text>
+<rect x="346" y="190" width="328" height="2" fill="#BCB2FA"/>
+<text class="t2" x="348" y="222">It meets the new customer &#8212; an agent</text>
+<text class="t2" x="348" y="245">that decides and pays for itself,</text>
+<text class="t2" x="348" y="268">and whose decisions are now made by a</text>
+<text class="t2" x="348" y="291">model that can be talked into things.</text>
+<text class="t1" x="348" y="346">So it trusts none of it,</text>
+<text class="t1" x="348" y="372">and answers one question</text>
+<text class="t1" x="348" y="398">nobody else answers:</text>
+<text class="t1" x="348" y="436">How many times today may we</text>
+<text class="t1" x="348" y="462">interrupt this person?</text>
+<circle cx="360" cy="495" r="11" fill="#6B5BD6"/>
+<text class="t3" x="356" y="500">1</text>
+<text class="t2" x="380" y="500">a request &#8212; 5 fields, no prose</text>
+<circle cx="360" cy="521" r="11" fill="#6B5BD6"/>
+<text class="t3" x="356" y="526">2</text>
+<text class="t2" x="380" y="526">ten rules &#183; a model on rule 9</text>
+<circle cx="360" cy="547" r="11" fill="#6B5BD6"/>
+<text class="t3" x="356" y="552">3</text>
+<text class="t2" x="380" y="552">hold, bundle, cap at 2</text>
+<circle cx="360" cy="573" r="11" fill="#6B5BD6"/>
+<text class="t3" x="356" y="578">4</text>
+<text class="t2" x="380" y="578">she answers &#8212; or does not</text>
+<circle cx="360" cy="599" r="11" fill="#6B5BD6"/>
+<text class="t3" x="356" y="604">5</text>
+<text class="t2" x="380" y="604">settle, and the morning ledger</text>
+<text class="lnm" x="744" y="50">WHAT IT PLUGS INTO</text>
+
+<rect x="744" y="96" width="256" height="98" rx="18" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
+<path d="M744 114 a18 18 0 0 1 18 -18 h220 a18 18 0 0 1 18 18 z" fill="#A6A3B4"/>
+<text class="t3" x="758" y="110">SCREENING &#183; STAND-IN</text>
+<text class="t3" x="986" y="110" text-anchor="end">STEP 2</text>
+<text class="t1" x="758" y="144">&#128737; intercepta</text>
+<text class="t2" x="758" y="168">may this money move?</text>
+<text class="t2" x="758" y="188">unreachable &#8594; refuse</text>
+
+<path class="hook" d="M744 148 L704 148"/>
+
+<rect x="744" y="214" width="256" height="116" rx="18" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
+<path d="M744 232 a18 18 0 0 1 18 -18 h220 a18 18 0 0 1 18 18 z" fill="#6B5BD6"/>
+<text class="t3" x="758" y="228">ON CHAIN</text>
+<text class="t3" x="986" y="228" text-anchor="end">STEP 2</text>
+<text class="t1" x="758" y="262">&#9939; ENSv2</text>
+<text class="t2" x="758" y="286">what may the delegate do?</text>
+<text class="t2" x="758" y="306">proposes &#10003; &#183; widens &#10007;</text>
+<text class="ev" x="758" y="324">rule 0 &#183; 0xb459618b</text>
+
+<path class="hook" d="M744 266 L704 266"/>
+
+<rect x="744" y="350" width="256" height="116" rx="18" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
+<path d="M744 368 a18 18 0 0 1 18 -18 h220 a18 18 0 0 1 18 18 z" fill="#6B5BD6"/>
+<text class="t3" x="758" y="364">LIVE</text>
+<text class="t3" x="986" y="364" text-anchor="end">STEP 4</text>
+<text class="t1" x="758" y="398">&#127757; World ID</text>
+<text class="t2" x="758" y="422">is a person here, now?</text>
+<text class="t2" x="758" y="442">at consent, not at signup</text>
+<text class="ev" x="758" y="460">orb &#183; checked this second</text>
+
+<path class="hook" d="M744 402 L704 402"/>
+
+<rect x="744" y="486" width="256" height="116" rx="18" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
+<path d="M744 504 a18 18 0 0 1 18 -18 h220 a18 18 0 0 1 18 18 z" fill="#7FA326"/>
+<text class="t3" x="758" y="500">ON CHAIN</text>
+<text class="t3" x="986" y="500" text-anchor="end">STEP 5</text>
+<text class="t1" x="758" y="534">&#128184; x402</text>
+<text class="t2" x="758" y="558">how does the money move?</text>
+<text class="t2" x="758" y="578">no answer &#8594; it expires</text>
+<text class="ev" x="758" y="596">4,200 moved &#183; 0x5c79fddf</text>
+
+<path class="hook" d="M744 538 L704 538"/>
+<text class="lnm" x="20" y="700">AND THEN THE MONEY HAS TO LIVE SOMEWHERE</text>
+<path class="go" d="M510.0 656 L510.0 742"/>
+<text class="io" x="526.0" y="690">the money it earned</text>
+<rect x="20" y="750" width="980" height="176" rx="24" fill="#DDF691" stroke="#7FA326" stroke-width="3"/>
+<text class="t0" x="48" y="792">&#128202; Curvegrid NEO &#8212; the treasury it lands in</text>
+<text class="t2" x="48" y="826">An agent that decides for itself also earns for itself. <tspan class="t1">Yohaku is the moment a human is</tspan></text>
+<text class="t2" x="48" y="850"><tspan class="t1">still involved; NEO is where that money is then held and governed</tspan> &#8212; approve, sign,</text>
+<text class="t2" x="48" y="874">execute, record, at company scale.</text>
+<text class="t2" x="48" y="906">Same idea, one step apart: <tspan class="t1">separate the AI&#8217;s intent from the authority to move money.</tspan></text>
+<rect x="20" y="952" width="980" height="116" rx="18" fill="#F8F7F3" stroke="#E8E5DC" stroke-width="2"/>
+<text class="t1" x="48" y="988">&#9888; What we did not build</text>
+<text class="t2" x="48" y="1016">Execution, custody, the wallet, the treasury. All of them have owners already.</text>
+<text class="t2" x="48" y="1042"><tspan class="t1">Yohaku is the half-step before them: deciding whether money should move</tspan></text>
+<text class="t2" x="48" y="1066"><tspan class="t1">means deciding, first, whether to ask.</tspan></text>
+</svg>
