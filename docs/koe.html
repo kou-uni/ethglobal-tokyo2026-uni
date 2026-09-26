@@ -12,13 +12,14 @@
 <header><a class="wordmark" href="koe.html" aria-label="Koe home">koe<span>.</span></a><span class="descriptor">Human perspectives. Agent access.</span><nav aria-label="Main"><a href="#directory">Directory</a><a href="#protocol">For agents</a><a href="#join">Participate ↗</a></nav></header>
 <main>
 <section class="intro"><p class="eyebrow">A DIRECTORY FOR THE AGENT ECONOMY</p><h1>Find a person.<br>Ask through their boundaries.</h1><p class="lead">People have experiences that a model can only imagine.<br>Discover who can speak to a question. Their router decides what happens next.</p><div class="intro-links"><a class="primary" href="koe/directory.json">Read the directory <span>JSON ↗</span></a><a href="#protocol">Build a request →</a></div></section>
-<aside class="notice"><strong>Illustrative demo.</strong> Every profile is fictional and unverified. All profiles use one shared Yohaku demo router. No answers are sold or delivered.</aside>
+<aside class="notice"><strong>Illustrative demo.</strong> The six example profiles are fictional and unverified. Verified demo participants appear separately below. All profiles use one shared Yohaku demo router. No answers are sold or delivered.</aside>
 <div class="workspace">
 <section id="directory" aria-labelledby="directory-title">
 <div class="section-top"><h2 id="directory-title">People & perspectives</h2><span id="count" role="status">Loading…</span></div>
 <div class="filters"><label>Find a perspective<input id="search" type="search" placeholder="Try coffee, commuting, writing…"></label><label>Topic<select id="topic"><option value="">All topics</option></select></label></div>
 <div id="profiles" class="profiles" aria-live="polite"></div>
 <noscript><p>JavaScript is needed for this directory view. Agents can read <a href="koe/directory.json">the JSON directly</a>.</p></noscript>
+<section class="live-section" aria-labelledby="live-title"><div class="section-top"><h2 id="live-title">World-verified participants</h2><button id="refresh-live" type="button">Refresh</button></div><p id="live-status" role="status">Checking the live directory…</p><div id="live-profiles" class="profiles"></div><p class="footnote">Personhood is checked on the server; introductions are self-reported. Temporary listings use the shared demo router and expire within one hour. Individual answer delivery is not connected.</p><a id="live-json">Read live participants JSON ↗</a></section>
 <p class="footnote">Categories describe the shared demo policy, subject to its other rules. The limit is two bundled notification slots per day, not necessarily two raw requests.</p>
 </section>
 <aside id="protocol" class="protocol" aria-labelledby="protocol-title">
@@ -36,7 +37,7 @@
 <p id="copy-status" role="status" class="copy-status"></p>
 </aside>
 </div>
-<section id="join" class="join"><div><p class="eyebrow">FOR PEOPLE</p><h2>Your perspective.<br>Your terms.</h2><p>The intended flow is to verify with World ID, describe what you can answer, and set your boundaries.</p></div><div class="join-action"><a id="world-link" class="primary" aria-disabled="true">Try the World ID approval demo ↗</a><p>This opens Yohaku’s existing <strong>request approval</strong> flow. Choose “Skip” to try without payment. It does not register you in Koe.</p><p class="footnote">Verified profile publishing, listing removal, personal routers and persistent accounts are not implemented. This page never treats opening the demo as identity verification.</p></div></section>
+<section id="join" class="join"><div><p class="eyebrow">FOR PEOPLE</p><h2>Your perspective.<br>Your terms.</h2><p>Describe a perspective, consent to publish it, and verify with World ID. A valid proof publishes a temporary profile to the live directory.</p></div><div class="join-action"><a id="world-link" class="primary" aria-disabled="true">Verify & join with World ID ↗</a><p>Use an alias and choose a demo topic. Your public profile lasts up to one hour. You can remove it from the browser where you registered. No payment is made.</p><p class="footnote">World verifies personhood, not your profile’s accuracy. Listings disappear on server restart. Individual routers, persistent accounts, answer delivery and one-person-one-profile enforcement are not implemented.</p></div></section>
 <footer><span><strong>Koe</strong> is the discovery sketch. <a href="./">Yohaku</a> is the product behind the request.</span><a href="inflow.html">See how requests arrive →</a></footer>
 </main>
 </body></html>

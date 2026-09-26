@@ -11,7 +11,7 @@ export interface IdkitApprovalOptions {
   action: string;
   sign(): RpContext;
   verify(challenge: IdkitChallenge, proof: unknown): Promise<IdkitProofSummary>;
-  assets: { page: string; js: Uint8Array; wasm: Uint8Array };
+  assets: { page: string; js: Uint8Array; wasm: Uint8Array; koePage?: string; koeJs?: Uint8Array };
 }
 export function demoCookieName(origin: string) {
   return new URL(origin).protocol === 'https:' ? '__Secure-YohakuDemo' : 'YohakuDemo';

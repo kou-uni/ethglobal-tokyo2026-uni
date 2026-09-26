@@ -24,6 +24,10 @@ export async function idkitApprovalFromEnv(env: NodeJS.ProcessEnv): Promise<Idki
     entryPoints: [new URL('../../setup/idkit-approval.ts', import.meta.url).pathname],
     bundle: true, platform: 'browser', format: 'esm', target: 'es2022', minify: true, write: false,
   });
+  const koeBundle = await build({
+    entryPoints: [new URL('../../setup/koe-registration.ts', import.meta.url).pathname],
+    bundle: true, platform: 'browser', format: 'esm', target: 'es2022', minify: true, write: false,
+  });
   return {
     origin, appId: config.appId, action: config.action,
     sign: () => {
@@ -35,6 +39,8 @@ export async function idkitApprovalFromEnv(env: NodeJS.ProcessEnv): Promise<Idki
       page: readFileSync(new URL('../../setup/idkit-approval.html', import.meta.url), 'utf8'),
       js: bundle.outputFiles[0]!.contents,
       wasm: readFileSync(new URL('../../node_modules/@worldcoin/idkit-core/dist/idkit_wasm_bg.wasm', import.meta.url)),
+      koePage: readFileSync(new URL('../../setup/koe-registration.html', import.meta.url), 'utf8'),
+      koeJs: koeBundle.outputFiles[0]!.contents,
     },
   };
 }

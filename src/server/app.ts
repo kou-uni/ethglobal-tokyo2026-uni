@@ -38,6 +38,7 @@ import { delegationDisabled } from '../ports/delegation.js';
 import type { PermissionsPort } from '../ports/permissions.js';
 import type { ProductionProbeHandler } from './world-production-probe.js';
 import { createIdkitApproval, beginDemoBrowser, demoBrowser, type IdkitApprovalOptions } from './idkit-approval.js';
+import { createKoeRegistration } from './koe-registration.js';
 
 export interface AppDeps {
   /** Any qualified human can approve only the visitor demo they started. */
@@ -258,6 +259,7 @@ export function createApp(deps: AppDeps): Server {
     });
     return { id: entry.request.id, verdict: 'approved', identity: proof, settlement: paid };
   }, () => now().getTime()) : undefined;
+  const koe = createKoeRegistration(deps.idkitDemo, deps.policy, () => now().getTime());
 
   /*
    * How many payments this process will sign for strangers in an hour.
@@ -306,6 +308,7 @@ export function createApp(deps: AppDeps): Server {
     const path = url.pathname;
 
     try {
+      if (await koe(req, res)) return;
       if (idkit && await idkit(req, res)) return;
       if (deps.productionProbe && await deps.productionProbe(req, res)) return;
       /* ── health ─────────────────────────────────────────────────────────── */
@@ -320,6 +323,7 @@ export function createApp(deps: AppDeps): Server {
             classifier: Boolean(deps.classifier),
             identity: Boolean(deps.idkitDemo || (deps.identityWired && deps.identity)),
             identityMode: deps.idkitDemo ? 'idkit-production-visitor-demo' : 'oidc-or-mock',
+            koeRegistration: Boolean(deps.idkitDemo?.assets.koePage && deps.idkitDemo?.assets.koeJs),
             screening: Boolean(deps.screeningWired),
             settlement: Boolean(deps.settlement?.live),
             delegationReader: Boolean(deps.delegation),

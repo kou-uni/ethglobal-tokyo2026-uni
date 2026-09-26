@@ -7,7 +7,7 @@
   "personhood": {
     "required": true,
     "method": "World ID",
-    "note": "Intended listing policy: World ID verification before publishing. This static directory does not implement verified publishing, revocation or one-person-one-profile. Existing World verification is available as a separate Yohaku approval demo."
+    "note": "The static profiles below are fictional and unverified. The separate liveDirectory endpoint lists temporary participants only after production World proof verification. Listings last up to one hour or server restart and can be removed from the originating browser. No one-person-one-profile enforcement or profile-truth guarantee."
   },
   "howToAsk": {
     "endpoint": "POST <profile.router>/requests",
@@ -40,7 +40,9 @@
       "experience/why-you-stopped": "other",
       "judgement/what-you-earn": "other",
       "wallet/your-address": "other"
-    }
+    },
+    "liveDirectory": "https://mac-studio.taila649e1.ts.net/koe-registration/directory.json",
+    "registrationUrl": "https://mac-studio.taila649e1.ts.net/koe-registration"
   },
   "profiles": [
     {

@@ -10,7 +10,8 @@ sends a request to its router. **Koe never approves or pays. Yohaku makes the ro
 - An `application/json` alternate link in the page head for discovery without reading the UI.
 - Topic selection builds the exact five fields, with prices and purposes from the JSON contract.
 - Copyable curl with a fresh 15-minute deadline. Copy does not send a request or money.
-- Existing `/try` World approval entry; no duplicate authentication implementation.
+- Real World ID registration at `/koe-registration`, reusing the existing IDKit signer and server proof verifier. Successful proofs publish a one-hour memory-only listing, removable from the originating browser.
+- Separate live participant feed at `/koe-registration/directory.json`; static fictional examples remain explicitly unverified. The page fetches the live feed without credentials and offers a refresh button.
 - Local assets only, no CDN/fonts/build step. GitHub Pages serves `docs/koe.html` and `docs/koe/*`.
 - Explicit load failure, no-results state and clipboard fallback. Profile text is inserted as text,
   never executable HTML; router links require HTTPS and no embedded credentials.
@@ -52,7 +53,8 @@ asset and atomic amount rather than assuming a one-to-one currency conversion.
 
 ## Honest scope
 
-All people are fictional and **not verified**. Every profile points to one shared demo router,
+The six static examples are fictional and **not verified**. Real participants appear separately,
+only after the server verifies a production World proof. Every profile points to one shared demo router,
 with the same standing policy and two bundled notification slots a day. There is no recipient
 field selecting a fictional individual, personal router provisioning, content delivery or sale.
 The real ENS name was removed from the fictional Alice profile to avoid implying ownership.
@@ -62,14 +64,24 @@ a valid grant, an unexpired request, acceptable screening and a price within the
 The server's earlier rules, history and configuration can change the outcome. A cap of two means
 notification slots, not a promise that only two raw requests exist.
 
-The World link reuses **Yohaku request approval**, not Koe registration. It does not prove that
-someone has registered a profile merely because they opened or returned from that page. Verified
-publishing, removal/revocation, storage, accounts and one-person-one-profile are not implemented;
-this is stated on the page. No "verification → listing" success is simulated.
+The World link now opens **Koe registration**, not Yohaku request approval. The browser submits
+an alias, headline, optional about text, one supported topic and explicit publication consent.
+The server binds these exact fields and the browser session to a fresh `koe-publish` signal.
+It reuses `idkitApprovalFromEnv` signing and `verifyIdkitProof` to verify the production
+Orb/PoH proof. No request store, agent private key or settlement port is passed to the registration handler.
 
-The public World app's RP registration is complete; kou still needs to select the public config
-and restart. See `../build/WORLD-IDKIT-DEMO.md`. Until that deployment is verified, the live
-`/try` mode must be checked on `/health`; a link alone does not prove production IDKit is live.
+Successful profiles are publicly readable for up to one hour, or until the server restarts.
+The original browser can remove its listing. Verification challenges expire within 120 seconds,
+are consumed before provider verification, and cancellation/removal/replacement invalidates
+in-flight work. The profile fields are self-reported; World does not verify their truth.
+No nullifier/raw proof is retained, and no one-person-one-profile guarantee is made.
+Persistent accounts, personal routing, editing without a fresh proof and answer delivery are not implemented.
+
+Public configuration is in `config/world-idkit-public.json`. Kou must deploy the new code,
+select `WORLD_IDKIT_DEPLOYMENT=public`, and restart with production IDKit enabled.
+`/health` reports `wired.koeRegistration`. When disabled, registration responds 503 and never
+falls back to mock or OIDC. The live page reports unavailability without inventing participants.
+See `../build/WORLD-IDKIT-DEMO.md`.
 
 ## Verification
 
@@ -81,7 +93,7 @@ node --import tsx docs/koe/check.ts
 node --import tsx docs/koe/check.ts --live
 ```
 
-- Full project check: 283 tests and 10 claims passed with the public-config change.
+- The full project check must pass before push. The registration HTTP suite covers publication, consent, origin/browser isolation, failed/replayed proofs, cancellation, replacement, removal during verification and expiration.
 - Local real HTTP router: all 33 profile/category combinations matched their advertised branches.
   The script also checks ASKS membership, purposes, policy lists, price thresholds and daily cap.
   Screening is mocked in this local contract check; settlement is not wired.
@@ -93,3 +105,10 @@ node --import tsx docs/koe/check.ts --live
 
 This is a routing/discovery demo. Neither the HTTP results nor World personhood prove that
 answers are accurate, human-authored or delivered.
+
+## Real-device verification status
+
+The registration form and real IDKit bundle are running locally for an end-to-end World App
+check. Automated registration tests use a mocked proof-verification boundary; they are **not**
+evidence of a real new registration. The earlier Yohaku production approval proof is separate.
+A real Koe registration is recorded only after the new form, World App and server finish successfully.
