@@ -32,7 +32,7 @@ production-IDKit + on-chain settlement has been demonstrated yet.
 | External judge-device success and cancellation | After deployment, start from `/try` in that browser |
 | IDKit + Base Sepolia payment in one run | Only after the no-payment path passes on the public instance |
 | Final live demo URL and video | Use [PITCH](../product/PITCH.md); don't substitute static screenshots for the ENS live-demo requirement |
-| Live screening on the public server | Adapter merged and working locally ([Issue #14](https://github.com/kou-uni/ethglobal-tokyo2026-uni/issues/14)). kou: `npm run setup:intercepta` on the public host, restart, confirm `/health` reports `screening: true`. The paid leg — one request settling after a live clean verdict — needs that deployment, since settlement is not wired locally |
+| Live screening on the public instance | **Done, with one boundary left.** Public `/health` reported `screening: true` — that is configuration evidence, not a run. The screening-plus-settlement run was exercised locally ([evidence](evidence/screening-with-settlement.json)); `npm run agent -- routine` and `npm run agent -- routine flagged` reproduce both halves on the public host |
 | Seller signup, actual content delivery | Not implemented; not prerequisites for the current limited demonstration |
 
 A qualified visitor may approve their own browser's demo. This does not authenticate them

@@ -32,8 +32,11 @@ sentence that goes with it.
 | 36–49s | World approval result | “For the choice that needs a human, the backend verifies a World ID proof bound to that request. Our production IDKit demo reached approved. Cancelling leaves the request unapproved.” |
 | 49–60s | Logo, empty centre; separate payment receipt if time | “The movement around our logo is demand and opportunity. The space inside is what we protect. Yohaku makes room for the choices only you should make.” |
 
-**Payment caption:** “Separate x402 testnet transfer evidence. Production IDKit + payment
-in one run is pending.” Remove that caption only after that combined run actually succeeds.
+**Payment caption:** “Production World ID approval and the transfer, in one run on the public
+site.” That run happened: `try-e30e5ea1`, production / 3.0 / orb at 14:43:04 JST, then 4,200
+atomic USDC on Base Sepolia — [`0xa87231ba…`](https://sepolia.basescan.org/tx/0xa87231ba7d9a46c15764f1f875aa9619f060101fb49e369e67f896e8741df8c4),
+status `0x1`, block 47316550, gas paid by the relayer. Read back from the chain, not from our
+own response.
 
 ## 3:30 walkthrough
 
@@ -101,8 +104,22 @@ No personal content is actually delivered to the buyer in this demo.
 
 > The ledger shows what happened and what still needs a person.
 > We tested the permissions boundary, the human-verification step, and the payment rail.
-> Our next integration check is the production World proof and payment together on the public demo.
+> The production World proof and the payment now happen together on the public site.
+> Our next check is the live screening decision on that same instance.
 > Agents keep moving. Yohaku protects the room in which a person decides.
+
+### The one a judge can run twice, and watch change
+
+Same grant, same category, same price. Only the payment source differs.
+
+```sh
+npm run agent -- routine           # screens clean → rule 8 auto → 120 atomic settles
+npm run agent -- routine flagged   # same request → rule 4 deny, in the provider's own words
+```
+
+The refusal quotes Intercepta rather than us: *the payment source failed screening —
+known_scammer — The address has a confirmed history of malicious activity…*
+Receipts in [screening-with-settlement.json](../build/evidence/screening-with-settlement.json).
 
 ## Booth interaction checklist
 
@@ -120,12 +137,12 @@ No personal content is actually delivered to the buyer in this demo.
 
 | Say | Avoid |
 |---|---|
-| Production IDKit proof led to this local demo approval | The public site already runs that flow |
+| The public site runs production IDKit approval and settles from it | Any visitor can approve the ENS owner's own requests |
 | Any qualified visitor can approve the demo started in their browser | Any visitor can approve the ENS owner's requests |
 | Personhood is checked at the decision boundary | The content is human-written, true, or free from AI |
 | ENSv2 gives this delegate access to one record | Revocation itself is unique to ENSv2 |
 | MultiBaas is not used; our Curvegrid fit is policy-aware agent payments | MultiBaas executes our transfers |
-| The existing x402 testnet transfers were verified separately | The production IDKit + payment run is already proven |
+| Production IDKit and payment have run together, on the public site, and the receipt is on chain | Any of it moved real money, or delivered a personal answer |
 | Cancelled verification leaves the request unapproved | We demonstrated rejection inside World App |
 
 ## Sponsor-specific closing line
