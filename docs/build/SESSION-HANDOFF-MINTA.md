@@ -17,7 +17,7 @@
   証拠は `evidence/world-public-payment.json`。
 - コミット `7445905`：上記証拠と、依頼価格JPYCと実送金トークン量を区別する表示修正。
 - PR #13にはhealthのCORS修正、審査向け案内、Koeの位置づけ明記も含む。
-- 変更前後の `npm run check` 成功。342 tests / 12 claims。
+- 変更前後の `npm run check` 成功。343 tests / 12 claims。
 
 ## 次にすること
 

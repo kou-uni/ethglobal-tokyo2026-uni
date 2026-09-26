@@ -1,0 +1,69 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Yohaku — the whole journey, numbered</title>
+<meta name="description" content="Twenty-two steps from an agent's request to the answer, each with its state and something to check.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap');
+:root{--ink:#242329;--ink2:#6B6484;--ink3:#9A93B8;--lilacD:#5B4BE0;--lilacL:#EDE9FF;--line:#E4DEF2;
+--run:#57A80A;--des:#5B4BE0;--nb:#B08900}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:1060px;padding:26px 18px 70px;color:var(--ink);
+background:linear-gradient(160deg,#E9F0FF 0%,#F4EDFF 48%,#FFEAF6 100%);background-attachment:fixed;
+font-family:"M PLUS Rounded 1c",-apple-system,BlinkMacSystemFont,"Hiragino Maru Gothic ProN",sans-serif;
+font-size:18px;line-height:1.65;font-weight:700}
+a.back{font-size:16px;color:var(--lilacD);text-decoration:none;font-weight:900}
+h1{font-size:clamp(32px,6.6vw,48px);font-weight:900;letter-spacing:-.02em;margin:14px 0 8px;line-height:1.18}
+h1 em{font-style:normal;display:inline-block;color:#fff;background:var(--lilacD);padding:0 14px 4px;
+border-radius:17px;transform:rotate(-1.4deg)}
+p.sub{color:var(--ink2);font-size:17px;margin:10px 0 20px;max-width:56ch}
+table{width:100%;border-collapse:collapse;background:rgba(255,255,255,.66);border-radius:24px;overflow:hidden}
+td{padding:13px 14px;vertical-align:top;border-bottom:2px solid rgba(228,222,242,.7)}
+tr:last-child td{border-bottom:0}
+td.n{font:900 20px ui-monospace,Menlo,monospace;color:var(--lilacD);width:44px;text-align:right}
+td.ph{font-size:11.5px;font-weight:900;letter-spacing:.1em;color:var(--ink3);width:104px;padding-top:17px}
+td b{display:block;font-size:17px;line-height:1.38}
+td span{display:block;font-size:14.5px;color:var(--ink2);margin-top:3px;line-height:1.55}
+td.wh{font-size:14px;color:var(--ink2);width:140px;padding-top:16px}
+.c{display:inline-block;font-size:10.5px;font-weight:900;letter-spacing:.07em;color:#fff;
+border-radius:10px;padding:2px 9px;margin-bottom:6px}
+.c.run{background:var(--run)}.c.des{background:var(--des)}.c.nb{background:var(--nb)}
+td a{display:block;font-size:12.5px;font-weight:900;text-decoration:none;color:var(--lilacD)}
+footer{margin-top:30px;padding-top:18px;border-top:2px dashed var(--line);font-size:16px;color:var(--ink2)}
+footer a{color:var(--lilacD)}
+@media(max-width:720px){td.ph,td.wh{display:none}}
+</style></head><body>
+<a class="back" href="./">&larr; Yohaku</a>
+<h1>Every step, <em>numbered.</em></h1>
+<p class="sub">From an agent asking to the answer leaving. Twenty-two steps, each with its state
+and one thing you can check.</p>
+
+<table>
+<tr><td class="n">1</td><td class="ph">Discovery</td><td><b>The agent finds a person who can answer</b><span>a listing: who, what they can speak to, until when</span></td><td class="wh">the agent</td><td><span class="c run">RUNNING</span><a href="koe.html">Koe &rarr;</a></td></tr>
+<tr><td class="n">2</td><td class="ph">Discovery</td><td><b>It reads what may be asked, at what price, by when</b><span>categories, price, deadline — five fields, no prose</span></td><td class="wh">the agent</td><td><span class="c run">RUNNING</span><a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/src/core/types.ts">the request shape &rarr;</a></td></tr>
+<tr><td class="n">3</td><td class="ph">Intake</td><td><b>It signs a payment authorization</b><span>EIP-3009, validBefore set to the request deadline</span></td><td class="wh">the agent</td><td><span class="c run">RUNNING</span><a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/src/ports/settlement.ts">the port &rarr;</a></td></tr>
+<tr><td class="n">4</td><td class="ph">Intake</td><td><b>It posts the request</b><span>the five fields, and the address it would pay from</span></td><td class="wh">the agent</td><td><span class="c run">RUNNING</span><a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/src/server/app.ts">the endpoint &rarr;</a></td></tr>
+<tr><td class="n">5</td><td class="ph">Screening</td><td><b>The declared payment source is checked, live</b><span>a score and traits, in the provider’s own words</span></td><td class="wh">Intercepta</td><td><span class="c run">RUNNING</span><a href="build/evidence/intercepta-live.json">what it answered &rarr;</a></td></tr>
+<tr><td class="n">6</td><td class="ph">Routing</td><td><b>Ten ordered rules run, first match wins</b><span>a verdict, a rule number and a reason</span></td><td class="wh">Yohaku</td><td><span class="c run">RUNNING</span><a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/src/core/rules.ts">the rules &rarr;</a></td></tr>
+<tr><td class="n">7</td><td class="ph">Routing</td><td><b>Rule 0 — the delegate tries to widen its own rights</b><span>the contract refuses; nothing of ours decides it</span></td><td class="wh">ENSv2</td><td><span class="c run">RUNNING</span><a href="build/evidence/ens-delegation.json">six receipts &rarr;</a></td></tr>
+<tr><td class="n">8</td><td class="ph">Routing</td><td><b>Rule 4 — the money may not move</b><span>deny, quoting the screening sentence verbatim</span></td><td class="wh">Yohaku</td><td><span class="c run">RUNNING</span><a href="build/evidence/screening-with-settlement.json">one cleared, one refused &rarr;</a></td></tr>
+<tr><td class="n">9</td><td class="ph">Routing</td><td><b>Rule 9 — nothing matched, so a model is asked</b><span>one typed question. It may answer ask or drop. <b>There is no value meaning pass</b></span></td><td class="wh">a decision model</td><td><span class="c run">RUNNING</span><a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/src/adapters/jev.ts">the adapter &rarr;</a></td></tr>
+<tr><td class="n">10</td><td class="ph">Auto</td><td><b>Cleared and inside a standing grant → it settles now</b><span>the authorization is redeemed; the facilitator pays the gas</span></td><td class="wh">x402</td><td><span class="c run">RUNNING</span><a href="https://sepolia.basescan.org/tx/0xa6b97b7c07716a8456c9f6b78157366e3ac760f2be3dfbb77b63eedcbb8d0087">the receipt &rarr;</a></td></tr>
+<tr><td class="n">11</td><td class="ph">Refused</td><td><b>Denied → it is never mentioned to her</b><span>the request, its rule and its reason, listed at /dropped</span></td><td class="wh">Yohaku</td><td><span class="c run">RUNNING</span><a href="https://mac-studio.taila649e1.ts.net/dropped">/dropped &rarr;</a></td></tr>
+<tr><td class="n">12</td><td class="ph">Held</td><td><b>Held → bundled with anything like it, and ranked</b><span>one notification instead of several</span></td><td class="wh">Yohaku</td><td><span class="c run">RUNNING</span><a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/src/core/queue.ts">the queue &rarr;</a></td></tr>
+<tr><td class="n">13</td><td class="ph">Held</td><td><b>Only the daily cap reaches her. The rest waits</b><span>two, in the seeded night. The number is hers</span></td><td class="wh">Yohaku</td><td><span class="c run">RUNNING</span><a href="claims.json">re-derived by running the code &rarr;</a></td></tr>
+<tr><td class="n">14</td><td class="ph">Decision</td><td><b>She opens one and presses yes</b><span>nothing yet — the authorization is still inert</span></td><td class="wh">the person</td><td><span class="c run">RUNNING</span><a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/src/server/pages.ts">the screen &rarr;</a></td></tr>
+<tr><td class="n">15</td><td class="ph">Decision</td><td><b>Personhood is proved at that moment</b><span>a proof bound to this request and this browser</span></td><td class="wh">World ID</td><td><span class="c run">RUNNING</span><a href="build/evidence/world-public-payment.json">that run &rarr;</a></td></tr>
+<tr><td class="n">16</td><td class="ph">Decision</td><td><b>She ignores it instead, and the deadline passes</b><span>deny. The authorization expires and cannot be settled</span></td><td class="wh">nobody</td><td><span class="c run">RUNNING</span><a href="build/evidence/world-idkit-cancel.json">cancellation &rarr;</a></td></tr>
+<tr><td class="n">17</td><td class="ph">Settlement</td><td><b>Settlement runs, once, from one place in the code</b><span>the money moves to the wallet she named</span></td><td class="wh">x402</td><td><span class="c run">RUNNING</span><a href="build/evidence/world-public-payment.json">the public run &rarr;</a></td></tr>
+<tr><td class="n">18</td><td class="ph">Settlement</td><td><b>A routing voucher accrues — one unit for the decision</b><span>never a share of her price. Nothing has been broadcast</span></td><td class="wh">Yohaku</td><td><span class="c run">RUNNING</span><a href="https://mac-studio.taila649e1.ts.net/fees">/fees &rarr;</a></td></tr>
+<tr><td class="n">19</td><td class="ph">Delivery</td><td><b><b>Her answer is delivered to the agent</b></b><span> — </span></td><td class="wh">the person</td><td><span class="c nb">NOT BUILT</span><a href="build/STATUS.md">what is not built &rarr;</a></td></tr>
+<tr><td class="n">20</td><td class="ph">After</td><td><b>The morning ledger records what happened</b><span>what settled, what was refused, what she was asked</span></td><td class="wh">Yohaku</td><td><span class="c run">RUNNING</span><a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/src/core/ledger.ts">the ledger &rarr;</a></td></tr>
+<tr><td class="n">21</td><td class="ph">After</td><td><b>What she refused becomes a rule she did not have to write</b><span>fewer interruptions next week, and she can undo any of it</span></td><td class="wh">Yohaku</td><td><span class="c run">RUNNING</span><a href="business.html">the value loop &rarr;</a></td></tr>
+<tr><td class="n">22</td><td class="ph">After</td><td><b>A rule that becomes a default earns its contributor a share</b><span> — </span></td><td class="wh">—</td><td><span class="c nb">NOT BUILT</span><a href="business.html">the business model &rarr;</a></td></tr>
+</table>
+
+<footer><b>Yohaku</b> &mdash; <a href="status.html">what exists today</a> &middot;
+<a href="map.html">the map</a> &middot; <a href="ask.html">ask it something</a><br>
+<b>19 is the one that matters.</b> Everything around the answer works; the answer itself is not
+delivered yet, and 22 does not exist at all.</footer>
+</body></html>

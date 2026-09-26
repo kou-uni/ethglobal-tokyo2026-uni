@@ -13,7 +13,7 @@ room. See [ENSV2-DIFFERENTIATION.md](../decisions/ENSV2-DIFFERENTIATION.md).
 ## Already done (runs offline, no keys, no gas)
 
 ```bash
-npm test          # 342 tests, 13 of them on the permission boundary
+npm test          # 343 tests, 13 of them on the permission boundary
 ```
 
 | | |
