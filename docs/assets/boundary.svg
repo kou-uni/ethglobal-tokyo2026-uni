@@ -45,9 +45,8 @@
 <rect x="20" y="420" width="980" height="106" rx="22" fill="#FFF6DC" stroke="#F0DFA8" stroke-width="2"/>
 <rect x="46" y="442" width="122" height="24" rx="12" fill="#B08900"/>
 <text class="bd-pill" x="60" y="459">STILL OPEN</text>
-<text class="bd-q" x="186" y="459">Four questions for the interview</text>
-<text class="bd-q" x="46" y="500">1. Sync or after the fact?</text>
-<text class="bd-q" x="290" y="500">2. Do you want the refusals?</text>
-<text class="bd-q" x="534" y="500">3. Is acr enough for you?</text>
-<text class="bd-q" x="778" y="500">4. Whose policy wins?</text>
+<text class="bd-q" x="186" y="459">What the conversation is for</text>
+<text class="bd-q" x="46" y="500">1. What should cross the line?</text>
+<text class="bd-q" x="372" y="500">2. A layer, or a feature?</text>
+<text class="bd-q" x="698" y="500">3. Is the thesis right?</text>
 </svg>

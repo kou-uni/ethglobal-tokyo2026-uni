@@ -67,11 +67,10 @@ y += 204
 a('<rect x="20" y="%d" width="%d" height="106" rx="22" fill="#FFF6DC" stroke="#F0DFA8" stroke-width="2"/>' % (y, W - 40))
 a('<rect x="46" y="%d" width="122" height="24" rx="12" fill="#B08900"/>' % (y + 22))
 a('<text class="bd-pill" x="60" y="%d">%s</text>' % (y + 39, fits('STILL OPEN', 12, 108, 'pill3')))
-a('<text class="bd-q" x="186" y="%d">%s</text>' % (y + 39, fits('Four questions for the interview', 14, 420, 'q0')))
-for i, ln in enumerate(['Sync or after the fact?', 'Do you want the refusals?',
-                        'Is acr enough for you?', 'Whose policy wins?']):
-    x = 46 + (i % 4) * 244
-    a('<text class="bd-q" x="%d" y="%d">%d. %s</text>' % (x, y + 80, i + 1, fits(ln, 14, 232, 'q%d' % i)))
+a('<text class="bd-q" x="186" y="%d">%s</text>' % (y + 39, fits('What the conversation is for', 14, 420, 'q0')))
+for i, ln in enumerate(['What should cross the line?', 'A layer, or a feature?', 'Is the thesis right?']):
+    x = 46 + (i % 3) * 326
+    a('<text class="bd-q" x="%d" y="%d">%d. %s</text>' % (x, y + 80, i + 1, fits(ln, 14, 300, 'q%d' % i)))
 a('</svg>')
 
 svg = '\n'.join(o)

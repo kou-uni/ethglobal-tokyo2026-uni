@@ -21,14 +21,15 @@ h2{font-size:12px;letter-spacing:.15em;color:var(--ink3);font-weight:900;margin:
 figure.dia{margin:6px 0 10px;background:var(--card);border-radius:26px;padding:14px;box-shadow:var(--sh)}
 figure.dia svg{width:100%;height:auto;display:block;border-radius:14px}
 figure.dia figcaption{font-size:14px;color:var(--ink2);padding:12px 8px 2px;line-height:1.6}
-ol{counter-reset:q;list-style:none;padding:0;margin:0}
-ol li{counter-increment:q;background:var(--card);border-radius:20px;box-shadow:var(--shS);
-padding:15px 19px 15px 58px;position:relative;margin:10px 0;font-size:15.5px;line-height:1.66}
-ol li::before{content:counter(q);position:absolute;left:17px;top:15px;width:27px;height:27px;
-border-radius:50%;background:var(--lilacD);color:#fff;font-size:13px;font-weight:900;
-display:flex;align-items:center;justify-content:center}
-ol li b{color:var(--ink)}
-ol li span{display:block;color:var(--ink2);font-size:14px;margin-top:5px;line-height:1.6}
+section.Q{background:var(--card);border-radius:24px;box-shadow:var(--shS);padding:20px 22px 18px 62px;
+position:relative;margin:12px 0}
+section.Q .num{position:absolute;left:20px;top:22px;width:30px;height:30px;border-radius:50%;
+background:var(--lilacD);color:#fff;font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center}
+section.Q h3{font-size:20px;font-weight:900;margin:0 0 6px;line-height:1.3;letter-spacing:-.2px}
+section.Q p.fr{margin:0 0 12px;font-size:14.5px;color:var(--ink2);line-height:1.6}
+section.Q ul{margin:0;padding:0;list-style:none;border-top:2px solid var(--line)}
+section.Q li{padding:11px 0 0;font-size:14.5px;color:var(--ink2);line-height:1.62}
+section.Q li b{color:var(--ink)}
 .warn{background:var(--amberL);border-radius:18px;padding:15px 18px;font-size:15px;color:#6E520A;line-height:1.65;margin:16px 0}
 .warn b{color:#4D3A05}
 .grid{display:grid;gap:11px;grid-template-columns:repeat(auto-fit,minmax(228px,1fr));margin-bottom:6px}
@@ -109,11 +110,10 @@ guess at.</p>
   <rect x="20" y="420" width="980" height="106" rx="22" fill="#FFF6DC" stroke="#F0DFA8" stroke-width="2"/>
   <rect x="46" y="442" width="122" height="24" rx="12" fill="#B08900"/>
   <text class="bd-pill" x="60" y="459">STILL OPEN</text>
-  <text class="bd-q" x="186" y="459">Four questions for the interview</text>
-  <text class="bd-q" x="46" y="500">1. Sync or after the fact?</text>
-  <text class="bd-q" x="290" y="500">2. Do you want the refusals?</text>
-  <text class="bd-q" x="534" y="500">3. Is acr enough for you?</text>
-  <text class="bd-q" x="778" y="500">4. Whose policy wins?</text>
+  <text class="bd-q" x="186" y="459">What the conversation is for</text>
+  <text class="bd-q" x="46" y="500">1. What should cross the line?</text>
+  <text class="bd-q" x="372" y="500">2. A layer, or a feature?</text>
+  <text class="bd-q" x="698" y="500">3. Is the thesis right?</text>
   </svg>
   <figcaption><b>The dashed box is yours and we have not drawn its insides,</b> because we do not
   know them. What we can describe exactly is our side of the line and what we think should cross it.</figcaption>
@@ -149,56 +149,51 @@ features</b>, and we have written that distinction down rather than assuming in 
 <tr><td><b>Execution and treasury</b></td><td><b>Not ours</b></td><td>&mdash;</td></tr>
 </table>
 
-<h2>WHAT WE WOULD LIKE TO ASK &mdash; THE INFORMATION FLOW</h2>
-<ol>
-<li><b>Synchronous, or after the fact?</b>
-<span>Should a decision layer block a movement until it answers, or is a signed record afterwards
-more useful to you? The first makes us part of your latency; the second makes us part of your audit.</span></li>
-<li><b>Do you want the refusals?</b>
-<span>We think the traffic you <i>stopped</i> is the signal nobody keeps &mdash; it is the only
-evidence a control is doing anything. It also doubles what you would ingest. Which way does that
-trade go for you?</span></li>
-<li><b>How much identity does a movement need attached?</b>
-<span>We can say &ldquo;a person with an orb-level credential was verified at 07:14, bound to this
-request&rdquo; without ever holding who they are. Is an assurance level and a timestamp enough, or
-does your record need something that identifies them?</span></li>
-<li><b>Whose policy wins?</b>
-<span>A treasury limit and a person&rsquo;s own rule will eventually disagree. Should the stricter
-one always win, should yours, and who has to be told that it happened?</span></li>
-<li><b>What is your unit of policy?</b>
-<span>Ours is the person, then the category, then the counterparty. If yours is the agent or the
-wallet, the mapping between them is the integration.</span></li>
-<li><b>What would you want that we have not listed?</b>
-<span>The four fields in the purple box are what we have. We would rather hear one we are missing
-than have four that are right.</span></li>
-</ol>
+<h2>THREE THINGS WE WOULD LIKE TO ASK</h2>
 
-<h2>WHERE THE TWO COULD RAISE EACH OTHER</h2>
-<ol start="7" style="counter-reset:q 6">
-<li><b>Where does &ldquo;should a person see this&rdquo; live in your design today?</b>
-<span>Inside the policy engine, before it, or nowhere yet? If it is inside, we are a feature you
-would build. If it is before, we are a layer you could adopt.</span></li>
-<li><b>What is the smallest integration worth your time?</b>
-<span>A webhook, a signed decision record, an API we call before settling? We would rather build
-the small one properly than propose a platform.</span></li>
-<li><b>What should we deliberately not do?</b>
-<span>We would like to know where your layer begins so we stop cleanly at it, rather than
-discovering the overlap later.</span></li>
-</ol>
+<section class="Q"><div class="num">1</div>
+<h3>What should cross the line, and when?</h3>
+<p class="fr">This is the one we most want answered. The four fields we would send are a guess at
+your needs, not a specification.</p>
+<ul>
+  <li><b>Synchronous, or after the fact?</b> Blocking the movement makes us part of your latency;
+  a signed record afterwards makes us part of your audit.</li>
+  <li><b>Do you want the refusals too?</b> What you <i>stopped</i> is the only evidence a control is
+  working, and nobody keeps it &mdash; but it doubles what you ingest.</li>
+  <li><b>How much identity does a movement need?</b> We can say an orb-level credential was verified
+  at 07:14, bound to this request, without ever holding who they are.</li>
+  <li><b>Whose policy wins when they disagree,</b> and who has to be told that it happened?</li>
+  <li><b>What is your unit of policy?</b> Ours is the person, then the category, then the
+  counterparty. If yours is the agent or the wallet, that mapping is the integration.</li>
+  <li><b>What are we not sending that you would want?</b></li>
+</ul>
+</section>
 
-<h2>AND THE PART WE MOST WANT YOUR OPINION ON</h2>
-<ol start="10" style="counter-reset:q 9">
-<li><b>Are agents actually becoming the customer?</b>
-<span>Our whole thesis assumes traffic arrives from software, all night, faster than a person can
-answer. Does what you see support that, or is it still mostly human-initiated?</span></li>
-<li><b>Is &ldquo;less to look at&rdquo; what customers want, or the opposite?</b>
-<span>We assume the goal is that a person earns automatically and only true judgement calls reach
-them. Teams often ask for the reverse &mdash; more visibility, not less. Which do you hear?</span></li>
-<li><b>At scale, what breaks first &mdash; the deciding, or the moving?</b>
-<span>We have only simulated volume. You have seen real systems fail.</span></li>
-<li><b>What are you looking for?</b>
-<span>Asked plainly, and we will write down the answer in your words rather than ours.</span></li>
-</ol>
+<section class="Q"><div class="num">2</div>
+<h3>Are we a layer you would adopt, or a feature you would build?</h3>
+<p class="fr">Both answers are useful to us today. The second one saves us months.</p>
+<ul>
+  <li><b>Where does &ldquo;should a person see this&rdquo; live in your design now?</b> Inside the
+  policy engine, before it, or nowhere yet?</li>
+  <li><b>What is the smallest integration worth your time?</b> A webhook, a signed decision record,
+  an API we call before settling &mdash; we would rather build the small one properly.</li>
+  <li><b>What should we deliberately not do,</b> so we stop cleanly where your layer begins?</li>
+</ul>
+</section>
+
+<section class="Q"><div class="num">3</div>
+<h3>Is the thesis right at all?</h3>
+<p class="fr">We are asking for a verdict here, not agreement. You have seen real systems; we have
+seen a simulation.</p>
+<ul>
+  <li><b>Are agents actually becoming the customer,</b> or is the traffic you see still mostly
+  human-initiated?</li>
+  <li><b>Is &ldquo;less to look at&rdquo; what teams want, or the opposite?</b> We assume a person
+  should earn automatically and only judge what needs judging. Teams often ask for more visibility.</li>
+  <li><b>At scale, what breaks first &mdash; the deciding or the moving?</b></li>
+  <li><b>What are you looking for?</b> We will write the answer down in your words.</li>
+</ul>
+</section>
 
 <h2>UNDERSTAND THE PRODUCT IN FIVE MINUTES</h2>
 <div class="grid">
