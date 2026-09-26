@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-09-26T04:30:07.283443+00:00",
+  "source": "https://mac-studio.taila649e1.ts.net/health",
+  "health": {
+    "ok": true,
+    "owner": "yohaku-minta-2026.eth",
+    "dailyCap": 2,
+    "wired": {
+      "routing": true,
+      "classifier": true,
+      "identity": true,
+      "identityMode": "oidc-or-mock",
+      "screening": false,
+      "settlement": true,
+      "delegationReader": true
+    }
+  },
+  "scope": "Read-only configuration report. True flags do not independently prove a new successful identity or payment run."
+}

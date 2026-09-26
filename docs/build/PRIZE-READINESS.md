@@ -1,6 +1,6 @@
 # 受賞要件と実装・証拠の対応
 
-2026-09-26。kouのmain `05d18d8`（PR #7のマージと図の修正を含む）を取り込み、PR #7の実機結果も合わせて再評価した。
+2026-09-26。kouのmain `2927393`（PR #7のマージと最新構成図を含む）を取り込み、PR #7の実機結果も合わせて再評価した。
 公式条件は [PRIZE-REQUIREMENTS](../knowledge/PRIZE-REQUIREMENTS-2026-09-26.md)。
 以下の優先度はチーム向けの提案で、受賞確率の推計や応募確定ではない。
 
@@ -34,7 +34,9 @@ RWAトークン発行やInterceptaを、この段階で新しく足す提案は�
 - コメント時点では承認接続が未実施だったが、その後12:57:56 JSTに
   本番IDKit → Yohaku承認が完了した。新しい証拠で再判断できる。
 - ENS公開反映はkouがIssue #6で完了報告済み。今回の外部health取得では本文を
-  得られなかったため、ここではその報告とローカル実証を区別する。
+  得られなかったが、後続確認ではHTTP 200で取得できた。
+  [public-health.json](evidence/public-health.json) ではdelegationReader=true、
+  classifier=true、settlement=true。WorldはまだIDKitモードではない。
 - PR #7は13:05:05 JSTにマージ済み。IDKit公開配置の完了報告はまだなく、未確認として扱う。
 
 ## Worldの信頼確認をどう説明するか
@@ -50,6 +52,9 @@ Orb/PoH資格を選び、追加の資格を集めない。ただし人間確認�
 審査員ごとに自分のブラウザーで `/try` から開始する。
 
 ## 提出までの順番
+
+最新構成図 `2927393` と公開環境に対する具体的な残作業は
+[DEMO-REMAINING.md](DEMO-REMAINING.md)。
 
 1. kou：マージ済みPR #7の公開反映。鍵は非公開で設定。手順は [WORLD-IDKIT-DEMO](WORLD-IDKIT-DEMO.md)。
 2. 両者：使う環境の `/health` を確認し、成功と取消を一周する。
