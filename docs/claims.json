@@ -1,0 +1,58 @@
+{
+  "generatedBy": "npm run verify -- --json",
+  "generatedAt": "2026-09-26T03:12:16.299Z",
+  "note": "Each claim is re-derived by running the code. Nothing here is asserted by hand. Re-run the command to check it yourself.",
+  "passed": true,
+  "claims": [
+    {
+      "claim": "README quotes seed 2 correctly",
+      "ok": true,
+      "detail": "README says 52/32/12/2, code produces 52/32/12/2"
+    },
+    {
+      "claim": "arrivals really do range 46-54 across 20 seeds",
+      "ok": true,
+      "detail": "measured 46-54"
+    },
+    {
+      "claim": "what reaches her really is the cap, every single run",
+      "ok": true,
+      "detail": "measured 2 against a cap of 2"
+    },
+    {
+      "claim": "ASSUMPTIONS quotes the same range as the code produces",
+      "ok": true,
+      "detail": "code says 46-54; that range does not appear in ASSUMPTIONS.md"
+    },
+    {
+      "claim": "the cap really does bind for the first two weeks",
+      "ok": true,
+      "detail": "week 1 2.00, week 2 2.00"
+    },
+    {
+      "claim": "being spared really does grow from near zero to several a day",
+      "ok": true,
+      "detail": "week 1 0.1, week 4 4.8"
+    },
+    {
+      "claim": "the mornings really do go quiet by week four",
+      "ok": true,
+      "detail": "week 4 1.44"
+    },
+    {
+      "claim": "local font fallback",
+      "ok": true,
+      "detail": "pages.ts loads a font over the network with no local rounded fallback in the same stack"
+    },
+    {
+      "claim": "no hardcoded model ids, endpoints or addresses anywhere in src/ or scripts/",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "claim": "every placeholder is still marked as one",
+      "ok": true,
+      "detail": "ASSUMPTIONS.md has no 🔴 left — either everything is verified, or the marks were dropped"
+    }
+  ]
+}

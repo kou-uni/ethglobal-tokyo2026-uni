@@ -107,10 +107,13 @@ export function isPermissionDenial(error: unknown, delegate: Address, key: strin
   return resource === BigInt(keyResource(key)) && role === ROLE.SET_TEXT && equal(account, delegate);
 }
 
-export async function expectPermissionDenial(
+/** Which block the refusal was reproduced against. Recorded, never assumed. */
+export type DenialCheck = 'historic' | 'latest';
+
+async function simulateDenial(
   client: PublicClient, d: DelegationDeployment, delegate: Address, key: string, value: string,
   blockNumber?: bigint,
-) {
+): Promise<'denied' | 'succeeded' | 'unavailable'> {
   try {
     await client.simulateContract({
       address: d.resolver, abi: resolverAbi, functionName: 'setText',
@@ -118,10 +121,40 @@ export async function expectPermissionDenial(
       account: delegate, ...(blockNumber !== undefined ? { blockNumber } : {}),
     });
   } catch (error) {
-    if (isPermissionDenial(error, delegate, key)) return;
-    throw new Error('Failure was not the expected EAC permission error');
+    return isPermissionDenial(error, delegate, key) ? 'denied' : 'unavailable';
   }
-  throw new Error('Write unexpectedly succeeded; refusing to send a supposed refusal test');
+  return 'succeeded';
+}
+
+/**
+ * Reproduce the refusal, and say where it was reproduced.
+ *
+ * Replaying at the historical block is the stronger evidence, and it needs archive state.
+ * **No free Sepolia endpoint serves it** — publicnode answers `header not found`, drpc puts
+ * it behind a paid plan, 1rpc says `block not found`. Failing there would leave the demo
+ * dependent on a key we do not have, so it falls back to the current block.
+ *
+ * **What does not soften:** a pass still requires an actual `EACUnauthorizedAccountRoles`
+ * naming this delegate and this key. A write that *succeeds* is a hard failure in either
+ * mode, and the mode is written into the evidence rather than hidden.
+ */
+export async function expectPermissionDenial(
+  client: PublicClient, d: DelegationDeployment, delegate: Address, key: string, value: string,
+  blockNumber?: bigint,
+): Promise<DenialCheck> {
+  if (blockNumber !== undefined) {
+    const historic = await simulateDenial(client, d, delegate, key, value, blockNumber);
+    if (historic === 'denied') return 'historic';
+    if (historic === 'succeeded') {
+      throw new Error('Write unexpectedly succeeded; refusing to send a supposed refusal test');
+    }
+  }
+  const now = await simulateDenial(client, d, delegate, key, value);
+  if (now === 'denied') return 'latest';
+  if (now === 'succeeded') {
+    throw new Error('Write unexpectedly succeeded; refusing to send a supposed refusal test');
+  }
+  throw new Error('Failure was not the expected EAC permission error');
 }
 
 export interface DelegationProofInput {
@@ -169,8 +202,11 @@ export async function verifyDelegationProof(
     }
     if (e.status === 'reverted' && receipt.gasUsed >= tx.gas) throw new Error('Revert may be out of gas');
   }
+  const denialChecks: Record<string, DenialCheck> = {};
   for (const [i, key] of [[3, KEYS.policy], [5, KEYS.proposal]] as const) {
-    await expectPermissionDenial(client, d, input.delegate, key, input.value, receipts[i]!.blockNumber);
+    denialChecks[key] = await expectPermissionDenial(
+      client, d, input.delegate, key, input.value, receipts[i]!.blockNumber,
+    );
   }
   const { blockNumber, roles } = await readDelegateRoles(client, d, input.delegate);
   if (roles[KEYS.proposal] || OWNER_ONLY_KEYS.some((k) => roles[k])) throw new Error('Delegate retains text access');
@@ -180,6 +216,12 @@ export async function verifyDelegationProof(
     checkedAt: new Date().toISOString(), chainId: 11155111, blockNumber: blockNumber.toString(),
     name: d.name, owner: d.owner, resolver: d.resolver, delegate: input.delegate, proposal: input.value,
     rolesAfterRevocation: roles,
+    /*
+     * `latest` means the archive state for the original block was not available, so the
+     * refusal was reproduced against the current chain instead. The receipts above still
+     * prove it reverted at the time; this says where it was re-simulated.
+     */
+    denialReproducedAt: denialChecks,
     transactions: receipts.map((r, i) => ({
       step: ['fund', 'grant', 'proposal-write', 'policy-refused', 'revoke', 'proposal-refused'][i],
       hash: r.transactionHash, blockNumber: r.blockNumber.toString(), status: r.status,
