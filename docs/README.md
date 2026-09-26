@@ -1,215 +1,182 @@
-# Yohaku — 全体の俯瞰
+# Yohaku — the whole thing on one page
 
-> **エージェントは眠らない。人は眠る。Yohaku はその間にある余白。**
+> **Agents never sleep. People do. Yohaku is the space in between.**
 >
-> エージェントが人に情報を買いに来る。一晩で約50件。**人が見るのは2件。**
-> 残りは自分のルールで通るか、本人に届く前に落ちる。
+> Agents come to buy information from a person. About fifty a night. **She sees two.**
+> The rest pass under her own rules, or never reach her at all.
 
-ETHGlobal Tokyo 2026 / 提出期限 **9/27 09:00 JST** / kou + minta
+ETHGlobal Tokyo 2026 · submission deadline **27 Sep, 09:00 JST** · kou + minta
 
 ---
 
-## 1. いま何が動いていて、何が動いていないか
+## 1. What runs, and what does not
 
 ```mermaid
 flowchart TB
-  A["🤖 AIエージェント<br/>（お客）"] -->|"POST /requests<br/>who・what・purpose・price・deadline"| R
+  A["🤖 AI agents<br/>(the customers)"] -->|"POST /requests<br/>who · what · purpose · price · deadline"| R
 
-  subgraph R["route() — 10段の順序つきルール。最初に当たったものが決める"]
+  subgraph R["route() — ten ordered rules. The first match decides."]
     direction TB
-    R0["rule 0 — 委任先が自分の権限を<br/>書き換えようとした → deny"]
-    R15["rule 1-4 — 失効・禁止・期限切れ・<br/>スクリーニング落ち → deny"]
-    R56["rule 5-7 — 機微・高額・初対面 → human"]
-    R8["rule 8 — 許可リスト → auto"]
-    R9["rule 9 — どれにも当たらない → human<br/>（auto ではない）"]
+    R0["rule 0 — a delegate tried to widen<br/>its own permissions → deny"]
+    R15["rules 1–4 — revoked, forbidden,<br/>expired, failed screening → deny"]
+    R56["rules 5–7 — sensitive, above threshold,<br/>first contact → human"]
+    R8["rule 8 — on the allow list → auto"]
+    R9["rule 9 — nothing matched → human<br/>(never auto)"]
   end
 
-  R -->|auto 約33| S["自動で処理。本人は聞かれない"]
-  R -->|deny 約8| D["本人に届かない"]
-  R -->|human 約8| Q
+  R -->|auto ≈32| S["settled without her"]
+  R -->|deny ≈12| D["never reaches her"]
+  R -->|human ≈8| Q
 
-  subgraph Q["人の行列を制御する"]
-    Q1["束ねる（3社→1通知）"] --> Q2["順位づけ"] --> Q3["1日の上限 = 2"]
+  subgraph Q["holding a person's queue"]
+    Q1["bundle (3 firms → 1 notice)"] --> Q2["rank"] --> Q3["daily cap = 2"]
   end
 
-  Q3 --> P["📱 承認画面<br/>朝7時に1回だけ"]
-  P -->|Yes| W["World ID で<br/>『いま本人である』ことを証明"]
-  P -->|"何もしない"| X["期限切れ → deny<br/>沈黙は同意ではない"]
-  W --> M["💸 決済"]
-  S --> L["朝の台帳"]
+  Q3 --> P["📱 one notification<br/>at 07:00"]
+  P -->|Yes| W["World ID — a person is here, now"]
+  P -->|"nothing"| X["deadline passes → deny<br/>silence is not consent"]
+  W --> M["💸 settlement"]
+  S --> L["morning ledger"]
   D --> L
   W --> L
 
-  R0 -.->|"本来はここで<br/>コントラクトが拒否する"| E["⛓️ ENSv2<br/>Permissioned Resolver"]
+  R0 -.->|"the contract refuses it,<br/>not our server"| E["⛓️ ENSv2<br/>permissioned resolver"]
 
   classDef done fill:#DDF691,stroke:#7FA326,stroke-width:2px,color:#2F3D09
   classDef live fill:#BCB2FA,stroke:#6B5BD6,stroke-width:2px,color:#241f3d
   classDef todo fill:#FFF0F0,stroke:#FF6B6B,stroke-width:2px,stroke-dasharray:5 4,color:#7a1f1f
   class R,R0,R15,R56,R8,R9,Q,Q1,Q2,Q3,S,D,X,L,P done
-  class W,M live
-  class E todo
+  class W,M,E live
 ```
 
-| | 意味 | 中身 |
+| | Meaning | What it covers |
 |---|---|---|
-| 🟩 | **動いている・test がある** | ルーター10段、行列制御、承認画面、台帳、rule 9 の AI 判定 |
-| 🟪 | **実物と繋がっている** | **World ID**（実機で往復。ただし `amr: pop` — 下記）と **x402**（本当に着金した） |
-| 🟥 | **まだ無い** | **ENSv2 の委任境界のオンチェーン証拠**（名前と resolver は登録済み） |
+| 🟩 | **Running, with tests** | Ten rules, queue control, the morning ledger, the drop list, a decision model on rule 9 |
+| 🟪 | **Connected to the real thing** | **World ID** (production, orb), **x402** (money moved on chain), **ENSv2** (the contract refuses the delegate) |
+| 🟥 | Still a stand-in | Live payment screening. `/health` reports it **false** rather than pretending |
 
-**`GET /health` が同じことを機械可読で返します。** ソースを読まずに、何が繋がっているか分かる。
+**`GET /health` says the same thing in machine-readable form**, so nobody has to read the source
+to find out what is wired.
 
-```json
-{ "routing": true, "classifier": true, "identity": true, "screening": true, "settlement": true }
-```
+## 1.4 Read one thing
 
-## 1.4 通しで読むなら
+**[product/STORY.md](product/STORY.md)** — thought → market → the two customers → who says we are
+right → the gap nobody fills → what it is worth → who owns which layer. **Sixteen diagrams**,
+and the pictures carry it.
 
-**[product/STORY.md](product/STORY.md) — 思想 → 反転 → 市場 → ジャーニー → 権威づけ → 穴 → 価値 → 層**を、
-**図14枚と文の両方**で1本にしたもの。初めての人はここから。
+## 1.5 There are two customers
 
-## 1.5 顧客は二人いる
+**The agent pays. The person sells.** Neither of them comes here on purpose — both pass through
+on the way to something else.
 
-**払うのはエージェント、売るのは人間。** どちらも Yohaku を使いに来るのではなく、
-**別の用事の途中でここを通る。**
-
-| | エージェント | 人間 |
+| | The agent | The person |
 |---|---|---|
-| 成功とは | **詰まらないこと。** 即答・理由・期限 | **判断が増えないこと。** 収入より先に、疲れないこと |
-| 1件の重み | 1/500 | **2件のうちの1件** |
+| Success is | **not stalling** — an answer, a reason, a deadline | **not deciding more often.** Before income: not being worn out |
+| One request weighs | 1 in 500 | **1 of 2** |
 
-→ [product/JOURNEY.md](product/JOURNEY.md)（規約の受け渡し図つき）／
-根拠は [knowledge/AGENT-TO-HUMAN-PROTOCOLS.md](knowledge/AGENT-TO-HUMAN-PROTOCOLS.md)
+→ [product/JOURNEY.md](product/JOURNEY.md), with the handoffs. Grounded in
+[knowledge/AGENT-TO-HUMAN-PROTOCOLS.md](knowledge/AGENT-TO-HUMAN-PROTOCOLS.md).
 
-**規約の言葉で言えば、Yohaku は AP2 の Trusted Surface です。**
-仕様はこの役割にだけ MUST を付けている — *"MUST be non-agentic"*、理由は
-*"the Agent itself is a potential attacker"*。そして **1日に何件まで人を呼んでよいかは、
-まだどの規約も定義していない。**
+**In the language of AP2, Yohaku is a Trusted Surface.** The specification puts a MUST on that
+one role — *"MUST be non-agentic"* — because *"the Agent itself is a potential attacker."*
+And **how many times a day an agent economy may interrupt one person is still undefined by
+anyone.**
 
-## 2. なぜこれを作るのか（3行）
+## 2. Why anyone pays a person at all
 
-1. 学習コストに上限が無い。**高くなるのは計算ではなく、まだ誰も持っていないデータ**
-2. **エージェントは web を漁っても「人間が書いたもの」を判別できない。** 合成テキストは無料で無限
-3. だから **人間しか登録できず、名前を剥奪できる**場所に、金を払う価値が生まれる
+1. Training costs have no ceiling. **What gets expensive is not compute — it is data nobody has**
+2. **An agent cannot tell what a human wrote.** Synthetic text is free and endless
+3. So **scraping is free and contaminated**, and a provable human answer is the scarce thing
 
-→ 詳細は [product/CONCEPT.md](product/CONCEPT.md)
+→ [product/CONCEPT.md](product/CONCEPT.md)
 
-## 3. フォルダの地図
+## 3. The map of the repository
 
 ```
 src/
-  core/      route() ・行列制御・学習・夜の生成・過去の夜の再生。I/O 無し、純粋
-  ports/     ClassifierPort / IdentityPort / ScreeningPort / PermissionsPort
-  adapters/  World OIDC（実物）
-  server/    HTTP。3つのエンドポイントと、人が見る2画面
-scripts/     verify.ts（主張をコードから再導出）・seed・鍵の投入画面
-demo/        1ファイル。USBメモリから、wifi無しで開く
-design/      minta さんのブランド（Make room. For being human.）
+  core/      route(), queue control, learning, the night generator, the replay. Pure, no I/O
+  ports/     ClassifierPort · IdentityPort · ScreeningPort · PermissionsPort · SettlementPort
+  adapters/  World OIDC, World IDKit, x402, ENSv2, the decision model
+  server/    node:http. The endpoints, and the two screens a person sees
+scripts/     verify.ts (re-derives the claims) · seed · simulate · the credential pages
+demo/        one file. Opens from a USB stick with no network
 docs/
-  product/   何を作るか — STORY / CONCEPT / ARCHITECTURE / JOURNEY / ECONOMICS / PITCH / MARKET / ASSUMPTIONS
-  decisions/ 何を選び、何を捨てたか — ENS vs intercepta ほか
-  build/     いまどこまで動くか — STATUS / WORLD-SETUP / ENSV2-SPIKE / FEEDBACK
-  knowledge/ 外から確かめたこと。全ファイルに出典と日付
+  product/   what we are building — STORY · CONCEPT · ARCHITECTURE · JOURNEY · ECONOMICS · PITCH
+  decisions/ what we chose, and what we discarded
+  build/     where we are — STATUS · setup guides · FEEDBACK
+  knowledge/ what we confirmed from the outside. Every file carries its sources and a date
 ```
 
-**この4分割には意味があります。** `product/` は我々の主張、`decisions/` は分岐の記録、
-`build/` は現在地、**`knowledge/` だけが外の事実**。混ぜると、どれが検証可能なのか分からなくなる。
+**The four folders mean something.** `product/` is our claim, `decisions/` is the record of a
+fork, `build/` is where we stand, **and only `knowledge/` is outside fact.** Mixing them makes it
+impossible to tell what can be checked.
 
-## 4. 貫いている考え方
+## 4. What runs through all of it
 
 | | |
 |---|---|
-| **全部 deny に倒れる** | エンジンが落ちても、スクリーニングが落ちても、本人が答えなくても、身元確認が失敗しても deny。**沈黙は同意ではない** |
-| **保証はスキーマに置く。アダプタに置かない** | AI の返せる値は `'ask' \| 'drop'` だけ。**「通す」という値が存在しない**ので、プロンプトインジェクションが最大限成功しても `drop` にしかならない |
-| **rule 9 は human。auto ではない** | 未知を自動で通す設計は、事故の後に説明できなくなる |
-| **推測を構造で排除する** | `npm run verify` が**ドキュメントの数字をコードから再導出**し、モデルID・エンドポイント・アドレスのハードコードを落とす。10項目 |
-| **言う前に測る** | 「12→5→2に減る」は実際に30夜再生したら偽だった。**測り直して撤回を残した**（[product/ASSUMPTIONS.md](product/ASSUMPTIONS.md) B3） |
-| **できないことを画面に書く** | 決済が繋がる前は金額を「worth」と出し「まだ動いていない」と書いていた。いまは動いたので tx を出す。**World が `amr: pop` を返す場面では、画面が自分から「アプリでの承認ではない」と書く** |
+| **Everything falls to deny** | Engine down, screening unreachable, identity failed, no answer before the deadline — all of them refuse. **Silence is not consent** |
+| **The guarantee lives in the schema** | The model may answer `ask` or `drop`. **There is no value meaning "pass"**, so a prompt injection that fully succeeds still only reaches a refusal |
+| **Rule 9 goes to a human, not to auto** | A system that auto-approves the unknown cannot be explained after an incident |
+| **Guessing is refused structurally** | `npm run verify` re-derives the documented numbers from the code and rejects any hardcoded model id, endpoint or address. Ten claims |
+| **Measure before saying** | "12 → 5 → 2 in a week" was false. Thirty nights were replayed, and **the retraction is still visible** ([ASSUMPTIONS](product/ASSUMPTIONS.md) B3) |
+| **Say what it cannot do** | Where settlement is not wired, the screen says so on the same page as the amount |
 
-## 5. 検証のしかた（他人が確かめられる形）
+## 5. Checking it instead of trusting it
 
 ```bash
-npm test          # 133 tests
-npm run verify    # 10 claims。ドキュメントの数字をコードから再導出する
-npm run seed -- 18   # 一晩を生成して route() に通す。seed を変えると入力は動く
-npm start         # サーバ
+npm test             # 300 tests
+npm run verify       # 10 claims, re-derived by running the code
+npm run seed -- 2    # generate a night and route it for real
+npm run simulate     # agents arriving, with real jobs and real questions
+npm start            # the server
 ```
 
-**「入力は 46〜54 で揺れる。本人に届く数は、20回とも 2 だった。」**
-これは主張ではなく `npm run verify` の出力です。
+**"Arrivals wander between 46 and 54. What reaches her was 2 in all twenty runs."**
+That is the output of `npm run verify`, not a claim. **Disprove it with the same command.**
 
-## 6. 次にやること
+## 6. What is left
 
-| 優先 | やること | なぜ | 状態 |
-|---|---|---|---|
-| **1** | **ENSv2 を Sepolia に乗せる** | rule 0 を「うちのサーバが拒否した」から**「コントラクトが拒否した」**に変える。ENS 賞は mock では要件を満たさない | 未確認4点は潰れた（[knowledge/ENSV2-ONCHAIN.md](knowledge/ENSV2-ONCHAIN.md)）。**残る壁は登録の支払い通貨と金額だけ** |
-| 2 | ブースで各スポンサーに「何を探しているか」を聞く | 推測で刺しに行かない。答えは逐語で記録する | 未 |
-| 3 | intercepta を実際に叩く | ENS が落ちたときの差し替え先 | 鍵待ち（kou@texx.io） |
-| — | 決済 | ~~意図的に最後~~ **済み。**Base Sepolia で2件、チェーンで確認。[120 atomic](https://sepolia.basescan.org/tx/0x79c1e3239ef89cdc1b8a5fc14321093b06504a3c68a24644ba6390caf90393fa)（auto）と [4,200 atomic](https://sepolia.basescan.org/tx/0x5c79fddfc8d6e6f64c1dd23752fae688a9b94ec5bc770f24fd1c2595b00d1d88)（**人が Yes を押した瞬間にだけ**動いた） | ✅ |
-
-**ENS の着手前に決めること: Sepolia の資金（2アカウント）と testnet USDC/DAI を誰が用意するか。**
-
-→ 現在地の詳細は [build/STATUS.md](build/STATUS.md)
-
-## 7. 図面の一覧
-
-**GitHub 上でそのまま描画されます**（mermaid）。SVG は手書きで、レンダリングして目で確認済み。
-
-### システムの図 — mermaid 13枚
-
-| # | 図 | 種類 | 何が分かるか |
-|---|---|---|---|
-| 0 | [いま何が動いていて、何が動いていないか](README.md#1-いま何が動いていて何が動いていないか) | flowchart | **色分けで現在地。** 緑=test あり／紫=実物と繋がっている／赤=まだ無い |
-| 1 | [Layers, and who answers what](product/ARCHITECTURE.md#1-layers-and-who-answers-what) | 表＋図 | 層の責務分担 |
-| 2 | [Actors and trust boundaries](product/ARCHITECTURE.md#2-actors-and-trust-boundaries) | flowchart | **誰を信用していないか。** 信頼境界の線 |
-| 3 | [Components](product/ARCHITECTURE.md#3-components) | flowchart | モジュールと依存の向き |
-| 4 | [Routing — ten ordered rules](product/ARCHITECTURE.md#4-routing-ten-ordered-rules) | flowchart | **10段の評価順。最初に当たったものが決める** |
-| 5 | [Failure — everything falls to `deny`](product/ARCHITECTURE.md#5-failure-everything-falls-to-deny) | flowchart | **全部の故障経路が deny に収束する絵。** 沈黙は同意ではない |
-| 6 | [Permission boundary — what ENSv2 is for here](product/ARCHITECTURE.md#6-permission-boundary-what-ensv2-is-for-here) | flowchart | **委任先は提案できるが、自分の権限を書き換えられない** |
-| 7 | [One night, end to end](product/ARCHITECTURE.md#7-one-night-end-to-end) | **sequenceDiagram** | 02:00 に来て 07:00 に本人が答えるまでの往復 |
-| 8 | [Data flow](product/ARCHITECTURE.md#8-data-flow) | flowchart | 何がオンチェーンで、何がオフチェーンか |
-| 9 | [Request の状態機械](product/ARCHITECTURE.md#9-1-request) | **stateDiagram** | received → auto / held / denied → settled |
-| 10 | [Grant の状態機械](product/ARCHITECTURE.md#9-2-grant) | **stateDiagram** | 許諾の発行・期限・失効 |
-| 11 | [Delegation の状態機械](product/ARCHITECTURE.md#9-3-delegation) | **stateDiagram** | 委任の付与と取り消し |
-| 12 | [Screens](product/ARCHITECTURE.md#10-screens) | flowchart | 5画面と、誰がどれを見るか |
-| 13 | [intercepta の最小フロー](decisions/INTERCEPTA.md#4-提案する最小フロー) | flowchart | スクリーニングを挟む位置 |
-| 14 | [規約の受け渡し](product/JOURNEY.md#1-規約の受け渡し--誰から誰へ何が渡るか) | **sequenceDiagram** | **AIPREF → 依頼 → AP2 Mandate → World ID → x402。**どの規約がどこで効くか |
-
-### 通しの物語 — [product/STORY.md](product/STORY.md) に **mermaid 14枚**
-
-| 節 | 図 | 何が見えるか |
+| | | |
 |---|---|---|
-| ① 思想 | 余白の概念図／3分岐が全部「余白」 | **生む・守る・使う** |
-| ② 反転 | 希少性の反転／人間証明だけでは足りない理由 | なぜ剥奪が要るか |
-| ③ 市場 | 供給側と需要側 | **払う経路はもう通っている** |
-| ④ ジャーニー | 二人の顧客／**プロセス図**／**状態遷移図**／**情報フロー図** | **各段で何が渡るか** |
-| ⑤ 権威づけ | ジャーニーに規約を重ねた図 | どの段が誰の仕様に載っているか |
-| ⑥ 穴 | 層の図。**埋まっている所と、赤い破線** | 相手が Merchant 前提であること |
-| ⑦ 価値 | before / after | 埋めると何が起きるか |
-| ⑧ 層 | 誰が何を持っているか | **持ち主がいないのは真ん中の1つ** |
+| 1 | **Record the video, and file the submission** | The evidence is in place; the words are drafted |
+| 2 | **Ask each sponsor what they are looking for** | Not whether they like it. Verbatim |
+| 3 | **Fees** | [Designed](product/ECONOMICS.md), and **taking nothing today** |
 
-### SVG — 2枚（手書き）
+→ [build/STATUS.md](build/STATUS.md) for where we actually are.
 
-| 図 | 何が分かるか |
-|---|---|
-| [assets/overview.svg](assets/overview.svg) | **アーキテクチャ全体1枚。** README の先頭に貼っているもの |
-| [assets/market.svg](assets/market.svg) | **市場の絵。** 供給の枯渇と買い手の増加 |
+## 7. The diagrams
 
-### ブランド — minta さん（`design/yohaku-v3/`）
+**Everything renders on GitHub.** The SVGs were drawn by hand and checked by eye.
 
-**Make room. For being human.** / Ink `#242329` · Paper `#F8F7F3` · Lilac `#BCB2FA` · Lime `#DDF691`
+### The live pages
 
 | | |
 |---|---|
-| [lockup.svg](../design/yohaku-v3/lockup.svg) | ロゴ＋タイポのロックアップ |
-| [mark.svg](../design/yohaku-v3/mark.svg) / [mark-light.svg](../design/yohaku-v3/mark-light.svg) | シンボル（余白の4隅） |
-| [preview.png](../design/yohaku-v3/preview.png) / [mobile.png](../design/yohaku-v3/mobile.png) | 画面のプレビュー |
+| [One night, animated](https://kou-uni.github.io/ethglobal-tokyo2026-uni/flow.html) | Twenty seconds, no reading |
+| [What it plugs into](https://kou-uni.github.io/ethglobal-tokyo2026-uni/stack.html) | Every box links to a transaction or a live endpoint |
+| [Where the requests come from](https://kou-uni.github.io/ethglobal-tokyo2026-uni/inflow.html) | Discovery, the call and the payment, on standards we did not invent |
+| [The running product](https://kou-uni.github.io/ethglobal-tokyo2026-uni/product.html) | Live status, and an honest list of what is not wired |
+| [The business model](https://kou-uni.github.io/ethglobal-tokyo2026-uni/business.html) | Never paid out of the seller's money |
+| [Glossary](https://kou-uni.github.io/ethglobal-tokyo2026-uni/glossary.html) | One line per term |
 
-### 紙芝居 — 説明を1枚ずつ送るデッキ（このリポジトリの外）
+### In the documents
 
-`~/kamishibai/content/` にあります。**提出物ではなく、レビューと説明用。**
+| # | Diagram | Kind | What it shows |
+|---|---|---|---|
+| 1 | [Layers](product/ARCHITECTURE.md#1-layers-and-who-answers-what) | table | Who answers what |
+| 2 | [Actors and trust boundaries](product/ARCHITECTURE.md#2-actors-and-trust-boundaries) | flowchart | **Who is not trusted** |
+| 3 | [Components](product/ARCHITECTURE.md#3-components) | flowchart | Modules, and which way they depend |
+| 4 | [Ten ordered rules](product/ARCHITECTURE.md#4-routing-ten-ordered-rules) | flowchart | **First match decides** |
+| 5 | [Failure](product/ARCHITECTURE.md#5-failure-everything-falls-to-deny) | flowchart | **Every path converging on `deny`** |
+| 6 | [Permission boundary](product/ARCHITECTURE.md#6-permission-boundary-what-ensv2-is-for-here) | flowchart | The delegate cannot widen its rights |
+| 7 | [One night](product/ARCHITECTURE.md#7-one-night-end-to-end) | **sequence** | 02:00 to settlement |
+| 8 | [Data flow](product/ARCHITECTURE.md#8-data-flow) | flowchart | On chain, and off it |
+| 9–11 | [Request](product/ARCHITECTURE.md#9-1-request) · [Grant](product/ARCHITECTURE.md#9-2-grant) · [Delegation](product/ARCHITECTURE.md#9-3-delegation) | **state** | Lifecycles |
+| 12 | [Screens](product/ARCHITECTURE.md#10-screens) | flowchart | Who sees which |
+| 13 | [Handoffs](product/JOURNEY.md#1-規約の受け渡し--誰から誰へ何が渡るか) | **sequence** | **What passes at each step** |
+| 14 | [The story](product/STORY.md) | 16 diagrams | Thought → market → journey → the gap → value → layers |
 
-| | 更新 | 中身 |
-|---|---|---|
-| `yohaku-story.js` | 9/26 | **現行。** Yohaku のプロジェクトストーリー |
-| `noren-v2-story.js` | 9/26 | 改名前の版 |
-| `noren-app.local.js` | 9/23 | 最初の製品説明 |
+### Brand — minta (`design/yohaku-v3/`)
+
+**Make room. For being human.** · Ink `#242329` · Paper `#F8F7F3` · Lilac `#BCB2FA` · Lime `#DDF691`
