@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 540" role="img" aria-label="Yohaku decides whether a person should see a money movement; a treasury layer executes and records it. Four things cross the boundary in each direction, and four questions about that boundary are still open.">
+<rect width="100%" height="100%" fill="#F8F7F3"/>
+<defs>
+<marker id="bd-r" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#6B5BD6"/></marker>
+<marker id="bd-l" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#7FA326"/></marker>
+</defs>
+<style>
+.bd-lnm{font:900 13px "M PLUS Rounded 1c",sans-serif;fill:#8C8998;letter-spacing:.11em}
+.bd-h{font:900 26px "M PLUS Rounded 1c",sans-serif;fill:#241f3d}
+.bd-s{font:800 15px "M PLUS Rounded 1c",sans-serif;fill:#8C8998}
+.bd-t{font:900 16px "M PLUS Rounded 1c",sans-serif;fill:#242329}
+.bd-m{font:900 13.5px ui-monospace,Menlo,monospace;fill:#6B5BD6}
+.bd-g{font:900 13.5px ui-monospace,Menlo,monospace;fill:#6F9022}
+.bd-q{font:900 14px "M PLUS Rounded 1c",sans-serif;fill:#8A6A12}
+.bd-pill{font:900 12px "M PLUS Rounded 1c",sans-serif;fill:#fff;letter-spacing:.06em}
+</style>
+<text class="bd-lnm" x="20" y="36">WHERE ONE LAYER STOPS</text>
+<rect x="20" y="62" width="330" height="128" rx="24" fill="#EDE9FF" stroke="#6B5BD6" stroke-width="3"/>
+<text class="bd-h" x="46" y="106">Yohaku</text>
+<text class="bd-t" x="46" y="136">Should a person see this?</text>
+<text class="bd-s" x="46" y="164">Running today</text>
+<rect x="670" y="62" width="330" height="128" rx="24" fill="#fff" stroke="#E8E5DC" stroke-width="3" stroke-dasharray="9 6"/>
+<text class="bd-h" x="696" y="106">A treasury layer</text>
+<text class="bd-t" x="696" y="136">Move it, and record it.</text>
+<text class="bd-s" x="696" y="164">Not ours. Not built here</text>
+<path d="M360 104 L660 104" stroke="#6B5BD6" stroke-width="3" fill="none" marker-end="url(#bd-r)"/>
+<path d="M660 150 L360 150" stroke="#7FA326" stroke-width="3" fill="none" marker-end="url(#bd-l)"/>
+<text class="bd-m" x="382" y="94">per decision →</text>
+<text class="bd-g" x="382" y="176">← per movement</text>
+<rect x="20" y="216" width="480" height="184" rx="22" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
+<rect x="46" y="238" width="190" height="24" rx="12" fill="#6B5BD6"/>
+<text class="bd-pill" x="60" y="255">WHAT WE WOULD SEND</text>
+<text class="bd-m" x="46" y="292">&#183; the verdict, and which rule</text>
+<text class="bd-m" x="46" y="318">&#183; whether a person was verified</text>
+<text class="bd-m" x="46" y="344">&#183; the authorization and its expiry</text>
+<text class="bd-m" x="46" y="370">&#183; the screening result, verbatim</text>
+<rect x="540" y="216" width="460" height="184" rx="22" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
+<rect x="566" y="238" width="190" height="24" rx="12" fill="#7FA326"/>
+<text class="bd-pill" x="580" y="255">WHAT WE WOULD NEED</text>
+<text class="bd-g" x="566" y="292">&#183; limits, before we decide</text>
+<text class="bd-g" x="566" y="318">&#183; the settlement outcome</text>
+<text class="bd-g" x="566" y="344">&#183; what actually moved</text>
+<text class="bd-g" x="566" y="370">&#183; a record a person can read</text>
+<rect x="20" y="420" width="980" height="106" rx="22" fill="#FFF6DC" stroke="#F0DFA8" stroke-width="2"/>
+<rect x="46" y="442" width="122" height="24" rx="12" fill="#B08900"/>
+<text class="bd-pill" x="60" y="459">STILL OPEN</text>
+<text class="bd-q" x="186" y="459">Four questions for the interview</text>
+<text class="bd-q" x="46" y="500">1. Sync or after the fact?</text>
+<text class="bd-q" x="290" y="500">2. Do you want the refusals?</text>
+<text class="bd-q" x="534" y="500">3. Is acr enough for you?</text>
+<text class="bd-q" x="778" y="500">4. Whose policy wins?</text>
+</svg>

@@ -1,0 +1,244 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Yohaku &times; Curvegrid — the boundary, and what we want to ask</title>
+<meta name="description" content="Where a decision layer stops and a treasury layer starts, what should cross between them, and the questions we would like answered.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap');
+:root{--ink:#242329;--ink2:#5F5D6B;--ink3:#A6A3B4;--paper:#F8F7F3;--card:#fff;--line:#E8E5DC;
+--lilac:#BCB2FA;--lilacD:#6B5BD6;--lilacL:#EDE9FF;--limeD:#7FA326;--limeL:#F2FBD9;--amber:#B08900;--amberL:#FFF6DC;
+--sh:0 6px 0 rgba(36,35,41,.09),0 12px 28px rgba(36,35,41,.13);--shS:0 4px 0 rgba(36,35,41,.08)}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:880px;padding:26px 18px 80px;color:var(--ink);
+background:linear-gradient(180deg,#EFEBFF 0%,#F6F4EC 40%,var(--paper) 100%);background-attachment:fixed;
+font-family:"M PLUS Rounded 1c",-apple-system,BlinkMacSystemFont,"Hiragino Maru Gothic ProN",sans-serif;
+font-size:16px;line-height:1.7;font-weight:700;-webkit-font-smoothing:antialiased}
+a.back{font-size:14px;color:var(--lilacD);text-decoration:none;font-weight:900}
+h1{font-size:clamp(28px,6.4vw,44px);font-weight:900;letter-spacing:-.02em;margin:12px 0 6px;line-height:1.2}
+h1 em{font-style:normal;display:inline-block;color:#fff;background:var(--lilacD);padding:0 12px 3px;
+border-radius:15px;box-shadow:0 5px 0 #4A3BAE;transform:rotate(-1.4deg)}
+p.sub{color:var(--ink2);font-size:16px;margin:10px 0 18px;max-width:54ch}
+h2{font-size:12px;letter-spacing:.15em;color:var(--ink3);font-weight:900;margin:36px 0 12px}
+figure.dia{margin:6px 0 10px;background:var(--card);border-radius:26px;padding:14px;box-shadow:var(--sh)}
+figure.dia svg{width:100%;height:auto;display:block;border-radius:14px}
+figure.dia figcaption{font-size:14px;color:var(--ink2);padding:12px 8px 2px;line-height:1.6}
+ol{counter-reset:q;list-style:none;padding:0;margin:0}
+ol li{counter-increment:q;background:var(--card);border-radius:20px;box-shadow:var(--shS);
+padding:15px 19px 15px 58px;position:relative;margin:10px 0;font-size:15.5px;line-height:1.66}
+ol li::before{content:counter(q);position:absolute;left:17px;top:15px;width:27px;height:27px;
+border-radius:50%;background:var(--lilacD);color:#fff;font-size:13px;font-weight:900;
+display:flex;align-items:center;justify-content:center}
+ol li b{color:var(--ink)}
+ol li span{display:block;color:var(--ink2);font-size:14px;margin-top:5px;line-height:1.6}
+.warn{background:var(--amberL);border-radius:18px;padding:15px 18px;font-size:15px;color:#6E520A;line-height:1.65;margin:16px 0}
+.warn b{color:#4D3A05}
+.grid{display:grid;gap:11px;grid-template-columns:repeat(auto-fit,minmax(228px,1fr));margin-bottom:6px}
+a.c{display:block;background:var(--card);border-radius:20px;padding:15px 17px;box-shadow:var(--shS);
+text-decoration:none;color:inherit}
+a.c .k{font-size:10.5px;font-weight:900;letter-spacing:.11em;color:#fff;background:var(--lilacD);
+padding:3px 10px;border-radius:99px;display:inline-block;margin-bottom:8px}
+a.c .k.g{background:var(--limeD)}a.c .k.d{background:var(--ink)}
+a.c b{display:block;font-size:16px;font-weight:900;line-height:1.35}
+a.c span{display:block;font-size:13.5px;color:var(--ink2);margin-top:5px;line-height:1.5}
+details{background:var(--card);border-radius:20px;box-shadow:var(--shS);margin:11px 0;overflow:hidden}
+details summary{cursor:pointer;list-style:none;padding:15px 19px;font-size:15.5px;font-weight:900;
+display:flex;align-items:center;gap:10px}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:"+";color:var(--lilacD);font-size:19px;line-height:1}
+details[open] summary::before{content:"\2212"}
+details > *:not(summary){padding:0 19px;margin-top:0}
+details > *:not(summary):last-child{padding-bottom:17px}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:18px;overflow:hidden;
+box-shadow:var(--shS);font-size:14.5px}
+th,td{text-align:left;padding:11px 15px;border-bottom:2px solid var(--line);vertical-align:top}
+th{font-size:11px;letter-spacing:.1em;color:var(--ink3)}
+tr:last-child td{border-bottom:0}
+.ev{display:inline-block;font-size:12px;font-weight:900;text-decoration:none;color:var(--lilacD);
+background:var(--lilacL);border-radius:10px;padding:3px 9px;margin:2px 3px 0 0}
+footer{margin-top:40px;padding-top:18px;border-top:2px dashed var(--line);font-size:13.5px;color:var(--ink2)}
+footer a{color:var(--lilacD)}
+</style></head><body>
+<a class="back" href="./">&larr; Yohaku</a>
+<h1>You move it.<br>We decide <em>whether to ask.</em></h1>
+<p class="sub">A working router, an open boundary, and the questions we would rather ask you than
+guess at.</p>
+
+<figure class="dia">
+  <svg viewBox="0 0 1020 540" role="img" aria-label="Yohaku decides whether a person should see a money movement; a treasury layer executes and records it. Four things cross the boundary in each direction, and four questions about that boundary are still open.">
+  <rect width="100%" height="100%" fill="#F8F7F3"/>
+  <defs>
+  <marker id="bd-r" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#6B5BD6"/></marker>
+  <marker id="bd-l" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#7FA326"/></marker>
+  </defs>
+  <style>
+  .bd-lnm{font:900 13px "M PLUS Rounded 1c",sans-serif;fill:#8C8998;letter-spacing:.11em}
+  .bd-h{font:900 26px "M PLUS Rounded 1c",sans-serif;fill:#241f3d}
+  .bd-s{font:800 15px "M PLUS Rounded 1c",sans-serif;fill:#8C8998}
+  .bd-t{font:900 16px "M PLUS Rounded 1c",sans-serif;fill:#242329}
+  .bd-m{font:900 13.5px ui-monospace,Menlo,monospace;fill:#6B5BD6}
+  .bd-g{font:900 13.5px ui-monospace,Menlo,monospace;fill:#6F9022}
+  .bd-q{font:900 14px "M PLUS Rounded 1c",sans-serif;fill:#8A6A12}
+  .bd-pill{font:900 12px "M PLUS Rounded 1c",sans-serif;fill:#fff;letter-spacing:.06em}
+  </style>
+  <text class="bd-lnm" x="20" y="36">WHERE ONE LAYER STOPS</text>
+  <rect x="20" y="62" width="330" height="128" rx="24" fill="#EDE9FF" stroke="#6B5BD6" stroke-width="3"/>
+  <text class="bd-h" x="46" y="106">Yohaku</text>
+  <text class="bd-t" x="46" y="136">Should a person see this?</text>
+  <text class="bd-s" x="46" y="164">Running today</text>
+  <rect x="670" y="62" width="330" height="128" rx="24" fill="#fff" stroke="#E8E5DC" stroke-width="3" stroke-dasharray="9 6"/>
+  <text class="bd-h" x="696" y="106">A treasury layer</text>
+  <text class="bd-t" x="696" y="136">Move it, and record it.</text>
+  <text class="bd-s" x="696" y="164">Not ours. Not built here</text>
+  <path d="M360 104 L660 104" stroke="#6B5BD6" stroke-width="3" fill="none" marker-end="url(#bd-r)"/>
+  <path d="M660 150 L360 150" stroke="#7FA326" stroke-width="3" fill="none" marker-end="url(#bd-l)"/>
+  <text class="bd-m" x="382" y="94">per decision →</text>
+  <text class="bd-g" x="382" y="176">← per movement</text>
+  <rect x="20" y="216" width="480" height="184" rx="22" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
+  <rect x="46" y="238" width="190" height="24" rx="12" fill="#6B5BD6"/>
+  <text class="bd-pill" x="60" y="255">WHAT WE WOULD SEND</text>
+  <text class="bd-m" x="46" y="292">&#183; the verdict, and which rule</text>
+  <text class="bd-m" x="46" y="318">&#183; whether a person was verified</text>
+  <text class="bd-m" x="46" y="344">&#183; the authorization and its expiry</text>
+  <text class="bd-m" x="46" y="370">&#183; the screening result, verbatim</text>
+  <rect x="540" y="216" width="460" height="184" rx="22" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
+  <rect x="566" y="238" width="190" height="24" rx="12" fill="#7FA326"/>
+  <text class="bd-pill" x="580" y="255">WHAT WE WOULD NEED</text>
+  <text class="bd-g" x="566" y="292">&#183; limits, before we decide</text>
+  <text class="bd-g" x="566" y="318">&#183; the settlement outcome</text>
+  <text class="bd-g" x="566" y="344">&#183; what actually moved</text>
+  <text class="bd-g" x="566" y="370">&#183; a record a person can read</text>
+  <rect x="20" y="420" width="980" height="106" rx="22" fill="#FFF6DC" stroke="#F0DFA8" stroke-width="2"/>
+  <rect x="46" y="442" width="122" height="24" rx="12" fill="#B08900"/>
+  <text class="bd-pill" x="60" y="459">STILL OPEN</text>
+  <text class="bd-q" x="186" y="459">Four questions for the interview</text>
+  <text class="bd-q" x="46" y="500">1. Sync or after the fact?</text>
+  <text class="bd-q" x="290" y="500">2. Do you want the refusals?</text>
+  <text class="bd-q" x="534" y="500">3. Is acr enough for you?</text>
+  <text class="bd-q" x="778" y="500">4. Whose policy wins?</text>
+  </svg>
+  <figcaption><b>The dashed box is yours and we have not drawn its insides,</b> because we do not
+  know them. What we can describe exactly is our side of the line and what we think should cross it.</figcaption>
+</figure>
+
+<h2>THE HYPOTHESIS WE WOULD LIKE CORRECTED</h2>
+<div class="warn"><b>Our guess:</b> the hard problem in agent finance is not moving money, it is
+deciding <b>which movements a person should ever see.</b> An agent that works around the clock
+spends and earns around the clock, and the number that decides whether a team can live with it is
+not the amount &mdash; it is how many times a day someone has to look.
+<b>We built that half-step. We did not build execution, and we are not claiming it.</b>
+If this is not where your next layer needs help, the most useful thing you can do today is say so.
+<br><br>What we are going on is your public talk, where NEO was described as holding digital assets
+inside treasury operations and deciding whether an AI-proposed action may proceed &mdash; approve,
+sign, execute, record. <b>We treat that as a design that was described, not as a list of shipped
+features</b>, and we have written that distinction down rather than assuming in your favour.</div>
+
+<h2>WHAT IS ACTUALLY RUNNING</h2>
+<table>
+<tr><th>Piece</th><th>State</th><th>Check it</th></tr>
+<tr><td><b>Ten ordered rules</b><br>auto / human / deny, first match wins</td><td>Running</td>
+<td><a class="ev" href="claims.json">12 claims</a><a class="ev" href="console.html">offline console</a></td></tr>
+<tr><td><b>Settlement over x402</b><br>only after a verified person says yes</td><td>Running, on chain</td>
+<td><a class="ev" href="https://sepolia.basescan.org/tx/0xa6b97b7c07716a8456c9f6b78157366e3ac760f2be3dfbb77b63eedcbb8d0087">the receipt</a></td></tr>
+<tr><td><b>Payment screening</b><br>a live call decides rule 4 before we settle</td><td>Running</td>
+<td><a class="ev" href="build/evidence/screening-with-settlement.json">one cleared, one refused</a></td></tr>
+<tr><td><b>A permission boundary</b><br>the agent cannot widen its own rights</td><td>Running, on chain</td>
+<td><a class="ev" href="build/evidence/ens-delegation.json">six receipts</a></td></tr>
+<tr><td><b>Proof of personhood at consent</b><br>not at signup</td><td>Running</td>
+<td><a class="ev" href="build/evidence/world-idkit-approval.json">the approval</a></td></tr>
+<tr><td><b>A per-decision fee</b><br>never a share of the seller&rsquo;s money</td><td>Running, collecting nothing</td>
+<td><a class="ev" href="business.html">the model</a><a class="ev" href="https://mac-studio.taila649e1.ts.net/fees">/fees</a></td></tr>
+<tr><td><b>Execution and treasury</b></td><td><b>Not ours</b></td><td>&mdash;</td></tr>
+</table>
+
+<h2>WHAT WE WOULD LIKE TO ASK &mdash; THE INFORMATION FLOW</h2>
+<ol>
+<li><b>Synchronous, or after the fact?</b>
+<span>Should a decision layer block a movement until it answers, or is a signed record afterwards
+more useful to you? The first makes us part of your latency; the second makes us part of your audit.</span></li>
+<li><b>Do you want the refusals?</b>
+<span>We think the traffic you <i>stopped</i> is the signal nobody keeps &mdash; it is the only
+evidence a control is doing anything. It also doubles what you would ingest. Which way does that
+trade go for you?</span></li>
+<li><b>How much identity does a movement need attached?</b>
+<span>We can say &ldquo;a person with an orb-level credential was verified at 07:14, bound to this
+request&rdquo; without ever holding who they are. Is an assurance level and a timestamp enough, or
+does your record need something that identifies them?</span></li>
+<li><b>Whose policy wins?</b>
+<span>A treasury limit and a person&rsquo;s own rule will eventually disagree. Should the stricter
+one always win, should yours, and who has to be told that it happened?</span></li>
+<li><b>What is your unit of policy?</b>
+<span>Ours is the person, then the category, then the counterparty. If yours is the agent or the
+wallet, the mapping between them is the integration.</span></li>
+<li><b>What would you want that we have not listed?</b>
+<span>The four fields in the purple box are what we have. We would rather hear one we are missing
+than have four that are right.</span></li>
+</ol>
+
+<h2>WHERE THE TWO COULD RAISE EACH OTHER</h2>
+<ol start="7" style="counter-reset:q 6">
+<li><b>Where does &ldquo;should a person see this&rdquo; live in your design today?</b>
+<span>Inside the policy engine, before it, or nowhere yet? If it is inside, we are a feature you
+would build. If it is before, we are a layer you could adopt.</span></li>
+<li><b>What is the smallest integration worth your time?</b>
+<span>A webhook, a signed decision record, an API we call before settling? We would rather build
+the small one properly than propose a platform.</span></li>
+<li><b>What should we deliberately not do?</b>
+<span>We would like to know where your layer begins so we stop cleanly at it, rather than
+discovering the overlap later.</span></li>
+</ol>
+
+<h2>AND THE PART WE MOST WANT YOUR OPINION ON</h2>
+<ol start="10" style="counter-reset:q 9">
+<li><b>Are agents actually becoming the customer?</b>
+<span>Our whole thesis assumes traffic arrives from software, all night, faster than a person can
+answer. Does what you see support that, or is it still mostly human-initiated?</span></li>
+<li><b>Is &ldquo;less to look at&rdquo; what customers want, or the opposite?</b>
+<span>We assume the goal is that a person earns automatically and only true judgement calls reach
+them. Teams often ask for the reverse &mdash; more visibility, not less. Which do you hear?</span></li>
+<li><b>At scale, what breaks first &mdash; the deciding, or the moving?</b>
+<span>We have only simulated volume. You have seen real systems fail.</span></li>
+<li><b>What are you looking for?</b>
+<span>Asked plainly, and we will write down the answer in your words rather than ours.</span></li>
+</ol>
+
+<h2>UNDERSTAND THE PRODUCT IN FIVE MINUTES</h2>
+<div class="grid">
+  <a class="c" href="stack.html"><span class="k">THE MAP</span>
+    <b>What is connected, and how to check each one</b>
+    <span>Every box links to a transaction or a live endpoint, not to our description of it</span></a>
+  <a class="c" href="flow.html"><span class="k g">20 SECONDS</span>
+    <b>One night, animated</b>
+    <span>Fifty-two arrive, two reach her. No reading required</span></a>
+  <a class="c" href="business.html"><span class="k">THE MONEY</span>
+    <b>Two paths, drawn to scale</b>
+    <span>The price goes around us; our fee is one unit per decision, and the value loop underneath</span></a>
+  <a class="c" href="inflow.html"><span class="k">BEFORE THE ASK</span>
+    <b>Where a request like that comes from</b>
+    <span>A2A, an Agent Card, and why one router per person rather than one per platform</span></a>
+  <a class="c" href="product.html"><span class="k g">LIVE</span>
+    <b>Try it yourself</b>
+    <span>Be the person an agent is asking. Approving asks you to prove you are one</span></a>
+  <a class="c" href="ask.html"><span class="k d">ASK</span>
+    <b>28 answers, each with evidence</b>
+    <span>No model behind it, so it cannot invent one. It says so when it has nothing</span></a>
+</div>
+
+<h2>THINGS WE COULD BE WRONG ABOUT</h2>
+<details><summary>We may be solving a problem that policy already solves</summary>
+<p>If a treasury policy engine can express &ldquo;escalate to a human when X&rdquo; richly enough,
+the decision layer is a rule set inside your product rather than a layer in front of it. We think
+the difference is that our unit is a <b>person&rsquo;s attention</b> and a policy engine&rsquo;s unit
+is a <b>transaction</b> &mdash; but that is an argument, not a finding.</p></details>
+<details><summary>Our volume is simulated, and we say so everywhere</summary>
+<p>Fifty-two requests a night is a generated night, reproducible from a seed, not observed customer
+traffic. The cap holding at two across twenty runs is a property of the code, not a market fact.</p></details>
+<details><summary>We have not run screening, personhood and settlement under load</summary>
+<p>Each is exercised, and one run does all three end to end. None of it has been run at a rate
+where the ordering between them matters.</p></details>
+
+<footer><b>Yohaku</b> &mdash; <a href="./">overview</a> &middot;
+<a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni">the repository, MIT</a> &middot;
+<a href="claims.json">every claim as JSON</a> &middot;
+<a href="llms.txt">llms.txt</a><br>
+Prepared for a conversation with Curvegrid. Nothing here describes their unreleased work; the
+dashed box is deliberately empty.</footer>
+</body></html>
