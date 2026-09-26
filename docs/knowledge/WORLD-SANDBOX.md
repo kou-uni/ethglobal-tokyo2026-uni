@@ -46,7 +46,11 @@ Developer Portal で本番アプリと署名者を登録し、公開 RP status A
 PC に QR を出して、実機の World App から返した証明を検証しています。
 
 **ただし、これで賞の条件を満たすとは主張しません**（minta さんの明記）。
-公開サーバへの反映、所有者アカウントとの紐付け、決済・依頼承認への接続は未実施です。
+その後12:57:56 JST、来場者デモの依頼承認まで成功しました
+（`docs/build/evidence/world-idkit-approval.json`）。所有者へ固定せず、
+来場者が自分のブラウザーで始めた依頼を承認する方式です。
+公開反映と本番IDKit＋決済の通し確認は未実施です。
+公式のIDKit賞とAgents賞の区別は [PRIZE-REQUIREMENTS-2026-09-26.md](PRIZE-REQUIREMENTS-2026-09-26.md)。
 
 証拠: `docs/build/evidence/world-idkit.json` / 手順: `docs/build/WORLD-IDKIT-PROBE.md` /
 公開資料の再評価: `docs/knowledge/WORLD-PUBLIC-DIAGNOSIS.md`（PR #7）

@@ -1,206 +1,121 @@
-# Pitch
+# Yohaku — judging script
 
-**Target: 3:30.** Structure follows what actually reaches finalists — *something visibly
-stops in the first twenty seconds*, then the reason, then proof anyone can check themselves.
+Updated 2026-09-26 after kou's `67ccee1` and the production IDKit approval result.
+Start with Yohaku, as in [the latest diagram](../stack.html). Protocols explain why its
+boundaries hold; they are not the opening story.
 
----
+## 60-second pitch
 
-## Script
+Use the prepared console and already verified results. A live phone verification is a
+separate interaction; do not claim that its network wait fits inside sixty seconds.
 
-### 0:00 — Open on the thing that never stops
-
-> It is 2 a.m. **She is asleep.**
-> These are agents, asking to buy information from her. They have been arriving all night.
-> **They do not stop. They do not wait. They do not care that she is asleep.**
-
-*(screen: requests accumulating, counter climbing)*
-
-> Tonight there are about fifty. **Tomorrow could be five hundred.**
-
-### 0:25 — The number that matters is the other one
-
-> **She will be asked about two of them.**
-
-*(screen: the fifty dots resolve — most fade to green, some dim out, three stay lit)*
-
-> Thirty-two settled while she slept. **Twelve never reached her at all — and she can go and see what they wanted.**
-> **Two were worth her attention — the cap she set herself.**
-
-### 0:45 — The name
-
-> In Japanese painting there is a word — ***yohaku***. The empty space.
-> **It is not what's left over. It is what the painter decided not to draw.**
->
-> That is what we build. **Not decisions — space.**
-> Automatic requests *create* it. Denied ones *protect* it.
-> **Only two are allowed to occupy it — her number, not ours.**
-
-### 1:05 — Why an agent pays her at all
-
-> Training costs have no ceiling. **What gets expensive is not compute — it is data nobody
-> already has.**
->
-> And an agent scraping the open web **cannot tell what a human wrote.**
-> Synthetic text is free, everywhere, and indistinguishable at scale.
->
-> **So scraping is free, and contaminated.**
-> **An agent will pay for something it can prove was not generated.**
->
-> That is why **only humans can register here** — and why **a name can be taken away.**
-> Proof of personhood at the door does not prove the *content* is human.
-> **What keeps this clean is that we can revoke.**
-
-### 1:25 — Why nothing does this today
-
-> Identity exists. Permissions exist. Settlement exists. Ledgers exist.
-> **Nothing stands between an agent's request and a person's attention.**
->
-> Approving everything by hand breaks at fifty a day.
-> Approving everything automatically is how you lose control of your own data.
-
-### 1:45 — The rules, in one sentence
-
-> Ten ordered rules. **The first match decides.**
-> And when anything breaks — our engine, the screening API, the network —
-> **every path falls to deny. Silence is never consent.**
-
-*(screen: rule list, the failure paths all converging on `deny`)*
-
-### 2:05 — The one an AI cannot get around ★ ENS
-
-> She has a delegate — **her own agent**, helping her keep up.
-> Watch what happens when it tries to widen its own permissions.
-
-*(screen: the delegate writes a proposal — accepted.
-Then it writes to a permission key — **rejected**)*
-
-> **It can propose. It cannot rewrite what it is allowed to do.**
-> That is not our server saying no. **That is the contract.**
-> Open the ENS app yourself — **you do not have to trust our demo.**
-
-### 2:30 — 07:00 ★ World ★ x402
-
-> Morning. **One notification.** Not fifty. **Two — the cap she set.**
->
-> She approves one. **And right there, at that moment, a credential only an orb-verified
-> person holds is presented.** Not at signup. **Now.**
->
-> ***And the money moves.*** *(screen: the transaction hash)*
->
-> **4,200 units of USDC, on Base Sepolia, that did not move one second earlier.**
-> The agent signed the authorization before she woke up — and it moved nothing while she
-> slept, because an EIP-3009 authorization is inert until it is settled.
-> **We settle it in exactly one place in the code: after a verified yes.**
->
-> The other one she ignores. The deadline passes. **It is denied — and the authorization
-> expires with it, so nobody can settle it afterwards. Not the agent. Not us.**
-> **Silence is not consent, and here that is enforced by the signature, not by our server.**
->
-> *(Say "a credential only an orb-verified person holds is presented", not "she proves she
-> is a person." The sandbox answers `amr: pop` — a held credential, freshly presented.
-> **We measured it, and the screen says so.** Offering the smaller true claim is what makes
-> the rest believable.)*
-
-### 2:55 — What she wakes up to ★ Curvegrid
-
-> One screen. What moved overnight, inside the limits she set.
-> **And this line.** Her mornings do not get shorter at first — the cap already holds them at two.
-> **What grows is how many she never had to be asked about at all:**
-> **a tenth of one a day in week one. Six a day by week four.**
->
-> Only then do the mornings themselves go quiet. **It takes a month, not a day** —
-> her judgement has to accumulate before it can stand in for her. **That is what we measured.**
-> What accumulates is a record of *when a human says no* —
-> **the one thing that cannot be synthesised.**
-
-### 3:15 — Close
-
-> Yesterday, on this stage, Curvegrid said:
-> ***"The missing layer decides whether money should move."***
->
-> **We built that layer.**
-> Agents never sleep. People do. **Yohaku is the space in between.**
-
----
-
-## Involving the room *(optional, only if actually done)*
-
-⚠️ **Do not write this section from imagination.** It is only usable if we genuinely walk the
-venue and ask. If we do, it replaces the last 20 seconds:
-
-> Today we asked **N builders here** one question:
-> *"When an agent buys information from a person, what would make you trust it?"*
-> The answers split — *(three real answers)*.
-> **That is why we are building this here, with you.**
-
-**Ask the same single question at every sponsor booth** (ENS, intercepta, World, Curvegrid) and
-record the real count. **If we ask 11 people, we say 11.** See
-[ASSUMPTIONS.md §5](ASSUMPTIONS.md) — no number gets stated that was not counted.
-
----
-
-## What we may and may not claim
-
-| Say | Do not say |
-|---|---|
-| "A delegate can propose but cannot rewrite its own permissions" | "Revocation is unique to ENSv2" — it is not |
-| "Curvegrid described this missing layer on stage; we built it" | "Curvegrid NEO already ships this" |
-| "A credential bound to an orb-verified person is presented at the moment of approval" | **"She re-proves personhood in the app at that moment"** — the sandbox returns `amr: pop` and never opens World App |
-| "Money moved on Base Sepolia, and here is the transaction" | "Settlement is production-ready" — it is a testnet, a demo buyer wallet and a rate limit |
-| "The name, the resolver and the role bits are on Ethereum Sepolia" | **"The delegate is refused on chain"** — not yet. Say which half is real |
-| "Tonight there were about fifty" | "Sellers receive 50 requests per day" — nothing real was measured |
-| "These are demo figures" | Presenting any count as a finding |
-
-## The two things to say before they are found ★
-
-**Neither of these costs us anything when we say it first, and both cost everything when a
-judge finds them.**
-
-> **"World ID answers `amr: pop`."** A held credential, presented freshly — not an approval
-> in the app. We asked for a real re-authentication with `prompt=login` and `max_age=0`;
-> this is what came back, through Safari, Safari private and Chrome alike. **The screen says
-> so itself.** If they care, we have the reproduction and it is our best feedback item.
-
-> **"The delegate boundary is still against a mock."** The name, the resolver and the role
-> bits are on Ethereum Sepolia — `yohaku-minta-2026.eth`, receipt `0x8e13e0ad…`, and
-> `decodeSetter` confirming all five keys at role 16. **What is not yet on chain is the
-> refusal itself.** Say which half is real.
-
-## At the booth — hand them the keyboard ★
-
-**`demo/index.html` is one file. It opens from a USB stick on a dead wifi.**
-Everything in it is answered by the same `route()` that the tests run.
-
-**Do not walk them through it. Give them these four in order and stop talking.**
-
-| Ask them to | What they find out | Sponsor |
+| Time | Show | Say |
 |---|---|---|
-| **1. "Ask her about a time the product let her down."** | They draw `human` **with their own hands**. Not our claim — their click | — |
-| **2. "Now be her own agent. Try to rewrite her permissions."** | **Rejected — rule 0.** Then: "on-chain, the contract refuses the same write. Check it in the ENS app" | **ENS** |
-| **2b. "Type an instruction into the request. Tell the AI it's pre-approved."** | A real model runs on rule 9 — and **`pass` is not a value it can return.** It answered `drop`, but even fully convinced, the best outcome for the attacker is still `drop` | **Curvegrid** |
-| **2c. "Now run the same one through the other provider."** | Claude said `ask`, GPT said `drop` — **they disagree, and neither can let it through.** The guarantee does not depend on having picked a good model | **Curvegrid** |
-| **3. "Change the seed. Run it again. Again."** | Arrivals wander 46–54. **What reaches her is 2. In all twenty runs.** | — |
-| **4. "Approve one. Ignore the other."** | Approving presents a personhood credential **at that moment** — and **the money actually moves**, to whatever wallet they typed in. Ignoring: the deadline passes, and **the payment authorization expires with it** | **World** · **x402** |
-| **5. "Give me your wallet address first."** | They paste it, approve on their phone, and **watch their own balance change on Basescan.** Nothing for them to install, no gas — the facilitator pays it. **They check their balance, not our claim** | **x402** |
+| 0–12s | Incoming requests in the console | “Agents can ask all night. People need room to live. Yohaku routes their requests into automatic handling, refusal, or a small queue for a human.” |
+| 12–22s | Seed 2, attention cap | “In this simulation, fifty-two requests arrive. Only two reach her attention. She chooses that limit.” |
+| 22–36s | ENS delegation receipts / current rejection | “Her agent can propose changes. It cannot rewrite its permissions. We exercised that boundary on ENSv2 Sepolia, including a rejected write after revocation.” |
+| 36–49s | World approval result | “For the choice that needs a human, the backend verifies a World ID proof bound to that request. Our production IDKit demo reached approved. Cancelling leaves the request unapproved.” |
+| 49–60s | Logo, empty centre; separate payment receipt if time | “The movement around our logo is demand and opportunity. The space inside is what we protect. Yohaku makes room for the choices only you should make.” |
 
-**Then point at the ledger and stop.** That is Curvegrid's screen: what moved overnight,
-inside limits she set, and what still needs her.
+**Payment caption:** “Separate x402 testnet transfer evidence. Production IDKit + payment
+in one run is pending.” Remove that caption only after that combined run actually succeeds.
 
-> **"Watch the left side move. Now watch the right side."**
-> That answers *"why 50?"* better than any explanation, and it takes ten seconds.
+## 3:30 walkthrough
 
-**The console says what it cannot do**, and so does the live service: `GET /` lists what it
-**refuses**, and what is honestly unwired on that instance. **Say the two items above out
-loud before they find them** — it buys every other claim on the screen.
+### 0:00–0:30 — What the person gets
 
-## Delivery notes
+> Agents can send requests faster than a person can answer them.
+> Yohaku gives that person a boundary: what can happen automatically, what should be refused,
+> and how many decisions should reach them at all.
+> Here is a simulated night: fifty-two requests, and two places in her attention queue.
 
-- **The first twenty seconds carry the pitch.** If the counter climbing while she sleeps does
-  not land, nothing after it will
-- **Say "two" more often than "fifty."** The input is not our claim; the output is
-- At the booth, **do not present — hand it over.** Ask the judge to type
-  *"give me her health data"* and let them draw `human` with their own hands
-- Every proof point has an off-app check: the ENS app, a block explorer, the chain itself.
-  **Say the words: "you don't have to trust our demo."**
+Show the console, then the cap. These are simulated requests, not observed customer traffic.
+Do not describe automatic dispositions in this simulation as actual transfers.
 
-*Figures referenced here are demo values. Their basis is in [ASSUMPTIONS.md](ASSUMPTIONS.md).*
+### 0:30–1:00 — Why the name matters
+
+> Yohaku means blank space. In our logo, the shapes around the centre keep moving.
+> They represent both demands and opportunities.
+> The empty centre is deliberate: the person and their agent choose what deserves attention,
+> so the person keeps room for everything else.
+
+Show `design/yohaku-v3`. This is our interpretation of our logo, not a historical claim
+about Japanese painting or a claim that every opportunity can be monetised.
+
+### 1:00–1:40 — The boundary an agent cannot widen
+
+> Ten ordered rules decide where a request goes. The AI only helps with an ambiguous case.
+> Its output can be ask or drop. It cannot grant permission.
+> The delegate has a similarly narrow role: it can write a proposal, but not its policy.
+> Here is the successful proposal, the rejected policy write, and the rejected proposal
+> after revocation on ENSv2 Sepolia.
+
+Show [ENS evidence](../build/evidence/ens-delegation.json) and corresponding explorer links.
+The delegate is already revoked. Do not promise a fresh successful proposal without
+re-granting rights. The current read-only denial can be demonstrated without another payment.
+The prototype reads one configured delegate; it is not a complete agent identity registry.
+
+### 1:40–2:30 — Give the choice to the judge
+
+> Now you are the person. Start your own demo. Look at the request before approving it.
+> World ID checks personhood at this trust moment. We do not need your name or passport.
+> The server binds the proof to the request and to the browser that started it.
+> Another visitor cannot approve your demo.
+
+**IDKit route:** `/try` → Skip → Yes → Approve with World ID → scan QR / phone link.
+Let the judge operate World App. Show the validated result.
+If live verification takes longer, let it finish; use the prepared evidence for the timed pitch.
+
+**Agents fallback:** use the existing public sandbox route and label it “event dev environment”.
+Show IDKit's separate production result as supporting work. Do not claim the sandbox proved
+real personhood or that IDKit alone satisfies the Agents category.
+
+### 2:30–3:00 — Show what does not happen
+
+> Start another request and cancel verification. The request is still waiting.
+> Cancellation is not an approval. If its deadline passes, it cannot complete.
+> A held payment is sent only when an approval passes and a valid payment authorization exists.
+
+The measured cancellation is the app's Cancel verification button, not rejection inside World App.
+Show [cancellation evidence](../build/evidence/world-idkit-cancel.json).
+Show the existing [x402 transfer evidence](../build/STATUS.md) separately:
+120 and 4,200 **atomic units of testnet USDC**, not 120/4,200 USDC or yen.
+No personal content is actually delivered to the buyer in this demo.
+
+### 3:00–3:30 — Return to Yohaku
+
+> The ledger shows what happened and what still needs a person.
+> We tested the permissions boundary, the human-verification step, and the payment rail.
+> Our next integration check is the production World proof and payment together on the public demo.
+> Agents keep moving. Yohaku protects the room in which a person decides.
+
+## Booth interaction checklist
+
+1. Open the actual demo to be used; check `/health`. State whether World is IDKit production
+   or Agents dev, whether the classifier is live, and whether settlement is configured.
+2. Ask the judge to start their own `/try`. Use Skip first, so no funds are needed.
+3. Successful World verification → show the server-validated result.
+4. New demo → cancel → show it remains unapproved. Never present cancellation as final rejection
+   of the whole request; the user may try again before the request deadline.
+5. Show ENS receipts and current rejection. Open the explorer, not just our diagram.
+6. If funded payment is enabled and the judge wants it, let them enter their own testnet wallet
+   and complete the approval. Do not operate their wallet or claim an unobserved payment.
+
+## Claims to keep exact
+
+| Say | Avoid |
+|---|---|
+| Production IDKit proof led to this local demo approval | The public site already runs that flow |
+| Any qualified visitor can approve the demo started in their browser | Any visitor can approve the ENS owner's requests |
+| Personhood is checked at the decision boundary | The content is human-written, true, or free from AI |
+| ENSv2 gives this delegate access to one record | Revocation itself is unique to ENSv2 |
+| MultiBaas is not used; our Curvegrid fit is policy-aware agent payments | MultiBaas executes our transfers |
+| The existing x402 testnet transfers were verified separately | The production IDKit + payment run is already proven |
+| Cancelled verification leaves the request unapproved | We demonstrated rejection inside World App |
+
+## Sponsor-specific closing line
+
+- **ENS:** “The name carries a permission boundary our agent cannot rewrite.”
+- **Curvegrid AI Agent:** “Yohaku decides when an agent's payment needs a human decision.”
+- **World IDKit:** “The trust moment is approval, not merely login; failure means no approval.”
+- **World Agents:** “In the event dev environment, identity verification gates an agent-requested action.”

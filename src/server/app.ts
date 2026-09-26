@@ -172,13 +172,16 @@ const FIVE_FIELDS = ['who', 'what', 'purpose', 'price', 'deadline'] as const;
 function todaySummary(store: Store, settlementWired = false): TodaySummary {
   const auto = store.byVerdict('auto');
   const totals = store.received();
+  const currency = totals[0]?.currency ?? auto[0]?.request.price.currency ?? 'JPYC';
   return {
     arrived: store.all().length,
     auto: auto.length,
     deny: store.byVerdict('deny').length,
     waiting: store.outstanding().length,
-    worth: totals[0]?.amount ?? 0,
-    currency: totals[0]?.currency ?? auto[0]?.request.price.currency ?? 'JPYC',
+    // The offline fold labels offers as "worth"; paid totals must not include them.
+    worth: settlementWired ? totals[0]?.amount ?? 0
+      : auto.filter(e => e.request.price.currency === currency).reduce((sum, e) => sum + e.request.price.amount, 0),
+    currency,
     settlementWired,
   };
 }

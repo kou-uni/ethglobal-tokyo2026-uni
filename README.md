@@ -302,10 +302,10 @@ With no key the CLI says so and uses a mock — **it never quietly pretends a mo
 |---|---|---|
 | **Who** | Is this a real person? | **World ID** |
 | **What is allowed** | Scope, expiry, **delegation boundary** | **ENSv2 + EAC** |
-| **How much moved** | Execution under constraints, ledger | **Curvegrid MultiBaas** |
+| **What needs a human** | Policy-aware agent requests and ledger | **Yohaku** — Curvegrid AI Agent prize fit; MultiBaas not used |
 | **Payment rail** | An agent pays for what it buys | **x402** |
 
-Stack: Hardhat · Next.js · TypeScript · Vercel · npm.
+Implemented stack: TypeScript · Node HTTP server · viem · World OIDC / IDKit · x402 v2 · npm.
 
 **What we claim about ENSv2 is narrow**: not that revocation is unique to it, but that
 **a delegated agent can propose without being able to rewrite what it is allowed to do.**
@@ -354,7 +354,18 @@ the number that reaches her is 2. Every time.** That is her cap, not our claim.
 See [ASSUMPTIONS.md §2](docs/product/ASSUMPTIONS.md).
 
 Copy `.env.example` to `.env` before touching chain or sponsor APIs. *(UI and chain
-integration not yet wired.)*
+configuration depends on the instance; inspect `/health`.)*
+
+The seeded “32 settle” above is a simulated disposition count, not 32 live transfers.
+For measured transactions, production World proof results, and remaining deployment work,
+see [current status](docs/build/STATUS.md).
+
+## Judging and submission
+
+- [Prize requirements and evidence](docs/build/PRIZE-READINESS.md)
+- [60-second pitch and live demonstration](docs/product/PITCH.md)
+- [English submission copy](docs/product/SUBMISSION.md)
+- [Production IDKit visitor demo setup](docs/build/WORLD-IDKIT-DEMO.md)
 
 ## Team
 
@@ -363,7 +374,7 @@ integration not yet wired.)*
 | **minta** | CEO / CTO / CDO — implementation and design lead | [@mintannn](https://github.com/mintannn) |
 | **kou (spark)** | CSO / architect — structure, infrastructure, strategy | [@kou-uni](https://github.com/kou-uni) |
 
-*Social handles to be added before submission.*
+The linked GitHub accounts above are the team's public handles.
 
 ## Feedback to sponsors
 

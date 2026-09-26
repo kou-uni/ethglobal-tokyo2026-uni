@@ -7,8 +7,26 @@ polite and useless.
 > ⚠️ **Nothing below is written in advance.** Empty sections mean that integration has not
 > been done yet. They are never filled from imagination.
 >
-> **World ID is done and written from the actual run.** The others are still empty because
-> they have not happened.
+> World, x402 and ENS observations are recorded below. Production IDKit follow-up is
+> included here and in `docs/product/SUBMISSION.md`.
+
+## Production IDKit follow-up — 2026-09-26
+
+- Trust moment: a visitor approves an agent's request. Personhood is relevant; passport
+  information and nationality are not. We use Orb/PoH without adding unrelated credentials.
+- First verified production proof: **12:46:23 JST**. First proof-to-Yohaku-approval:
+  **12:57:56 JST**. Total time from starting integration was not timed. These milestones
+  are 11m33s apart, not a claim about total implementation time.
+- Success and an alternative path were exercised: production proof approved the local
+  visitor request; cancelling a later verification left that request unapproved.
+  See `evidence/world-idkit-approval.json` and `evidence/world-idkit-cancel.json`.
+- We confused the Agents OIDC portal with the IDKit Developer Portal, and separately
+  misinterpreted `amr=pop`. The correction below applies to the latter.
+- Our esbuild bundle initially omitted the SDK WASM asset route. Serving that asset fixed
+  our setup; this is a bundling integration issue, not a confirmed SDK defect.
+- The most useful documentation improvement would be one comparison page linking each
+  product to its portal, dev/production environment, credentials and success/failure example.
+- PR #7 is merged. Public IDKit deployment is unconfirmed, and the combined production-IDKit + payment run remains pending.
 
 **Required by sponsors**
 

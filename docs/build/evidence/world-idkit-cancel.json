@@ -1,0 +1,12 @@
+{
+  "observedOn": "2026-09-26",
+  "requestId": "try-88f74f15",
+  "source": "Native Chrome UI on local port 8404: create visitor demo, generate World QR, click Cancel verification; then read local ledger",
+  "screenResult": "Verification cancelled.",
+  "ledgerCheck": {
+    "heldCount": 1,
+    "requestStillNeedsYou": true,
+    "matchingRequestId": "try-88f74f15"
+  },
+  "scope": "Cancelled the application's verification attempt before completing World App. The protected approval did not occur. This was not a rejection inside World App. Settlement was disabled; the fake-settlement regression tests separately check that cancellation makes zero settlement calls."
+}
