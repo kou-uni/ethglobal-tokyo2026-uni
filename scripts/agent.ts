@@ -22,6 +22,7 @@
 import { loadEnv } from '../src/core/env.js';
 loadEnv();
 
+import { authorizeRoutingFee } from '../src/adapters/fee-authorization.js';
 import { privateKeyToAccount } from 'viem/accounts';
 import { encodePaymentSignatureHeader, decodePaymentRequiredHeader } from '@x402/core/http';
 
@@ -154,6 +155,12 @@ async function main() {
 
   const first = await post();
   const body = (await first.json()) as Record<string, unknown>;
+  const feeHeaders: Record<string, string> = {};
+  try {
+    const fee = await authorizeRoutingFee(body.extensions, process.env, `${SERVER}/requests`);
+    if (fee) feeHeaders['YOHAKU-FEE-AUTHORIZATION'] = fee;
+  } catch { console.log('  Optional fee skipped: offer outside configured spending permission.'); }
+
 
   /* ── held for a person ─────────────────────────────────────────────────── */
   if (first.status === 202) {
@@ -163,8 +170,8 @@ async function main() {
       console.log('  no authorization sent (no key, or settlement is not wired)\n');
       return;
     }
-    const payload = await authorize(accepts[0], new Date(deadline).getTime());
-    const again = await post({ 'PAYMENT-SIGNATURE': encodePaymentSignatureHeader(payload as never) });
+    const payload = { ...await authorize(accepts[0], new Date(deadline).getTime()), ...(body.extensions ? { extensions: body.extensions } : {}) };
+    const again = await post({ ...feeHeaders, 'PAYMENT-SIGNATURE': encodePaymentSignatureHeader(payload as never) });
     const out = (await again.json()) as Record<string, unknown>;
     console.log(`  re-sent with an authorization → ${again.status}`);
     console.log(`  ${JSON.stringify(out['payment'] ?? out, null, 2)}\n`);
@@ -184,8 +191,8 @@ async function main() {
       return;
     }
     console.log(`  402 — ${req.amount} atomic units of ${req.asset} on ${req.network}`);
-    const payload = await authorize(req, Date.now() + req.maxTimeoutSeconds * 1000);
-    const paid = await post({ 'PAYMENT-SIGNATURE': encodePaymentSignatureHeader(payload as never) });
+    const payload = { ...await authorize(req, Date.now() + req.maxTimeoutSeconds * 1000), ...(body.extensions ? { extensions: body.extensions } : {}) };
+    const paid = await post({ ...feeHeaders, 'PAYMENT-SIGNATURE': encodePaymentSignatureHeader(payload as never) });
     const out = (await paid.json()) as Record<string, unknown>;
     console.log(`  paid → ${paid.status}`);
     // The reason matters more than the status: "no funds" means the whole path worked and
@@ -194,6 +201,11 @@ async function main() {
     return;
   }
 
+  if (feeHeaders['YOHAKU-FEE-AUTHORIZATION']) {
+    const retry = await post(feeHeaders);
+    const result = await retry.json() as Record<string, unknown>;
+    console.log(`  Optional fee: ${JSON.stringify(result.fee)} (no fee collection)`);
+  }
   console.log(`  ${first.status}\n  ${JSON.stringify(body, null, 2)}\n`);
 }
 

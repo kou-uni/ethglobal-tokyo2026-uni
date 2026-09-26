@@ -52,8 +52,9 @@ footer a{color:var(--lilacD)}
 never hold it. What we charge for is the work we did &mdash; and it is charged the way the
 protocol says to charge something smaller than gas.</p>
 
-<div class="warn"><b>&#9888; None of this is implemented.</b> Yohaku takes <b>nothing</b> today.
-This page is the design, and the repository says so everywhere it comes up.
+<div class="warn"><b>&#9888; Vouchers accrue. Nothing has ever been broadcast.</b> Yohaku has
+collected <b>nothing</b>, and <a href="https://mac-studio.taila649e1.ts.net/fees">/fees</a> says so
+in the response rather than leaving a rising number to imply otherwise.
 <a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/product/ECONOMICS.md"><b>The full version, including where it rubs against our own principles &rarr;</b></a></div>
 
 <h2>WHERE THE MONEY GOES</h2>
@@ -63,7 +64,8 @@ This page is the design, and the repository says so everywhere it comes up.
     their address. <b>We are not on it.</b></div><span class="tag g">DONE &#183; ON CHAIN</span></div>
   <div class="row"><div class="n">2</div>
     <div class="txt"><b>We take a voucher, not a cut.</b> One per decision &mdash; gas-sized, and
-    signed by the agent if it chooses to.</div><span class="tag n">DESIGNED</span></div>
+    the 402 offers an <b>optional</b> second authorization. <b>The request goes through either
+    way</b>: a fee must never be a hostage.</div><span class="tag g">RUNNING</span></div>
   <div class="row"><div class="n">3</div>
     <div class="txt"><b>Redeemed later, in one transaction.</b> Which is what
     <code>batch-settlement</code> exists for: <i>&ldquo;gas fees exceed the value of individual
@@ -112,7 +114,7 @@ a person&rsquo;s judgement &mdash; so asking for it back needs conditions, set b
 <h2>WHAT WE WILL NOT SAY</h2>
 <table>
 <tr><th>We say</th><th>We do not say</th></tr>
-<tr><td>&ldquo;This is the fee model&rdquo;</td><td class="no"><b>&ldquo;We take a fee&rdquo;</b> &mdash; we take nothing</td></tr>
+<tr><td>&ldquo;Vouchers accrue per decision&rdquo;</td><td class="no"><b>&ldquo;We take a fee&rdquo;</b> &mdash; nothing has been collected</td></tr>
 <tr><td>&ldquo;Free while small, traffic-priced later&rdquo;</td><td class="no">&ldquo;It costs this much&rdquo; &mdash; not decided</td></tr>
 <tr><td>&ldquo;The design keeps their money off our books&rdquo;</td><td class="no">&ldquo;It works that way today&rdquo; &mdash; <b><code>batch-settlement</code> has never been called</b></td></tr>
 <tr><td>&ldquo;Being asked less is what we sell&rdquo;</td><td class="no">&ldquo;It learns and your mornings shrink&rdquo; &mdash; week four, measured</td></tr>

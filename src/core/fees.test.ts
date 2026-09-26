@@ -8,7 +8,7 @@
 import { describe, expect, it } from 'vitest';
 import { FeeLedger, feesFromEnv } from './fees.js';
 
-const POLICY = { perDecision: 1, redeemAbove: 10, payTo: '0xfee' };
+const POLICY = { perDecision: 1, redeemAbove: 10, payTo: '0x' + 'f'.repeat(40) };
 
 describe('what is charged for', () => {
   it('charges the same for an expensive decision as a cheap one', () => {
@@ -25,7 +25,7 @@ describe('what is charged for', () => {
   it('does not grow with the size of the payment', () => {
     const l = new FeeLedger(POLICY);
     for (const id of ['a', 'b', 'c']) l.record(id, 'now');
-    expect(l.accrued()).toBe(3 * POLICY.perDecision);
+    expect(l.accrued()).toBe(BigInt(3 * POLICY.perDecision));
   });
 
   it('charges for a refusal too — the work was the same', () => {
@@ -41,11 +41,11 @@ describe('the summary never implies a payout', () => {
     expect(s.redeemed).toMatch(/nothing has been broadcast/);
   });
 
-  it('holds below the threshold, because redeeming would cost more than it collects', () => {
+  it('compares signed accounting units against a configured threshold, not measured gas', () => {
     const l = new FeeLedger(POLICY);
-    for (let i = 0; i < 9; i++) l.record(`v${i}`, 'now');
+    for (let i = 0; i < 9; i++) l.record(`v${i}`, 'now', { test: true });
     expect(l.summary().worthRedeeming).toBe(false);
-    l.record('v9', 'now');
+    l.record('v9', 'now', { test: true });
     expect(l.summary().worthRedeeming).toBe(true);
   });
 });
@@ -62,6 +62,6 @@ describe('authorizations', () => {
 describe('feesFromEnv', () => {
   it('stays off until someone says where the fee would go', () => {
     expect(feesFromEnv({} as NodeJS.ProcessEnv)).toBeUndefined();
-    expect(feesFromEnv({ YOHAKU_FEE_ADDRESS: '0xa' } as NodeJS.ProcessEnv)).toMatchObject({ payTo: '0xa' });
+    expect(feesFromEnv({ YOHAKU_FEE_ADDRESS: '0x' + 'a'.repeat(40) } as NodeJS.ProcessEnv)).toMatchObject({ payTo: '0x' + 'a'.repeat(40) });
   });
 });

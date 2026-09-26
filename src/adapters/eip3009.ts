@@ -40,7 +40,10 @@ export async function signAuthorization(opts: {
   validBeforeMs: number;
   resourceUrl: string;
   now?: () => Date;
+  /** Optional server-issued nonce for a separately bound fee authorization. */
+  nonce?: `0x${string}`;
 }): Promise<SignedPayment> {
+  if (opts.nonce && !/^0x[0-9a-fA-F]{64}$/.test(opts.nonce)) throw new Error('invalid authorization nonce');
   const account = privateKeyToAccount(opts.privateKey as `0x${string}`);
   const nowMs = (opts.now ?? (() => new Date()))().getTime();
 
@@ -52,7 +55,7 @@ export async function signAuthorization(opts: {
     validAfter: BigInt(Math.floor(nowMs / 1000) - 60),
     // Rounded up, plus slack: expiring on the exact second of the deadline is a coin flip.
     validBefore: BigInt(Math.ceil(opts.validBeforeMs / 1000) + 60),
-    nonce: `0x${Buffer.from(crypto.getRandomValues(new Uint8Array(32))).toString('hex')}` as `0x${string}`,
+    nonce: opts.nonce ?? `0x${Buffer.from(crypto.getRandomValues(new Uint8Array(32))).toString('hex')}` as `0x${string}`,
   };
 
   const signature = await account.signTypedData({
