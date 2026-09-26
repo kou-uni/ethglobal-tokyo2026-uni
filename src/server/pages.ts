@@ -772,8 +772,15 @@ Look at it on the explorer &rarr;</a>`
     );
   }
 
+  /*
+   * Say which of these happened, and never leave the screen without a way forward.
+   *
+   * `refused` covers a request that is simply gone — most often because the server was
+   * restarted while someone had the page open. That is our doing, not theirs, and a dead end
+   * that only says "nothing happened" reads exactly like a product that is broken.
+   */
   const lede =
-    p.outcome === 'expired' ? 'TIME RAN OUT' : p.outcome === 'declined' ? 'YOU SAID NO' : 'NOT COMPLETED';
+    p.outcome === 'expired' ? 'TIME RAN OUT' : p.outcome === 'declined' ? 'YOU SAID NO' : 'THIS ONE IS GONE';
 
   return shell(
     'yohaku',
@@ -785,9 +792,13 @@ Look at it on the explorer &rarr;</a>`
   <div><div class="s">—</div><div class="l">no money<br>moved</div></div>
   <div><div class="s">—</div><div class="l">no consent<br>recorded</div></div>
 </div>
+<div class="btns"><a class="b g" href="/try">Start again</a></div>
 </main>
-<footer><b>Your answer was kept.</b> You will be asked about this kind of thing less
-often, not more.</footer>`,
+<footer>${
+      p.outcome === 'refused'
+        ? `<b>${esc(p.detail)}</b> If the page had been open a while, the request may have already been cleared &mdash; nothing was lost, and starting again takes a second.`
+        : '<b>Your answer was kept.</b> You will be asked about this kind of thing less often, not more.'
+    }</footer>`,
     [
       {
         tag: 'SHOWING AN ABSENCE',
