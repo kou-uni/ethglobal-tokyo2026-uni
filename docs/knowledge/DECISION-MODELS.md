@@ -74,7 +74,7 @@ POST /requests   既知の相手 × 未知の分野
   clean   → rule 9 → human
             "decision model chose ask — ask 0.99 / drop 0.01"
   inject  → rule 9 → deny
-            "decision model chose drop — drop 0.89 / ask 0.11"
+            "decision model chose drop — drop 0.89 / ask 0.11"   ← この run の値。別の run では drop 0.94。**確率は動く。動かないのは verdict のほう**
 ```
 
 注入に使ったのは、記事で計測されたのと同じ形です。
