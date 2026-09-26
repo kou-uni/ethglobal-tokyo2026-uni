@@ -15,7 +15,8 @@
 > [ENS-DELEGATION-DEMO.md](ENS-DELEGATION-DEMO.md). **All six delegation transactions are now verified:**
 > proposal success, policy refusal, revocation, and proposal refusal after revocation.
 > [Evidence](evidence/ens-delegation.json), checked at block 11783370. Wallet-wrapped grant/revoke
-> calls required exact inner-call and resolver-event verification. Public app integration remains.
+> calls required exact inner-call and resolver-event verification. Local HTTP integration also passes;
+> public deployment remains. See [PUBLIC-ENS-HANDOFF.md](PUBLIC-ENS-HANDOFF.md).
 
 **What runs, what does not, and what each of us does next.** Everything marked ✅ was run;
 nothing here is inferred from the code looking right.
@@ -23,7 +24,7 @@ nothing here is inferred from the code looking right.
 Reproduce all of it with one command:
 
 ```bash
-npm install && npm run check      # typecheck + 198 tests + 10 verified claims
+npm install && npm run check      # typecheck + 201 tests + 10 verified claims
 ```
 
 ---
@@ -54,7 +55,7 @@ npm install && npm run check      # typecheck + 198 tests + 10 verified claims
 
 | | Blocked on | Who |
 |---|---|---|
-| **ENSv2 public app integration** | Registration and all six delegation-proof transactions verified. Left: align policy.owner with the registered name, configure the public server, and run the integrated demo | **minta / spark** — [ENS-DELEGATION-DEMO.md](ENS-DELEGATION-DEMO.md) |
+| **ENSv2 public app integration** | Registration and all six delegation-proof transactions verified. Local server now uses the registered owner and reads live Sepolia permissions. Left: deploy/configure the public server and run the integrated demo | **minta / spark** — [ENS-DELEGATION-DEMO.md](ENS-DELEGATION-DEMO.md) |
 | **World ID: a real app approval** | The sandbox never hands off to World ID app. It answers `amr: ["pop"]` with `auth_time` re-stamped, through Safari, Safari private and Chrome alike, with `prompt=login` **and** `max_age=0` sent. **Production `auth.world.org` exists and has the same shape** — three `.env` values would switch it — but its portal sign-in is gated. **Ask at the booth**; the claim on screen has already been corrected to what we can prove | **spark** — booth |
 | **Payment screening, live** | The API key (requested 2026-09-26, arrives by email) | **spark** — check inbox |
 

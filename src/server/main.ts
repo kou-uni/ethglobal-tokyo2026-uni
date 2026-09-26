@@ -12,7 +12,8 @@ import { readFileSync } from 'node:fs';
 import { loadEnv } from '../core/env.js';
 loadEnv();
 
-import { DEMO_POLICY, KNOWN_PARTIES } from '../core/night.js';
+import { KNOWN_PARTIES } from '../core/night.js';
+import { serverPolicy } from './policy.js';
 import { pastNights } from '../core/history.js';
 import { chooseProvider } from '../ports/provider.js';
 import { MockScreening } from '../ports/screening.js';
@@ -61,9 +62,10 @@ const settlement = 'missing' in x402 ? undefined : new X402Settlement(x402);
 
 const resolverAddress = process.env.ENS_RESOLVER_ADDRESS;
 const delegateAddress = process.env.ENS_DELEGATE_ADDRESS;
-const ensName = process.env.ENS_NAME;
+const policy = serverPolicy(process.env.ENS_NAME);
+const ensName = process.env.ENS_NAME?.trim() ? policy.owner : undefined;
 const ensRpc = process.env.SEPOLIA_RPC_URL;
-const delegation = ensRpc && ensName === DEMO_POLICY.owner
+const delegation = ensRpc && ensName
   && resolverAddress && isAddress(resolverAddress)
   && delegateAddress && isAddress(delegateAddress)
   ? {
@@ -77,11 +79,11 @@ const delegation = ensRpc && ensName === DEMO_POLICY.owner
 
 const app = createApp({
   ...(delegation ? { delegation } : {}),
-  policy: DEMO_POLICY,
+  policy,
   store: new Store(KNOWN_PARTIES),
   screening: new MockScreening(),
   // Replayed through the same route(), so the fold shows the router's output, not a fixture.
-  nights: pastNights(new Date()),
+  nights: pastNights(new Date(), 4, policy),
   ...(provider.live ? { classifier: provider.create() } : {}),
   ...(redirectUri ? { redirectUri } : {}),
   identityWired: worldConfigured && Boolean(redirectUri),
@@ -117,8 +119,9 @@ if (settlement) {
 
 app.listen(PORT, () => {
   console.log(`\n  yohaku — listening on http://127.0.0.1:${PORT}\n`);
-  console.log(`    owner       ${DEMO_POLICY.owner}`);
-  console.log(`    daily cap   ${DEMO_POLICY.dailyCap}`);
+  console.log(`    owner       ${policy.owner}`);
+  console.log(`    daily cap   ${policy.dailyCap}`);
+  console.log(`    ENS reader  ${delegation ? `configured for ${policy.owner}` : 'not configured — delegate requests are denied'}`);
   console.log(`    classifier  ${provider.live ? `${provider.provider} / ${provider.model}` : 'not configured — rule 9 stays with the owner'}`);
   console.log(`    identity    ${worldConfigured && redirectUri ? `World ID → ${redirectUri}` : 'mock — approvals are not proving anything yet'}`);
   console.log(`    screening   mock`);

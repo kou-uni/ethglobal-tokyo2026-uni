@@ -43,6 +43,8 @@ export interface AppDeps {
   policy: Policy;
   store: Store;
   screening: ScreeningPort;
+  /** A live screening adapter is explicitly configured, rather than the stand-in. */
+  screeningWired?: boolean;
   /** Optional: consulted only on rule 9. */
   classifier?: ClassifierPort;
   /** Optional: required before an approval can settle. */
@@ -294,8 +296,8 @@ export function createApp(deps: AppDeps): Server {
           wired: {
             routing: true,
             classifier: Boolean(deps.classifier),
-            identity: Boolean(deps.identity),
-            screening: true,
+            identity: Boolean(deps.identityWired && deps.identity),
+            screening: Boolean(deps.screeningWired),
             settlement: Boolean(deps.settlement?.live),
             delegationReader: Boolean(deps.delegation),
           },
