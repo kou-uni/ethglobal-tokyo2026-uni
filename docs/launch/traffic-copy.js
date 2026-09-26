@@ -1,7 +1,11 @@
 window.TRAFFIC_COPY = {
   ja: {
     title:'依頼は、どんどん。<br><em>人の出番は、必要なときだけ。</em>',
-    intro:'50件の依頼で、技術が働く場所をたどる。Interceptaで資金リスクを確認し、Yohakuの固定ルールへ。未知の依頼だけJevが補助し、人に届ける量も制限します。',
+    intro:'YOHAKUは、エージェントの依頼を「任せる・聞く・断る」に整理し、人の出番を必要な範囲に収める製品です。資金審査・判断の補助・通知の上限を、一つの仕組みとして提供します。',
+    flowMode:'50件の流れを見る',examplesMode:'具体例で基準を見る',viewLabel:'表示モード',
+    productPromise:'機会を選び、人の余白をつくる。',
+    productNote:'枠内はYOHAKUが提供する機能のまとまり。内部の資金審査にIntercepta、未知の依頼の分類にJevを利用します。',
+    engineTitle:'方針を照合',
     badge:'判定の再生 · API呼出し・送金なし', open:'大きく見る', close:'閉じる · Esc',
     play:'流れを再生', pause:'一時停止', restart:'もう一度', result:'結果まで進む',
     loop:'繰り返す', timeline:'再生位置', cap:'朝に見せる上限', unit:'束',
@@ -19,9 +23,9 @@ window.TRAFFIC_COPY = {
     legend:['任せる','止める','人の判断待ち'],
     steps:['資金を審査','ルールで分岐','未知だけJev','束ねて、絞る','人の出番へ'],
     captions:[
-      ['最初にIntercepta。受け取ってよい資金かを確認する。','粒は1件の依頼。署名があっても、資金リスクは別の確認です。申告アドレスの判定・理由を受け、flaggedや不明は拒否へ。'],
+      ['YOHAKUが依頼を受け、内部で資金リスクを確認する。','粒は1件の依頼。YOHAKUの審査機能がInterceptaを使い、申告アドレスの判定・理由を取得します。リスクや不明な結果は、拒否の判断に使います。'],
       ['Yohakuがルールを強制する。AIへのお願いではない。','金額・相手・方針で分岐。ENSv2は委任先が方針を書き換えられない境界を担います。許可済みは任せ、新規の相手や慎重に扱う依頼は人の判断待ちへ。'],
-      ['未知の2件だけ、Jevへ。答えは ask か drop。','大きめの2粒がAIの分岐へ。askは判断待ち、dropは拒否へ進みます。Jevから自動許可へつながる経路はありません。AI回答は説明用の例です。'],
+      ['YOHAKUの分類補助が、未知の2件だけを扱う。','この内部機能にJevを使用します。askは判断待ち、dropは拒否。AIから自動許可へつながる経路はなく、通知の上限もYOHAKUが管理します。AI回答は説明用の例です。'],
       ['{held}件を、{bundles}つの束に。さらに、本人の上限で絞る。','AIのaskも、新規の相手からの依頼も、そのまま全件通知しません。同じ質問をまとめ、価値・期限・本人の上限を適用します。'],
       ['人が必要なところでWorld。その先に決済と財務。','朝に{cap}束を提示し、残り{deferred}束は保留。承認する人をWorldで確認し、条件成立後の決済はx402へ。NEOへの財務連携は提案段階です。']
     ],
@@ -36,12 +40,16 @@ window.TRAFFIC_COPY = {
     aiDropReason:'AIは「取り下げる」を選びました。人には通知せず、拒否で終了します。',
     aiNote:'別の説明用サンプル。モデルは未呼出し。実装の applyClassification() で結果を生成。AIの誤判定は残り得ますが、AIから自動許可へ広げる経路はありません。',
     record:'粒・ルール・束の根拠を見る', recordIntro:'実コアが返したデータ。金額や決済ではなく、依頼の振り分けを表します。',
-    graphTitle:'多数の依頼を固定ルールで振り分け、人への通知を束ねて制限する',
-    graphDesc:'50件がInterceptaの資金審査からYohakuへ。未知の2件だけJevのask/dropへ。自動{auto}件、拒否{deny}件、判断待ち{held}件。{bundles}束にまとめ、上限だけ朝に提示。承認はWorld、条件成立後の決済はx402。NEO連携は提案段階。'
+    graphTitle:'YOHAKUの内部で審査・分類・通知量を管理する製品図',
+    graphDesc:'エージェントから50件がYOHAKUへ届く。枠内でInterceptaの資金審査、固定ルール、未知の依頼へのJev補助を使用。自動{auto}件、拒否{deny}件、判断待ち{held}件。{bundles}束にまとめ、上限だけ人へ提示。承認はWorld、決済はx402、NEO連携は提案段階。'
   },
   en: {
     title:'Requests keep coming.<br><em>People step in where it matters.</em>',
-    intro:'Follow 50 requests through the stack. Intercepta screens payment risk before Yohaku applies fixed rules. Only unmatched requests reach Jev. Even human judgment has an attention cap.',
+    intro:'YOHAKU is the product that routes agent requests to delegate, ask or refuse, while keeping human involvement bounded. It brings risk screening, decision support and attention limits into one system.',
+    flowMode:'Watch 50 requests',examplesMode:'Explore decision criteria',viewLabel:'View mode',
+    productPromise:'Keep opportunity open. Make space for people.',
+    productNote:'The boundary groups YOHAKU’s capabilities. Its risk screening uses Intercepta; its unmatched-request classification uses Jev.',
+    engineTitle:'Policy engine',
     badge:'Decision replay · no API calls or payments', open:'Present', close:'Close · Esc',
     play:'Play the flow', pause:'Pause', restart:'Replay', result:'Show result',
     loop:'Loop', timeline:'Playback position', cap:'Morning attention cap', unit:'bundles',
@@ -59,9 +67,9 @@ window.TRAFFIC_COPY = {
     legend:['Delegate','Stop','Human judgment'],
     steps:['Screen risk','Route by rules','Unknown → Jev','Bundle and cap','Human judgment'],
     captions:[
-      ['Intercepta comes first. Is this payment safe to accept?','Each particle is a request. A signature does not settle payment risk. Screen the declared address and pass the verdict and reason onward; flagged or unavailable refuses.'],
+      ['YOHAKU receives the request and checks payment risk inside.','Each particle is a request. YOHAKU’s screening capability uses Intercepta for the declared address’s verdict and reason. Flagged or unavailable results inform refusal.'],
       ['Yohaku enforces rules. A prompt is not the boundary.','Route by price, counterparty and policy. ENSv2 limits the delegate’s ability to rewrite that policy. Delegate allowed requests; hold new or sensitive ones for a person.'],
-      ['Only two unmatched requests reach Jev. Ask or drop.','The two larger particles take the AI branch. Ask stays held; drop is refused. No path from Jev leads to auto. The model choices shown here are illustrative.'],
+      ['YOHAKU’s decision support handles only the two unknowns.','This internal capability uses Jev. Ask stays held; drop is refused. AI has no route to auto, and YOHAKU still controls notification limits. Model choices here are illustrative.'],
       ['{held} requests. {bundles} bundles. Then the owner’s cap.','AI asks and new-counterparty requests do not all become notifications. Group the same question, rank by value and deadline, and apply the owner’s attention limit.'],
       ['World at human approval. Payment and treasury beyond.','Surface {cap} bundles; defer {deferred}. World checks the person at approval. x402 settles after the conditions are met. NEO treasury integration is proposed.']
     ],
@@ -76,7 +84,7 @@ window.TRAFFIC_COPY = {
     aiDropReason:'AI chose drop. The request is refused without notifying the person.',
     aiNote:'Separate illustrative sample. No model call. Results generated with the actual applyClassification(). AI can still make mistakes, but it cannot widen a request to auto.',
     record:'Inspect particles, rules and bundles', recordIntro:'Data returned by the actual core. This describes request routing, not amounts or settlement.',
-    graphTitle:'Many requests routed by fixed rules, bundled and capped before reaching a person',
-    graphDesc:'50 requests go through Intercepta screening to Yohaku. Two unmatched requests take Jev’s ask/drop branch. {auto} auto, {deny} denied, {held} held in {bundles} bundles. Only the capped bundles reach the morning. World at approval; x402 after conditions. NEO integration is proposed.'
+    graphTitle:'One YOHAKU product containing screening, classification and attention control',
+    graphDesc:'Agents send 50 requests to YOHAKU. Inside its boundary: screening with Intercepta, fixed rules, and Jev support only for unmatched requests. {auto} auto, {deny} refused, {held} held in {bundles} bundles. The cap bounds what reaches a person. World at approval, x402 at settlement. NEO integration is proposed.'
   }
 };

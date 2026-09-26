@@ -7,12 +7,17 @@ root.innerHTML=`
  <div class="section-head"><span class="eyebrow">02 / MANY AGENTS. ONE HUMAN.</span><h2 data-traffic-html="title"></h2><p data-traffic="intro"></p></div>
  <div class="traffic-player" id="trafficPlayer">
   <div class="traffic-top"><span class="badge" data-traffic="badge"></span><div><button id="trafficLang" type="button">EN</button> <button id="trafficFocus" type="button" aria-expanded="false" data-traffic="open"></button></div></div>
+  <div class="traffic-modes" role="group" id="trafficModes"><button type="button" data-traffic-mode="flow" aria-controls="trafficFlowPanel" aria-pressed="true" data-traffic="flowMode"></button><button type="button" data-traffic-mode="examples" aria-controls="trafficExamplesPanel" aria-pressed="false" data-traffic="examplesMode"></button></div>
+  <div id="trafficFlowPanel">
   <div class="traffic-caption" aria-live="polite" aria-atomic="true"><h3 id="trafficTitle"></h3><p id="trafficCaption"></p></div>
   <div class="traffic-map" tabindex="0" role="region" aria-labelledby="trafficSvgTitle">
    <svg viewBox="0 0 1170 515" role="img" aria-labelledby="trafficSvgTitle trafficSvgDesc">
     <title id="trafficSvgTitle" data-traffic="graphTitle"></title><desc id="trafficSvgDesc" data-traffic="graphDesc"></desc>
     <defs><pattern id="trafficDots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="#52465e"/></pattern></defs>
     <rect x="0" y="0" width="1170" height="515" fill="url(#trafficDots)" opacity=".4"/>
+    <rect x="230" y="7" width="687" height="498" rx="24" class="product-boundary"/>
+    <text x="254" y="36" class="product-name">YOHAKU</text>
+    <text x="401" y="33" class="product-promise" data-traffic="productPromise"></text>
     <g aria-hidden="true" id="trafficInputRails"></g>
     <path id="trafficPath-screened" class="rail screening-rail" d="M386 158 V192"/>
     <path id="trafficPath-auto" class="rail auto-rail" d="M498 296 C550 296 532 120 590 120"/>
@@ -35,7 +40,7 @@ root.innerHTML=`
     <text x="294" y="147" class="tiny" data-traffic="screenFailure"></text>
     <rect class="engine" x="273" y="192" width="225" height="168" rx="20"/>
     <text x="294" y="220" class="engine-small" data-traffic="engine"></text>
-    <text x="293" y="253" class="heavy engine-ink" style="font-size:30px">Yohaku</text>
+    <text x="293" y="253" class="heavy engine-ink" style="font-size:25px" data-traffic="engineTitle"></text>
     <text x="294" y="280" class="engine-small" data-traffic="enforced"></text>
     <text x="294" y="311" class="engine-small" data-traffic="checks"></text>
     <text x="294" y="340" class="engine-small">ENSv2 · proposal ≠ policy</text>
@@ -90,6 +95,9 @@ root.innerHTML=`
   </div>
   <div class="traffic-timeline"><input id="trafficTime" type="range" min="0" max="40" step=".1" value="0"><output id="trafficClock" for="trafficTime"></output></div>
   <div class="traffic-steps" id="trafficSteps"></div><p class="traffic-note" data-traffic="capNote"></p>
+  <p class="traffic-note product-note" data-traffic="productNote"></p>
+  </div>
+  <section id="trafficExamplesPanel" hidden aria-labelledby="criteriaTitle"></section>
  </div>
  <div class="traffic-after"><p data-traffic="foot"></p><a href="#journey" data-traffic="detail"></a></div>
  <div class="ai-boundary"><span class="eyebrow">JEV / BOUNDED DECISION SUPPORT</span><h3 data-traffic="aiTitle"></h3><p data-traffic="aiIntro"></p>
@@ -103,6 +111,7 @@ const $=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg',DURATION
 const motion=matchMedia('(prefers-reduced-motion: reduce)');
 let lang=document.documentElement.lang==='en'?'en':'ja',time=motion.matches?DURATION:0,playing=false,frame=0,lastFrame=0;
 let cap=2,focused=false,hasInteracted=false,aiChoice='ask',lastScene=-1,previousFocus=null;
+let mode=new URLSearchParams(location.search).get('view')==='examples'?'examples':'flow';
 const svg=(tag,attrs,parent)=>{const el=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs))el.setAttribute(k,String(v));parent.append(el);return el;};
 const incoming=flow.agents.map((agent,i)=>{
  const y=135+i*40;
@@ -202,6 +211,7 @@ function labels(){
  text('trafficLang',lang==='ja'?'EN':'日本語');text('trafficFocus',focused?t.close:t.open);
  $('trafficLang').setAttribute('aria-label',lang==='ja'?'Switch to English':'日本語に切り替える');
  $('trafficTime').setAttribute('aria-label',t.timeline);
+ $('trafficModes').setAttribute('aria-label',t.viewLabel);
  ['Auto','Deny','Human'].forEach((s,i)=>text('trafficLegend'+s,t.legend[i]));
  text('trafficTotals',fill(t.totals,totals));text('trafficSvgDesc',fill(t.graphDesc,totals));
  $('trafficSteps').innerHTML=t.steps.map((s,i)=>`<button type="button" data-traffic-step="${i}">0${i+1} / ${s}</button>`).join('');
@@ -218,7 +228,7 @@ function tick(now){
  frame=requestAnimationFrame(tick);
 }
 function play(){
- hasInteracted=true;if(motion.matches){seek(DURATION);return;}
+ hasInteracted=true;if(mode!=='flow')return;if(motion.matches){seek(DURATION);return;}
  document.dispatchEvent(new CustomEvent('launch-playback',{detail:'traffic'}));
  if(time>=DURATION)time=0;playing=true;lastFrame=performance.now();playLabel();cancelAnimationFrame(frame);frame=requestAnimationFrame(tick);
 }
@@ -230,7 +240,13 @@ function setFocus(on){
  text('trafficFocus',on?COPY[lang].close:COPY[lang].open);
  (on?$('trafficFocus'):previousFocus??$('trafficFocus')).focus({preventScroll:true});
 }
-function setCap(value){cap=value;$('trafficCap').value=String(value);caption();draw();}
+function setCap(value){cap=value;$('trafficCap').value=String(value);caption();draw();document.dispatchEvent(new CustomEvent('launch-cap',{detail:cap}));}
+function setMode(next){
+ mode=next;pause();$('trafficFlowPanel').hidden=mode!=='flow';$('trafficExamplesPanel').hidden=mode!=='examples';
+ root.querySelectorAll('[data-traffic-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.trafficMode===mode)));
+ try{const url=new URL(location.href);url.searchParams.set('view',mode);history.replaceState(null,'',url);}catch{}
+}
+root.querySelectorAll('[data-traffic-mode]').forEach(b=>b.onclick=()=>{hasInteracted=true;setMode(b.dataset.trafficMode);});
 function followCap(){setCap(Number($('cap').value));}
 $('trafficPlay').onclick=()=>{hasInteracted=true;if(playing)pause();else play();};
 $('trafficResult').onclick=()=>seek(DURATION);
@@ -247,14 +263,14 @@ motion.addEventListener('change',()=>{pause();if(motion.matches)seek(DURATION);}
 document.addEventListener('keydown',e=>{
  if(!focused)return;if(e.key==='Escape'){e.preventDefault();setFocus(false);return;}
  if(e.key==='Tab'){
-  const items=[...$('trafficPlayer').querySelectorAll('button:not([disabled]),input,select,[tabindex="0"]')],first=items[0],last=items.at(-1);
+  const items=[...$('trafficPlayer').querySelectorAll('button:not([disabled]),input,select,[tabindex="0"],summary')].filter(el=>el.getClientRects().length&&!el.closest('[hidden]')),first=items[0],last=items.at(-1);
   if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
   else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
  }
 });
 // One automatic preview when the visible flow enters the viewport; explicit controls take over.
-const observer=new IntersectionObserver(entries=>{for(const e of entries){if(e.isIntersecting&&!hasInteracted&&!document.hidden&&!motion.matches)play();else if(!e.isIntersecting&&!focused)pause();}},{threshold:.25});
+const observer=new IntersectionObserver(entries=>{for(const e of entries){if(e.isIntersecting&&mode==='flow'&&!hasInteracted&&!document.hidden&&!motion.matches)play();else if(!e.isIntersecting&&!focused)pause();}},{threshold:.25});
 observer.observe($('trafficPlayer'));
-document.querySelectorAll('a[href="#traffic"]').forEach(a=>a.addEventListener('click',()=>{if(!playing)play();}));
-labels();draw();
+document.querySelectorAll('a[href="#traffic"]').forEach(a=>a.addEventListener('click',()=>{setMode('flow');if(!playing)play();}));
+labels();draw();setMode(mode);
 })();

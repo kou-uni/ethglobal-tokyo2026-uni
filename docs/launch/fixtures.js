@@ -689,5 +689,441 @@ window.YOHAKU_REPLAY = {
         "reason": "unrecognised and not worth asking: Illustrative model choice; no model was called"
       }
     }
+  },
+  "criteria": {
+    "threshold": 1000,
+    "dailyCap": 2,
+    "notificationHour": 7,
+    "examples": [
+      {
+        "id": "routine",
+        "input": {
+          "id": "routine",
+          "amount": 120,
+          "category": "allowed",
+          "party": "known",
+          "risk": "clean",
+          "grant": "valid"
+        },
+        "request": {
+          "id": "criteria-routine",
+          "who": "market-research.acme.eth",
+          "what": "experience/why-you-put-it-back",
+          "purpose": "market-research",
+          "price": {
+            "amount": 120,
+            "currency": "JPYC"
+          },
+          "deadline": "2026-09-26T12:00:00+09:00"
+        },
+        "initial": {
+          "verdict": "auto",
+          "rule": 8,
+          "reason": "within the standing grant for \"experience/why-you-put-it-back\""
+        },
+        "decision": {
+          "verdict": "auto",
+          "rule": 8,
+          "reason": "within the standing grant for \"experience/why-you-put-it-back\""
+        },
+        "modelChoice": null
+      },
+      {
+        "id": "limit",
+        "input": {
+          "id": "limit",
+          "amount": 1000,
+          "category": "allowed",
+          "party": "known",
+          "risk": "clean",
+          "grant": "valid"
+        },
+        "request": {
+          "id": "criteria-limit",
+          "who": "market-research.acme.eth",
+          "what": "experience/why-you-put-it-back",
+          "purpose": "market-research",
+          "price": {
+            "amount": 1000,
+            "currency": "JPYC"
+          },
+          "deadline": "2026-09-26T12:00:00+09:00"
+        },
+        "initial": {
+          "verdict": "auto",
+          "rule": 8,
+          "reason": "within the standing grant for \"experience/why-you-put-it-back\""
+        },
+        "decision": {
+          "verdict": "auto",
+          "rule": 8,
+          "reason": "within the standing grant for \"experience/why-you-put-it-back\""
+        },
+        "modelChoice": null
+      },
+      {
+        "id": "over",
+        "input": {
+          "id": "over",
+          "amount": 1001,
+          "category": "allowed",
+          "party": "known",
+          "risk": "clean",
+          "grant": "valid"
+        },
+        "request": {
+          "id": "criteria-over",
+          "who": "market-research.acme.eth",
+          "what": "experience/why-you-put-it-back",
+          "purpose": "market-research",
+          "price": {
+            "amount": 1001,
+            "currency": "JPYC"
+          },
+          "deadline": "2026-09-26T12:00:00+09:00"
+        },
+        "initial": {
+          "verdict": "human",
+          "rule": 6,
+          "reason": "1001 JPYC is above the threshold"
+        },
+        "decision": {
+          "verdict": "human",
+          "rule": 6,
+          "reason": "1001 JPYC is above the threshold"
+        },
+        "modelChoice": null
+      },
+      {
+        "id": "stranger",
+        "input": {
+          "id": "stranger",
+          "amount": 120,
+          "category": "allowed",
+          "party": "new",
+          "risk": "clean",
+          "grant": "valid"
+        },
+        "request": {
+          "id": "criteria-stranger",
+          "who": "first-contact.newco.eth",
+          "what": "experience/why-you-put-it-back",
+          "purpose": "market-research",
+          "price": {
+            "amount": 120,
+            "currency": "JPYC"
+          },
+          "deadline": "2026-09-26T12:00:00+09:00"
+        },
+        "initial": {
+          "verdict": "human",
+          "rule": 7,
+          "reason": "first request from first-contact.newco.eth"
+        },
+        "decision": {
+          "verdict": "human",
+          "rule": 7,
+          "reason": "first request from first-contact.newco.eth"
+        },
+        "modelChoice": null
+      },
+      {
+        "id": "sensitive",
+        "input": {
+          "id": "sensitive",
+          "amount": 120,
+          "category": "sensitive",
+          "party": "known",
+          "risk": "clean",
+          "grant": "valid"
+        },
+        "request": {
+          "id": "criteria-sensitive",
+          "who": "market-research.acme.eth",
+          "what": "experience/the-time-it-failed-you",
+          "purpose": "market-research",
+          "price": {
+            "amount": 120,
+            "currency": "JPYC"
+          },
+          "deadline": "2026-09-26T12:00:00+09:00"
+        },
+        "initial": {
+          "verdict": "human",
+          "rule": 5,
+          "reason": "\"experience/the-time-it-failed-you\" is a sensitive domain"
+        },
+        "decision": {
+          "verdict": "human",
+          "rule": 5,
+          "reason": "\"experience/the-time-it-failed-you\" is a sensitive domain"
+        },
+        "modelChoice": null
+      },
+      {
+        "id": "forbidden",
+        "input": {
+          "id": "forbidden",
+          "amount": 120,
+          "category": "forbidden",
+          "party": "known",
+          "risk": "clean",
+          "grant": "valid"
+        },
+        "request": {
+          "id": "criteria-forbidden",
+          "who": "market-research.acme.eth",
+          "what": "contact/where-you-live",
+          "purpose": "market-research",
+          "price": {
+            "amount": 120,
+            "currency": "JPYC"
+          },
+          "deadline": "2026-09-26T12:00:00+09:00"
+        },
+        "initial": {
+          "verdict": "deny",
+          "rule": 2,
+          "reason": "\"contact/where-you-live\" is never offered"
+        },
+        "decision": {
+          "verdict": "deny",
+          "rule": 2,
+          "reason": "\"contact/where-you-live\" is never offered"
+        },
+        "modelChoice": null
+      },
+      {
+        "id": "risk",
+        "input": {
+          "id": "risk",
+          "amount": 120,
+          "category": "allowed",
+          "party": "known",
+          "risk": "flagged",
+          "grant": "valid"
+        },
+        "request": {
+          "id": "criteria-risk",
+          "who": "market-research.acme.eth",
+          "what": "experience/why-you-put-it-back",
+          "purpose": "market-research",
+          "price": {
+            "amount": 120,
+            "currency": "JPYC"
+          },
+          "deadline": "2026-09-26T12:00:00+09:00"
+        },
+        "initial": {
+          "verdict": "deny",
+          "rule": 4,
+          "reason": "the payment source failed screening"
+        },
+        "decision": {
+          "verdict": "deny",
+          "rule": 4,
+          "reason": "the payment source failed screening"
+        },
+        "modelChoice": null
+      },
+      {
+        "id": "unavailable",
+        "input": {
+          "id": "unavailable",
+          "amount": 120,
+          "category": "allowed",
+          "party": "known",
+          "risk": "unavailable",
+          "grant": "valid"
+        },
+        "request": {
+          "id": "criteria-unavailable",
+          "who": "market-research.acme.eth",
+          "what": "experience/why-you-put-it-back",
+          "purpose": "market-research",
+          "price": {
+            "amount": 120,
+            "currency": "JPYC"
+          },
+          "deadline": "2026-09-26T12:00:00+09:00"
+        },
+        "initial": {
+          "verdict": "deny",
+          "rule": 4,
+          "reason": "screening was unavailable — we do not settle unchecked"
+        },
+        "decision": {
+          "verdict": "deny",
+          "rule": 4,
+          "reason": "screening was unavailable — we do not settle unchecked"
+        },
+        "modelChoice": null
+      },
+      {
+        "id": "revoked",
+        "input": {
+          "id": "revoked",
+          "amount": 120,
+          "category": "allowed",
+          "party": "known",
+          "risk": "clean",
+          "grant": "revoked"
+        },
+        "request": {
+          "id": "criteria-revoked",
+          "who": "market-research.acme.eth",
+          "what": "experience/why-you-put-it-back",
+          "purpose": "market-research",
+          "price": {
+            "amount": 120,
+            "currency": "JPYC"
+          },
+          "deadline": "2026-09-26T12:00:00+09:00"
+        },
+        "initial": {
+          "verdict": "deny",
+          "rule": 1,
+          "reason": "the grant for \"experience/why-you-put-it-back\" was revoked"
+        },
+        "decision": {
+          "verdict": "deny",
+          "rule": 1,
+          "reason": "the grant for \"experience/why-you-put-it-back\" was revoked"
+        },
+        "modelChoice": null
+      },
+      {
+        "id": "expired",
+        "input": {
+          "id": "expired",
+          "amount": 120,
+          "category": "allowed",
+          "party": "known",
+          "risk": "clean",
+          "grant": "expired"
+        },
+        "request": {
+          "id": "criteria-expired",
+          "who": "market-research.acme.eth",
+          "what": "experience/why-you-put-it-back",
+          "purpose": "market-research",
+          "price": {
+            "amount": 120,
+            "currency": "JPYC"
+          },
+          "deadline": "2026-09-26T12:00:00+09:00"
+        },
+        "initial": {
+          "verdict": "deny",
+          "rule": 3,
+          "reason": "the grant for \"experience/why-you-put-it-back\" expired on 2025-01-01T00:00:00Z"
+        },
+        "decision": {
+          "verdict": "deny",
+          "rule": 3,
+          "reason": "the grant for \"experience/why-you-put-it-back\" expired on 2025-01-01T00:00:00Z"
+        },
+        "modelChoice": null
+      },
+      {
+        "id": "ask",
+        "input": {
+          "id": "ask",
+          "amount": 120,
+          "category": "unknown",
+          "party": "known",
+          "risk": "clean",
+          "grant": "valid"
+        },
+        "request": {
+          "id": "criteria-ask",
+          "who": "market-research.acme.eth",
+          "what": "experience/a-new-question",
+          "purpose": "market-research",
+          "price": {
+            "amount": 120,
+            "currency": "JPYC"
+          },
+          "deadline": "2026-09-26T12:00:00+09:00"
+        },
+        "initial": {
+          "verdict": "human",
+          "rule": 9,
+          "reason": "no rule matched — the unknown goes to a person, never to auto"
+        },
+        "decision": {
+          "verdict": "human",
+          "rule": 9,
+          "reason": "unrecognised — Illustrative model choice; no model was called"
+        },
+        "modelChoice": "ask"
+      },
+      {
+        "id": "drop",
+        "input": {
+          "id": "drop",
+          "amount": 120,
+          "category": "unknown",
+          "party": "known",
+          "risk": "clean",
+          "grant": "valid"
+        },
+        "request": {
+          "id": "criteria-drop",
+          "who": "market-research.acme.eth",
+          "what": "experience/a-new-question",
+          "purpose": "market-research",
+          "price": {
+            "amount": 120,
+            "currency": "JPYC"
+          },
+          "deadline": "2026-09-26T12:00:00+09:00"
+        },
+        "initial": {
+          "verdict": "human",
+          "rule": 9,
+          "reason": "no rule matched — the unknown goes to a person, never to auto"
+        },
+        "decision": {
+          "verdict": "deny",
+          "rule": 9,
+          "reason": "unrecognised and not worth asking: Illustrative model choice; no model was called"
+        },
+        "modelChoice": "drop"
+      },
+      {
+        "id": "combined",
+        "input": {
+          "id": "combined",
+          "amount": 1001,
+          "category": "allowed",
+          "party": "new",
+          "risk": "flagged",
+          "grant": "valid"
+        },
+        "request": {
+          "id": "criteria-combined",
+          "who": "first-contact.newco.eth",
+          "what": "experience/why-you-put-it-back",
+          "purpose": "market-research",
+          "price": {
+            "amount": 1001,
+            "currency": "JPYC"
+          },
+          "deadline": "2026-09-26T12:00:00+09:00"
+        },
+        "initial": {
+          "verdict": "deny",
+          "rule": 4,
+          "reason": "the payment source failed screening"
+        },
+        "decision": {
+          "verdict": "deny",
+          "rule": 4,
+          "reason": "the payment source failed screening"
+        },
+        "modelChoice": null
+      }
+    ]
   }
 };
