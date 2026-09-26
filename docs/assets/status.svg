@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 640" role="img" aria-label="What exists today: agents and the Koe directory feed Yohaku, whose ten rules send a request to automatic settlement, a capped human queue, or a silent refusal. ENSv2, Intercepta, a decision model and World ID attach at named rules.">
+<defs>
+<linearGradient id="st-bg" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#E4EDFF"/><stop offset="55%" stop-color="#F2EBFF"/><stop offset="1" stop-color="#FFE7F4"/></linearGradient>
+<radialGradient id="st-glow" cx="42%" cy="34%" r="55%">
+<stop offset="0" stop-color="#FFF" stop-opacity=".85"/><stop offset="1" stop-color="#FFF" stop-opacity="0"/></radialGradient>
+</defs>
+<style>
+.st-l{font:900 12px "M PLUS Rounded 1c",sans-serif;fill:#9A93B8;letter-spacing:.12em}
+.st-t{font:900 20px "M PLUS Rounded 1c",sans-serif;fill:#2B2740}
+.st-c{font:900 30px "M PLUS Rounded 1c",sans-serif;fill:#fff}
+.st-b{font:800 15px "M PLUS Rounded 1c",sans-serif;fill:#6B6484}
+.st-w{font:800 15px "M PLUS Rounded 1c",sans-serif;fill:#E4DEFF}
+.st-r{font:900 13px ui-monospace,Menlo,monospace;fill:#5B4BE0}
+</style>
+<rect width="1020" height="640" fill="url(#st-bg)"/><rect width="1020" height="640" fill="url(#st-glow)"/>
+<text class="st-l" x="20" y="40">WHERE REQUESTS COME FROM</text>
+<rect x="20" y="58" width="250" height="92" rx="24" fill="#FFFFFF" fill-opacity=".72"/>
+<circle cx="46" cy="96" r="6" fill="#57A80A"/>
+<text class="st-t" x="62" y="103">&#129302; Agent</text>
+<text class="st-b" x="46" y="130">15 buyers, seeded nights</text>
+<rect x="20" y="166" width="250" height="92" rx="24" fill="#FFFFFF" fill-opacity=".72"/>
+<circle cx="46" cy="204" r="6" fill="#57A80A"/>
+<text class="st-t" x="62" y="211">&#128196; Koe</text>
+<text class="st-b" x="46" y="238">real World ID, 1h listing</text>
+<rect x="276" y="153" width="48" height="9" rx="4.5" fill="#5B4BE0"/>
+<path d="M322 148 L336 158 L322 168 z" fill="#5B4BE0"/>
+<rect x="346" y="58" width="262" height="200" rx="24" fill="#5B4BE0"/>
+<text class="st-c" x="376" y="112">Yohaku</text>
+<text class="st-w" x="376" y="146">ten ordered rules</text>
+<text class="st-w" x="376" y="172">first match wins</text>
+<text class="st-w" x="376" y="206">everything else</text>
+<text class="st-w" x="376" y="230">falls to deny</text>
+<rect x="614" y="94" width="38" height="7" rx="3.5" fill="#57A80A"/>
+<path d="M650 88 L664 98 L650 108 z" fill="#57A80A"/>
+<rect x="674" y="58" width="326" height="84" rx="24" fill="#FFFFFF" fill-opacity=".72"/>
+<circle cx="702" cy="92" r="6" fill="#57A80A"/>
+<text class="st-t" x="718" y="99">&#9889; auto</text>
+<text class="st-b" x="702" y="126">settles on x402</text>
+<rect x="614" y="194" width="38" height="7" rx="3.5" fill="#5B4BE0"/>
+<path d="M650 188 L664 198 L650 208 z" fill="#5B4BE0"/>
+<rect x="674" y="158" width="326" height="84" rx="24" fill="#FFFFFF" fill-opacity=".72"/>
+<circle cx="702" cy="192" r="6" fill="#57A80A"/>
+<text class="st-t" x="718" y="199">&#128100; human</text>
+<text class="st-b" x="702" y="226">2 a day, her cap</text>
+<rect x="614" y="294" width="38" height="7" rx="3.5" fill="#C4504A"/>
+<path d="M650 288 L664 298 L650 308 z" fill="#C4504A"/>
+<rect x="674" y="258" width="326" height="84" rx="24" fill="#FFFFFF" fill-opacity=".72"/>
+<circle cx="702" cy="292" r="6" fill="#57A80A"/>
+<text class="st-t" x="718" y="299">&#128683; deny</text>
+<text class="st-b" x="702" y="326">silent, in /dropped</text>
+<text class="st-l" x="20" y="392">ATTACHED, AND WHERE</text>
+<rect x="20" y="410" width="230" height="84" rx="24" fill="#FFFFFF" fill-opacity=".72"/>
+<circle cx="46" cy="444" r="6" fill="#57A80A"/>
+<text class="st-t" x="62" y="451">&#9939; ENSv2</text>
+<text class="st-r" x="46" y="478">rule 0</text>
+<rect x="270" y="410" width="230" height="84" rx="24" fill="#FFFFFF" fill-opacity=".72"/>
+<circle cx="296" cy="444" r="6" fill="#57A80A"/>
+<text class="st-t" x="312" y="451">&#128737; Intercepta</text>
+<text class="st-r" x="296" y="478">rule 4</text>
+<rect x="520" y="410" width="230" height="84" rx="24" fill="#FFFFFF" fill-opacity=".72"/>
+<circle cx="546" cy="444" r="6" fill="#57A80A"/>
+<text class="st-t" x="562" y="451">&#129513; a model</text>
+<text class="st-r" x="546" y="478">rule 9</text>
+<rect x="770" y="410" width="230" height="84" rx="24" fill="#FFFFFF" fill-opacity=".72"/>
+<circle cx="796" cy="444" r="6" fill="#57A80A"/>
+<text class="st-t" x="812" y="451">&#127757; World ID</text>
+<text class="st-r" x="796" y="478">on yes</text>
+<text class="st-l" x="20" y="536">WHAT A PROOF AUTHORIZES</text>
+<rect x="20" y="554" width="980" height="70" rx="24" fill="#FFE0EF"/>
+<text class="st-b" x="46" y="586">one request, one browser.</text>
+<text class="st-b" x="46" y="610">Never the owner.</text>
+<text class="st-r" x="540" y="586">signal = hash(request, id)</text>
+<text class="st-r" x="540" y="610">we keep verifiedAt and acr</text>
+</svg>
