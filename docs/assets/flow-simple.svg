@@ -1,47 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 500" role="img" aria-label="Requests pass through Yohaku; the money does not. The buyer pays the seller directly, and Yohaku takes one atomic unit per decision, which it has never collected.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 396" role="img" aria-label="Requests pass through Yohaku. The money goes around it, from the buyer straight to the seller. Yohaku takes one unit per decision against a price of a hundred and twenty, and collects nothing below ten thousand.">
 <rect width="100%" height="100%" fill="#F8F7F3"/>
 <defs>
 <marker id="fs-k" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#242329"/></marker>
-<marker id="fs-g" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="15" markerHeight="15" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#7FA326"/></marker>
+<marker id="fs-g" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#7FA326"/></marker>
 <marker id="fs-p" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#6B5BD6"/></marker>
 </defs>
 <style>
 .fs-lnm{font:900 13px "M PLUS Rounded 1c",sans-serif;fill:#8C8998;letter-spacing:.11em}
-.fs-h{font:900 26px "M PLUS Rounded 1c",sans-serif;fill:#241f3d}
-.fs-t{font:900 19px "M PLUS Rounded 1c",sans-serif;fill:#242329}
-.fs-b{font:800 15px "M PLUS Rounded 1c",sans-serif;fill:#5F5D6B}
-.fs-m{font:900 13px ui-monospace,Menlo,monospace;fill:#6F9022}
-.fs-mf{font:900 13px ui-monospace,Menlo,monospace;fill:#6B5BD6}
+.fs-h{font:900 27px "M PLUS Rounded 1c",sans-serif;fill:#241f3d}
+.fs-t{font:900 21px "M PLUS Rounded 1c",sans-serif;fill:#242329}
+.fs-b{font:800 16px "M PLUS Rounded 1c",sans-serif;fill:#5F5D6B}
+.fs-m{font:900 14px ui-monospace,Menlo,monospace;fill:#6F9022}
+.fs-mf{font:900 14px ui-monospace,Menlo,monospace;fill:#6B5BD6}
 .fs-pill{font:900 12px "M PLUS Rounded 1c",sans-serif;fill:#fff;letter-spacing:.06em}
-.fs-big{font:900 34px "M PLUS Rounded 1c",sans-serif;fill:#242329}
-.fs-cap{font:800 13.5px "M PLUS Rounded 1c",sans-serif;fill:#8C8998}
+.fs-cap{font:800 14px "M PLUS Rounded 1c",sans-serif;fill:#8C8998}
 </style>
-<text class="fs-lnm" x="20" y="38">THE REQUESTS GO THROUGH US. THE MONEY GOES AROUND US.</text>
-<rect x="20" y="74" width="250" height="104" rx="20" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
-<text class="fs-t" x="42" y="116">&#129302; Agents</text>
-<text class="fs-b" x="42" y="146">buying, all night</text>
-<rect x="385" y="74" width="250" height="104" rx="20" fill="#EDE9FF" stroke="#6B5BD6" stroke-width="3"/>
-<text class="fs-t" x="407" y="116"> Yohaku</text>
-<text class="fs-b" x="407" y="146">decides what she sees</text>
-<rect x="750" y="74" width="250" height="104" rx="20" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
-<text class="fs-t" x="772" y="116">&#128100; A person</text>
-<text class="fs-b" x="772" y="146">answering, sometimes</text>
-<path d="M270 126 L378 126" stroke="#242329" stroke-width="3" fill="none" marker-end="url(#fs-k)"/>
-<path d="M635 126 L743 126" stroke="#242329" stroke-width="3" fill="none" marker-end="url(#fs-k)"/>
-<text class="fs-cap" x="278" y="112">52 a night</text>
-<text class="fs-cap" x="643" y="112">2 reach her</text>
-<path d="M145 178 L145 262 L875 262 L875 182" stroke="#7FA326" stroke-width="11" fill="none" marker-end="url(#fs-g)" stroke-linejoin="round"/>
-<text class="fs-t" x="190" y="250">the whole price</text>
-<text class="fs-m" x="190" y="290">120 atomic USDC, straight to her wallet</text>
-<path d="M600 262 L600 186" stroke="#6B5BD6" stroke-width="2" fill="none" stroke-dasharray="6 4" marker-end="url(#fs-p)"/>
-<text class="fs-mf" x="616" y="222">1 per decision</text>
-<text class="fs-mf" x="616" y="242">— and only that</text>
-<rect x="20" y="336" width="980" height="140" rx="20" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
-<text class="fs-t" x="46" y="372">To scale</text>
-<text class="fs-b" x="140" y="372">— in that demo, the price and our fee, drawn at the same scale.</text>
-<rect x="46" y="392" width="600" height="26" rx="8" fill="#7FA326"/>
-<text class="fs-pill" x="60" y="410">120 — HERS</text>
-<rect x="46" y="428" width="5" height="26" rx="2" fill="#6B5BD6"/>
-<text class="fs-mf" x="62" y="447">1 — ours, per decision. Under 10,000 it costs more gas than it is worth, so it stays uncollected.</text>
+<text class="fs-lnm" x="20" y="36">REQUESTS GO THROUGH. MONEY GOES AROUND.</text>
+<rect x="20" y="66" width="250" height="74" rx="20" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
+<text class="fs-t" x="44" y="112">&#129302; Agents</text>
+<rect x="385" y="66" width="250" height="74" rx="20" fill="#EDE9FF" stroke="#6B5BD6" stroke-width="3"/>
+<text class="fs-t" x="409" y="112">Yohaku</text>
+<rect x="750" y="66" width="250" height="74" rx="20" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
+<text class="fs-t" x="774" y="112">&#128100; A person</text>
+<path d="M270 103 L378 103" stroke="#242329" stroke-width="3" fill="none" marker-end="url(#fs-k)"/>
+<path d="M635 103 L743 103" stroke="#242329" stroke-width="3" fill="none" marker-end="url(#fs-k)"/>
+<text class="fs-cap" x="284" y="90">52</text>
+<text class="fs-cap" x="655" y="90">2</text>
+<path d="M145 140 L145 214 L875 214 L875 144" stroke="#7FA326" stroke-width="12" fill="none" marker-end="url(#fs-g)" stroke-linejoin="round"/>
+<text class="fs-t" x="196" y="204">the price</text>
+<path d="M600 214 L600 148" stroke="#6B5BD6" stroke-width="2" fill="none" stroke-dasharray="6 4" marker-end="url(#fs-p)"/>
+<text class="fs-mf" x="616" y="190">1 per decision</text>
+<rect x="20" y="256" width="980" height="120" rx="20" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
+<rect x="46" y="286" width="600" height="28" rx="8" fill="#7FA326"/>
+<text class="fs-pill" x="62" y="305">120 &#183; HERS</text>
+<rect x="46" y="324" width="5" height="28" rx="2" fill="#6B5BD6"/>
+<text class="fs-mf" x="64" y="344">1 &#183; ours</text>
+<text class="fs-cap" x="160" y="344">and nothing until it passes 10,000</text>
 </svg>

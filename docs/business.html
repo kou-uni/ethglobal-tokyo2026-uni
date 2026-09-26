@@ -62,149 +62,47 @@ in the response rather than leaving a rising number to imply otherwise.
 
 <h2>IN ONE LOOK</h2>
 <figure class="dia">
-  <svg viewBox="0 0 1020 500" role="img" aria-label="Requests pass through Yohaku; the money does not. The buyer pays the seller directly, and Yohaku takes one atomic unit per decision, which it has never collected.">
+  <svg viewBox="0 0 1020 396" role="img" aria-label="Requests pass through Yohaku. The money goes around it, from the buyer straight to the seller. Yohaku takes one unit per decision against a price of a hundred and twenty, and collects nothing below ten thousand.">
   <rect width="100%" height="100%" fill="#F8F7F3"/>
   <defs>
   <marker id="fs-k" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#242329"/></marker>
-  <marker id="fs-g" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="15" markerHeight="15" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#7FA326"/></marker>
+  <marker id="fs-g" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#7FA326"/></marker>
   <marker id="fs-p" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="9" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#6B5BD6"/></marker>
   </defs>
   <style>
   .fs-lnm{font:900 13px "M PLUS Rounded 1c",sans-serif;fill:#8C8998;letter-spacing:.11em}
-  .fs-h{font:900 26px "M PLUS Rounded 1c",sans-serif;fill:#241f3d}
-  .fs-t{font:900 19px "M PLUS Rounded 1c",sans-serif;fill:#242329}
-  .fs-b{font:800 15px "M PLUS Rounded 1c",sans-serif;fill:#5F5D6B}
-  .fs-m{font:900 13px ui-monospace,Menlo,monospace;fill:#6F9022}
-  .fs-mf{font:900 13px ui-monospace,Menlo,monospace;fill:#6B5BD6}
+  .fs-h{font:900 27px "M PLUS Rounded 1c",sans-serif;fill:#241f3d}
+  .fs-t{font:900 21px "M PLUS Rounded 1c",sans-serif;fill:#242329}
+  .fs-b{font:800 16px "M PLUS Rounded 1c",sans-serif;fill:#5F5D6B}
+  .fs-m{font:900 14px ui-monospace,Menlo,monospace;fill:#6F9022}
+  .fs-mf{font:900 14px ui-monospace,Menlo,monospace;fill:#6B5BD6}
   .fs-pill{font:900 12px "M PLUS Rounded 1c",sans-serif;fill:#fff;letter-spacing:.06em}
-  .fs-big{font:900 34px "M PLUS Rounded 1c",sans-serif;fill:#242329}
-  .fs-cap{font:800 13.5px "M PLUS Rounded 1c",sans-serif;fill:#8C8998}
+  .fs-cap{font:800 14px "M PLUS Rounded 1c",sans-serif;fill:#8C8998}
   </style>
-  <text class="fs-lnm" x="20" y="38">THE REQUESTS GO THROUGH US. THE MONEY GOES AROUND US.</text>
-  <rect x="20" y="74" width="250" height="104" rx="20" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
-  <text class="fs-t" x="42" y="116">&#129302; Agents</text>
-  <text class="fs-b" x="42" y="146">buying, all night</text>
-  <rect x="385" y="74" width="250" height="104" rx="20" fill="#EDE9FF" stroke="#6B5BD6" stroke-width="3"/>
-  <text class="fs-t" x="407" y="116"> Yohaku</text>
-  <text class="fs-b" x="407" y="146">decides what she sees</text>
-  <rect x="750" y="74" width="250" height="104" rx="20" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
-  <text class="fs-t" x="772" y="116">&#128100; A person</text>
-  <text class="fs-b" x="772" y="146">answering, sometimes</text>
-  <path d="M270 126 L378 126" stroke="#242329" stroke-width="3" fill="none" marker-end="url(#fs-k)"/>
-  <path d="M635 126 L743 126" stroke="#242329" stroke-width="3" fill="none" marker-end="url(#fs-k)"/>
-  <text class="fs-cap" x="278" y="112">52 a night</text>
-  <text class="fs-cap" x="643" y="112">2 reach her</text>
-  <path d="M145 178 L145 262 L875 262 L875 182" stroke="#7FA326" stroke-width="11" fill="none" marker-end="url(#fs-g)" stroke-linejoin="round"/>
-  <text class="fs-t" x="190" y="250">the whole price</text>
-  <text class="fs-m" x="190" y="290">120 atomic USDC, straight to her wallet</text>
-  <path d="M600 262 L600 186" stroke="#6B5BD6" stroke-width="2" fill="none" stroke-dasharray="6 4" marker-end="url(#fs-p)"/>
-  <text class="fs-mf" x="616" y="222">1 per decision</text>
-  <text class="fs-mf" x="616" y="242">— and only that</text>
-  <rect x="20" y="336" width="980" height="140" rx="20" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
-  <text class="fs-t" x="46" y="372">To scale</text>
-  <text class="fs-b" x="140" y="372">— in that demo, the price and our fee, drawn at the same scale.</text>
-  <rect x="46" y="392" width="600" height="26" rx="8" fill="#7FA326"/>
-  <text class="fs-pill" x="60" y="410">120 — HERS</text>
-  <rect x="46" y="428" width="5" height="26" rx="2" fill="#6B5BD6"/>
-  <text class="fs-mf" x="62" y="447">1 — ours, per decision. Under 10,000 it costs more gas than it is worth, so it stays uncollected.</text>
+  <text class="fs-lnm" x="20" y="36">REQUESTS GO THROUGH. MONEY GOES AROUND.</text>
+  <rect x="20" y="66" width="250" height="74" rx="20" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
+  <text class="fs-t" x="44" y="112">&#129302; Agents</text>
+  <rect x="385" y="66" width="250" height="74" rx="20" fill="#EDE9FF" stroke="#6B5BD6" stroke-width="3"/>
+  <text class="fs-t" x="409" y="112">Yohaku</text>
+  <rect x="750" y="66" width="250" height="74" rx="20" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
+  <text class="fs-t" x="774" y="112">&#128100; A person</text>
+  <path d="M270 103 L378 103" stroke="#242329" stroke-width="3" fill="none" marker-end="url(#fs-k)"/>
+  <path d="M635 103 L743 103" stroke="#242329" stroke-width="3" fill="none" marker-end="url(#fs-k)"/>
+  <text class="fs-cap" x="284" y="90">52</text>
+  <text class="fs-cap" x="655" y="90">2</text>
+  <path d="M145 140 L145 214 L875 214 L875 144" stroke="#7FA326" stroke-width="12" fill="none" marker-end="url(#fs-g)" stroke-linejoin="round"/>
+  <text class="fs-t" x="196" y="204">the price</text>
+  <path d="M600 214 L600 148" stroke="#6B5BD6" stroke-width="2" fill="none" stroke-dasharray="6 4" marker-end="url(#fs-p)"/>
+  <text class="fs-mf" x="616" y="190">1 per decision</text>
+  <rect x="20" y="256" width="980" height="120" rx="20" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
+  <rect x="46" y="286" width="600" height="28" rx="8" fill="#7FA326"/>
+  <text class="fs-pill" x="62" y="305">120 &#183; HERS</text>
+  <rect x="46" y="324" width="5" height="28" rx="2" fill="#6B5BD6"/>
+  <text class="fs-mf" x="64" y="344">1 &#183; ours</text>
+  <text class="fs-cap" x="160" y="344">and nothing until it passes 10,000</text>
   </svg>
-  <figcaption><b>The requests pass through us. The money does not.</b> Her payment arrives from the
-  buyer directly &mdash; we are not a stop on it. The only thing that comes to us is one atomic unit
-  for each decision we made, and under ten thousand of them it costs more in gas than it is worth,
-  so it sits uncollected. The bar is drawn to scale.</figcaption>
-</figure>
-
-<h2>THE SAME THING, WITH THE MECHANISM</h2>
-<figure class="dia">
-  <svg viewBox="0 0 1020 1282" role="img" aria-label="Two separate money paths: the seller is paid directly by the buyer, and Yohaku's per-decision fee is a separate optional authorization that is only redeemed above a threshold">
-  <rect width="100%" height="100%" fill="#F8F7F3"/>
-  <defs>
-  <marker id="cf-d" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="13" markerHeight="13" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#7FA326"/></marker>
-  <marker id="cf-f" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#6B5BD6"/></marker>
-  <marker id="cf-k" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#242329"/></marker>
-  </defs>
-  <style>
-  .cf-lnm{font:900 13px "M PLUS Rounded 1c",sans-serif;fill:#8C8998;letter-spacing:.11em}
-  .cf-h0{font:900 30px "M PLUS Rounded 1c",sans-serif;fill:#241f3d}
-  .cf-h1{font:900 20px "M PLUS Rounded 1c",sans-serif;fill:#242329}
-  .cf-b{font:800 15.5px "M PLUS Rounded 1c",sans-serif;fill:#5F5D6B}
-  .cf-n{font:900 17px "M PLUS Rounded 1c",sans-serif;fill:#242329}
-  .cf-mono{font:900 12.5px ui-monospace,Menlo,monospace;fill:#6F9022}
-  .cf-monoF{font:900 12.5px ui-monospace,Menlo,monospace;fill:#6B5BD6}
-  .cf-pill{font:900 12.5px "M PLUS Rounded 1c",sans-serif;fill:#fff;letter-spacing:.05em}
-  .cf-seller{stroke:#7FA326;stroke-width:6;fill:none;marker-end:url(#cf-d)}
-  .cf-fee{stroke:#6B5BD6;stroke-width:3;fill:none;stroke-dasharray:8 5;marker-end:url(#cf-f)}
-  .cf-k{stroke:#242329;stroke-width:3;fill:none;marker-end:url(#cf-k)}
-  </style>
-  <text class="cf-lnm" x="20" y="44">ONE BUYER, TWO AUTHORIZATIONS, TWO SEPARATE PATHS</text>
-  <rect x="270" y="70" width="480" height="120" rx="20" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
-  <text class="cf-h1" x="296" y="108">&#129302; Buyer agent</text>
-  <text class="cf-b" x="296" y="136">It signs the price. It may also sign a</text>
-  <text class="cf-b" x="296" y="158">second, tiny authorization for routing.</text>
-  <text class="cf-mono" x="296" y="180">buyer ETH balance: 0 — it never pays gas</text>
-  <path class="cf-k" d="M420 190 L420 214 L251 214 L251 250"/>
-  <path class="cf-k" d="M600 190 L600 214 L769 214 L769 250"/>
-  <rect x="20" y="250" width="300" height="28" rx="14" fill="#7FA326"/>
-  <text class="cf-pill" x="36" y="269">THE PRICE &#183; RUNNING</text>
-  <text class="cf-h0" x="20" y="304">The seller's money</text>
-  <rect x="20" y="330" width="462" height="100" rx="18" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
-  <text class="cf-n" x="46" y="360">402, then one EIP-3009 signature</text>
-  <text class="cf-b" x="46" y="384">validBefore is the request deadline, so</text>
-  <text class="cf-b" x="46" y="406">an unanswered request cannot settle.</text>
-  <path class="cf-seller" d="M251 434 L251 460"/>
-  <rect x="20" y="464" width="462" height="102" rx="18" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
-  <text class="cf-n" x="46" y="494">The facilitator submits it</text>
-  <text class="cf-b" x="46" y="518">It pays the gas, not the buyer.</text>
-  <text class="cf-mono" x="46" y="542">gas 85,756 — paid by the relayer</text>
-  <path class="cf-seller" d="M251 570 L251 596"/>
-  <rect x="20" y="600" width="462" height="124" rx="18" fill="#F2FBD9" stroke="#C7E479" stroke-width="2"/>
-  <text class="cf-n" x="46" y="630">→ Straight to the seller's wallet</text>
-  <text class="cf-b" x="46" y="654">The whole price. Yohaku is not a hop</text>
-  <text class="cf-b" x="46" y="676">on this path and holds nothing.</text>
-  <text class="cf-mono" x="46" y="700">120 atomic USDC, on Base Sepolia</text>
-  <rect x="538" y="250" width="300" height="28" rx="14" fill="#6B5BD6"/>
-  <text class="cf-pill" x="554" y="269">THE ROUTING FEE &#183; RUNNING</text>
-  <text class="cf-h0" x="538" y="304">Our fee</text>
-  <rect x="538" y="330" width="462" height="146" rx="18" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
-  <text class="cf-n" x="564" y="360">An extension on that same 402</text>
-  <text class="cf-b" x="564" y="384">extensions[yohaku-routing-fee],</text>
-  <text class="cf-b" x="564" y="406">optional. Decline it and the request</text>
-  <text class="cf-b" x="564" y="428">is still routed.</text>
-  <text class="cf-monoF" x="564" y="452">per-request nonce, 15-minute expiry</text>
-  <path class="cf-fee" d="M769 480 L769 506"/>
-  <rect x="538" y="510" width="462" height="122" rx="18" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
-  <text class="cf-n" x="564" y="540">1 atomic unit per decision</text>
-  <text class="cf-b" x="564" y="564">Charged for the routing, not as a share</text>
-  <text class="cf-b" x="564" y="586">of the sale. auto, human and deny all</text>
-  <text class="cf-b" x="564" y="608">cost the same, because all three are work.</text>
-  <path class="cf-fee" d="M769 636 L769 662"/>
-  <rect x="538" y="666" width="462" height="124" rx="18" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
-  <text class="cf-n" x="564" y="696">A voucher ledger, off the money path</text>
-  <text class="cf-b" x="564" y="720">Authorizations accumulate here. The</text>
-  <text class="cf-b" x="564" y="742">seller's proceeds never enter it.</text>
-  <text class="cf-monoF" x="564" y="766">redeemed: 0 · broadcast: false</text>
-  <path class="cf-fee" d="M769 794 L769 820"/>
-  <rect x="538" y="824" width="462" height="146" rx="18" fill="#EDE9FF" stroke="#C9BFFF" stroke-width="2"/>
-  <text class="cf-n" x="564" y="854">→ One redemption, above 10,000</text>
-  <text class="cf-b" x="564" y="878">Below that, gas costs more than the fee,</text>
-  <text class="cf-b" x="564" y="900">so nothing is broadcast at all. Today:</text>
-  <text class="cf-b" x="564" y="922">nothing has been.</text>
-  <text class="cf-monoF" x="564" y="946">x402 batch-settlement</text>
-  <rect x="20" y="1000" width="980" height="120" rx="20" fill="#EDE9FF" stroke="#C9BFFF" stroke-width="2"/>
-  <text class="cf-h1" x="46" y="1036">Why two paths and not one cut</text>
-  <text class="cf-b" x="46" y="1062">A router that took a share of the sale would have to sit inside the seller’s payment.</text>
-  <text class="cf-b" x="46" y="1084">This one cannot. The fee is a separate authorization to a different address, and the</text>
-  <text class="cf-b" x="46" y="1106">ledger’s own summary type is broadcast: false — it cannot report holding anything.</text>
-  <rect x="20" y="1138" width="980" height="120" rx="20" fill="#FFF6DC" stroke="#F0DFA8" stroke-width="2"/>
-  <text class="cf-h1" x="46" y="1174">Not built: the part that compounds</text>
-  <text class="cf-b" x="46" y="1200">The intended next step: a filter rule that becomes a default earns its contributor a</text>
-  <text class="cf-b" x="46" y="1222">share of the fees it saves, so the fee falls as the router learns.</text>
-  <text class="cf-b" x="46" y="1244">None of it exists. It is a direction, drawn so it is not mistaken for revenue.</text>
-  </svg>
-  <figcaption><b>Read it as two lanes, not one split.</b> The green lane is the seller&rsquo;s money and
-  we are not a hop on it. The purple lane is ours, and it is a <i>separate</i> authorization to a
-  different address &mdash; which is the only reason we can say we never hold their funds.
-  The amber panel at the bottom is the part that does not exist yet, drawn so nobody counts it as revenue.</figcaption>
+  <figcaption>Her money never passes through us.
+  <a href="assets/cashflow.svg">The same thing with the mechanism &rarr;</a></figcaption>
 </figure>
 
 <h2>WHERE THE MONEY GOES</h2>
@@ -245,71 +143,53 @@ in the response rather than leaving a rising number to imply otherwise.
 
 <h2>AND THE PART THAT COMPOUNDS</h2>
 <figure class="dia">
-  <svg viewBox="0 0 1020 620" role="img" aria-label="Her decisions teach the router, so more runs without her and she can pull any of it back. Across many sellers the platform accumulates shape rather than content, and that aggregate is what could one day be useful to partners such as Curvegrid. None of that last part is built.">
+  <svg viewBox="0 0 1020 452" role="img" aria-label="Her answers teach the router, so more runs without her and she can pull it back. Across a market the platform sees a distribution rather than anyone's content, which an agent treasury would want. That last part is not built.">
   <rect width="100%" height="100%" fill="#F8F7F3"/>
   <defs>
   <marker id="vl-k" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#242329"/></marker>
   <marker id="vl-r" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#6B5BD6"/></marker>
-  <marker id="vl-a" viewBox="0 0 10 10" refX="8" refY="5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#B08900"/></marker>
   </defs>
   <style>
   .vl-lnm{font:900 13px "M PLUS Rounded 1c",sans-serif;fill:#8C8998;letter-spacing:.11em}
-  .vl-h{font:900 26px "M PLUS Rounded 1c",sans-serif;fill:#241f3d}
-  .vl-t{font:900 19px "M PLUS Rounded 1c",sans-serif;fill:#242329}
-  .vl-b{font:800 15px "M PLUS Rounded 1c",sans-serif;fill:#5F5D6B}
-  .vl-m{font:900 13px ui-monospace,Menlo,monospace;fill:#6F9022}
-  .vl-mf{font:900 13px ui-monospace,Menlo,monospace;fill:#6B5BD6}
+  .vl-h{font:900 27px "M PLUS Rounded 1c",sans-serif;fill:#241f3d}
+  .vl-t{font:900 21px "M PLUS Rounded 1c",sans-serif;fill:#242329}
+  .vl-b{font:800 16px "M PLUS Rounded 1c",sans-serif;fill:#5F5D6B}
+  .vl-m{font:900 14px ui-monospace,Menlo,monospace;fill:#6F9022}
+  .vl-mf{font:900 14px ui-monospace,Menlo,monospace;fill:#6B5BD6}
   .vl-pill{font:900 12px "M PLUS Rounded 1c",sans-serif;fill:#fff;letter-spacing:.06em}
-  .vl-big{font:900 34px "M PLUS Rounded 1c",sans-serif;fill:#242329}
-  .vl-cap{font:800 13.5px "M PLUS Rounded 1c",sans-serif;fill:#8C8998}
+  .vl-cap{font:800 14px "M PLUS Rounded 1c",sans-serif;fill:#8C8998}
   </style>
-  <text class="vl-lnm" x="20" y="38">WHAT ACCUMULATES, AND WHAT COULD LEAVE</text>
-  <rect x="20" y="66" width="560" height="330" rx="26" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
-  <text class="vl-h" x="46" y="108">The loop, per person</text>
-  <circle cx="90" cy="148" r="17" fill="#6B5BD6"/>
-  <text class="vl-pill" x="85" y="153">1</text>
-  <text class="vl-t" x="122" y="154">She answers</text>
-  <text class="vl-b" x="122" y="178">Yes, no, never again. Each one is a</text>
-  <text class="vl-b" x="122" y="199">judgement the rules could not make.</text>
-  <circle cx="90" cy="234" r="17" fill="#6B5BD6"/>
-  <text class="vl-pill" x="85" y="239">2</text>
-  <text class="vl-t" x="122" y="240">The router learns the shape</text>
-  <text class="vl-b" x="122" y="264">Not her words — which categories, which</text>
-  <text class="vl-b" x="122" y="285">askers, which prices she keeps refusing.</text>
-  <circle cx="90" cy="320" r="17" fill="#6B5BD6"/>
-  <text class="vl-pill" x="85" y="325">3</text>
-  <text class="vl-t" x="122" y="326">More runs without her</text>
-  <text class="vl-b" x="122" y="350">And she can pull any of it back. The cap</text>
-  <text class="vl-b" x="122" y="371">is hers; so is every rule it learned.</text>
-  <path d="M62 372 L62 134" stroke="#6B5BD6" stroke-width="2.5" fill="none" stroke-dasharray="7 5" marker-end="url(#vl-r)"/>
-  <text class="vl-b" transform="rotate(-90 42 253)" x="42" y="253" text-anchor="middle">and it comes back round</text>
-  <rect x="612" y="66" width="388" height="330" rx="26" fill="#EDE9FF" stroke="#C9BFFF" stroke-width="2"/>
-  <text class="vl-h" x="638" y="108">What only a platform</text>
-  <text class="vl-h" x="638" y="140">can see</text>
-  <text class="vl-b" x="638" y="174">One seller has a habit. Many sellers,</text>
-  <text class="vl-b" x="638" y="195">across a market, have a distribution.</text>
-  <text class="vl-mf" x="638" y="228">&#183; what agents are willing to pay for</text>
-  <text class="vl-mf" x="638" y="252">&#183; which requests get refused, and why</text>
-  <text class="vl-mf" x="638" y="276">&#183; which prices actually clear</text>
-  <text class="vl-mf" x="638" y="300">&#183; how often a human is really needed</text>
-  <text class="vl-b" x="638" y="342">Her answers are not in there. The</text>
-  <text class="vl-b" x="638" y="363">shape of the demand is.</text>
-  <path d="M584 230 L606 230" stroke="#242329" stroke-width="3" fill="none" marker-end="url(#vl-k)"/>
-  <rect x="20" y="424" width="980" height="172" rx="26" fill="#FFF6DC" stroke="#F0DFA8" stroke-width="2"/>
-  <rect x="46" y="448" width="212" height="26" rx="13" fill="#B08900"/>
-  <text class="vl-pill" x="62" y="466">NOT BUILT &#183; A DIRECTION</text>
-  <text class="vl-h" x="280" y="470">Where that bundle could go</text>
-  <text class="vl-b" x="46" y="504">An agent treasury has to answer a question we are collecting the evidence for: which of an</text>
-  <text class="vl-b" x="46" y="526">agent’s money movements needed a person, and how often. That is what the distribution above is,</text>
-  <text class="vl-b" x="46" y="548">and a partner working on agent finances — Curvegrid, for instance — would want it as a feed.</text>
-  <text class="vl-b" x="46" y="570">It does not exist. No aggregate is computed, nothing is shared, and there is no agreement to.</text>
+  <text class="vl-lnm" x="20" y="36">WHAT ACCUMULATES</text>
+  <rect x="20" y="62" width="560" height="224" rx="26" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
+  <circle cx="92" cy="100" r="18" fill="#6B5BD6"/>
+  <text class="vl-pill" x="87" y="105">1</text>
+  <text class="vl-t" x="128" y="107">She answers</text>
+  <circle cx="92" cy="162" r="18" fill="#6B5BD6"/>
+  <text class="vl-pill" x="87" y="167">2</text>
+  <text class="vl-t" x="128" y="169">It learns the shape</text>
+  <circle cx="92" cy="224" r="18" fill="#6B5BD6"/>
+  <text class="vl-pill" x="87" y="229">3</text>
+  <text class="vl-t" x="128" y="231">More runs without her</text>
+  <path d="M62 262 L62 96" stroke="#6B5BD6" stroke-width="2.5" fill="none" stroke-dasharray="7 5" marker-end="url(#vl-r)"/>
+  <text class="vl-b" transform="rotate(-90 42 180)" x="42" y="180" text-anchor="middle">she can pull it back</text>
+  <rect x="612" y="62" width="388" height="224" rx="26" fill="#EDE9FF" stroke="#C9BFFF" stroke-width="2"/>
+  <text class="vl-h" x="640" y="104">A market has a shape</text>
+  <text class="vl-mf" x="640" y="140">&#183; what agents pay for</text>
+  <text class="vl-mf" x="640" y="166">&#183; what gets refused</text>
+  <text class="vl-mf" x="640" y="192">&#183; which prices clear</text>
+  <text class="vl-mf" x="640" y="218">&#183; how often a person was needed</text>
+  <text class="vl-b" x="640" y="264">Her answers are not in it.</text>
+  <path d="M584 174 L606 174" stroke="#242329" stroke-width="3" fill="none" marker-end="url(#vl-k)"/>
+  <rect x="20" y="312" width="980" height="120" rx="26" fill="#FFF6DC" stroke="#F0DFA8" stroke-width="2"/>
+  <rect x="46" y="338" width="106" height="26" rx="13" fill="#B08900"/>
+  <text class="vl-pill" x="62" y="356">NOT BUILT</text>
+  <text class="vl-h" x="174" y="360">Where it could go</text>
+  <text class="vl-b" x="46" y="396">An agent treasury needs exactly this.</text>
+  <text class="vl-b" x="46" y="418">Curvegrid, for instance. Nothing shared today.</text>
   </svg>
-  <figcaption><b>Each answer she gives makes the next night smaller.</b> The router learns the shape
-  of her refusals, not her words, so more runs without her &mdash; and she can pull any of it back.
-  One seller has a habit; a market of them has a distribution, and that is the only thing a platform
-  knows that a person cannot. <b>The amber panel is a direction, not a product:</b> nothing is
-  aggregated, nothing is shared, and there is no agreement with anyone to do so.</figcaption>
+  <figcaption>The amber panel is a direction, not a product.</figcaption>
 </figure>
+
 <div class="grid">
   <div class="c"><span class="k p">CONTRIBUTE</span><b class="t">The shape of your refusals</b>
   <span>Not what you refused. <b>What kind of asking you tend to refuse.</b> Opt-in, and you can
