@@ -63,6 +63,11 @@ main{flex:1;display:flex;flex-direction:column;justify-content:center;padding:14
 @keyframes drop{0%{transform:translateY(-34px) scale(.7);opacity:0}70%{transform:translateY(6px) scale(1.06)}100%{transform:none;opacity:1}}
 .lede .sub{font-size:16.5px;font-weight:800;color:var(--ink2);line-height:1.5;margin-top:4px}
 
+input.addr{width:100%;font:inherit;font-size:17px;font-weight:800;padding:13px 15px;margin-top:2px;
+  border:3px solid var(--line);border-radius:16px;background:var(--paper);color:var(--ink);
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+input.addr:focus{outline:0;border-color:var(--lilac);background:#fff}
+
 /* the fold — reference, not the job in front of her */
 details.roll{margin-top:22px;background:var(--card);border-radius:24px;box-shadow:var(--shS);
   overflow:hidden}
@@ -132,6 +137,9 @@ h1 .sm{display:block;font-size:13px;font-weight:900;letter-spacing:.16em;color:v
 .card .v{font-weight:900;font-size:24px;line-height:1.3;letter-spacing:-.3px;word-break:break-word}
 .card .p{font-weight:900;font-size:34px;letter-spacing:-.8px;margin-top:10px;color:var(--lilacD)}
 .card .p span{font-size:15px;color:var(--ink3)}
+.pay{margin-top:11px;background:var(--limeL);border-radius:14px;padding:10px 14px;font-size:14px;
+  font-weight:800;color:#41530F}
+.pay b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#2F3D09;font-weight:900}
 .why{background:var(--lilacL);border-radius:18px;padding:13px 16px;margin-top:15px;
   font-size:15px;line-height:1.6;color:#3B3456;font-weight:800}
 
@@ -397,6 +405,75 @@ ${nights
 </div></details>`;
 }
 
+/**
+ * The way in, for someone who has never seen this before.
+ *
+ * It asks for one thing — where to pay them — and it is honest that skipping is fine. A booth
+ * visitor who does not want to paste an address should still be able to see the whole flow,
+ * because the part worth showing is the decision, not the wallet.
+ */
+export function invitePage(p: {
+  paying: boolean;
+  amount: string;
+  error?: string;
+}): string {
+  return shell(
+    'yohaku',
+    `<main>
+<div class="lede">
+  <div class="pill">AN AGENT WANTS TO BUY FROM YOU</div>
+  <div class="count">1</div>
+  <div class="sub">request, waiting<br>for a person to answer.</div>
+</div>
+
+<h1 style="text-align:center">Where should<br>we <em>pay you?</em></h1>
+
+<form method="post" action="/try">
+  <div class="card">
+    <div class="k">YOUR WALLET · BASE SEPOLIA</div>
+    <input class="addr" name="payTo" placeholder="0x…" autocomplete="off"
+      autocapitalize="off" spellcheck="false" inputmode="latin">
+    <div class="why">${
+      p.paying
+        ? `If it settles, <b>${esc(p.amount)}</b> lands there — and you check your own balance, not our word for it.`
+        : 'Settlement is not wired on this instance, so nothing will be transferred either way.'
+    }</div>
+  </div>
+  ${p.error ? `<div class="cav">${esc(p.error)}</div>` : ''}
+  <div class="btns">
+    <button class="b" type="submit" name="go" value="pay">Ask me for my data</button>
+    <button class="b g" type="submit" name="go" value="skip">Skip — just show me the screen</button>
+  </div>
+</form>
+</main>
+<footer>Nothing is sent yet. <b>The next screen is the one a person actually sees</b>, and
+answering it is what decides whether anything moves.</footer>`,
+    [
+      {
+        tag: 'WHY ASK FOR AN ADDRESS',
+        lines: [
+          'You are standing in for <b>the seller</b> — the person an agent is buying from.',
+          'The buyer is our wallet, and it signs a payment <b>to the address you give</b>. We cannot raise the amount or change the destination afterwards; both are inside the signature.',
+        ],
+      },
+      {
+        tag: 'WHAT HAPPENS NEXT',
+        lines: [
+          'A request goes through the real router. If a rule settles it, you never see it — <b>that is the product</b>.',
+          'This one is built to land on a person. You will be asked <b>once</b>, and proving you are a person happens <b>at that moment</b>, not at signup.',
+        ],
+      },
+      {
+        tag: 'IF YOU DO NOTHING',
+        lines: [
+          '<b>The deadline passes and it is denied.</b> Silence is not consent.',
+          'The payment authorization expires with it, so <b>nobody can settle it afterwards</b> — not the agent, not us. That is enforced by the signature, not by our server.',
+        ],
+      },
+    ],
+  );
+}
+
 export function approvalPage(p: {
   id: string;
   who: string;
@@ -408,6 +485,8 @@ export function approvalPage(p: {
   reason: string;
   identityWired: boolean;
   handledWithoutYou?: number;
+  /** Shown only when a visitor asked to be paid into their own wallet. */
+  payTo?: string;
   today: TodaySummary;
   nights?: NightSummary[];
 }): string {
@@ -430,6 +509,11 @@ ${dots(handled)}
   <div class="v">${esc(p.what)}</div>
   <div class="p">${num(p.amount)} <span>${esc(p.currency)} · ${hoursLeft(p.deadline)} left</span></div>
   <div class="why">${esc(p.reason)}</div>
+  ${
+    p.payTo
+      ? `<div class="pay">Pays to <b>${esc(p.payTo.slice(0, 6))}…${esc(p.payTo.slice(-4))}</b> &mdash; your wallet</div>`
+      : ''
+  }
 </div>
 
 <div class="btns">

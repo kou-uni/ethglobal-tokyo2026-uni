@@ -65,6 +65,41 @@ pre b{color:var(--lime);font-weight:700}
 footer{margin-top:44px;padding-top:20px;border-top:2px dashed var(--line);font-size:14px;color:var(--ink2)}
 footer a{color:var(--lilacD)}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ── ジャーニー / ペイン / 解決 / デモ範囲 ───────────────────────── */
+.jy{background:var(--card);border-radius:28px;padding:22px 20px;box-shadow:var(--sh);margin:6px 0 8px;
+overflow-x:auto}
+.jy-in{min-width:740px}
+.jy-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;font-weight:900;margin-bottom:16px;
+color:var(--ink2)}
+.jy-legend i{display:inline-block;width:13px;height:13px;border-radius:4px;margin-right:6px;
+vertical-align:-2px;font-style:normal}
+.jy-legend .p i{background:#FFD5D2}.jy-legend .y i{background:var(--lime)}
+.jy-legend .d i{background:transparent;border:3px dashed var(--lilacD);border-radius:5px}
+.jy-row{display:grid;grid-template-columns:86px repeat(5,1fr);gap:9px;align-items:stretch}
+.jy-row+.jy-row{margin-top:9px}
+.jy-lab{font-size:11px;font-weight:900;letter-spacing:.09em;color:var(--ink3);
+display:flex;align-items:center;line-height:1.4}
+.jy-cell{border-radius:15px;padding:11px 12px;font-size:13.5px;line-height:1.5;font-weight:800}
+.jy-time{background:var(--ink);color:#fff;text-align:center;font-size:14px;font-weight:900;
+border-radius:99px;padding:7px 4px;letter-spacing:-.2px}
+.jy-what{background:var(--lilacL);color:#3B3456}
+.jy-what b{color:var(--lilacD)}
+.jy-pain{background:#FFE9E7;color:#8A3B34}
+.jy-pain b{color:#B03A2E;display:block;font-size:14px;margin-bottom:2px}
+.jy-fix{background:var(--limeL);color:#41530F}
+.jy-fix b{color:#2F3D09;display:block;font-size:14px;margin-bottom:2px}
+.jy-none{background:var(--paper);color:var(--ink3);font-weight:800;text-align:center;
+display:flex;align-items:center;justify-content:center;font-size:13px}
+/* デモが覆っている範囲 */
+.jy-scope{display:grid;grid-template-columns:86px repeat(5,1fr);gap:9px;margin-top:13px}
+.jy-scope div{font-size:12px;font-weight:900;text-align:center;padding:9px 6px;border-radius:12px}
+.jy-scope .on{background:#fff;color:var(--lilacD);border:3px dashed var(--lilacD)}
+.jy-scope .on.live{background:var(--lilacD);color:#fff;border-color:var(--lilacD)}
+.jy-scope .off{color:var(--ink3);border:3px dashed var(--line)}
+.jy-note{margin-top:14px;font-size:14px;color:var(--ink2);line-height:1.65}
+.jy-note b{color:var(--ink)}
+@media(max-width:620px){.jy{padding:16px 13px}}
 </style></head><body>
 
 <a class="back" href="./">&larr; Yohaku</a>
@@ -78,17 +113,84 @@ about it once, proves she is a person <b>at that moment</b>, and the money moves
 It runs from a laptop at the event, so it is up while we are. Everything else on this page —
 the console, the diagrams, the code — works without it.</div>
 
+
+<h2>THE JOURNEY, THE PAIN, AND WHAT THIS DEMO COVERS</h2>
+<div class="jy"><div class="jy-in">
+  <div class="jy-legend">
+    <span class="p"><i></i>今日ある痛み</span>
+    <span class="y"><i></i>Yohaku が解くところ</span>
+    <span class="d"><i></i>今日のデモが触れる範囲</span>
+  </div>
+
+  <div class="jy-row">
+    <div class="jy-lab">いつ</div>
+    <div class="jy-cell jy-time">店を開く</div>
+    <div class="jy-cell jy-time">02:00</div>
+    <div class="jy-cell jy-time">寝ている</div>
+    <div class="jy-cell jy-time">07:00</div>
+    <div class="jy-cell jy-time">その直後</div>
+  </div>
+
+  <div class="jy-row">
+    <div class="jy-lab">何が<br>起きるか</div>
+    <div class="jy-cell jy-what">人が<b>売り手として登録</b>する</div>
+    <div class="jy-cell jy-what">エージェントが<b>買いに来る</b>。止まらない</div>
+    <div class="jy-cell jy-what">依頼が<b>溜まり続ける</b></div>
+    <div class="jy-cell jy-what">起きて、<b>判断する</b></div>
+    <div class="jy-cell jy-what"><b>お金が動く</b></div>
+  </div>
+
+  <div class="jy-row">
+    <div class="jy-lab">今日の<br>痛み</div>
+    <div class="jy-cell jy-pain"><b>誰でも入れる</b>なら、買い手にとって価値がない。人間由来だと証明できない</div>
+    <div class="jy-cell jy-pain"><b>エージェントが詰まる</b>。返事を待って接続を握ったまま朝になる</div>
+    <div class="jy-cell jy-pain"><b>沈黙の意味が決まっていない</b>。未処理が借金のように溜まる</div>
+    <div class="jy-cell jy-pain"><b>朝に50件</b>。一度そうなったら二度と開かない</div>
+    <div class="jy-cell jy-pain"><b>誰が同意したのか残らない</b>。責任は人間側に残るのに</div>
+  </div>
+
+  <div class="jy-row">
+    <div class="jy-lab">Yohaku が<br>解くところ</div>
+    <div class="jy-cell jy-fix"><b>人間しか入れない</b>World ID で登録。<b>名前は剥奪できる</b></div>
+    <div class="jy-cell jy-fix"><b>その場で答える</b>。auto / deny / 「保留、期限はT」を同期で返す</div>
+    <div class="jy-cell jy-fix"><b>沈黙は拒否</b>。期限で必ず決着し、溜まらない</div>
+    <div class="jy-cell jy-fix"><b>2件だけ</b>。束ねて順位づけ、上限は本人が決める</div>
+    <div class="jy-cell jy-fix"><b>同意の瞬間に人間証明</b>。その証跡が精算の根拠になる</div>
+  </div>
+
+  <div class="jy-scope">
+    <div class="jy-lab" style="font-size:11px">今日の<br>デモ</div>
+    <div class="off">これから</div>
+    <div class="on live">触れる</div>
+    <div class="on live">触れる</div>
+    <div class="on live">触れる</div>
+    <div class="on live">触れる</div>
+  </div>
+
+  <div class="jy-note"><b>右の4つを、あなた自身で通せます。</b>財布の住所を渡す → エージェントが
+  依頼してくる → 朝の画面で答える → <b>World ID で「いま人である」ことを証明</b>する →
+  <b>その住所に着金する</b>。確かめるのは我々の言葉ではなく、あなたの残高です。<br><br>
+  <b>いま欠けているのは2つだけ。</b>着金は署名も検証も本物ですが、買い手の財布に testnet の
+  残高がまだ無いので、実際の転送はこれから。左端の「売り手として登録する」画面も、
+  World ID の認証自体は通っているものの、まだ作っていません。</div>
+</div></div>
+
 <h2>TRY IT — ONE LINK, NO SETUP</h2>
 <div class="try">
-  <b>Be the person who gets asked.</b>
-  <p>This stages a real request through the real router and sends you to whatever it decided.
-  <b>Open it on your phone</b> — the personhood check is a phone flow.
-  Press <b>Yes</b> and you will be asked to prove you are a person, right then.
-  Press <b>No</b>, or just close it, and watch what the next screen says did <i>not</i> happen.</p>
-  <a class="go" id="tryLink" href="https://mac-studio.taila649e1.ts.net/try">Ask me for my data →</a>
+  <b>Be the seller. Get paid into your own wallet.</b>
+  <p><b>Open it on your phone.</b> Paste a Base Sepolia address, and an agent asks to buy
+  something from you. Press <b>Yes</b> and you prove you are a person <b>at that moment</b> —
+  then the payment settles to the address you gave. <b>You check your own balance, not our
+  word for it.</b><br><br>
+  Press <b>No</b>, or just close the tab, and the next screen names each thing that did
+  <i>not</i> happen. No wallet? There is a skip button — the decision is the part worth seeing.</p>
+  <a class="go" id="tryLink" href="https://mac-studio.taila649e1.ts.net/try">Start — an agent is asking →</a>
 </div>
 
 <ol class="steps">
+  <li><b>You say where to pay you.</b> Our buyer wallet signs a payment to <i>that</i> address.
+  The amount and the destination are inside the signature — <b>nothing downstream can raise
+  either</b>, not the facilitator and not us.</li>
   <li><b>A request arrives</b> with exactly five fields — who, what, purpose, price, deadline.
   Ten ordered rules decide; the first match wins.</li>
   <li><b>It was not settled by a rule</b>, so it waits for a person — bundled, ranked, and held
@@ -96,8 +198,11 @@ the console, the diagrams, the code — works without it.</div>
   <li><b>Yes asks her to prove personhood now</b>, not at signup. The screen shows how many
   <b>seconds</b> ago — a signed claim from the issuer, checked against this server's clock.</li>
   <li><b>Doing nothing is an answer.</b> The deadline passes and the request is denied. The
-  agent's payment authorization expires with it, so <b>nobody can settle it, including us</b>.</li>
+  payment authorization expires with it, so <b>nobody can settle it, including us</b>.</li>
 </ol>
+<div class="note" style="margin-top:14px"><b>The buyer's wallet is ours and it is rate-limited.</b>
+This is open on the internet with no login, so the number of payments it will sign in an hour is
+capped. Past the ceiling the flow still works — it just stops paying, and says so.</div>
 
 <h2>HOW IT FITS TOGETHER</h2>
 <figure>

@@ -24,7 +24,7 @@ import { mayProceed, type IdentityPort, type VerificationOutcome } from '../port
 import { mayMoveMoney, type ScreeningPort } from '../ports/screening.js';
 import { Store, verdictBody, type Entry } from './state.js';
 import { PendingVerifications } from './pending.js';
-import { approvalPage, resultPage, type TodaySummary } from './pages.js';
+import { approvalPage, invitePage, resultPage, type TodaySummary } from './pages.js';
 import { pastNights, type NightSummary } from '../core/history.js';
 import {
   outlivesDeadline,
@@ -32,6 +32,7 @@ import {
   type SettlementPort,
 } from '../ports/settlement.js';
 import { decodePaymentSignatureHeader, encodePaymentRequiredHeader } from '@x402/core/http';
+import { isAddress, signAuthorization } from '../adapters/eip3009.js';
 
 export interface AppDeps {
   policy: Policy;
@@ -58,6 +59,29 @@ export interface AppDeps {
   origin?: string;
   /** Explorer prefix for a settled transaction. Configuration, never a literal in source. */
   explorerUrl?: string;
+  /**
+   * The buyer's key, used only by `/try` so a visitor can be paid into their own wallet
+   * without having to be an agent themselves.
+   *
+   * It signs for exactly the amount and destination this server quoted, and it never
+   * broadcasts — settlement still runs from the one place that requires a verified yes.
+   */
+  demoBuyerKey?: string;
+  /**
+   * How many visitor-funded runs this process will sign in an hour.
+   *
+   * The server is on the open internet with no authentication, so an unbounded `/try` is an
+   * unbounded way to spend the buyer's balance. Small amounts are not a substitute for a
+   * limit.
+   */
+  demoSignsPerHour?: number;
+  /**
+   * Where to send a reader. Passed in from `package.json`, which is the canonical place for
+   * a project's own URLs — and the reason `npm run verify` can keep refusing every literal
+   * endpoint in source without an exception for our own.
+   */
+  docsUrl?: string;
+  homeUrl?: string;
   now?: () => Date;
 }
 
@@ -152,6 +176,20 @@ function json(res: ServerResponse, status: number, body: unknown): void {
   res.end(text);
 }
 
+async function readText(req: IncomingMessage): Promise<string> {
+  const chunks: Buffer[] = [];
+  for await (const c of req) chunks.push(c as Buffer);
+  return Buffer.concat(chunks).toString('utf8');
+}
+
+/** The one request `/try` stages. Ordinary enough to be believable, sensitive enough to escalate. */
+const DEMO_ASK = {
+  who: 'nozomi-labs.eth',
+  what: 'health/sleep-quality',
+  purpose: 'market-research' as const,
+  price: { amount: 4200, currency: 'JPYC' as const },
+};
+
 async function readJson(req: IncomingMessage): Promise<unknown> {
   const chunks: Buffer[] = [];
   for await (const c of req) chunks.push(c as Buffer);
@@ -193,6 +231,24 @@ function validate(body: Record<string, unknown>): { ok: true; request: AgentRequ
 export function createApp(deps: AppDeps): Server {
   const now = deps.now ?? (() => new Date());
   const pending = new PendingVerifications();
+
+  /*
+   * How many payments this process will sign for strangers in an hour.
+   *
+   * `/try` is open on the public internet with no authentication, and each run signs an
+   * authorization payable to whatever address was typed in. **Small amounts are not a
+   * substitute for a limit** — a few thousand runs of a tiny amount is still the whole
+   * balance. Past the ceiling the demo still works; it just stops paying.
+   */
+  const signedAt: number[] = [];
+  const allowDemoSignature = (): boolean => {
+    const ceiling = deps.demoSignsPerHour ?? 40;
+    const cutoff = now().getTime() - 3_600_000;
+    while (signedAt.length && signedAt[0]! < cutoff) signedAt.shift();
+    if (signedAt.length >= ceiling) return false;
+    signedAt.push(now().getTime());
+    return true;
+  };
 
   const html = (res: ServerResponse, status: number, body: string): void => {
     res.writeHead(status, { 'content-type': 'text/html; charset=utf-8' });
@@ -468,8 +524,8 @@ export function createApp(deps: AppDeps): Server {
           service: 'yohaku',
           what: 'An escalation router. Post a request to buy information from a person; it is answered synchronously as auto, human or deny.',
           owner: deps.policy.owner,
-          docs: 'https://github.com/kou-uni/ethglobal-tokyo2026-uni',
-          forAgents: 'https://kou-uni.github.io/ethglobal-tokyo2026-uni/llms.txt',
+          ...(deps.docsUrl ? { docs: deps.docsUrl } : {}),
+          ...(deps.homeUrl ? { forAgents: `${deps.homeUrl.replace(/\/$/, '')}/llms.txt` } : {}),
           request: {
             endpoint: 'POST /requests',
             fields: FIVE_FIELDS,
@@ -539,12 +595,43 @@ export function createApp(deps: AppDeps): Server {
        * approval screen — which is the correct failure.
        */
       if (req.method === 'GET' && path === '/try') {
+        return html(
+          res,
+          200,
+          invitePage({
+            paying: Boolean(deps.settlement?.live && deps.demoBuyerKey),
+            amount: `${DEMO_ASK.price.amount} ${DEMO_ASK.price.currency}`,
+          }),
+        );
+      }
+
+      /*
+       * The visitor answers "pay me here", and a request is staged for them.
+       *
+       * The request goes through **the real router** — this is a door, not a shortcut. If the
+       * rules ever stopped escalating it, no approval screen would appear, which is the
+       * correct failure rather than a hidden special case.
+       */
+      if (req.method === 'POST' && path === '/try') {
+        const form = new URLSearchParams(await readText(req));
+        const wanted = (form.get('payTo') ?? '').trim();
+        const skipping = form.get('go') === 'skip';
+
+        if (!skipping && wanted && !isAddress(wanted)) {
+          return html(
+            res,
+            400,
+            invitePage({
+              paying: Boolean(deps.settlement?.live && deps.demoBuyerKey),
+              amount: `${DEMO_ASK.price.amount} ${DEMO_ASK.price.currency}`,
+              error: 'That does not look like a wallet address — 0x and 40 hex characters.',
+            }),
+          );
+        }
+
         const request: AgentRequest = {
+          ...DEMO_ASK,
           id: `try-${randomUUID().slice(0, 8)}`,
-          who: 'nozomi-labs.eth',
-          what: 'health/sleep-quality',
-          purpose: 'market-research',
-          price: { amount: 4200, currency: 'JPYC' },
           deadline: new Date(now().getTime() + 6 * 3_600_000).toISOString(),
         };
         const screened = await deps.screening.scan('');
@@ -553,7 +640,42 @@ export function createApp(deps: AppDeps): Server {
           seenBefore: (who) => deps.store.hasSeen(who),
           screen: () => screened,
         });
-        deps.store.add({ request, decision, receivedAt: now().toISOString() });
+        const entry: Entry = { request, decision, receivedAt: now().toISOString() };
+
+        /*
+         * Sign on the buyer's behalf, payable to the visitor.
+         *
+         * This is the only place the server signs anything, and it still moves nothing: an
+         * EIP-3009 authorization is inert until settled, and settlement happens exactly once,
+         * after a verified person says yes.
+         */
+        const payTo = skipping ? undefined : wanted || undefined;
+        if (payTo && deps.settlement?.live && deps.demoBuyerKey && allowDemoSignature()) {
+          const requirement = deps.settlement.quote(
+            request.price.amount,
+            request.price.currency,
+            payTo,
+          );
+          try {
+            const payload = await signAuthorization({
+              privateKey: deps.demoBuyerKey,
+              requirement,
+              validBeforeMs: new Date(request.deadline).getTime(),
+              resourceUrl: `${deps.origin ?? ''}/requests`,
+              now,
+            });
+            entry.auth = {
+              payload,
+              requirement,
+              validBefore: Math.ceil(new Date(request.deadline).getTime() / 1000),
+            };
+            entry.payTo = payTo;
+          } catch {
+            // A signature we could not produce is simply a demo without a payment.
+          }
+        }
+
+        deps.store.add(entry);
         if (decision.verdict !== 'human') {
           return json(res, 200, {
             note: 'the router did not escalate this one, so there is no screen to show',
@@ -594,6 +716,7 @@ export function createApp(deps: AppDeps): Server {
           deadline: entry.request.deadline,
           reason: entry.decision.reason,
           identityWired: Boolean(deps.identityWired),
+          ...(entry.payTo ? { payTo: entry.payTo } : {}),
           today: todaySummary(deps.store, Boolean(deps.settlement?.live)),
           nights: deps.nights ?? [],
         }));

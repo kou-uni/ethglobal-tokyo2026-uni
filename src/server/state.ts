@@ -25,6 +25,8 @@ export interface Entry {
    * signature rather than by us.
    */
   auth?: HeldAuthorization;
+  /** Where this one pays, when a visitor asked to be paid into their own wallet. */
+  payTo?: string;
   receivedAt: string;
 }
 
