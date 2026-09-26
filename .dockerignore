@@ -5,6 +5,7 @@ node_modules
 !.env.example
 *.log
 .test-counts.json
+.yohaku
 design
 docs
 demo

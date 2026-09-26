@@ -3,6 +3,14 @@
 2026-09-26。新デモと同じPRで、Kou向けの移行依頼とDockerfileを用意。
 クラウドサービスの作成、課金プランの契約、秘密値の移送、公開切替はまだ行っていません。
 
+## 公開前に取り込むPR
+
+PR #23（説明・アニメーション）と、このデモのPR #28に加え、
+**PR #27（通常依頼の決済・所有者認証・永続化修正）を公開前に取り込んでください。**
+このブランチ単体の確認はPR #27との統合確認を含みません。共通の `app.ts`、
+`idkit-approval.ts`、`main.ts` とドキュメントのテスト件数を照合し、統合後に
+`npm run check` を再実行してください。#27の修正を落とした公開切替は行わないでください。
+
 ## 提出URLについて
 
 公式イベントページで提出期限とFAQは確認しましたが、公開ページだけでは「デプロイURL欄が必須」
@@ -15,7 +23,9 @@
 GitHub Pages（説明・Koe）→ Render Web Service等の常駐Nodeコンテナ（World、依頼、回答、x402）。
 同じDockerfileは他の常駐コンテナサービスでも使用できます。
 
-現在のStore、Worldの認証待ち、Koeの一時掲載、新デモの回答、署名回数制限はプロセス内です。
+このPRのベースではStore、Worldの認証待ち、Koeの一時掲載、新デモの回答、
+署名回数制限はプロセス内です。PR #27は通常依頼と日次表示枠をファイルへ保存しますが、
+World待ちと新デモの一時セッションをすべて永続化する変更ではありません。
 そのため今回は常駐プロセスを1インスタンスで動かす案です。Vercelでも実装は可能ですが、
 この状態をそのまま複数のFunctionへ分散させないでください。永続DBへの移行と原子的な
 認証消費・支払い確保が必要になります。特に支払い途中の再起動を「もう一度署名」で復旧すると、
@@ -35,12 +45,15 @@ tsxとesbuildは現行サーバーの起動時に必要なので、devDependenci
 | Render等でWeb Serviceを作成できるアカウントと、決まった公開origin | Worldと同一origin制御を新URLに合わせるため |
 | public用World app/RPの設定・署名者が現在のconfigと一致しているか | local用の鍵をpublic用として移さないため |
 | 既存環境変数の設定有無 | 下の必須設定を移行先へ入れるため。値はホストのSecret欄へ直接入力 |
+| PR #27の保存ファイルがStudioで使用されているか | 使用中なら通常依頼・表示枠の状態を失わず移すため |
 | 買い手ウォレットの公開アドレス、テストUSDC残高、デモ署名予算 | 再発行せず、既存の資金と上限を引き継ぐため |
 | 現在認証中／決済中のデモがないこと | 移行時に途中の状態を破棄しないため |
 
 オンチェーンの資産・記録とリポの証拠JSONは残ります。旧サーバーのメモリ内セッション、
 生proof、cookie、保留中の署名認可をPRへ吸い出す必要はありません。
 旧セッションは完了させてから切り替え、新環境では新規デモ・Koe登録を行います。
+PR #27の `requests.json` と `attention.json` はこの一時セッションとは別です。
+すでに運用している場合は停止後に非公開の保存先へ移し、GitHubへ公開しないでください。
 旧APIと新APIの同時開催は、署名上限が別プロセスごとになるため避けてください。
 
 ## 移す設定
@@ -54,6 +67,7 @@ tsxとesbuildは現行サーバーの起動時に必要なので、devDependenci
 | Intercepta | `INTERCEPTA_API_KEY`, `INTERCEPTA_BASE_URL`, `INTERCEPTA_SCAN_PATH`, `INTERCEPTA_AUTH_HEADER` |
 | Jev | `JEV_API_KEY`, `JEV_BASE_URL`, `JEV_MODEL`, `YOHAKU_PROVIDER=jev`。model IDは現在使える値を引き継ぐ |
 | ENS読取 | `SEPOLIA_RPC_URL`, `ENS_NAME`, `ENS_RESOLVER_ADDRESS`, `ENS_DELEGATE_ADDRESS` |
+| PR #27の所有者・保存先 | 必要に応じて `OWNER_WALLET_ADDRESS`。`REQUEST_STATE_FILE=/app/.yohaku/requests.json`, `ATTENTION_STATE_FILE=/app/.yohaku/attention.json` |
 | 既存機能を残す場合 | OIDCの `WORLD_*` と任意のfee設定。callback/originが旧Studioを向かないよう照合 |
 
 秘密値はサーバー専用です。`NEXT_PUBLIC_*`、`VITE_*`などの公開変数にはしません。
@@ -61,8 +75,10 @@ Worldの署名鍵、買い手の支払い鍵、APIキーは別のものです。
 
 ## Renderでの作業手順
 
-1. 対象PRをマージ。Web Serviceをリポから作成し、Docker runtimeとルートのDockerfileを指定。
+1. #23、#27、#28を統合し、全チェックを実行。Web Serviceをリポから作成し、Docker runtimeとルートのDockerfileを指定。
 2. 1インスタンス・スリープしない稼働条件を選択。プランと費用は所有者が確認して選ぶ。
+   `/app/.yohaku` に永続ディスクをマウントし、実行ユーザーnodeの書込権限を確認する。
+   Dockerfileのディレクトリ作成だけでは再デプロイ時の永続性は得られない。
    ヘルスチェックは `/health`。デモ中に再起動しないよう自動デプロイを止める。
 3. 公開URLを確定し、`WORLD_IDKIT_ORIGIN`をそのoriginへ設定。末尾スラッシュ・pathは付けない。
    World Portal側のアプリURL／許可origin等も、新しい公開URLとの整合を確認する。

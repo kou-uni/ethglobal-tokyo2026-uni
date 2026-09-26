@@ -3,7 +3,9 @@
 ## 最新の追加：依頼から回答・報酬までのデモ
 
 作業ブランチは `minta/live-human-journey`。PR #23の
-`minta/agent-traffic-animation` の上に積んでいます。
+`minta/agent-traffic-animation` の上にPR #28として積んでいます。
+公開前に別PR #27の決済・永続化修正との統合確認が必要です。
+保存ファイルの移行とコンテナの永続ディスク設定を移行手順へ追記しています。
 
 - 新しい `/experience`：50件の生成依頼 → 実ルール・審査 → Worldログイン →
   委任分1件の報酬 → 本人回答1件の報酬・買い手受信箱 → Koe。日英切替あり。
