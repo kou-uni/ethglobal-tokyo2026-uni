@@ -1,5 +1,9 @@
 {
   "confirmed": "2026-09-26",
+  "registry": {
+    "value": "0x657ea849311d3d5823348dded7c2aaafb3ede09e",
+    "source": "https://github.com/ensdomains/contracts-v2/blob/71a3b7339dbc55ab47667abdfe8303bac4f4c24e/contracts/deployments/sepolia/ETHRegistry.json"
+  },
   "factory": {
     "value": "0x9e726eb570beb6bceb495ab8cda7df517d4e841c",
     "source": "https://github.com/ensdomains/contracts-v2/blob/71a3b7339dbc55ab47667abdfe8303bac4f4c24e/contracts/deployments/sepolia/VerifiableFactory.json"

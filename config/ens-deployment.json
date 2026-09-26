@@ -1,0 +1,14 @@
+{
+  "chainId": 11155111,
+  "name": "yohaku-minta-2026.eth",
+  "owner": "0x5f52FA3c5DF22d8c89fA6c2221E2aeBd6FE722bD",
+  "resolver": "0xCf853fF7BBA8f616E2814745C4FC0012D51E681e",
+  "walletDelegationManager": "0xdb9b1e94b5b69df7e401ddbede43491141047db3",
+  "walletDelegationManagerSource": {
+    "observedTransaction": "0xb32713ee62c7b19907fc7b8c5c2ba728e92f83bfcd12bf5267a52a1802aec016",
+    "abi": "https://github.com/MetaMask/delegation-framework/blob/main/src/DelegationManager.sol",
+    "scope": "Observed wallet wrapper for this demo. Acceptance also requires exact single-call payload and the registered resolver's role-change event."
+  },
+  "source": "docs/build/evidence/ens-registration.json",
+  "registrationTransaction": "0x8e13e0ad4ef75378f6e00130f2a1e76f7664cd6d5d303cd703a1e76452267828"
+}

@@ -7,10 +7,15 @@
 > Follow-up: `decodeSetter` succeeded live for all five keys. Registration prices and
 > free mock-token minting were also checked; see [ENS-REGISTRATION.md](ENS-REGISTRATION.md).
 > **Registration completed:** `yohaku-minta-2026.eth` and its seller resolver were verified
-> on Sepolia. See [ENS-REGISTERED.md](ENS-REGISTERED.md). Delegate grants and writes remain unexecuted.
+> on Sepolia. See [ENS-REGISTERED.md](ENS-REGISTERED.md).
 > The read-only port and optional server denial gate are now implemented:
 > [ENS-INTEGRATION.md](ENS-INTEGRATION.md). The adapter was exercised against the registered
 > seller resolver; the public server is not yet configured with this registration.
+> The browser-only delegate signer and receipt verifier are ready:
+> [ENS-DELEGATION-DEMO.md](ENS-DELEGATION-DEMO.md). **All six delegation transactions are now verified:**
+> proposal success, policy refusal, revocation, and proposal refusal after revocation.
+> [Evidence](evidence/ens-delegation.json), checked at block 11783370. Wallet-wrapped grant/revoke
+> calls required exact inner-call and resolver-event verification. Public app integration remains.
 
 **What runs, what does not, and what each of us does next.** Everything marked ✅ was run;
 nothing here is inferred from the code looking right.
@@ -18,7 +23,7 @@ nothing here is inferred from the code looking right.
 Reproduce all of it with one command:
 
 ```bash
-npm install && npm run check      # typecheck + 133 tests + 10 verified claims
+npm install && npm run check      # typecheck + 192 tests + 10 verified claims
 ```
 
 ---

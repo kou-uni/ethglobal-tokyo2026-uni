@@ -1,0 +1,68 @@
+{
+  "checkedAt": "2026-09-26T02:50:35.466Z",
+  "chainId": 11155111,
+  "blockNumber": "11783390",
+  "name": "yohaku-minta-2026.eth",
+  "owner": "0x5f52FA3c5DF22d8c89fA6c2221E2aeBd6FE722bD",
+  "resolver": "0xCf853fF7BBA8f616E2814745C4FC0012D51E681e",
+  "delegate": "0x4b7fba60f96562e24769e67cead8f388f43ba971",
+  "proposal": "yohaku-delegation-demo:7c5cec7e-fced-4df6-97da-00755ec0d7a6",
+  "rolesAfterRevocation": {
+    "yh:proposal": false,
+    "yh:policy": false,
+    "yh:payout": false,
+    "yh:price": false,
+    "yh:license": false
+  },
+  "transactions": [
+    {
+      "step": "fund",
+      "hash": "0x348ed9c5c0d06f8cafebaeb503ec5e142f276365f8690ead37b22f89e69b9801",
+      "blockNumber": "11783334",
+      "status": "success",
+      "gasUsed": "21000",
+      "submission": "direct"
+    },
+    {
+      "step": "grant",
+      "hash": "0xb32713ee62c7b19907fc7b8c5c2ba728e92f83bfcd12bf5267a52a1802aec016",
+      "blockNumber": "11783335",
+      "status": "success",
+      "gasUsed": "177824",
+      "submission": "wallet-delegation-manager"
+    },
+    {
+      "step": "proposal-write",
+      "hash": "0x16873dfa2a63a0e6dc1edb1903488499686d25628d17352dca14449ed24ee8d0",
+      "blockNumber": "11783336",
+      "status": "success",
+      "gasUsed": "158863",
+      "submission": "direct"
+    },
+    {
+      "step": "policy-refused",
+      "hash": "0xb459618bfdd9d0ab78cf34ee64723e04ef227546208d6502b23cf6e72e73ce4f",
+      "blockNumber": "11783337",
+      "status": "reverted",
+      "gasUsed": "39407",
+      "submission": "direct"
+    },
+    {
+      "step": "revoke",
+      "hash": "0x52528761f782d07379de4bf493acabd6702fc5f5c6dc6b3eaff717ed02742871",
+      "blockNumber": "11783338",
+      "status": "success",
+      "gasUsed": "128459",
+      "submission": "wallet-delegation-manager"
+    },
+    {
+      "step": "proposal-refused",
+      "hash": "0x2380d0feb0cade3b3e224fa12960f2d2d4d130609d00d7437729789b6bb3faae",
+      "blockNumber": "11783339",
+      "status": "reverted",
+      "gasUsed": "39431",
+      "submission": "direct"
+    }
+  ],
+  "permissionErrorsVerified": true
+}

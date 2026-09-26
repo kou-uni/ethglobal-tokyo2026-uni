@@ -9,6 +9,7 @@ import { packetToBytes } from 'viem/ens';
 import { KEYS, keyResource, ROLE } from '../ports/permissions.js';
 
 export const resolverAbi = parseAbi([
+  'error EACUnauthorizedAccountRoles(uint256 resource, uint256 roleBitmap, address account)',
   'function setText(bytes name, string key, string value)',
   'function grantSetterRoles(bytes setter, address account) returns (bool)',
   'function revokeRoles(uint256 resource, uint256 roleBitmap, address account) returns (bool)',
