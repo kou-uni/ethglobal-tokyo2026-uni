@@ -134,8 +134,97 @@ export const ASK_QUESTION: Record<string, string> = {
   'judgement/what-you-earn': 'What do you earn, and how did you decide that was enough?',
 };
 
-/** The question if we know it, otherwise the slug — never a blank. */
-export const asQuestion = (what: string): string => ASK_QUESTION[what] ?? what;
+/**
+ * Several ways to ask the same thing.
+ *
+ * The category is what the rules match on; the sentence is what a person reads. One sentence
+ * per category made a staged night read as a stuck record, and a person who sees the same
+ * words forty times learns nothing about whether the product would work for them.
+ */
+export const PHRASINGS: Record<string, string[]> = {
+  'experience/why-you-put-it-back': [
+    'What made you put it back on the shelf?',
+    'You almost bought it. What stopped you?',
+    'What was the last thing you looked at before deciding against it?',
+  ],
+  'experience/first-five-minutes': [
+    'What happened in your first five minutes with it?',
+    'What did you try first, and did it work?',
+    'What surprised you when you opened it?',
+  ],
+  'experience/what-you-expected': [
+    'What did you expect that it turned out not to be?',
+    'What had you assumed, before you used it?',
+    'Where did it differ from what you were promised?',
+  ],
+  'experience/how-it-tasted': [
+    'What did it actually taste like?',
+    'Describe the smell before the first sip.',
+    'What would you compare the texture to?',
+  ],
+  'experience/where-you-got-stuck': [
+    'Where in the instructions did you get stuck?',
+    'Which step did you have to read twice?',
+    'What did you end up looking up elsewhere?',
+  ],
+  'judgement/what-youd-warn-a-friend-about': [
+    'What would you warn a friend about?',
+    'If someone you liked was about to buy this, what would you say?',
+    'What do you wish someone had told you first?',
+  ],
+  'experience/the-time-it-failed-you': [
+    'Tell me about a time it let you down.',
+    'When did you most need it to work, and it did not?',
+    'What went wrong at the worst possible moment?',
+  ],
+  'experience/why-you-stopped': [
+    'Why did you stop using it?',
+    'What was the last straw?',
+    'When did you realise you had stopped?',
+  ],
+  'corpus/your-own-words': [
+    'Your own writing, in your own words — to train on.',
+    'Something you wrote for yourself, not for an audience.',
+  ],
+  'contact/where-you-live': ['What is your home address?', 'Which neighbourhood do you live in?'],
+  'wallet/your-address': ['Which wallet address is yours?', 'Where should we look up your on-chain history?'],
+  'experience/who-you-live-with': ['Who do you live with?', 'How many people are in your household?'],
+  'judgement/what-you-earn': [
+    'What do you earn, and how did you decide that was enough?',
+    'What is your household income?',
+  ],
+};
+
+/** Stable across restarts: the same request always reads the same way. */
+export function stableHash(s: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+/** The sentence a person reads, chosen by the request's own id rather than by chance. */
+export function phrasing(what: string, id: string): string | undefined {
+  const options = PHRASINGS[what];
+  if (!options?.length) return undefined;
+  return options[stableHash(id) % options.length];
+}
+
+/**
+ * The question if we know it, otherwise the slug — never a blank.
+ *
+ * With an `id`, the wording varies between requests in the same category. The category is
+ * still what the rules match on; only the sentence changes.
+ */
+export function asQuestion(what: string, id?: string): string {
+  if (id) {
+    const varied = phrasing(what, id);
+    if (varied) return varied;
+  }
+  return ASK_QUESTION[what] ?? what;
+}
 
 /**
  * A few asks each night are bulk commissions — a whole panel rather than one answer.
