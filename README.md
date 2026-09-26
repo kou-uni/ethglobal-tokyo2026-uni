@@ -13,6 +13,7 @@ proves anybody was there.
 | 🎬 **20 seconds** | [Watch one night](https://kou-uni.github.io/ethglobal-tokyo2026-uni/flow.html) — no reading |
 | 🗺️ **The whole picture** | [What it plugs into](https://kou-uni.github.io/ethglobal-tokyo2026-uni/stack.html) · [Where the requests come from](https://kou-uni.github.io/ethglobal-tokyo2026-uni/inflow.html) |
 | 🧪 **Touch it** | [The running product](https://kou-uni.github.io/ethglobal-tokyo2026-uni/product.html) — it settles real money on Base Sepolia |
+| 📖 **Unfamiliar terms?** | [Glossary](https://kou-uni.github.io/ethglobal-tokyo2026-uni/glossary.html) — one line each |
 | 🤖 **Reading this as an agent?** | [llms.txt](llms.txt) · [claims.json](docs/claims.json) · [AGENTS.md](AGENTS.md) |
 
 ![How Yohaku sits between an agent and a person, and what it plugs into](docs/assets/stack.svg)
@@ -74,7 +75,7 @@ personal data.** That is the gap.
 | **Money actually moving** | ✅ **twice, on chain** — and 4,200 moved *only when a person pressed Yes* | [auto](https://sepolia.basescan.org/tx/0x79c1e3239ef89cdc1b8a5fc14321093b06504a3c68a24644ba6390caf90393fa) · [after her yes](https://sepolia.basescan.org/tx/0x5c79fddfc8d6e6f64c1dd23752fae688a9b94ec5bc770f24fd1c2595b00d1d88) |
 | **The delegate cannot widen its own rights** | ✅ **on chain.** The contract refuses it, not our server | [proposal ✓](https://sepolia.etherscan.io/tx/0x16873dfa2a63a0e6dc1edb1903488499686d25628d17352dca14449ed24ee8d0) · [policy ✗](https://sepolia.etherscan.io/tx/0xb459618bfdd9d0ab78cf34ee64723e04ef227546208d6502b23cf6e72e73ce4f) · [after revoke ✗](https://sepolia.etherscan.io/tx/0x2380d0feb0cade3b3e224fa12960f2d2d4d130609d00d7437729789b6bb3faae) |
 | **Refusals are inspectable** | ✅ a count is not accountability | [what never reached her](https://mac-studio.taila649e1.ts.net/dropped) |
-| **A counter for people to be found at** | ✅ Koe — World ID listing, and a JSON feed agents read | [Koe](https://kou-uni.github.io/ethglobal-tokyo2026-uni/koe.html) |
+| **A counter for people to be found at** | ✅ **Koe — *not our product.*** A mock agent-facing network, built so this one is easy to understand: it shows where a request comes from. World ID listing, and a JSON feed agents read | [Koe](https://kou-uni.github.io/ethglobal-tokyo2026-uni/koe.html) |
 | Live payment screening | ⚠️ a stand-in. `/health` reports it **false** rather than pretending | — |
 | Fees | ⚠️ **designed, not wired. We take nothing today** | [the model](docs/product/ECONOMICS.md) |
 

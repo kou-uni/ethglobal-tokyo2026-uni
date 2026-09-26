@@ -1,0 +1,155 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Yohaku — glossary</title>
+<meta name="description" content="Every term used in this project, in one line each.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap');
+:root{--ink:#242329;--ink2:#5F5D6B;--ink3:#A6A3B4;--paper:#F8F7F3;--card:#fff;--line:#E8E5DC;
+--lilac:#BCB2FA;--lilacD:#6B5BD6;--lilacL:#EDE9FF;--limeD:#7FA326;--limeL:#F2FBD9;
+--shS:0 4px 0 rgba(36,35,41,.08),0 8px 18px rgba(36,35,41,.1)}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:880px;padding:28px 18px 70px;color:var(--ink);
+background:linear-gradient(180deg,#EFEBFF 0%,#F6F4EC 40%,var(--paper) 100%);background-attachment:fixed;
+font-family:"M PLUS Rounded 1c",-apple-system,BlinkMacSystemFont,"Hiragino Maru Gothic ProN",sans-serif;
+font-size:16px;line-height:1.7;font-weight:700;-webkit-font-smoothing:antialiased}
+a.back{font-size:14px;color:var(--lilacD);text-decoration:none;font-weight:900}
+h1{font-size:clamp(28px,6.4vw,40px);font-weight:900;letter-spacing:-.02em;margin:12px 0 6px}
+p.sub{color:var(--ink2);font-size:16px;margin:10px 0 0;max-width:52ch}
+h2{font-size:12px;letter-spacing:.15em;color:var(--ink3);font-weight:900;margin:36px 0 12px}
+dl{margin:0;background:var(--card);border-radius:22px;padding:6px 20px 14px;box-shadow:var(--shS)}
+dt{font-size:17.5px;font-weight:900;margin-top:16px;line-height:1.35}
+dt small{font-size:12px;font-weight:900;letter-spacing:.08em;color:#fff;background:var(--ink3);
+padding:2px 9px;border-radius:99px;margin-left:8px;vertical-align:2px}
+dt small.us{background:var(--lilacD)}dt small.ok{background:var(--limeD)}
+dd{margin:5px 0 0;font-size:15px;color:var(--ink2);line-height:1.6}
+dd b{color:var(--ink)}
+dd a{color:var(--lilacD)}
+footer{margin-top:40px;padding-top:20px;border-top:2px dashed var(--line);font-size:14px;color:var(--ink2)}
+footer a{color:var(--lilacD)}
+</style></head><body>
+<a class="back" href="./">&larr; Yohaku</a>
+<h1>Glossary</h1>
+<p class="sub">One line each. <b>Purple means it is ours; green means it is running.</b></p>
+
+<h2>THE PRODUCT</h2>
+<dl>
+<dt>Yohaku <small class="us">OURS</small><small class="ok">RUNNING</small></dt>
+<dd>The router between an agent and a person. It decides which incoming requests a human is
+asked about at all, and holds that number to a cap the person sets. Japanese for <b>the empty
+space in a painting — not what is left over, but what the painter decided not to draw</b>.</dd>
+
+<dt>Koe <small>MOCK</small></dt>
+<dd><b>Not the product.</b> A mock agent-facing network built so the product is easy to
+understand: people list what they can speak to, and agents read a JSON feed and ask.
+Japanese for <b>voice</b>.</dd>
+
+<dt>The cap <small class="us">OURS</small></dt>
+<dd>How many requests may reach one person per day. Two, by default, and <b>set by them</b>.
+Across twenty runs, arrivals moved between 46 and 54 and <b>this number never moved</b>.</dd>
+
+<dt>The drop list <small class="ok">RUNNING</small></dt>
+<dd>What was refused on someone's behalf, with the rule that stopped each one named beside it.
+<b>A refusal nobody can inspect is the same as never having been asked.</b></dd>
+
+<dt>Rule 0 <small class="us">OURS</small></dt>
+<dd>The one rule on a different axis: rules 1&ndash;9 judge requests arriving from outside;
+<b>rule 0 judges the person's own delegate from the inside</b> and refuses it the right to widen
+its own permissions.</dd>
+
+<dt>Rule 9 <small class="us">OURS</small></dt>
+<dd>Nothing matched. It goes to a human, <b>never to automatic approval</b> &mdash; and it is the
+only rule where a model is consulted.</dd>
+
+<dt>Fails to deny <small class="us">OURS</small></dt>
+<dd>Every failure path refuses: engine down, screening unreachable, identity check failed,
+deadline passed with no answer. <b>Silence is not consent.</b></dd>
+</dl>
+
+<h2>STANDARDS WE BUILD ON</h2>
+<dl>
+<dt>World ID <small class="ok">RUNNING</small></dt>
+<dd>Proof that a real person is present. We check it <b>at the moment of consent, not at
+signup</b>. Production, orb credential.</dd>
+
+<dt>ENSv2 &middot; permissioned resolver <small class="ok">RUNNING</small></dt>
+<dd>Names with per-key permissions on chain. We use it so a delegated agent <b>can propose and
+cannot rewrite what it is allowed to do</b> &mdash; refused by the contract, not by our server.</dd>
+
+<dt>x402 <small class="ok">RUNNING</small></dt>
+<dd>An open payment protocol over HTTP 402. The buyer signs; a <b>facilitator</b> broadcasts and
+pays the gas, and <b>cannot change the amount or the destination</b>.</dd>
+
+<dt>EIP-3009 &middot; <code>validBefore</code> <small class="ok">RUNNING</small></dt>
+<dd>A signed authorization that moves nothing until settled, and expires at a time the signer
+chose. We set that time to the request's deadline, so <b>&ldquo;silence is not consent&rdquo;
+is enforced by the signature rather than by us</b>.</dd>
+
+<dt><code>exact</code> / <code>upto</code> / <code>batch-settlement</code></dt>
+<dd>x402 payment schemes. <b>exact</b>: a fixed amount to one destination &mdash; the seller's
+payment. <b>upto</b>: capped, settled by consumption. <b>batch-settlement</b>: a commitment now,
+redeemed later in one transaction &mdash; <b>for fees smaller than gas</b>.</dd>
+
+<dt>A2A &middot; Agent Card</dt>
+<dd>The agent-to-agent protocol (v1.0, Linux Foundation, 150+ organisations). An agent publishes
+a card at <code>/.well-known/agent-card.json</code> saying what it can do and how to reach it.
+<b>How an agent finds a person without scraping.</b></dd>
+
+<dt>AP2 &middot; Trusted Surface</dt>
+<dd>Google's agent payments protocol. It defines a surface that obtains informed human consent
+before a mandate is signed, and requires it to be <b>non-agentic</b> &mdash; <i>&ldquo;the Agent
+itself is a potential attacker.&rdquo;</i> <b>That is the role Yohaku plays.</b></dd>
+
+<dt>MCP &middot; elicitation</dt>
+<dd>The one standard place an agent asks a human for something mid-task &mdash; and it
+<b>explicitly forbids requesting personal data</b>. Which is why a separate consent surface has
+to exist.</dd>
+
+<dt>Personhood credential</dt>
+<dd>A credential proving you are a real person without revealing who you are. Proposed in a 2024
+paper by 32 researchers from OpenAI, MIT, Microsoft and Harvard, among others.</dd>
+</dl>
+
+<h2>TERMS FROM THE PROTOCOL RESPONSES</h2>
+<dl>
+<dt><code>amr</code></dt>
+<dd>How someone was authenticated, as the issuer describes it. World ID returns
+<code>["pop"]</code> for every authentication, so <b>it does not tell you whether a
+re-authentication happened</b> &mdash; a distinction we got wrong once and corrected.</dd>
+
+<dt><code>auth_time</code></dt>
+<dd>When the issuer says the authentication happened. We require it within 120 seconds of the
+server clock. <b>Fresh is not the same as freshly approved.</b></dd>
+
+<dt><code>unresolved_constraint</code></dt>
+<dd>AP2's name for the moment a human has to be brought back in: <b>the agent could not settle
+the request within the limits it was already given</b>. Our rules 5, 6, 7 and 9 are instances
+of it.</dd>
+
+<dt>Decision model <small>e.g. Jev</small></dt>
+<dd>A model that answers typed questions with a choice and a confidence rather than prose.
+Increasingly what decides things inside an agent. <b>We give it two options,
+<code>ask</code> and <code>drop</code> &mdash; there is no option meaning &ldquo;pass&rdquo;.</b></dd>
+
+<dt>Prompt injection</dt>
+<dd>Text planted in what a model reads, written to change its answer. A measured example moved
+a decision model's verdict from <b>0.76 to 0.48</b>. <b>Our defence is not a better model &mdash;
+it is that approval is not expressible.</b></dd>
+</dl>
+
+<h2>PARTNERS</h2>
+<dl>
+<dt>Curvegrid</dt>
+<dd>Digital-asset treasury infrastructure. Their next product governs stablecoins inside a
+company's finance operations &mdash; approve, sign, execute, record. <b>Yohaku draws the same
+line at one person's attention; they draw it at a company's balance.</b></dd>
+
+<dt>intercepta</dt>
+<dd>Payment screening. Checked before signing, and <b>an unreachable screening call refuses
+rather than passes</b>. Key requested; a stand-in is used today, and
+<code>/health</code> reports it as false rather than pretending.</dd>
+</dl>
+
+<footer><b>Yohaku</b> &mdash; <a href="./">overview</a> &middot;
+<a href="stack.html">the layer map</a> &middot; <a href="business.html">the business model</a>
+&middot; <a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni">source</a> &middot; MIT</footer>
+</body></html>
