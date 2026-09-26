@@ -1,0 +1,271 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Yohaku — one night</title>
+<meta name="description" content="Fifty agent requests arrive overnight. She sees two. Watch it happen.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@800;900&display=swap');
+:root{--ink:#242329;--ink2:#5F5D6B;--ink3:#A6A3B4;--paper:#F8F7F3;--card:#fff;--line:#E8E5DC;
+--lilac:#BCB2FA;--lilacD:#6B5BD6;--lilacL:#EDE9FF;--lime:#DDF691;--limeD:#7FA326;--limeL:#F2FBD9;
+--grey:#D6D3CA;--red:#FF9C94;--redD:#C4504A}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:linear-gradient(180deg,#EFEBFF 0%,#F6F4EC 46%,var(--paper) 100%);
+background-attachment:fixed;color:var(--ink);overflow:hidden;
+font-family:"M PLUS Rounded 1c",-apple-system,BlinkMacSystemFont,"Hiragino Maru Gothic ProN",sans-serif;
+font-weight:900;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;
+height:100dvh}
+
+/* ── caption ─────────────────────────────────────────── */
+#cap{flex:0 0 auto;padding:16px 20px 6px;text-align:center;min-height:118px}
+#time{font-size:12px;letter-spacing:.2em;color:var(--ink3);height:16px}
+#line{font-size:clamp(23px,6.4vw,40px);line-height:1.22;letter-spacing:-.02em;margin-top:5px;
+text-wrap:balance;transition:opacity .25s}
+#line em{font-style:normal;display:inline-block;color:#fff;background:var(--lilacD);
+padding:0 12px 3px;border-radius:14px;box-shadow:0 4px 0 #4A3BAE;transform:rotate(-1.5deg)}
+#line b.g{color:#4D6416}
+#sub{font-size:14.5px;font-weight:800;color:var(--ink2);margin-top:7px;min-height:20px;
+transition:opacity .25s}
+
+/* ── stage ───────────────────────────────────────────── */
+#stage{flex:1 1 auto;position:relative;margin:0 14px 8px;min-height:0}
+.zone{position:absolute;border-radius:22px;transition:opacity .4s;opacity:0}
+.zone .zl{position:absolute;top:8px;left:12px;font-size:11px;letter-spacing:.12em;opacity:.85}
+.zone .zn{position:absolute;top:22px;left:12px;font-size:clamp(22px,5vw,34px);line-height:1}
+#zAuto{background:var(--limeL);border:3px solid var(--lime)}
+#zAuto .zl,#zAuto .zn{color:var(--limeD)}
+#zDeny{background:#FBF0EF;border:3px dashed var(--grey)}
+#zDeny .zl,#zDeny .zn{color:var(--redD)}
+#zHold{background:var(--lilacL);border:3px solid var(--lilac)}
+#zHold .zl,#zHold .zn{color:var(--lilacD)}
+
+#router{position:absolute;left:6%;width:88%;height:52px;border-radius:18px;background:var(--ink);
+color:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-size:15px;
+box-shadow:0 6px 0 #0F0E14,0 12px 24px rgba(36,35,41,.25);opacity:0;
+transition:opacity .45s,transform .45s cubic-bezier(.2,1.6,.4,1);transform:scale(.9)}
+#router.on{opacity:1;transform:none}
+#router .r{background:rgba(255,255,255,.14);border-radius:99px;padding:3px 11px;font-size:12px}
+
+.actor{position:absolute;display:flex;flex-direction:column;align-items:center;gap:5px;
+transition:all .5s cubic-bezier(.2,1.2,.4,1)}
+.actor .face{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;
+justify-content:center;font-size:27px;background:var(--card);box-shadow:0 5px 0 rgba(36,35,41,.12)}
+.actor .nm{font-size:11.5px;letter-spacing:.06em;color:var(--ink2);white-space:nowrap}
+#her .face{background:var(--lilac);box-shadow:0 5px 0 var(--lilacD)}
+#her.wake .face{background:var(--lime);box-shadow:0 5px 0 var(--limeD)}
+#her.buried .face{animation:shake .4s ease-in-out 3}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+i.d{position:absolute;width:13px;height:13px;border-radius:50%;background:var(--lilac);
+margin:-6.5px 0 0 -6.5px;transition:all .85s cubic-bezier(.3,.8,.3,1);opacity:0;transform:scale(.3)}
+i.d.on{opacity:1;transform:scale(1)}
+i.d.auto{background:var(--limeD);width:9px;height:9px;opacity:.75}
+i.d.deny{background:var(--grey);width:8px;height:8px;opacity:.5}
+i.d.hold{background:var(--lilacD)}
+i.d.up{width:19px;height:19px;background:var(--lilacD);
+box-shadow:0 0 0 6px var(--lilacL),0 4px 10px rgba(107,91,214,.4);opacity:1}
+i.d.gone{opacity:0;transform:scale(.2)}
+i.d.coin{background:var(--limeD);width:17px;height:17px;box-shadow:0 0 0 6px var(--limeL)}
+
+/* ── controls ────────────────────────────────────────── */
+#bar{flex:0 0 auto;display:flex;align-items:center;gap:11px;padding:0 20px
+calc(14px + env(safe-area-inset-bottom));max-width:620px;margin:0 auto;width:100%}
+#prog{flex:1;height:8px;border-radius:99px;background:rgba(36,35,41,.1);overflow:hidden}
+#prog b{display:block;height:100%;width:0;background:var(--lilacD);border-radius:99px;
+transition:width .3s linear}
+button{font:inherit;font-size:14px;font-weight:900;border:0;border-radius:99px;cursor:pointer;
+padding:10px 18px;background:var(--ink);color:#fff;box-shadow:0 4px 0 #0F0E14}
+button:active{transform:translateY(3px);box-shadow:0 1px 0 #0F0E14}
+#step{font-size:12px;color:var(--ink3);font-variant-numeric:tabular-nums;white-space:nowrap}
+a.out{font-size:13px;color:var(--lilacD);text-decoration:none;white-space:nowrap}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style></head><body>
+
+<div id="cap"><div id="time"></div><div id="line"></div><div id="sub"></div></div>
+
+<div id="stage">
+  <div class="zone" id="zAuto"><div class="zl">SETTLED WITHOUT HER</div><div class="zn" id="nAuto">0</div></div>
+  <div class="zone" id="zDeny"><div class="zl">NEVER REACHED HER</div><div class="zn" id="nDeny">0</div></div>
+  <div class="zone" id="zHold"><div class="zl">WAITING FOR HER</div><div class="zn" id="nHold">0</div></div>
+  <div id="router"><span>ten ordered rules</span><span class="r">first match wins</span></div>
+  <div class="actor" id="bots"><div class="face">🤖</div><div class="nm">AGENTS · BUYING</div></div>
+  <div class="actor" id="her"><div class="face">😴</div><div class="nm">ONE PERSON</div></div>
+</div>
+
+<div id="bar">
+  <button id="play">⏸</button>
+  <div id="prog"><b id="pb"></b></div>
+  <span id="step"></span>
+  <a class="out" href="product.html">try it →</a>
+</div>
+
+<script>
+(function(){
+'use strict';
+var N = 52, AUTO = 32, DENY = 12, HOLD = 8, CAP = 2;
+var stage = document.getElementById('stage');
+var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* One dot per request. Positions are percentages of the stage, so it survives any screen. */
+var dots = [];
+for (var i = 0; i < N; i++) {
+  var e = document.createElement('i');
+  e.className = 'd';
+  stage.appendChild(e);
+  dots.push(e);
+}
+function put(e, x, y){ e.style.left = x + '%'; e.style.top = y + '%'; }
+function set(e, cls){ e.className = 'd on ' + (cls || ''); }
+
+/* Scattered inside a box, deterministically — the same shape every replay. */
+function seatIn(e, idx, box){
+  var cols = box.cols, r = Math.floor(idx / cols), c = idx % cols;
+  put(e, box.x + (c + .5) * (box.w / cols), box.y + 14 + r * box.rowH);
+}
+var BOX = {
+  src:  { x: 8,  y: 16, w: 84, cols: 13, rowH: 5.5 },
+  auto: { x: 5,  y: 58, w: 40, cols: 8,  rowH: 5.5 },
+  deny: { x: 55, y: 58, w: 40, cols: 6,  rowH: 5.5 },
+  hold: { x: 30, y: 58, w: 40, cols: 4,  rowH: 5.5 }
+};
+
+function layout(){
+  var narrow = stage.clientWidth < 520;
+  document.getElementById('router').style.top = '42%';
+  var zA = document.getElementById('zAuto'), zD = document.getElementById('zDeny'),
+      zH = document.getElementById('zHold');
+  zA.style.cssText += ';left:3%;top:54%;width:45%;height:30%';
+  zD.style.cssText += ';left:52%;top:54%;width:45%;height:30%';
+  zH.style.cssText += ';left:27%;top:54%;width:46%;height:30%';
+  document.getElementById('bots').style.cssText += ';left:50%;top:2%;transform:translateX(-50%)';
+  document.getElementById('her').style.cssText  += ';left:50%;top:87%;transform:translateX(-50%)';
+  if (narrow) { BOX.src.cols = 9; BOX.auto.cols = 6; BOX.deny.cols = 4; BOX.hold.cols = 3; }
+}
+layout(); addEventListener('resize', layout);
+
+var line = document.getElementById('line'), sub = document.getElementById('sub'),
+    time = document.getElementById('time');
+function say(t, l, s){ time.textContent = t || ''; line.innerHTML = l; sub.innerHTML = s || ''; }
+function zone(id, on, n){
+  var z = document.getElementById(id);
+  z.style.opacity = on ? 1 : 0;
+  if (n !== undefined) document.getElementById('n' + id.slice(1)).textContent = n;
+}
+function countTo(id, to, ms){
+  var el = document.getElementById(id), t0 = performance.now();
+  (function tick(now){
+    var p = Math.min(1, (now - t0) / ms);
+    el.textContent = Math.round(to * p);
+    if (p < 1) requestAnimationFrame(tick);
+  })(t0);
+}
+
+/* ── the beats ─────────────────────────────────────────────────────────── */
+var beats = [
+  { ms: 3200, go: function(){
+      zone('zAuto',0); zone('zDeny',0); zone('zHold',0);
+      document.getElementById('router').classList.remove('on');
+      document.getElementById('her').className = 'actor';
+      document.getElementById('her').querySelector('.face').textContent = '😴';
+      say('02:00', 'Agents never sleep.<br>She does.',
+          'They keep arriving all night — and they do not wait.');
+      dots.forEach(function(e, i){
+        e.className = 'd';
+        put(e, 50, 8);
+        setTimeout(function(){ set(e, ''); seatIn(e, i, BOX.src); }, reduce ? 0 : i * 45);
+      });
+    }},
+  { ms: 2600, go: function(){
+      say('', '<em>52</em> asked her<br>for something tonight.',
+          'Each dot is one request from one agent.');
+    }},
+  { ms: 3400, go: function(){
+      document.getElementById('her').className = 'actor buried';
+      say('', 'Answer them by hand?<br>Approve them all blindly?',
+          '<b style="color:#C4504A">Fifty a night breaks a person. Auto-approving loses the person.</b>');
+    }},
+  { ms: 2600, go: function(){
+      document.getElementById('her').className = 'actor';
+      document.getElementById('router').classList.add('on');
+      say('', 'So something has to<br>stand <em>in between.</em>',
+          'Ten ordered rules. The first match decides.');
+    }},
+  { ms: 3800, go: function(){
+      zone('zAuto',1,0); zone('zDeny',1,0); zone('zHold',1,0);
+      var a = 0, d = 0, h = 0;
+      dots.forEach(function(e, i){
+        setTimeout(function(){
+          if (i < AUTO)            { set(e,'auto'); seatIn(e, a++, BOX.auto); }
+          else if (i < AUTO+DENY)  { set(e,'deny'); seatIn(e, d++, BOX.deny); }
+          else                     { set(e,'hold'); seatIn(e, h++, BOX.hold); }
+        }, reduce ? 0 : i * 40);
+      });
+      countTo('nAuto', AUTO, 2200); countTo('nDeny', DENY, 2200); countTo('nHold', HOLD, 2200);
+      say('', 'Three answers,<br>and she is asleep for all of them.',
+          '<b class="g">auto</b> settles · <b style="color:#C4504A">deny</b> never reaches her · <b style="color:#6B5BD6">held</b> waits');
+    }},
+  { ms: 3400, go: function(){
+      say('', 'Refused ones are<br><em>not</em> invisible.',
+          'She can open the list later and see what each one wanted — with the rule that stopped it.');
+      dots.slice(AUTO, AUTO+DENY).forEach(function(e,i){
+        setTimeout(function(){ e.style.transform = 'scale(1.7)';
+          setTimeout(function(){ e.style.transform = ''; }, 500); }, i * 70);
+      });
+    }},
+  { ms: 3600, go: function(){
+      var held = dots.slice(AUTO+DENY);
+      held.forEach(function(e,i){
+        setTimeout(function(){
+          if (i < CAP) { set(e,'hold up'); put(e, 42 + i*16, 76); }
+          else { set(e,'hold'); e.style.opacity = .25; }
+        }, reduce ? 0 : i * 90);
+      });
+      zone('zHold',1,CAP);
+      say('07:00', 'She is asked about <em>two.</em>',
+          'The cap is hers, not ours. The rest keep waiting, or run out of time.');
+    }},
+  { ms: 4200, go: function(){
+      var her = document.getElementById('her');
+      her.className = 'actor wake';
+      her.querySelector('.face').textContent = '🙂';
+      var a = dots[AUTO+DENY], b = dots[AUTO+DENY+1];
+      setTimeout(function(){ set(a,'coin'); put(a, 50, 88); }, 500);
+      setTimeout(function(){ set(b,'gone'); }, 1900);
+      say('', 'One <b class="g">yes</b>.<br>One left alone.',
+          'Yes proves a person is there, and <b class="g">the money moves</b>. Silence lets the deadline refuse it — <b>and the payment authorization expires with it.</b>');
+    }},
+  { ms: 4600, go: function(){
+      say('', '<em>52</em> arrived.<br>She saw <b class="g">2</b>.',
+          'The other fifty are the product. <b>Yohaku sells the empty space.</b>');
+    }}
+];
+
+/* ── the driver ────────────────────────────────────────────────────────── */
+var idx = -1, timer = null, playing = true, started = 0;
+var pb = document.getElementById('pb'), stepEl = document.getElementById('step');
+function run(i){
+  idx = i % beats.length;
+  stepEl.textContent = (idx + 1) + ' / ' + beats.length;
+  line.style.opacity = 0; sub.style.opacity = 0;
+  setTimeout(function(){ beats[idx].go(); line.style.opacity = 1; sub.style.opacity = 1; }, 160);
+  started = performance.now();
+  if (playing) timer = setTimeout(function(){ run(idx + 1); }, beats[idx].ms);
+}
+(function frame(now){
+  if (playing && idx >= 0) pb.style.width = Math.min(100, (now - started) / beats[idx].ms * 100) + '%';
+  requestAnimationFrame(frame);
+})(0);
+
+var btn = document.getElementById('play');
+btn.onclick = function(){
+  playing = !playing;
+  btn.textContent = playing ? '⏸' : '▶';
+  if (playing) run(idx + 1); else clearTimeout(timer);
+};
+stage.onclick = function(){ clearTimeout(timer); run(idx + 1); };
+addEventListener('keydown', function(e){
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); clearTimeout(timer); run(idx + 1); }
+});
+run(0);
+})();
+</script>
+</body></html>
