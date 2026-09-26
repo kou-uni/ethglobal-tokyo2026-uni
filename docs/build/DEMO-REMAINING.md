@@ -1,5 +1,7 @@
 # 合意した審査デモを通すための残作業
 
+> Historical audit. For the current public rollout and verified/pending steps, see [PUBLIC-DEMO-HANDOFF.md](PUBLIC-DEMO-HANDOFF.md). The status below predates the public IDKit/Koe deployment and the Jev integration.
+
 2026-09-26。main `2927393` の構成図・判断モデル調査、実装、公開healthを確認。
 公開環境の観測は [public-health.json](evidence/public-health.json)。
 

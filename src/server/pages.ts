@@ -455,7 +455,7 @@ export function invitePage(p: {
       autocapitalize="off" spellcheck="false" inputmode="latin">
     <div class="why">${
       p.paying
-        ? `If it settles, <b>${esc(p.amount)}</b> lands there — and you check your own balance, not our word for it.`
+        ? `The request offers <b>${esc(p.amount)}</b> in demo pricing. Settlement uses a scaled testnet token amount, not that many yen or whole tokens. Check the exact payment on the World ID approval screen, then verify it in your wallet.`
         : 'Settlement is not wired on this instance, so nothing will be transferred either way.'
     }</div>
   </div>

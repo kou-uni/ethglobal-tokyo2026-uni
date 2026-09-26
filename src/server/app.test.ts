@@ -50,7 +50,12 @@ const ask = (over: Record<string, unknown> = {}) =>
 
 describe('an agent asks', () => {
   it('says what is wired, without being asked twice', async () => {
-    const h = (await (await fetch(`${base}/health`)).json()) as { wired: Record<string, boolean> };
+    const response = await fetch(`${base}/health`, { headers: { origin: 'https://pages.example' } });
+    expect(response.headers.get('access-control-allow-origin')).toBe('*');
+    expect(response.headers.get('access-control-allow-credentials')).toBeNull();
+    expect(response.headers.get('set-cookie')).toBeNull();
+    expect(response.headers.get('cache-control')).toBe('no-store');
+    const h = await response.json() as { wired: Record<string, boolean> };
     expect(h.wired['routing']).toBe(true);
     expect(h.wired['identity']).toBe(false); // MockIdentity is not a live integration.
     expect(h.wired['screening']).toBe(false);

@@ -107,10 +107,11 @@ display:flex;align-items:center;justify-content:center;font-size:13px}
 <p class="sub">An agent asks for something it cannot get from the open web. A person is asked
 about it once, proves she is a person <b>at that moment</b>, and the money moves.</p>
 
+<p><a href="try-it.html">Follow the judging demo, step by step →</a></p>
 <h2>IS IT UP RIGHT NOW?</h2>
 <div class="live" id="live"><i></i><span>checking…</span></div>
-<div class="note" id="offline" style="display:none"><b>The demo server is not answering.</b>
-It runs from a laptop at the event, so it is up while we are. Everything else on this page —
+<div class="note" id="offline" style="display:none"><b>This page could not check the demo server.</b>
+A connection or browser access restriction can cause this. Open the server status link below to check directly. Everything else on this page —
 the console, the diagrams, the code — works without it.</div>
 
 
@@ -414,16 +415,17 @@ Product updates land here. The demo server runs from a laptop at the event.
 const ORIGIN = 'https://mac-studio.taila649e1.ts.net';
 const el = document.getElementById('live'), off = document.getElementById('offline');
 const ctrl = new AbortController(); setTimeout(() => ctrl.abort(), 6000);
-fetch(ORIGIN + '/health', { signal: ctrl.signal })
-  .then(r => r.json())
+fetch(ORIGIN + '/health', { signal: ctrl.signal, credentials: 'omit', cache: 'no-store' })
+  .then(r => { if (!r.ok) throw new Error('Status unavailable'); return r.json(); })
   .then(h => {
-    const on = Object.entries(h.wired).filter(([, v]) => v).map(([k]) => k);
+    if (h.ok !== true || !h.wired) throw new Error('Unknown status');
+    const on = Object.entries(h.wired).filter(([, v]) => v === true).map(([k]) => k);
     el.className = 'live up';
-    el.innerHTML = '<i></i><span>Live &middot; ' + on.join(' &middot; ') + '</span>';
+    el.textContent = 'Live · ' + on.join(' · ') + ' · World: ' + h.wired.identityMode;
   })
   .catch(() => {
     el.className = 'live down';
-    el.innerHTML = '<i></i><span>Not answering right now</span>';
+    el.textContent = 'Status unavailable in this page — check the server directly';
     off.style.display = '';
   });
 </script>

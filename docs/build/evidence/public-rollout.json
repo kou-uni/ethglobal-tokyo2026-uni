@@ -1,0 +1,21 @@
+{
+  "checkedAt": "2026-09-26T05:35:36.066831+00:00",
+  "health": {
+    "ok": true,
+    "owner": "yohaku-minta-2026.eth",
+    "dailyCap": 2,
+    "wired": {
+      "routing": true,
+      "classifier": true,
+      "identity": true,
+      "identityMode": "idkit-production-visitor-demo",
+      "koeRegistration": true,
+      "screening": false,
+      "settlement": true,
+      "delegationReader": true
+    }
+  },
+  "koeRegistrationPageHttpStatus": 200,
+  "healthAllowsCrossOriginReads": false,
+  "note": "Public GET /health lacked Access-Control-Allow-Origin. Health confirms enabled configuration, not successful proof or payment. CORS fix proposed separately."
+}

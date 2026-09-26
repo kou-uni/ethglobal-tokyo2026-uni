@@ -68,7 +68,8 @@ export function createIdkitApproval(
         json(409, { error: 'Nothing to approve' }); return true;
       }
       const request = entry.request;
-      const details = `${request.who}\n${asQuestion(request.what)}\nPurpose: ${request.purpose}\nOffer: ${request.price.amount.toLocaleString('en-US')} ${request.price.currency}\n${entry.auth ? `Approval will release the held payment to ${entry.auth.requirement.payTo}.` : 'This run has no payment. Nothing will be transferred.'}`;
+      const payment = entry.auth?.requirement;
+      const details = `${request.who}\n${asQuestion(request.what)}\nPurpose: ${request.purpose}\nOffer (demo pricing): ${request.price.amount.toLocaleString('en-US')} ${request.price.currency}\n${payment ? `Approval releases ${payment.amount} atomic token units (not whole tokens or yen).\nAsset: ${payment.asset}\nNetwork: ${payment.network}\nRecipient: ${payment.payTo}.` : 'This run has no payment. Nothing will be transferred.'}`;
       res.setHeader('content-type', 'text/html; charset=utf-8');
       res.end(options.assets.page.replace('<!--REQUEST-->', escape(details))
         .replace('<!--SNAPSHOT-->', snapshot(entry)));
