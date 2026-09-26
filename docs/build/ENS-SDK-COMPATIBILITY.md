@@ -20,7 +20,8 @@ npm run ens:probe
 `revokeRoles(keyResource, 16, delegate)` の calldata を生成できます。
 
 **これは実装コントラクトのデコーダ確認です。** 売り手のresolverでの付与や、
-proposal書き込み・policy拒否・取消後の拒否は未実行です。名前の登録も未実行です。
+proposal書き込み・policy拒否・取消後の拒否は未実行です。
+**後続作業で名前登録と所有者権限の確認は完了しました。** [ENS-REGISTERED.md](ENS-REGISTERED.md)を参照してください。
 
 出典：`config/ens-suggestions.json`、公式
 `contracts-v2/post-audit-2/contracts/src/resolver/PermissionedResolver.sol`。

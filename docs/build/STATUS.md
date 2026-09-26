@@ -6,10 +6,11 @@
 > See [ENS-SDK-COMPATIBILITY.md](ENS-SDK-COMPATIBILITY.md).
 > Follow-up: `decodeSetter` succeeded live for all five keys. Registration prices and
 > free mock-token minting were also checked; see [ENS-REGISTRATION.md](ENS-REGISTRATION.md).
-> Seller resolver deployment, registration, grants and writes remain unexecuted.
+> **Registration completed:** `yohaku-minta-2026.eth` and its seller resolver were verified
+> on Sepolia. See [ENS-REGISTERED.md](ENS-REGISTERED.md). Delegate grants and writes remain unexecuted.
 > The read-only port and optional server denial gate are now implemented:
-> [ENS-INTEGRATION.md](ENS-INTEGRATION.md). They are not deployed or exercised against
-> a registered seller resolver yet.
+> [ENS-INTEGRATION.md](ENS-INTEGRATION.md). The adapter was exercised against the registered
+> seller resolver; the public server is not yet configured with this registration.
 
 **What runs, what does not, and what each of us does next.** Everything marked ✅ was run;
 nothing here is inferred from the code looking right.
@@ -48,7 +49,7 @@ npm install && npm run check      # typecheck + 133 tests + 10 verified claims
 
 | | Blocked on | Who |
 |---|---|---|
-| **ENSv2 on chain** | ~~Sepolia addresses~~ ~~role bits~~ ~~grant function~~ ~~resolver scoping~~ **all four resolved 9/26** ([knowledge/ENSV2-ONCHAIN.md](../knowledge/ENSV2-ONCHAIN.md)). Left: **testnet USDC/DAI and the registration price**, then the 90-minute spike | **minta / spark** — [ENSV2-SPIKE.md](ENSV2-SPIKE.md) |
+| **ENSv2 delegated writes** | Name and seller resolver **registered and verified**. Left: delegate account/gas, proposal grant/write, policy refusal, revocation and refusal, server configuration | **minta / spark** — [ENS-REGISTERED.md](ENS-REGISTERED.md) |
 | **Payment screening, live** | The API key (requested 2026-09-26, arrives by email) | **spark** — check inbox |
 | **Settlement, actually landing** | ~~the protocol~~ ~~the signing~~ ~~the facilitator~~ **all proven**. Left: **testnet USDC in the buyer's wallet** | **minta** — issue #2 |
 

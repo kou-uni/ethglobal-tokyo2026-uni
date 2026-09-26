@@ -1,0 +1,48 @@
+{
+  "checkedAt": "2026-09-26T02:20:49.037Z",
+  "chainId": 11155111,
+  "blockNumber": "11783249",
+  "name": "yohaku-minta-2026.eth",
+  "expectedOwner": "0x5f52FA3c5DF22d8c89fA6c2221E2aeBd6FE722bD",
+  "state": {
+    "status": 2,
+    "expiry": "1821924864",
+    "latestOwner": "0x5f52FA3c5DF22d8c89fA6c2221E2aeBd6FE722bD",
+    "tokenId": "67355747195070222977281811764967722410829568480602253713608861982871225630720",
+    "resource": "67355747195070222977281811764967722410829568480602253713608861982871225630720"
+  },
+  "resolver": "0xCf853fF7BBA8f616E2814745C4FC0012D51E681e",
+  "resolverCodeBytes": 77,
+  "ownerText": true,
+  "ownerTextAdmin": true,
+  "registrations": [
+    {
+      "transactionHash": "0x8e13e0ad4ef75378f6e00130f2a1e76f7664cd6d5d303cd703a1e76452267828",
+      "blockNumber": "11783217",
+      "tokenId": "67355747195070222977281811764967722410829568480602253713608861982871225630720",
+      "referrer": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "label": "yohaku-minta-2026",
+      "owner": "0x5f52FA3c5DF22d8c89fA6c2221E2aeBd6FE722bD",
+      "subregistry": "0x0000000000000000000000000000000000000000",
+      "resolver": "0xCf853fF7BBA8f616E2814745C4FC0012D51E681e",
+      "duration": "31536000",
+      "paymentToken": "0x16f95D91DBa7dA3Aca778Ec053dF0FF6C6A8aA8e",
+      "base": "8000021",
+      "premium": "0"
+    }
+  ],
+  "followUp": {
+    "checkedAt": "2026-09-26T02:22:13.648Z",
+    "blockNumber": "11783254",
+    "tokenOwner": "0x5f52FA3c5DF22d8c89fA6c2221E2aeBd6FE722bD",
+    "implementation": "0x14F09Fd05d4585759e54844DC9B00147131Cf243",
+    "registrationReceiptStatus": "success",
+    "ownerProposalWritable": true,
+    "ownerPolicyWritable": true,
+    "proposal": null
+  },
+  "sources": {
+    "registryAbi": "ensdomains/contracts-v2@71a3b7339dbc55ab47667abdfe8303bac4f4c24e/contracts/deployments/sepolia/ETHRegistry.json",
+    "registrarAbi": "ensdomains/contracts-v2@71a3b7339dbc55ab47667abdfe8303bac4f4c24e/contracts/deployments/sepolia/ETHRegistrar.json"
+  }
+}

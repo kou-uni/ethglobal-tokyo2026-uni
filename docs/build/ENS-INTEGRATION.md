@@ -51,5 +51,6 @@ RPC transportを差し替えたテストで、resource/accountの指定、取消
 未知の名前、拡張resolver経由のテキスト取得を検証します。HTTPテストでは、
 未設定のdelegate拒否・設定後のproposal・policy拒否・取消・プロバイダー例外を検証します。
 
-**売り手resolverに対する実通信はまだ実施していません。**
-実通信が済んでいる範囲は実装コントラクトのdecoder確認と登録見積もりです。
+**売り手resolverへの実通信を実施しました。** 所有者のproposal／policy権限がtrue、
+proposalレコード未設定という読取結果を確認しています。
+[登録証拠](ENS-REGISTERED.md)を参照してください。委任先の実書き込み検証は残っています。
