@@ -57,19 +57,30 @@ function runSeed(seed: number) {
   };
 }
 
-const s18 = runSeed(18);
+/**
+ * The night the pitch quotes, chosen by a rule rather than by taste: **the run closest to the
+ * 20-seed mean.** When the categories changed, the rule re-picked it — which is the point of
+ * having a rule.
+ */
+const REPRESENTATIVE_SEED = 1;
+
+const rep = runSeed(REPRESENTATIVE_SEED);
 const readme = read('README.md');
 
-const quoted = readme.match(/seed -- 18` is the night used in the pitch\*\* — (\d+) arrive, (\d+) settle, (\d+) are dropped,\s*\*\*(\d+) reach her\*\*/);
+const quoted = readme.match(
+  new RegExp(
+    `seed -- ${REPRESENTATIVE_SEED}\` is the night used in the pitch\\*\\* — (\\d+) arrive, (\\d+) settle, (\\d+) are dropped,\\s*\\*\\*(\\d+) reach her\\*\\*`,
+  ),
+);
 check(
-  'README quotes seed 18 correctly',
+  `README quotes seed ${REPRESENTATIVE_SEED} correctly`,
   Boolean(quoted) &&
-    Number(quoted![1]) === s18.arrived &&
-    Number(quoted![2]) === s18.auto &&
-    Number(quoted![3]) === s18.deny &&
-    Number(quoted![4]) === s18.surfaced,
+    Number(quoted![1]) === rep.arrived &&
+    Number(quoted![2]) === rep.auto &&
+    Number(quoted![3]) === rep.deny &&
+    Number(quoted![4]) === rep.surfaced,
   quoted
-    ? `README says ${quoted[1]}/${quoted[2]}/${quoted[3]}/${quoted[4]}, code produces ${s18.arrived}/${s18.auto}/${s18.deny}/${s18.surfaced}`
+    ? `README says ${quoted[1]}/${quoted[2]}/${quoted[3]}/${quoted[4]}, code produces ${rep.arrived}/${rep.auto}/${rep.deny}/${rep.surfaced}`
     : 'could not find the claim in README.md — did the wording change?',
 );
 

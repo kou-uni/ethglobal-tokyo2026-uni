@@ -41,7 +41,7 @@ const post = (path: string, body: unknown) =>
 const ask = (over: Record<string, unknown> = {}) =>
   post('/requests', {
     who: 'market-research.acme.eth',
-    what: 'purchase-intent/groceries',
+    what: 'experience/why-you-put-it-back',
     purpose: 'demand-estimation',
     price: { amount: 80, currency: 'JPYC' },
     deadline: '2026-09-27T00:00:00Z',
@@ -63,7 +63,7 @@ describe('an agent asks', () => {
   });
 
   it('answers immediately when held — 202, with the deadline', async () => {
-    const res = await ask({ id: 'held-1', what: 'health/symptoms', price: { amount: 2000, currency: 'JPYC' } });
+    const res = await ask({ id: 'held-1', what: 'experience/why-you-stopped', price: { amount: 2000, currency: 'JPYC' } });
     expect(res.status).toBe(202);
     const b = (await res.json()) as { verdict: string; held: boolean; deadline: string };
     expect(b).toMatchObject({ verdict: 'human', held: true });
@@ -86,14 +86,14 @@ describe('an agent asks', () => {
 
 describe('the owner answers', () => {
   it('records a refusal and settles nothing', async () => {
-    await ask({ id: 'ref-1', what: 'work/history', price: { amount: 4000, currency: 'JPYC' } });
+    await ask({ id: 'ref-1', what: 'experience/why-you-stopped', price: { amount: 4000, currency: 'JPYC' } });
     const res = await post('/approvals/ref-1', { approve: false });
     const b = (await res.json()) as { verdict: string; settled: boolean };
     expect(b).toMatchObject({ verdict: 'deny', settled: false });
   });
 
   it('proves personhood at the moment of approval', async () => {
-    await ask({ id: 'app-1', what: 'health/symptoms', price: { amount: 2500, currency: 'JPYC' } });
+    await ask({ id: 'app-1', what: 'experience/why-you-stopped', price: { amount: 2500, currency: 'JPYC' } });
     const res = await post('/approvals/app-1', { approve: true });
     const b = (await res.json()) as { verdict: string; identity: { acr: string } };
     expect(b.verdict).toBe('approved');

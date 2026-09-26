@@ -36,12 +36,12 @@ const held = (
 describe('bundle — three companies asking the same thing is one notification', () => {
   it('groups by category', () => {
     const out = bundle([
-      held('a', 'health/symptoms', 2000, '2026-09-26T20:00:00+09:00'),
-      held('b', 'health/symptoms', 1500, '2026-09-26T18:00:00+09:00'),
-      held('c', 'work/history', 800, '2026-09-26T22:00:00+09:00'),
+      held('a', 'experience/why-you-stopped', 2000, '2026-09-26T20:00:00+09:00'),
+      held('b', 'experience/why-you-stopped', 1500, '2026-09-26T18:00:00+09:00'),
+      held('c', 'corpus/your-own-words', 800, '2026-09-26T22:00:00+09:00'),
     ]);
     expect(out).toHaveLength(2);
-    const health = out.find((b) => b.category === 'health/symptoms')!;
+    const health = out.find((b) => b.category === 'experience/why-you-stopped')!;
     expect(health.requests).toHaveLength(2);
     expect(health.topValue).toBe(2000);
     expect(health.nextDeadline).toBe('2026-09-26T18:00:00+09:00');

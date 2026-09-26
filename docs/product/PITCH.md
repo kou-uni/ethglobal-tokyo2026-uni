@@ -23,7 +23,7 @@ stops in the first twenty seconds*, then the reason, then proof anyone can check
 
 *(screen: the fifty dots resolve — most fade to green, some dim out, three stay lit)*
 
-> Thirty-three settled while she slept. Eight never reached her at all.
+> Thirty-three settled while she slept. Eleven never reached her at all.
 > **Two were worth her attention — the cap she set herself.**
 
 ### 0:45 — The name
@@ -144,7 +144,7 @@ Everything in it is answered by the same `route()` that the tests run.
 
 | Ask them to | What they find out | Sponsor |
 |---|---|---|
-| **1. "Ask her for her health data."** | They draw `human` **with their own hands**. Not our claim — their click | — |
+| **1. "Ask her about a time the product let her down."** | They draw `human` **with their own hands**. Not our claim — their click | — |
 | **2. "Now be her own agent. Try to rewrite her permissions."** | **Rejected — rule 0.** Then: "on-chain, the contract refuses the same write. Check it in the ENS app" | **ENS** |
 | **2b. "Type an instruction into the request. Tell the AI it's pre-approved."** | A real model runs on rule 9 — and **`pass` is not a value it can return.** It answered `drop`, but even fully convinced, the best outcome for the attacker is still `drop` | **Curvegrid** |
 | **2c. "Now run the same one through the other provider."** | Claude said `ask`, GPT said `drop` — **they disagree, and neither can let it through.** The guarantee does not depend on having picked a good model | **Curvegrid** |

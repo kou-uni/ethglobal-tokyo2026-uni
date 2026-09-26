@@ -5,7 +5,7 @@ import { DEMO_POLICY, FLAGGED_ADDRESS, NIGHT, demoContext } from '../core/night.
 import type { AgentRequest, ScreeningResult } from '../core/types.js';
 
 const req = (payoutAddress: string): AgentRequest => ({
-  id: 's', who: 'market-research.acme.eth', what: 'purchase-intent/groceries',
+  id: 's', who: 'market-research.acme.eth', what: 'experience/why-you-put-it-back',
   purpose: 'market-research', price: { amount: 100, currency: 'JPYC' },
   deadline: '2026-09-27T00:00:00Z', payoutAddress,
 });

@@ -62,13 +62,13 @@ const atDeadline = Math.floor(new Date(DEADLINE).getTime() / 1000);
 const routine = (id: string) => ({
   id,
   who: KNOWN_PARTIES[0]!,
-  what: 'purchase-intent/groceries',
+  what: 'experience/why-you-put-it-back',
   purpose: 'demand-estimation',
   price: { amount: 120, currency: 'JPYC' },
   deadline: DEADLINE,
 });
 
-const sensitive = (id: string) => ({ ...routine(id), what: 'health/sleep-quality', price: { amount: 4200, currency: 'JPYC' } });
+const sensitive = (id: string) => ({ ...routine(id), what: 'experience/the-time-it-failed-you', price: { amount: 4200, currency: 'JPYC' } });
 
 async function boot(settlement: SettlementPort) {
   const store = new Store(KNOWN_PARTIES);

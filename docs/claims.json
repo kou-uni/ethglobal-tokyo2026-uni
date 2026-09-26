@@ -1,13 +1,13 @@
 {
   "generatedBy": "npm run verify -- --json",
-  "generatedAt": "2026-09-26T00:25:58.164Z",
+  "generatedAt": "2026-09-26T01:45:25.057Z",
   "note": "Each claim is re-derived by running the code. Nothing here is asserted by hand. Re-run the command to check it yourself.",
-  "passed": false,
+  "passed": true,
   "claims": [
     {
-      "claim": "README quotes seed 18 correctly",
+      "claim": "README quotes seed 1 correctly",
       "ok": true,
-      "detail": "README says 49/33/8/2, code produces 49/33/8/2"
+      "detail": "README says 51/33/11/2, code produces 51/33/11/2"
     },
     {
       "claim": "arrivals really do range 46-54 across 20 seeds",
@@ -32,27 +32,22 @@
     {
       "claim": "being spared really does grow from near zero to several a day",
       "ok": true,
-      "detail": "week 1 0.1, week 4 6.3"
+      "detail": "week 1 0.4, week 4 4.7"
     },
     {
       "claim": "the mornings really do go quiet by week four",
       "ok": true,
-      "detail": "week 4 0.89"
-    },
-    {
-      "claim": "src/server/app.ts has no hardcoded api endpoint",
-      "ok": false,
-      "detail": "found 'https://github.com/kou-uni/ethglobal-tokyo2026-uni' — read it from the environment, or list it from the provider"
-    },
-    {
-      "claim": "src/server/app.ts has no hardcoded api endpoint",
-      "ok": false,
-      "detail": "found 'https://kou-uni.github.io/ethglobal-tokyo2026-uni/llms.txt' — read it from the environment, or list it from the provider"
+      "detail": "week 4 1.22"
     },
     {
       "claim": "local font fallback",
       "ok": true,
       "detail": "pages.ts loads a font over the network with no local rounded fallback in the same stack"
+    },
+    {
+      "claim": "no hardcoded model ids, endpoints or addresses anywhere in src/ or scripts/",
+      "ok": true,
+      "detail": ""
     },
     {
       "claim": "every placeholder is still marked as one",

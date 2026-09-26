@@ -51,7 +51,7 @@ describe('per-key permissions are independent', () => {
 
 describe('the chain state and rule 0 agree', () => {
   const req = (writeTarget: 'proposal' | 'permission' | 'payout'): AgentRequest => ({
-    id: 'd', who: 'helper.alice.yohaku.eth', what: 'purchase-intent/groceries',
+    id: 'd', who: 'helper.alice.yohaku.eth', what: 'experience/why-you-put-it-back',
     purpose: 'other', price: { amount: 0, currency: 'JPYC' },
     deadline: '2026-09-27T00:00:00Z', actingAs: 'delegate', writeTarget,
   });

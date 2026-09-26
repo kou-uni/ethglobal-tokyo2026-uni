@@ -26,25 +26,30 @@ export const MORNING = new Date('2026-09-26T07:00:00+09:00');
 export const DEMO_POLICY: Policy = {
   owner: 'alice.yohaku.eth',
   allow: [
-    'purchase-intent/groceries',
-    'purchase-intent/cosmetics',
-    'preference/coffee',
-    'location/coarse',
+    'experience/why-you-put-it-back',
+    'experience/first-five-minutes',
+    'experience/what-you-expected',
+    'experience/how-it-tasted',
   ],
-  forbid: ['finance/bank-activity', 'health/checkup-results'],
-  sensitive: ['health/symptoms', 'work/history', 'finance/income'],
+  // Not "too sensitive to decide" — decided already, and the answer was no.
+  forbid: ['experience/who-you-live-with', 'judgement/what-you-earn'],
+  sensitive: [
+    'experience/the-time-it-failed-you',
+    'experience/why-you-stopped',
+    'corpus/your-own-words',
+  ],
   amountThreshold: 1000,
   dailyCap: 2,
   notifyHour: 7,
   grants: [
-    { category: 'purchase-intent/groceries', expiresAt: '2026-12-31T00:00:00Z', revoked: false },
-    { category: 'purchase-intent/cosmetics', expiresAt: '2026-12-31T00:00:00Z', revoked: false },
-    { category: 'preference/coffee', expiresAt: '2026-12-31T00:00:00Z', revoked: false },
-    { category: 'location/coarse', expiresAt: '2026-12-31T00:00:00Z', revoked: false },
+    { category: 'experience/why-you-put-it-back', expiresAt: '2026-12-31T00:00:00Z', revoked: false },
+    { category: 'experience/first-five-minutes', expiresAt: '2026-12-31T00:00:00Z', revoked: false },
+    { category: 'experience/what-you-expected', expiresAt: '2026-12-31T00:00:00Z', revoked: false },
+    { category: 'experience/how-it-tasted', expiresAt: '2026-12-31T00:00:00Z', revoked: false },
     // Already lapsed — rule 3.
-    { category: 'preference/travel', expiresAt: '2025-09-01T00:00:00Z', revoked: false },
+    { category: 'judgement/what-youd-warn-a-friend-about', expiresAt: '2025-09-01T00:00:00Z', revoked: false },
     // Taken back by the owner — rule 1.
-    { category: 'purchase-intent/electronics', expiresAt: '2026-12-31T00:00:00Z', revoked: true },
+    { category: 'experience/where-you-got-stuck', expiresAt: '2026-12-31T00:00:00Z', revoked: true },
   ],
 };
 
@@ -60,19 +65,63 @@ export const NEW_PARTIES = ['first-contact.newco.eth', 'unknown-buyer.eth'];
 export const FLAGGED_ADDRESS = '0xSANCTIONED_FIXTURE';
 
 /** Weighted so that ordinary, low-stakes asks dominate — as they do in life. */
+/**
+ * What an agent actually comes to ask.
+ *
+ * These were records at first — bank activity, checkup results, a coarse location — and that
+ * was wrong twice over. **It made the product a data-extraction pipe**, which is not what it
+ * is for, and it undercut its own premise: a bank statement is not scarce because a human
+ * produced it, it is scarce because it is locked up. Scraped text is free and contaminated;
+ * what cannot be synthesised is **what a person went through and concluded.**
+ *
+ * So the agent is a researcher now, and every one of these is a question only someone who
+ * lived it can answer. A model can invent an answer to "what made you put it back on the
+ * shelf" — it just cannot invent a *true* one, and that is the whole market.
+ */
 export const ASKS: { what: string; purpose: Purpose; max: number; weight: number }[] = [
-  { what: 'purchase-intent/groceries', purpose: 'demand-estimation', max: 120, weight: 34 },
-  { what: 'purchase-intent/cosmetics', purpose: 'market-research', max: 200, weight: 22 },
-  { what: 'preference/coffee', purpose: 'personalisation', max: 80, weight: 14 },
-  { what: 'location/coarse', purpose: 'market-research', max: 150, weight: 10 },
-  { what: 'health/symptoms', purpose: 'market-research', max: 3000, weight: 5 },
-  { what: 'work/history', purpose: 'other', max: 4000, weight: 3 },
-  { what: 'finance/bank-activity', purpose: 'other', max: 500, weight: 5 },
-  { what: 'health/checkup-results', purpose: 'other', max: 900, weight: 3 },
-  { what: 'preference/travel', purpose: 'market-research', max: 150, weight: 5 },
-  { what: 'purchase-intent/electronics', purpose: 'demand-estimation', max: 180, weight: 5 },
-  { what: 'corpus/writing', purpose: 'ai-training', max: 6000, weight: 3 },
+  // Everyday, already allowed. Cheap, and most of the night.
+  { what: 'experience/why-you-put-it-back', purpose: 'demand-estimation', max: 120, weight: 30 },
+  { what: 'experience/first-five-minutes', purpose: 'market-research', max: 200, weight: 20 },
+  { what: 'experience/what-you-expected', purpose: 'personalisation', max: 80, weight: 14 },
+  { what: 'experience/how-it-tasted', purpose: 'market-research', max: 150, weight: 10 },
+
+  // Fine to ask, but not on her allow list — so they land on rules 7 or 9.
+  { what: 'experience/where-you-got-stuck', purpose: 'market-research', max: 180, weight: 6 },
+  { what: 'judgement/what-youd-warn-a-friend-about', purpose: 'market-research', max: 150, weight: 5 },
+
+  // She wants to decide these herself — rule 5.
+  { what: 'experience/the-time-it-failed-you', purpose: 'other', max: 3000, weight: 5 },
+  { what: 'experience/why-you-stopped', purpose: 'other', max: 900, weight: 3 },
+  { what: 'corpus/your-own-words', purpose: 'ai-training', max: 6000, weight: 3 },
+
+  // She has decided not to sell these at all — rule 2.
+  { what: 'experience/who-you-live-with', purpose: 'other', max: 500, weight: 3 },
+  { what: 'judgement/what-you-earn', purpose: 'other', max: 4000, weight: 3 },
 ];
+
+/**
+ * The question, as the person actually reads it.
+ *
+ * The wire carries a slug because agents match on it; a person should never be shown one.
+ * Keeping the mapping here rather than in the page means the demo console, the server and
+ * the pitch all say the same sentence.
+ */
+export const ASK_QUESTION: Record<string, string> = {
+  'experience/why-you-put-it-back': 'What made you put it back on the shelf?',
+  'experience/first-five-minutes': 'What happened in your first five minutes with it?',
+  'experience/what-you-expected': 'What did you expect that it turned out not to be?',
+  'experience/how-it-tasted': 'What did it actually taste like?',
+  'experience/where-you-got-stuck': 'Where in the instructions did you get stuck?',
+  'judgement/what-youd-warn-a-friend-about': 'What would you warn a friend about?',
+  'experience/the-time-it-failed-you': 'Tell me about a time it let you down.',
+  'experience/why-you-stopped': 'Why did you stop using it?',
+  'corpus/your-own-words': 'Your own writing, in your own words — to train on.',
+  'experience/who-you-live-with': 'Who do you live with?',
+  'judgement/what-you-earn': 'What do you earn, and how did you decide that was enough?',
+};
+
+/** The question if we know it, otherwise the slug — never a blank. */
+export const asQuestion = (what: string): string => ASK_QUESTION[what] ?? what;
 
 /**
  * A few asks each night are bulk commissions — a whole panel rather than one answer.

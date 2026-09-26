@@ -26,6 +26,7 @@ import { Store, verdictBody, type Entry } from './state.js';
 import { PendingVerifications } from './pending.js';
 import { approvalPage, invitePage, resultPage, type TodaySummary } from './pages.js';
 import { pastNights, type NightSummary } from '../core/history.js';
+import { asQuestion } from '../core/night.js';
 import {
   outlivesDeadline,
   type PaymentRequirement,
@@ -185,7 +186,7 @@ async function readText(req: IncomingMessage): Promise<string> {
 /** The one request `/try` stages. Ordinary enough to be believable, sensitive enough to escalate. */
 const DEMO_ASK = {
   who: 'nozomi-labs.eth',
-  what: 'health/sleep-quality',
+  what: 'experience/the-time-it-failed-you',
   purpose: 'market-research' as const,
   price: { amount: 4200, currency: 'JPYC' as const },
 };
@@ -710,6 +711,7 @@ export function createApp(deps: AppDeps): Server {
           handledWithoutYou,
           who: entry.request.who,
           what: entry.request.what,
+          question: asQuestion(entry.request.what),
           purpose: entry.request.purpose,
           amount: entry.request.price.amount,
           currency: entry.request.price.currency,

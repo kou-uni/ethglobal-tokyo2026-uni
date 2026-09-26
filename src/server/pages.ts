@@ -137,6 +137,8 @@ h1 .sm{display:block;font-size:13px;font-weight:900;letter-spacing:.16em;color:v
 .card .v{font-weight:900;font-size:24px;line-height:1.3;letter-spacing:-.3px;word-break:break-word}
 .card .p{font-weight:900;font-size:34px;letter-spacing:-.8px;margin-top:10px;color:var(--lilacD)}
 .card .p span{font-size:15px;color:var(--ink3)}
+.slug{margin-top:7px;font-size:12px;font-weight:800;color:var(--ink3);
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:-.2px}
 .pay{margin-top:11px;background:var(--limeL);border-radius:14px;padding:10px 14px;font-size:14px;
   font-weight:800;color:#41530F}
 .pay b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#2F3D09;font-weight:900}
@@ -421,12 +423,12 @@ export function invitePage(p: {
     'yohaku',
     `<main>
 <div class="lede">
-  <div class="pill">AN AGENT WANTS TO BUY FROM YOU</div>
+  <div class="pill">AN AGENT IS RESEARCHING</div>
   <div class="count">1</div>
-  <div class="sub">request, waiting<br>for a person to answer.</div>
+  <div class="sub">question it cannot answer<br>without asking a person.</div>
 </div>
 
-<h1 style="text-align:center">Where should<br>we <em>pay you?</em></h1>
+<h1 style="text-align:center">It wants to ask<br>you <em>one thing.</em></h1>
 
 <form method="post" action="/try">
   <div class="card">
@@ -482,6 +484,14 @@ export function approvalPage(p: {
   amount: number;
   currency: string;
   deadline: string;
+  /**
+   * The question as a person reads it.
+   *
+   * The wire carries a slug because agents match on it. **Showing a person a slug is showing
+   * them the plumbing** — and what is being sold here is an answer only they can give, so the
+   * screen has to ask it in words.
+   */
+  question?: string;
   reason: string;
   identityWired: boolean;
   handledWithoutYou?: number;
@@ -506,7 +516,8 @@ ${dots(handled)}
 
 <div class="card">
   <div class="k">${esc(p.who)}</div>
-  <div class="v">${esc(p.what)}</div>
+  <div class="v">${esc(p.question ?? p.what)}</div>
+  ${p.question ? `<div class="slug">${esc(p.what)}</div>` : ''}
   <div class="p">${num(p.amount)} <span>${esc(p.currency)} · ${hoursLeft(p.deadline)} left</span></div>
   <div class="why">${esc(p.reason)}</div>
   ${
