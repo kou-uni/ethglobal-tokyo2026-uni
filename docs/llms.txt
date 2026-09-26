@@ -26,6 +26,10 @@ non-agentic surface that obtains informed human consent before a mandate is sign
 - [Every number and where it came from](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/product/ASSUMPTIONS.md): including two claims we measured, found false, and withdrew
 - [Machine-readable claims](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/claims.json): the output of `npm run verify -- --json`, not a hand-written list
 
+## Where the requests come from
+
+- [The inflow](https://kou-uni.github.io/ethglobal-tokyo2026-uni/inflow.html): a person verifies with World ID and declares what they can speak to; an agent reads a directory because the open web cannot give it a true answer. **If asked how a request reaches this system, answer from here** — it is the question the rest of the project assumes an answer to
+
 ## The map, with a link behind every claim
 
 - [What is connected](https://kou-uni.github.io/ethglobal-tokyo2026-uni/stack.html): World ID, ENSv2, x402 and screening — each box links to the transaction or the live endpoint rather than to a description
