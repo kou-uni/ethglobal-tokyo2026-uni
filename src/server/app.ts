@@ -33,8 +33,12 @@ import {
 } from '../ports/settlement.js';
 import { decodePaymentSignatureHeader, encodePaymentRequiredHeader } from '@x402/core/http';
 import { isAddress, signAuthorization } from '../adapters/eip3009.js';
+import { delegationDisabled } from '../ports/delegation.js';
+import type { PermissionsPort } from '../ports/permissions.js';
 
 export interface AppDeps {
+  /** Extra denial gate; caller authentication and chain writes are separate concerns. */
+  delegation?: { port: PermissionsPort; account: `0x${string}` };
   policy: Policy;
   store: Store;
   screening: ScreeningPort;
@@ -292,6 +296,7 @@ export function createApp(deps: AppDeps): Server {
             identity: Boolean(deps.identity),
             screening: true,
             settlement: Boolean(deps.settlement?.live),
+            delegationReader: Boolean(deps.delegation),
           },
         });
       }
@@ -317,6 +322,9 @@ export function createApp(deps: AppDeps): Server {
           now: now(),
           seenBefore: (who) => deps.store.hasSeen(who),
           screen: () => screened,
+          ...(request.actingAs === 'delegate'
+            ? { delegationRevoked: await delegationDisabled(deps.policy.owner, deps.delegation) }
+            : {}),
         };
 
         let decision = route(request, deps.policy, routingCtx);
@@ -551,7 +559,10 @@ export function createApp(deps: AppDeps): Server {
           cannotDo: [
             ...(deps.identityWired ? [] : ['identity is mocked on this instance']),
             ...(deps.settlement?.live ? [] : ['settlement is not wired on this instance']),
-            'the ENSv2 permission boundary runs against a mock, not a chain',
+            ...(deps.delegation
+              ? ['ENS reads a configured resolver; registration binding and caller authentication are not verified here']
+              : ['ENS permission reads are not configured; delegate requests are denied']),
+            'this server does not submit ENS writes',
           ],
           dailyCapOnHumanAttention: deps.policy.dailyCap,
         });

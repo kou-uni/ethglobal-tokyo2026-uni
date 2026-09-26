@@ -36,6 +36,10 @@ Base Sepoliaのx402用USDC、およびCircleのEthereum Sepolia USDCとは別コ
 
 ## 現在の不足
 
+**後続確認：ユーザーがガスを補充し、このアドレスでEthereum Sepolia 0.05 ETHを確認しました。**
+署名を行うローカル画面は [ENS-WALLET-SETUP.md](ENS-WALLET-SETUP.md) を参照してください。
+以下の0残高は、補充前のブロック11782986の記録です。
+
 ユーザー指定アドレス `0x5f52FA3c5DF22d8c89fA6c2221E2aeBd6FE722bD` について同じブロックで確認：
 
 - Ethereum Sepolia ETH：**0**

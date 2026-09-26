@@ -7,6 +7,9 @@
 > Follow-up: `decodeSetter` succeeded live for all five keys. Registration prices and
 > free mock-token minting were also checked; see [ENS-REGISTRATION.md](ENS-REGISTRATION.md).
 > Seller resolver deployment, registration, grants and writes remain unexecuted.
+> The read-only port and optional server denial gate are now implemented:
+> [ENS-INTEGRATION.md](ENS-INTEGRATION.md). They are not deployed or exercised against
+> a registered seller resolver yet.
 
 **What runs, what does not, and what each of us does next.** Everything marked ✅ was run;
 nothing here is inferred from the code looking right.

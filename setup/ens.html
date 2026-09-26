@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Yohaku — ENSセットアップ</title>
+<style>
+body{max-width:760px;margin:48px auto;padding:0 24px;background:#f8f7f3;color:#242329;font:16px/1.8 system-ui,sans-serif}
+h1{font-size:32px}button,input{font:inherit;padding:12px;border-radius:10px;border:1px solid #aaa}
+button{background:#bcb2fa;cursor:pointer}button:disabled{opacity:.5;cursor:wait}input{width:90%;background:white}
+section{padding:22px;background:#fff;border-radius:18px;margin:20px 0}code{overflow-wrap:anywhere}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px}#status{white-space:pre-wrap}li{margin:10px 0;overflow-wrap:anywhere}
+</style>
+<h1>yohaku / ENSセットアップ</h1>
+<p>Ethereum Sepoliaのテスト用です。秘密鍵は入力しません。各操作は接続したウォレットで確認して署名します。</p>
+<section id="prepare">
+<label>取得する名前（.ethの前、5文字以上）<br><input id="label" value="yohaku-minta-2026" pattern="[a-z0-9-]+"></label>
+<p><button id="connect">ウォレットを接続して送信内容を準備</button></p>
+<p>まだ名前は取得されていません。まず空きと費用を確認します。</p>
+</section>
+<section id="details" hidden><h2 id="name"></h2><pre id="summary"></pre><ol id="steps"></ol>
+<button id="next"></button><p>1件ずつ確認します。画面の再読み込み後も、このタブでは進捗を復元します。</p>
+<details><summary>次の送信内容</summary><pre id="transaction"></pre></details></section>
+<p id="status" role="status"></p>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const saveKey='yohaku-ens-setup-v1';
+let state;
+try{state=JSON.parse(sessionStorage.getItem(saveKey)||'null')}catch{}
+const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+const save=()=>sessionStorage.setItem(saveKey,JSON.stringify(state));
+async function wallet(){
+  if(!window.ethereum)throw Error('MetaMaskなどのウォレット拡張機能があるブラウザーで開いてください。');
+  const accounts=await ethereum.request({method:'eth_requestAccounts'});
+  const chain=await ethereum.request({method:'eth_chainId'});
+  if(chain!=='0xaa36a7')await ethereum.request({method:'wallet_switchEthereumChain',params:[{chainId:'0xaa36a7'}]});
+  return accounts[0];
+}
+function render(){
+  if(!state)return;
+  $('prepare').hidden=true;$('details').hidden=false;$('name').textContent=state.plan.name;
+  $('summary').textContent='所有者: '+state.plan.owner+'\nネットワーク: Ethereum Sepolia（11155111）\n'
+    +'見積もり: '+state.plan.quotedTokens+' MockUSDC / 1年\n'
+    +'取得・承認する上限: '+state.plan.tokenLimit+' MockUSDC（価格変動用に10%の余裕）\n'
+    +'トークン: '+state.plan.token+'\nresolver予定アドレス: '+state.plan.resolver+'\n'
+    +'各操作にテストETHのガスが必要です。';
+  $('steps').replaceChildren(...state.plan.steps.map((step,i)=>{
+    const li=document.createElement('li');
+    li.textContent=(i<state.index?'✓ ':i===state.index?'→ ':'')+step.title;
+    if(state.receipts[i])li.append(document.createTextNode(' / tx: '+state.receipts[i].transactionHash));
+    return li;
+  }));
+  const step=state.plan.steps[state.index];
+  $('next').hidden=!step;
+  if(step){
+    $('next').textContent=state.pending?'送信済みトランザクションを再確認':step.title;
+    $('transaction').textContent=JSON.stringify({from:state.plan.owner,to:step.to,data:step.data,value:'0x0'},null,2);
+  }else $('status').textContent='5件のトランザクションが成功しました。名前とresolverの結び付き、委任操作は次に検証します。';
+}
+$('connect').onclick=async()=>{
+  $('connect').disabled=true;
+  try{
+    const owner=await wallet();$('status').textContent='空き・価格・resolver作成を読み取りシミュレーションしています…';
+    const response=await fetch('/plan',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({owner,label:$('label').value.trim()})});
+    const plan=await response.json();if(!response.ok)throw Error(plan.error);
+    state={plan,index:0,receipts:[],pending:null};save();render();$('status').textContent='送信内容を確認して進めてください。';
+  }catch(e){$('status').textContent=e.message}finally{$('connect').disabled=false}
+};
+$('next').onclick=async()=>{
+  $('next').disabled=true;
+  try{
+    const owner=await wallet();
+    if(owner.toLowerCase()!==state.plan.owner.toLowerCase())throw Error('準備時と同じ所有者アカウントに戻してください。');
+    const step=state.plan.steps[state.index];
+    if(step.waitAfterPreviousSeconds&&!state.pending){
+      const previous=state.receipts[state.index-1];
+      const committed=await ethereum.request({method:'eth_getBlockByNumber',params:[previous.blockNumber,false]});
+      const ready=Number(BigInt(committed.timestamp))+step.waitAfterPreviousSeconds+2;
+      for(;;){
+        const latest=await ethereum.request({method:'eth_getBlockByNumber',params:['latest',false]});
+        const left=ready-Number(BigInt(latest.timestamp));if(left<=0)break;
+        $('status').textContent='commitの確定後、登録可能になるまで待機中… 約'+left+'秒';
+        await pause(3000);
+      }
+    }
+    if(!state.pending){
+      const tx={from:owner,to:step.to,data:step.data,value:'0x0'};
+      await ethereum.request({method:'eth_call',params:[tx,'latest']});
+      // Recheck after waiting: a changed wallet account or chain must never sign this plan.
+      const accounts=await ethereum.request({method:'eth_accounts'});
+      const chain=await ethereum.request({method:'eth_chainId'});
+      if(accounts[0]?.toLowerCase()!==state.plan.owner.toLowerCase()||chain!==state.plan.chainId)
+        throw Error('アカウントまたはネットワークが変わりました。設定を戻して再試行してください。');
+      state.pending=await ethereum.request({method:'eth_sendTransaction',params:[tx]});save();
+    }
+    $('status').textContent='確定を待っています: '+state.pending;
+    let receipt;
+    for(let i=0;i<90;i++){
+      receipt=await ethereum.request({method:'eth_getTransactionReceipt',params:[state.pending]});
+      if(receipt)break;await pause(2000);
+    }
+    if(!receipt)throw Error('まだ確定していません。再確認ボタンで同じ取引を確認できます。再送はしません。');
+    if(receipt.status!=='0x1'){
+      state.pending=null;save();throw Error('取引がrevertしました。次の工程には進みません。');
+    }
+    if(state.index===1){
+      const code=await ethereum.request({method:'eth_getCode',params:[state.plan.resolver,'latest']});
+      if(!code||code==='0x')throw Error('予定のresolverアドレスにコードがありません。登録には進みません。');
+    }
+    state.receipts.push(receipt);state.pending=null;state.index++;save();render();
+    if(state.index<state.plan.steps.length)$('status').textContent='成功しました。次の送信内容を確認してください。';
+  }catch(e){$('status').textContent=e.message;render()}finally{$('next').disabled=false}
+};
+render();
+</script>
+</html>

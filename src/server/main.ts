@@ -21,6 +21,9 @@ import { WorldIdentity } from '../adapters/world-oidc.js';
 import { createApp } from './app.js';
 import { X402Settlement, x402FromEnv } from '../adapters/x402.js';
 import { Store } from './state.js';
+import { createPublicClient, http, isAddress } from 'viem';
+import { sepolia } from 'viem/chains';
+import { EnsPermissions } from '../adapters/ens-permissions.js';
 
 const PORT = Number(process.env['PORT'] ?? 8402);
 
@@ -56,7 +59,24 @@ const redirectUri = process.env['WORLD_REDIRECT_URI'];
 const x402 = x402FromEnv(process.env);
 const settlement = 'missing' in x402 ? undefined : new X402Settlement(x402);
 
+const resolverAddress = process.env.ENS_RESOLVER_ADDRESS;
+const delegateAddress = process.env.ENS_DELEGATE_ADDRESS;
+const ensName = process.env.ENS_NAME;
+const ensRpc = process.env.SEPOLIA_RPC_URL;
+const delegation = ensRpc && ensName === DEMO_POLICY.owner
+  && resolverAddress && isAddress(resolverAddress)
+  && delegateAddress && isAddress(delegateAddress)
+  ? {
+      port: new EnsPermissions(
+        createPublicClient({ chain: sepolia, transport: http(ensRpc, { retryCount: 0, timeout: 15000 }) }),
+        { name: ensName, resolver: resolverAddress },
+      ),
+      account: delegateAddress,
+    }
+  : undefined;
+
 const app = createApp({
+  ...(delegation ? { delegation } : {}),
   policy: DEMO_POLICY,
   store: new Store(KNOWN_PARTIES),
   screening: new MockScreening(),

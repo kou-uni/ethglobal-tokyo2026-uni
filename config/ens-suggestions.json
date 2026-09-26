@@ -1,5 +1,9 @@
 {
   "confirmed": "2026-09-26",
+  "factory": {
+    "value": "0x9e726eb570beb6bceb495ab8cda7df517d4e841c",
+    "source": "https://github.com/ensdomains/contracts-v2/blob/71a3b7339dbc55ab47667abdfe8303bac4f4c24e/contracts/deployments/sepolia/VerifiableFactory.json"
+  },
   "registrar": {
     "value": "0xabe76f6c8dfced81aa5a2bb8034202a7136b94ca",
     "source": "https://docs.ens.domains/learn/deployments — Sepolia ENSv2 beta."

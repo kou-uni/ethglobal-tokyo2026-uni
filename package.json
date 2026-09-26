@@ -12,6 +12,7 @@
     "ens:check": "tsx scripts/ens-check.ts",
     "ens:probe": "tsx scripts/ens-probe.ts",
     "ens:registration": "tsx scripts/ens-registration.ts",
+    "setup:ens": "tsx scripts/setup-ens.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",

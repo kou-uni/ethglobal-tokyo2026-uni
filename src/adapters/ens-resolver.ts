@@ -14,6 +14,7 @@ export const resolverAbi = parseAbi([
   'function revokeRoles(uint256 resource, uint256 roleBitmap, address account) returns (bool)',
   'function decodeSetter(bytes setter) pure returns (bytes arg, uint256 resource, uint256 roleBitmap)',
   'function hasRoles(uint256 resource, uint256 roleBitmap, address account) view returns (bool)',
+  'function resolve(bytes name, bytes data) view returns (bytes)',
 ]);
 
 export function textSetter(name: string, key: string, value = '') {
