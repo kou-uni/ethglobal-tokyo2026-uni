@@ -1,5 +1,34 @@
 # ENS SDK compatibility — 2026-09-26
 
+## 追記：Sepolia の `decodeSetter` 呼び出しに成功
+
+**2026-09-26 00:59:59 UTC、ブロック 11782858** で、公式一覧の実装コントラクト
+`0x14f09fd05d4585759e54844dc9b00147131cf243` を直接読みました。
+`yh:proposal` / `yh:policy` / `yh:payout` / `yh:price` / `yh:license` の全5キーについて、
+戻り値の引数・resource・role bitmap を検査し、**キー単独のhashと `ROLE_SET_TEXT = 16`** に一致しました。
+
+対応する setter は **`setText(bytes,string,string)`** です。公開SDKの
+`authorizeTextRoles` / namehash 形式と混ぜられません。
+
+```bash
+npm run ens:probe
+```
+
+`src/adapters/ens-resolver.ts` は `contracts-v2` の `post-audit-2` ソースから
+必要なABIを定義し、実際に上記を読み取った実装です。proposal の付与には
+`grantSetterRoles(encodedSetText, delegate)`、取消には
+`revokeRoles(keyResource, 16, delegate)` の calldata を生成できます。
+
+**これは実装コントラクトのデコーダ確認です。** 売り手のresolverでの付与や、
+proposal書き込み・policy拒否・取消後の拒否は未実行です。名前の登録も未実行です。
+
+出典：`config/ens-suggestions.json`、公式
+`contracts-v2/post-audit-2/contracts/src/resolver/PermissionedResolver.sol`。
+
+登録費用とトークン取得方法は [ENS-REGISTRATION.md](ENS-REGISTRATION.md) に分けました。
+
+---
+
 Issue #1 の指定バージョンをインストールして確認したところ、既存の調査メモと公開パッケージは別のインターフェースでした。**「未確認は登録費用だけ」という前提を保留します。**
 
 | | インストールした `@ensdomains/ensjs@5.0.0-sepolia-fix.1` | 既存調査が参照する main ソース |

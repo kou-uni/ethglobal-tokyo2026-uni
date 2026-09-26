@@ -49,7 +49,9 @@ records where the value came from (`config/x402-suggestions.json`).
 - **World ID sandbox requires PKCE, and does not document it or say so in the error.** The
   response is a bare `invalid_request`
 - **ENSv2 per-key grants do not take a role bitmap.** `grantSetterRoles` takes the setter
-  argument and the role is implied. Only `@ensdomains/ensjs@5.0.0-sepolia-fix.1` can write
+  argument and the role is implied. **The published `@ensdomains/ensjs@5.0.0-sepolia-fix.1`
+  encodes an older resolver API.** Use the verified decoder ABI in `src/adapters/ens-resolver.ts`
+  for the deployment probed here; see `docs/build/ENS-SDK-COMPATIBILITY.md`.
 - EIP-3009 authorizations have **second** resolution. Comparing deadlines in milliseconds
   refuses authorizations that actually match
 

@@ -4,6 +4,9 @@
 > source cited in our research have different permission interfaces and scopes.
 > The claim below that only registration payment remains is on hold.
 > See [ENS-SDK-COMPATIBILITY.md](ENS-SDK-COMPATIBILITY.md).
+> Follow-up: `decodeSetter` succeeded live for all five keys. Registration prices and
+> free mock-token minting were also checked; see [ENS-REGISTRATION.md](ENS-REGISTRATION.md).
+> Seller resolver deployment, registration, grants and writes remain unexecuted.
 
 **What runs, what does not, and what each of us does next.** Everything marked ✅ was run;
 nothing here is inferred from the code looking right.

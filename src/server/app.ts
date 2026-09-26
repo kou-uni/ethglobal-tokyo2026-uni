@@ -13,6 +13,7 @@
 
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http';
 import { randomUUID } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import { applyLearned, learn } from '../core/decisions.js';
 import { buildLedger } from '../core/ledger.js';
 import { surface } from '../core/queue.js';
@@ -26,6 +27,9 @@ import { Store, verdictBody, type Entry } from './state.js';
 import { PendingVerifications } from './pending.js';
 import { approvalPage, resultPage, type TodaySummary } from './pages.js';
 import { pastNights, type NightSummary } from '../core/history.js';
+const projectLinks: { docs: string; forAgents: string } = JSON.parse(
+  readFileSync(new URL('../../config/project-links.json', import.meta.url), 'utf8'),
+);
 import {
   outlivesDeadline,
   type PaymentRequirement,
@@ -468,8 +472,8 @@ export function createApp(deps: AppDeps): Server {
           service: 'yohaku',
           what: 'An escalation router. Post a request to buy information from a person; it is answered synchronously as auto, human or deny.',
           owner: deps.policy.owner,
-          docs: 'https://github.com/kou-uni/ethglobal-tokyo2026-uni',
-          forAgents: 'https://kou-uni.github.io/ethglobal-tokyo2026-uni/llms.txt',
+          docs: projectLinks.docs,
+          forAgents: projectLinks.forAgents,
           request: {
             endpoint: 'POST /requests',
             fields: FIVE_FIELDS,
