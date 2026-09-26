@@ -18,6 +18,11 @@ h1{font-size:clamp(30px,7vw,44px);font-weight:900;letter-spacing:-.02em;margin:1
 h1 em{font-style:normal;display:inline-block;color:#fff;background:var(--lilacD);padding:0 13px 3px;
 border-radius:15px;box-shadow:0 5px 0 #4A3BAE;transform:rotate(-1.4deg)}
 p.sub{color:var(--ink2);font-size:16px;margin:12px 0 0;max-width:48ch}
+figure.diag{margin:0;background:var(--card);border-radius:26px;padding:16px;box-shadow:var(--sh);
+overflow-x:auto}
+figure.diag svg{display:block;width:100%;height:auto;min-width:980px}
+figure.diag figcaption{font-size:14px;color:var(--ink2);margin-top:12px;line-height:1.6;font-weight:800}
+figure.diag figcaption b{color:var(--ink)}
 h2{font-size:12px;letter-spacing:.15em;color:var(--ink3);font-weight:900;margin:40px 0 14px}
 
 /* ── the ring ─────────────────────────────────────── */
@@ -77,75 +82,201 @@ footer a{color:var(--lilacD)}
 already. <b>Nobody owns the decision of how many times a day an agent economy may interrupt
 one person.</b> Every box below links to the thing itself — not to our description of it.</p>
 
-<h2>THE LAYERS, AND HOW TO CHECK EACH ONE</h2>
+<h2>THE WHOLE THING, ON ONE SPINE</h2>
+<figure class="diag"><svg viewBox="0 0 1240 900" role="img" aria-label="Yohaku の構造図">
+<defs>
+  <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M0 0 L10 5 L0 10 z" fill="#242329"/></marker>
+  <marker id="arL" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M0 0 L10 5 L0 10 z" fill="#A6A3B4"/></marker>
+  <marker id="arG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+    <path d="M0 0 L10 5 L0 10 z" fill="#7FA326"/></marker>
+</defs>
+<style>
+  .lane{fill:#fff;opacity:.55}
+  .lnm{font:900 12px "M PLUS Rounded 1c",sans-serif;fill:#A6A3B4;letter-spacing:.1em}
+  .bx{fill:#fff;stroke:#E8E5DC;stroke-width:2;rx:16}
+  .t1{font:900 16px "M PLUS Rounded 1c",sans-serif;fill:#242329}
+  .t2{font:800 12.5px "M PLUS Rounded 1c",sans-serif;fill:#5F5D6B}
+  .t3{font:900 11px "M PLUS Rounded 1c",sans-serif;fill:#fff;letter-spacing:.06em}
+  .num{font:900 13px "M PLUS Rounded 1c",sans-serif;fill:#fff}
+  .flow{stroke:#242329;stroke-width:2.5;fill:none;marker-end:url(#ar)}
+  .hook{stroke:#A6A3B4;stroke-width:2;fill:none;stroke-dasharray:6 5;marker-end:url(#arL)}
+  .go{stroke:#7FA326;stroke-width:3;fill:none;marker-end:url(#arG)}
+  a{cursor:pointer} a:hover .bx{stroke:#6B5BD6;stroke-width:3}
+  .ev{font:900 10.5px ui-monospace,Menlo,monospace;fill:#7FA326}
+</style>
+
+<!-- lanes -->
+<rect class="lane" x="16" y="42"  width="1208" height="96"  rx="18"/>
+<rect class="lane" x="16" y="158" width="1208" height="140" rx="18"/>
+<rect class="lane" x="16" y="318" width="1208" height="112" rx="18"/>
+<rect class="lane" x="16" y="450" width="1208" height="150" rx="18"/>
+<rect class="lane" x="16" y="620" width="1208" height="140" rx="18"/>
+<text class="lnm" x="30" y="68">BUYER</text>
+<text class="lnm" x="30" y="184">YOHAKU &#183; THE LAYER WITH NO OWNER</text>
+<text class="lnm" x="30" y="344">SELLER &#183; A PERSON</text>
+<text class="lnm" x="30" y="476">LAYERS THAT ALREADY HAVE OWNERS &#8212; EACH ONE ATTACHES TO A STEP</text>
+<text class="lnm" x="30" y="646">WHERE IT GOES &#8212; AN AGENT&#8217;S FINANCES</text>
+
+<!-- buyer -->
+<rect class="bx" x="155" y="70" width="240" height="56" fill="#F8F7F3"/>
+<text class="t1" x="175" y="95">&#129302; Agents, all night</text>
+<text class="t2" x="175" y="113">~50 a night. They do not wait.</text>
+<path class="flow" d="M275 126 L275 196"/>
+
+<!-- the spine -->
+<g>
+  <rect class="bx" x="155" y="198" width="186" height="84" fill="#EDE9FF" stroke="#BCB2FA"/>
+  <circle cx="177" cy="220" r="11" fill="#6B5BD6"/><text class="num" x="173" y="225">1</text>
+  <text class="t1" x="196" y="225">Request</text>
+  <text class="t2" x="171" y="248">who / what / purpose</text>
+  <text class="t2" x="171" y="265">price / deadline</text>
+
+  <rect class="bx" x="367" y="198" width="186" height="84" fill="#EDE9FF" stroke="#BCB2FA"/>
+  <circle cx="389" cy="220" r="11" fill="#6B5BD6"/><text class="num" x="385" y="225">2</text>
+  <text class="t1" x="408" y="225">Ten rules</text>
+  <text class="t2" x="383" y="248">first match wins</text>
+  <text class="t2" x="383" y="265">everything fails to deny</text>
+
+  <rect class="bx" x="579" y="198" width="186" height="84" fill="#EDE9FF" stroke="#BCB2FA"/>
+  <circle cx="601" cy="220" r="11" fill="#6B5BD6"/><text class="num" x="597" y="225">3</text>
+  <text class="t1" x="620" y="225">Hold &#183; cap</text>
+  <text class="t2" x="595" y="248">bundle, rank, 2 a day</text>
+  <text class="t2" x="595" y="265">silence &#8594; refuse</text>
+
+  <rect class="bx" x="791" y="198" width="186" height="84" fill="#EDE9FF" stroke="#BCB2FA"/>
+  <circle cx="813" cy="220" r="11" fill="#6B5BD6"/><text class="num" x="809" y="225">4</text>
+  <text class="t1" x="832" y="225">She answers</text>
+  <text class="t2" x="807" y="248">yes / no / nothing</text>
+  <text class="t2" x="807" y="265">consent is recorded here</text>
+
+  <rect class="bx" x="1003" y="198" width="186" height="84" fill="#EDE9FF" stroke="#BCB2FA"/>
+  <circle cx="1025" cy="220" r="11" fill="#6B5BD6"/><text class="num" x="1021" y="225">5</text>
+  <text class="t1" x="1044" y="225">Settle &#183; ledger</text>
+  <text class="t2" x="1019" y="248">only after a verified yes</text>
+  <text class="t2" x="1019" y="265">one screen in the morning</text>
+
+  <path class="flow" d="M341 240 L361 240"/>
+  <path class="flow" d="M553 240 L573 240"/>
+  <path class="flow" d="M765 240 L785 240"/>
+  <path class="flow" d="M977 240 L997 240"/>
+</g>
+
+<!-- seller lane -->
+<a href="https://mac-studio.taila649e1.ts.net/dropped" target="_blank">
+  <rect class="bx" x="367" y="336" width="186" height="76" fill="#FBF0EF" stroke="#D6D3CA"/>
+  <text class="t1" x="385" y="362">&#10007; Never reaches her</text>
+  <text class="t2" x="385" y="381">~10 a night, each with</text>
+  <text class="t2" x="385" y="398">the rule that stopped it &#8594;</text>
+</a>
+<path class="hook" d="M460 282 L460 332"/>
+
+<rect class="bx" x="791" y="336" width="186" height="76" fill="#F2FBD9" stroke="#DDF691"/>
+<text class="t1" x="809" y="362">&#129489; One person</text>
+<text class="t2" x="809" y="381">asleep until 07:00</text>
+<text class="t2" x="809" y="398">asked about 2, not 50</text>
+<path class="flow" d="M884 332 L884 288"/>
+<path class="hook" d="M884 282 L884 330"/>
+
+<!-- external layers, each hooked to its step -->
+<a href="https://mac-studio.taila649e1.ts.net/health" target="_blank">
+  <rect class="bx" x="155" y="490" width="230" height="86"/>
+  <rect x="155" y="490" width="230" height="22" rx="11" fill="#A6A3B4"/>
+  <text class="t3" x="168" y="506">SCREENING &#183; STAND-IN</text>
+  <text class="t1" x="168" y="536">&#128737; Is this money ok?</text>
+  <text class="t2" x="168" y="556">unreachable &#8594; refuse,</text>
+  <text class="t2" x="168" y="571">never pass</text>
+</a>
+<path class="hook" d="M270 490 L270 440 L440 440 L448 288"/>
+
+<a href="https://sepolia.etherscan.io/tx/0xb459618bfdd9d0ab78cf34ee64723e04ef227546208d6502b23cf6e72e73ce4f" target="_blank">
+  <rect class="bx" x="419" y="490" width="230" height="86"/>
+  <rect x="419" y="490" width="230" height="22" rx="11" fill="#6B5BD6"/>
+  <text class="t3" x="432" y="506">ENSv2 &#183; ON CHAIN</text>
+  <text class="t1" x="432" y="536">&#9939; What may it do?</text>
+  <text class="t2" x="432" y="556">delegate proposes &#10003;</text>
+  <text class="t2" x="432" y="571">rewrites its rights &#10007; reverts</text>
+  <text class="ev" x="432" y="588">rule 0 &#183; 0xb459618b</text>
+</a>
+<path class="hook" d="M534 490 L534 440 L472 440 L470 288"/>
+
+<a href="https://mac-studio.taila649e1.ts.net/try" target="_blank">
+  <rect class="bx" x="683" y="490" width="230" height="86"/>
+  <rect x="683" y="490" width="230" height="22" rx="11" fill="#6B5BD6"/>
+  <text class="t3" x="696" y="506">WORLD ID &#183; LIVE</text>
+  <text class="t1" x="696" y="536">&#127757; Is a person here?</text>
+  <text class="t2" x="696" y="556">at the moment of consent,</text>
+  <text class="t2" x="696" y="571">not at signup</text>
+  <text class="ev" x="696" y="588">amr: pop &#183; stated on screen</text>
+</a>
+<path class="hook" d="M798 490 L798 440 L872 440 L872 420"/>
+
+<a href="https://sepolia.basescan.org/tx/0x5c79fddfc8d6e6f64c1dd23752fae688a9b94ec5bc770f24fd1c2595b00d1d88" target="_blank">
+  <rect class="bx" x="947" y="490" width="230" height="86"/>
+  <rect x="947" y="490" width="230" height="22" rx="11" fill="#7FA326"/>
+  <text class="t3" x="960" y="506">x402 &#183; ON CHAIN</text>
+  <text class="t1" x="960" y="536">&#128184; How does it pay?</text>
+  <text class="t2" x="960" y="556">authorization signed early,</text>
+  <text class="t2" x="960" y="571">expires if she never answers</text>
+  <text class="ev" x="960" y="588">4,200 moved &#183; 0x5c79fddf</text>
+</a>
+<path class="hook" d="M1062 490 L1062 440 L1096 440 L1096 288"/>
+
+<!-- where it goes -->
+<path class="go" d="M1096 282 L1096 300 L1200 300 L1200 660 L1150 660"/>
+<rect class="bx" x="155" y="666" width="290" height="76" fill="#F8F7F3"/>
+<text class="t1" x="175" y="694">1 &#183; One seller</text>
+<text class="t2" x="175" y="714">the morning screen: what moved,</text>
+<text class="t2" x="175" y="730">and the two that needed a person</text>
+<path class="flow" d="M451 704 L471 704"/>
+<rect class="bx" x="477" y="666" width="290" height="76" fill="#F8F7F3"/>
+<text class="t1" x="497" y="694">2 &#183; A team</text>
+<text class="t2" x="497" y="714">the cap stops being one person&#8217;s</text>
+<text class="t2" x="497" y="730">tolerance and becomes a policy</text>
+<path class="flow" d="M773 704 L793 704"/>
+<rect class="bx" x="799" y="666" width="351" height="76" fill="#DDF691" stroke="#7FA326"/>
+<text class="t1" x="819" y="694">3 &#183; A company&#8217;s agent treasury</text>
+<text class="t2" x="819" y="714">which movements must a human see at all &#8212;</text>
+<text class="t2" x="819" y="730">and who holds the record that she consented</text>
+
+<text class="t2" x="155" y="782" style="font-size:13px">We did not build execution, custody or the wallet. <tspan style="font:900 13px sans-serif;fill:#242329">Yohaku is the half-step before them: deciding whether money should move means deciding, first, whether to ask.</tspan></text>
+</svg><figcaption><b>Every box with a coloured cap is clickable</b> — it goes to the
+transaction or the live endpoint, not to a description of it. The dashed lines say
+<b>which step each layer attaches to</b>.</figcaption></figure>
+
+<h2>THE SAME THING, IN WORDS</h2>
 <div class="ring">
-
-  <div class="lay">
-    <div class="top"><span class="ic">🌍</span><span class="nm">World ID</span></div>
-    <div class="q"><b>Is a person here — now?</b> Not at signup. The check runs at the moment
-    of approval, and fails closed.</div>
-    <div class="ev warn"><b>Measured caveat.</b> The sandbox answers <code>amr: pop</code> —
-    a held credential presented freshly, <b>not an approval in the app</b>. We asked for more
-    with <code>prompt=login</code> and <code>max_age=0</code>. The screen says so itself.</div>
+  <div class="lay"><div class="top"><span class="ic">&#9939;</span><span class="nm">ENSv2 &#183; step 2</span></div>
+    <div class="q">The delegate <b>can propose and cannot widen its own rights</b> &mdash; and that is
+    the contract's answer, not ours. Simulating the same write today still reverts.</div>
     <div class="go">
-      <a href="https://mac-studio.taila649e1.ts.net/try">Press it yourself</a>
-      <a class="g" href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/knowledge/WORLD-SANDBOX.md">The measurement</a>
-    </div>
-  </div>
+      <a href="https://sepolia.etherscan.io/tx/0x16873dfa2a63a0e6dc1edb1903488499686d25628d17352dca14449ed24ee8d0">proposal &#10003;</a>
+      <a href="https://sepolia.etherscan.io/tx/0xb459618bfdd9d0ab78cf34ee64723e04ef227546208d6502b23cf6e72e73ce4f">policy &#10007;</a>
+      <a href="https://sepolia.etherscan.io/tx/0x2380d0feb0cade3b3e224fa12960f2d2d4d130609d00d7437729789b6bb3faae">after revoke &#10007;</a>
+    </div></div>
 
-  <div class="lay">
-    <div class="top"><span class="ic">⛓️</span><span class="nm">ENSv2</span></div>
-    <div class="q"><b>What may the delegate do?</b> It can propose. <b>It cannot rewrite what
-    it is allowed to do</b> — and that is the contract's answer, not ours.</div>
-    <div class="ev"><b>On Ethereum Sepolia.</b> The delegate wrote <code>yh:proposal</code> and
-    <b>succeeded</b>; wrote <code>yh:policy</code> and <b>reverted</b> with
-    <code>EACUnauthorizedAccountRoles</code>; after revocation the proposal write
-    <b>reverted too</b>. Simulating it today still reverts.</div>
+  <div class="lay"><div class="top"><span class="ic">&#127757;</span><span class="nm">World ID &#183; step 4</span></div>
+    <div class="q">Personhood is checked <b>at the moment of consent</b>, and every failure path denies.</div>
+    <div class="ev warn"><b>Measured:</b> the sandbox answers <code>amr: pop</code> &mdash; a held
+    credential presented freshly, <b>not an approval in the app</b>. The screen says so itself.</div>
+    <div class="go"><a href="https://mac-studio.taila649e1.ts.net/try">Press it yourself</a>
+      <a class="g" href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/knowledge/WORLD-SANDBOX.md">The measurement</a></div></div>
+
+  <div class="lay"><div class="top"><span class="ic">&#128184;</span><span class="nm">x402 &#183; step 5</span></div>
+    <div class="q">The agent signs before she wakes. <b>It moves nothing while it waits</b>, settles
+    on her yes, and <b>expires if she never answers</b> &mdash; enforced by the signature, not by us.</div>
     <div class="go">
-      <a href="https://sepolia.etherscan.io/tx/0x16873dfa2a63a0e6dc1edb1903488499686d25628d17352dca14449ed24ee8d0">proposal ✓</a>
-      <a href="https://sepolia.etherscan.io/tx/0xb459618bfdd9d0ab78cf34ee64723e04ef227546208d6502b23cf6e72e73ce4f">policy ✗</a>
-      <a href="https://sepolia.etherscan.io/tx/0x2380d0feb0cade3b3e224fa12960f2d2d4d130609d00d7437729789b6bb3faae">after revoke ✗</a>
-    </div>
-  </div>
+      <a href="https://sepolia.basescan.org/tx/0x79c1e3239ef89cdc1b8a5fc14321093b06504a3c68a24644ba6390caf90393fa">auto &#183; 120</a>
+      <a href="https://sepolia.basescan.org/tx/0x5c79fddfc8d6e6f64c1dd23752fae688a9b94ec5bc770f24fd1c2595b00d1d88">after her yes &#183; 4,200</a>
+    </div></div>
 
-  <div class="lay">
-    <div class="top"><span class="ic">💸</span><span class="nm">x402</span></div>
-    <div class="q"><b>How does an agent pay a person?</b> HTTP 402, protocol v2, stablecoin.
-    The buyer needs no ETH — the facilitator pays the gas.</div>
-    <div class="ev"><b>Money actually moved, on Base Sepolia.</b> 120 atomic settled inside
-    the request. <b>4,200 moved only when a person pressed Yes</b> — the seller's balance was
-    120 before and 4,320 after, and the buyer's ETH balance is still zero.</div>
-    <div class="go">
-      <a href="https://sepolia.basescan.org/tx/0x79c1e3239ef89cdc1b8a5fc14321093b06504a3c68a24644ba6390caf90393fa">auto</a>
-      <a href="https://sepolia.basescan.org/tx/0x5c79fddfc8d6e6f64c1dd23752fae688a9b94ec5bc770f24fd1c2595b00d1d88">after her yes</a>
-      <a class="g" href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/knowledge/X402-ONCHAIN.md">How it works</a>
-    </div>
-  </div>
-
-  <div class="lay">
-    <div class="top"><span class="ic">🛡️</span><span class="nm">Screening</span></div>
-    <div class="q"><b>Is this money allowed to move?</b> Checked before signing — and
-    <b>an unreachable screening call refuses</b>, it does not pass.</div>
-    <div class="ev warn"><b>A stand-in.</b> The shape is wired and tested; the live provider
-    is not connected, and <code>/health</code> reports it as false rather than pretending.</div>
-    <div class="go">
-      <a href="https://mac-studio.taila649e1.ts.net/health">/health</a>
-    </div>
-  </div>
-</div>
-
-<div class="mid">
-  <div class="k">AND IN THE MIDDLE</div>
-  <b class="t">⬜ Yohaku — how many times today may we interrupt this person?</b>
-  <p>Ten ordered rules, first match wins. Everything fails to <code>deny</code>. What reaches
-  her is held to a cap <b>she</b> set — about fifty arrive, two are raised, and across twenty
-  runs that second number never moved. <b>The refusals are inspectable</b>, because a refusal
-  nobody can look at is the same as never having been asked.</p>
-  <div class="go">
-    <a href="https://mac-studio.taila649e1.ts.net/dropped">What was refused</a>
-    <a href="https://mac-studio.taila649e1.ts.net/">What it refuses to do</a>
-    <a href="claims.json">The claims, as data</a>
-  </div>
+  <div class="lay"><div class="top"><span class="ic">&#11036;</span><span class="nm">Yohaku &#183; steps 1&#8211;5</span></div>
+    <div class="q"><b>How many times today may we interrupt this person?</b> About fifty arrive, two
+    are raised, and across twenty runs that second number never moved.</div>
+    <div class="go"><a href="https://mac-studio.taila649e1.ts.net/dropped">What was refused</a>
+      <a href="https://mac-studio.taila649e1.ts.net/">What it refuses</a>
+      <a class="g" href="claims.json">claims.json</a></div></div>
 </div>
 
 <h2>WHERE THIS GOES — AN AGENT'S FINANCES</h2>
