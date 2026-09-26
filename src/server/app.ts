@@ -748,7 +748,7 @@ export function createApp(deps: AppDeps): Server {
             items: denied.map((e) => ({
               who: e.request.who,
               what: e.request.what,
-              question: asQuestion(e.request.what),
+              question: asQuestion(e.request.what, e.request.id),
               amount: e.request.price.amount,
               currency: e.request.price.currency,
               rule: e.decision.rule,
@@ -786,7 +786,7 @@ export function createApp(deps: AppDeps): Server {
           handledWithoutYou,
           who: entry.request.who,
           what: entry.request.what,
-          question: asQuestion(entry.request.what),
+          question: asQuestion(entry.request.what, entry.request.id),
           purpose: entry.request.purpose,
           amount: entry.request.price.amount,
           currency: entry.request.price.currency,
