@@ -208,3 +208,104 @@ go((parseInt(new URLSearchParams(location.search).get(\'p\'),10)||1)-1);
 </body></html>
 ''')
 print('docs/script.html —', len(S), 'blocks, same source as the deck')
+
+# ── Canva に写すための素のテキスト ────────────────────────────────────────────
+import re as _re
+
+def _plain(v):
+    """<em> と <br> を落として、Canva にそのまま貼れる素の文字にする。"""
+    if isinstance(v, (list, tuple)): v = '\n'.join(v)
+    v = v.replace('<br>', '\n')
+    v = _re.sub(r'</?em>', '', v)
+    v = _re.sub(r'<[^>]+>', '', v)
+    return (v.replace('&#183;', '·').replace('&mdash;', '—').replace('&rarr;', '→')
+             .replace('&ldquo;', '“').replace('&rdquo;', '”').replace('&amp;', '&').strip())
+
+def _accent(v):
+    """紫にする語だけ抜き出す。"""
+    if isinstance(v, (list, tuple)): v = ' '.join(v)
+    return [_plain(m) for m in _re.findall(r'<em>(.*?)</em>', v)]
+
+TIMES = ['0:00–0:25','0:25–0:35','0:35–0:55','0:55–1:15','1:15–1:55','1:55–2:10','2:10–2:25','2:25–2:35']
+SIZES = {'huge':'420px','h2':'170px','sub':'46px','notes':'38px','lbl':'26px','punch':'70px','foot':'30px'}
+
+cards = []
+for i, d in enumerate(S):
+    rows = []
+    def row(label, text, note=''):
+        if not text: return
+        cid = 'c%d_%s' % (i, label)
+        rows.append('<div class="f"><div class="fh"><b>%s</b><span>%s</span>'
+                    '<button data-for="%s">copy</button></div><pre id="%s">%s</pre></div>'
+                    % (label, note, cid, cid, html.escape(text)))
+    if d.get('huge'): row('巨大な数字', d['huge'], SIZES['huge'] + ' · 紫 #5B4BE0')
+    if d.get('lbl'):  row('小ラベル', _plain(d['lbl']), SIZES['lbl'] + ' · 灰 #9A93B8 · 字間広め')
+    row('見出し', _plain(d['big']), SIZES['h2'] + (' · 白 #FFFFFF' if d.get('invert') else ' · 黒 #1D1B26'))
+    if d.get('roman'): row('ローマ字', _plain(d['roman']), '64px · 淡紫 #D6CEFF')
+    if d.get('sub'):   row('サブ', _plain(d['sub']), SIZES['sub'] + ' · 灰 #6B6484')
+    if d.get('punch'): row('強調文', _plain(d['punch']), SIZES['punch'] + ' · ピンク #DE3F97')
+    if d.get('notes'): row('注記', _plain(d['notes']), SIZES['notes'] + ' · 灰 #6B6484')
+    if d.get('foot'):  row('脚注', _plain(d['foot']), SIZES['foot'] + ' · 灰 #9A93B8')
+    acc = _accent(d['big']) + _accent(d.get('punch', ''))
+    extra = []
+    if acc: extra.append('<p class="hint">紫 #5B4BE0 にする語: <b>%s</b></p>' % html.escape(' / '.join(acc)))
+    if d.get('invert'): extra.append('<p class="hint warn">この1枚だけ <b>背景を #5B4BE0 のベタ塗り・文字は白</b>。中央寄せで周囲を大きく空ける</p>')
+    if d.get('embed'): extra.append('<p class="hint warn">ここに <b>40秒のアニメーション</b>（画面収録した動画）を置く。文字は見出しだけ</p>')
+    en, ja = LINES[d['k']]
+    cards.append('<section><h2>%d ｜ %s</h2>%s%s'
+                 '<details><summary>この1枚で言うこと</summary><p class="say">%s</p>'
+                 '<p class="sayja">%s</p></details></section>'
+                 % (i + 1, TIMES[i], ''.join(rows), ''.join(extra),
+                    _plain(en), html.escape(ja)))
+
+io.open('docs/canva.html', 'w', encoding='utf-8').write("""<!doctype html><html lang="ja"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Yohaku — Canva に写す用</title><meta name="robots" content="noindex">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap');
+*{box-sizing:border-box;margin:0}
+body{background:#12101C;color:#EDEAF8;padding:20px 16px 60px;max-width:760px;margin:0 auto;
+font-family:"M PLUS Rounded 1c",-apple-system,"Hiragino Maru Gothic ProN",sans-serif;font-weight:700}
+h1{font-size:27px;font-weight:900;margin-bottom:6px}
+p.s{font-size:15px;color:#8B83B8;margin-bottom:20px;line-height:1.7}
+.global{background:#1B1830;border-radius:18px;padding:16px 18px;margin-bottom:20px;font-size:15px;line-height:1.9}
+.global b{color:#A99BFF}
+section{background:#1B1830;border-radius:20px;padding:16px 16px 14px;margin-bottom:14px}
+section>h2{font-size:18px;font-weight:900;margin-bottom:12px;color:#A99BFF}
+.f{margin-bottom:11px}
+.fh{display:flex;align-items:center;gap:9px;margin-bottom:6px;flex-wrap:wrap}
+.fh b{font-size:15px}
+.fh span{font:900 11.5px ui-monospace,Menlo,monospace;color:#8B83B8;flex:1}
+button{font:inherit;font-size:13px;font-weight:900;background:#5B4BE0;color:#fff;border:0;
+border-radius:99px;padding:7px 16px;cursor:pointer}
+button.done{background:#57A80A}
+pre{white-space:pre-wrap;word-break:break-word;font-family:inherit;font-weight:800;font-size:17px;
+line-height:1.55;color:#EDEAF8;background:#12101C;border-radius:12px;padding:12px 13px}
+.hint{font-size:13.5px;color:#8B83B8;margin-top:8px;line-height:1.6}
+.hint.warn{color:#FFC46B}
+details{margin-top:10px}summary{cursor:pointer;font-size:14px;color:#8B83B8}
+.say{font-size:15px;line-height:1.7;margin-top:8px}
+.sayja{font-size:13.5px;color:#8B83B8;line-height:1.75;margin-top:6px}
+</style></head><body>
+<h1>Canva に写す用</h1>
+<p class="s">1枚ぶんずつ <b>copy</b> して貼るだけ。記号は入っていません。<br>
+色とサイズは各行の右に書いてあります。</p>
+<div class="global">
+<b>背景</b>　#E9F0FF → #F4EDFF → #FFEAF6（160°のグラデ）<br>
+<b>フォント</b>　Zen Maru Gothic の Black（無ければ M PLUS Rounded 1c）<br>
+<b>紫</b> #5B4BE0　<b>ピンク</b> #DE3F97　<b>黒</b> #1D1B26　<b>灰</b> #6B6484<br>
+<b>枠線と影は付けない。</b>サイズは 1920×1080 想定
+</div>
+""" + '\n'.join(cards) + """
+<script>
+document.addEventListener('click', async e => {
+  const b = e.target.closest('button[data-for]'); if (!b) return;
+  const t = document.getElementById(b.dataset.for).textContent;
+  try { await navigator.clipboard.writeText(t); } catch {}
+  b.textContent = 'copied'; b.classList.add('done');
+  setTimeout(() => { b.textContent = 'copy'; b.classList.remove('done'); }, 1500);
+});
+</script>
+</body></html>
+""")
+print('docs/canva.html —', len(cards), 'slides')
