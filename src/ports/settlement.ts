@@ -34,8 +34,14 @@ export type SettlementResult =
 export interface SettlementPort {
   /** True only when a real facilitator is configured. `GET /health` reports it. */
   readonly live: boolean;
-  /** What this request costs, in the asset actually being settled. */
-  quote(amount: number, currency: string): PaymentRequirement;
+  /**
+   * What this request costs, in the asset actually being settled.
+   *
+   * `payTo` overrides the configured seller. That exists for one reason: at a booth, the
+   * person doing the demo should be paid into **their own wallet**, so that what they check
+   * afterwards is their balance and not our claim about it.
+   */
+  quote(amount: number, currency: string, payTo?: string): PaymentRequirement;
   /**
    * Verify a signed authorization without moving anything. Used at intake, so a held
    * request can be rejected immediately if its authorization would expire before it

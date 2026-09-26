@@ -70,14 +70,14 @@ export class X402Settlement implements SettlementPort {
     }
   }
 
-  quote(amount: number, _currency: string): PaymentRequirement {
+  quote(amount: number, _currency: string, payTo?: string): PaymentRequirement {
     return {
       scheme: SCHEME,
       network: this.config.network,
       // Atomic units, as a string. Rounded up so we never quote less than we charge.
       amount: String(Math.max(1, Math.ceil(amount * this.config.atomicPerUnit))),
       asset: this.config.asset,
-      payTo: this.config.payTo,
+      payTo: payTo ?? this.config.payTo,
       maxTimeoutSeconds: this.config.maxTimeoutSeconds,
       extra: {
         name: this.config.assetName,

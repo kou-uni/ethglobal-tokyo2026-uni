@@ -8,6 +8,7 @@
  * so a judge can see what is wired without reading the source.
  */
 
+import { readFileSync } from 'node:fs';
 import { loadEnv } from '../core/env.js';
 loadEnv();
 
@@ -22,6 +23,12 @@ import { X402Settlement, x402FromEnv } from '../adapters/x402.js';
 import { Store } from './state.js';
 
 const PORT = Number(process.env['PORT'] ?? 8402);
+
+// Our own URLs come from package.json, not from a literal in source.
+const pkg = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8')) as {
+  homepage?: string;
+  repository?: { url?: string };
+};
 
 const provider = chooseProvider();
 
@@ -58,7 +65,11 @@ const app = createApp({
   ...(provider.live ? { classifier: provider.create() } : {}),
   ...(redirectUri ? { redirectUri } : {}),
   identityWired: worldConfigured && Boolean(redirectUri),
+  ...(pkg.repository?.url ? { docsUrl: pkg.repository.url } : {}),
+  ...(pkg.homepage ? { homeUrl: pkg.homepage } : {}),
   ...(settlement ? { settlement } : {}),
+  ...(process.env['AGENT_PRIVATE_KEY'] ? { demoBuyerKey: process.env['AGENT_PRIVATE_KEY'] } : {}),
+  ...(process.env['DEMO_SIGNS_PER_HOUR'] ? { demoSignsPerHour: Number(process.env['DEMO_SIGNS_PER_HOUR']) } : {}),
   ...(redirectUri ? { origin: redirectUri.replace(/\/auth\/world\/callback$/, '') } : {}),
   ...(process.env['X402_EXPLORER_URL'] ? { explorerUrl: process.env['X402_EXPLORER_URL'] } : {}),
   identity: worldConfigured
@@ -96,6 +107,13 @@ app.listen(PORT, () => {
       settlement
         ? `x402 → ${(x402 as { network: string }).network}`
         : `not wired — missing ${'missing' in x402 ? x402.missing.join(', ') : ''}`
+    }`,
+  );
+  console.log(
+    `    /try        ${
+      process.env['AGENT_PRIVATE_KEY'] && settlement
+        ? 'pays a visitor into their own wallet, rate-limited'
+        : 'shows the screens; pays nothing'
     }`,
   );
   console.log(`\n  the page she opens:   ${redirectUri ? redirectUri.replace(/\/auth\/world\/callback$/, '') : `http://127.0.0.1:${PORT}`}/approve/<id>`);

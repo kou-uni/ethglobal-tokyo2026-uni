@@ -26,6 +26,11 @@ non-agentic surface that obtains informed human consent before a mandate is sign
 - [Every number and where it came from](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/product/ASSUMPTIONS.md): including two claims we measured, found false, and withdrew
 - [Machine-readable claims](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/claims.json): the output of `npm run verify -- --json`, not a hand-written list
 
+## Try the running product
+
+- [The product hub](https://kou-uni.github.io/ethglobal-tokyo2026-uni/product.html): live status, one link that stages a real request, the architecture, and what is honestly not wired
+- `GET https://mac-studio.taila649e1.ts.net/` — **the service describes itself**, including what it refuses to do. It runs from a laptop at the event, so it is up while we are
+
 ## How to check a claim instead of trusting it
 
 ```

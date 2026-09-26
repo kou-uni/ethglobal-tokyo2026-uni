@@ -44,5 +44,10 @@
     "jose": "^6.2.12",
     "openai": "^7.23.0",
     "viem": "^2.56.9"
+  },
+  "homepage": "https://kou-uni.github.io/ethglobal-tokyo2026-uni/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kou-uni/ethglobal-tokyo2026-uni"
   }
 }
