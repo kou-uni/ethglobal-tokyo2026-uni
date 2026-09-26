@@ -38,12 +38,14 @@ root.innerHTML=`
     <text x="294" y="107" class="heavy">Intercepta</text>
     <text x="294" y="129" class="tiny" data-traffic="screenExchange"></text>
     <text x="294" y="147" class="tiny" data-traffic="screenFailure"></text>
-    <rect class="engine" x="273" y="192" width="225" height="168" rx="20"/>
-    <text x="294" y="220" class="engine-small" data-traffic="engine"></text>
+    <rect id="trafficEnsNode" class="engine ens-engine" x="273" y="192" width="225" height="168" rx="20"/>
+    <rect x="286" y="202" width="75" height="27" rx="8" class="ens-badge"/>
+    <text x="294" y="222" class="ens-brand">ENSv2</text>
+    <text x="370" y="220" class="engine-small" data-traffic="ensRole"></text>
     <text x="293" y="253" class="heavy engine-ink" style="font-size:25px" data-traffic="engineTitle"></text>
     <text x="294" y="280" class="engine-small" data-traffic="enforced"></text>
     <text x="294" y="311" class="engine-small" data-traffic="checks"></text>
-    <text x="294" y="340" class="engine-small">ENSv2 · proposal ≠ policy</text>
+    <text x="294" y="340" class="ens-keys"><tspan class="ens-write">yh:proposal ✓</tspan><tspan dx="12" class="ens-refuse">yh:policy ✕</tspan></text>
     <rect id="trafficJevNode" class="node jev-node" x="300" y="401" width="228" height="87" rx="16"/>
     <text x="317" y="422" class="tiny" data-traffic="jevRole"></text>
     <text x="317" y="449" class="heavy">Jev</text>
@@ -100,6 +102,7 @@ root.innerHTML=`
   <section id="trafficExamplesPanel" hidden aria-labelledby="criteriaTitle"></section>
  </div>
  <div class="traffic-after"><p data-traffic="foot"></p><a href="#journey" data-traffic="detail"></a></div>
+ <aside class="ens-proof"><div><span class="eyebrow">ENSv2 / ENHANCED ACCESS CONTROL</span><h3 data-traffic="ensTitle"></h3><p data-traffic="ensBody"></p></div><div class="ens-proof-links"><a href="https://sepolia.etherscan.io/tx/0x16873dfa2a63a0e6dc1edb1903488499686d25628d17352dca14449ed24ee8d0" target="_blank" rel="noopener" data-traffic="ensProposal"></a><a href="https://sepolia.etherscan.io/tx/0xb459618bfdd9d0ab78cf34ee64723e04ef227546208d6502b23cf6e72e73ce4f" target="_blank" rel="noopener" data-traffic="ensPolicy"></a></div><p class="ens-proof-note" data-traffic="ensNote"></p></aside>
  <div class="ai-boundary"><span class="eyebrow">JEV / BOUNDED DECISION SUPPORT</span><h3 data-traffic="aiTitle"></h3><p data-traffic="aiIntro"></p>
   <div class="ai-track"><div class="ai-card"><small data-traffic="aiRule"></small><strong data-traffic="aiInput"></strong><code>verdict: human</code></div><div class="ai-arrow" aria-hidden="true">→</div><div class="ai-card"><small data-traffic="aiOutput"></small><div class="ai-choices"><button type="button" data-ai-choice="ask">ask</button><button type="button" data-ai-choice="drop">drop</button></div><small data-traffic="aiNoAuto"></small></div><div class="ai-arrow" aria-hidden="true">→</div><div class="ai-card ai-result" id="trafficAiResult"><strong id="trafficAiTitle"></strong><code id="trafficAiCode"></code><p id="trafficAiCap"></p></div></div>
   <div class="ai-verdict" id="trafficAiVerdict" aria-live="polite"></div><p class="micro" data-traffic="aiNote"></p>
@@ -162,11 +165,12 @@ function position(p,progress){
 }
 function draw(){
  const completed=new Set(packets.filter(p=>time>=p.start+p.duration).map(p=>p.id));
- const counts={auto:0,human:0,deny:0};let arrived=0,screeningActive=false,jevActive=false;
+ const counts={auto:0,human:0,deny:0};let arrived=0,screeningActive=false,jevActive=false,ensActive=false;
  packets.forEach(p=>{
   if(time>=p.start)arrived++;if(completed.has(p.id))counts[p.verdict]++;
   const progress=(time-p.start)/p.duration;
   if(progress>=.30&&progress<=.43)screeningActive=true;
+  if(progress>=.43&&progress<=.51)ensActive=true;
   if(p.modelChoice&&progress>=.51&&progress<=.77)jevActive=true;
   p.trails.forEach((el,j)=>{
    const pos=position(p,(time-p.start-j*.07)/p.duration);
@@ -176,6 +180,7 @@ function draw(){
   });
  });
  $('trafficScreenNode').classList.toggle('lit',screeningActive);$('trafficJevNode').classList.toggle('lit',jevActive);
+ $('trafficEnsNode').classList.toggle('ens-lit',ensActive);
  text('trafficArrived',arrived);text('trafficAuto',counts.auto);text('trafficDeny',counts.deny);text('trafficHeld',counts.human);
  for(const dot of [...autoDots,...denyDots,...heldDots])dot.el.style.opacity=completed.has(dot.id)?'1':'.12';
  const groupProgress=Math.max(0,Math.min(1,(time-27)/1.5)),ease=groupProgress*groupProgress*(3-2*groupProgress);

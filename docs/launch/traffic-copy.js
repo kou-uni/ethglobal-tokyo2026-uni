@@ -6,6 +6,8 @@ window.TRAFFIC_COPY = {
     productPromise:'機会を選び、人の余白をつくる。',
     productNote:'枠内はYOHAKUが提供する機能のまとまり。内部の資金審査にIntercepta、未知の依頼の分類にJevを利用します。',
     engineTitle:'方針を照合',
+    ensRole:'委任権限を限定',ensTitle:'AIに任せる。方針は、人のもの。',ensBody:'ENSv2のキー単位の権限で、エージェントには提案だけを許可。自分に都合よく方針を書き換える操作は、コントラクトが拒否します。',
+    ensProposal:'yh:proposal ✓ 書き込み成功 ↗',ensPolicy:'yh:policy ✕ 権限外で拒否 ↗',ensNote:'Ethereum Sepoliaでの別の実取引実証。図は説明再生で、今回のスマホ /experience はENSの読書きを実行しません。ENSv2の見どころはキー単位の限定委任であり、取消そのものが新機能という主張ではありません。',
     badge:'判定の再生 · API呼出し・送金なし', open:'大きく見る', close:'閉じる · Esc',
     play:'流れを再生', pause:'一時停止', restart:'もう一度', result:'結果まで進む',
     loop:'繰り返す', timeline:'再生位置', cap:'朝に見せる上限', unit:'束',
@@ -21,10 +23,10 @@ window.TRAFFIC_COPY = {
     notify:'通知する束', wait:'残りは、期限まで保留',
     gate:'上限', humanLink:'World ID · 承認する人を確認', capNote:'件数ではなく「通知する束」の上限。保留中は未承認のまま、期限切れなら拒否。',
     legend:['任せる','止める','人の判断待ち'],
-    steps:['資金を審査','ルールで分岐','未知だけJev','束ねて、絞る','人の出番へ'],
+    steps:['資金を審査','ENSv2と方針','未知だけJev','束ねて、絞る','人の出番へ'],
     captions:[
       ['YOHAKUが依頼を受け、内部で資金リスクを確認する。','粒は1件の依頼。YOHAKUの審査機能がInterceptaを使い、申告アドレスの判定・理由を取得します。リスクや不明な結果は、拒否の判断に使います。'],
-      ['Yohakuがルールを強制する。AIへのお願いではない。','金額・相手・方針で分岐。ENSv2は委任先が方針を書き換えられない境界を担います。許可済みは任せ、新規の相手や慎重に扱う依頼は人の判断待ちへ。'],
+      ['ENSv2で委任を限定。YOHAKUが方針を照合する。','エージェントが書けるのはyh:proposalだけ。yh:policyの書換えはコントラクトが拒否します。その権限の範囲で、YOHAKUが金額・相手・方針を照合。任せるか、人に聞くか、断るかを分けます。'],
       ['YOHAKUの分類補助が、未知の2件だけを扱う。','この内部機能にJevを使用します。askは判断待ち、dropは拒否。AIから自動許可へつながる経路はなく、通知の上限もYOHAKUが管理します。AI回答は説明用の例です。'],
       ['{held}件を、{bundles}つの束に。さらに、本人の上限で絞る。','AIのaskも、新規の相手からの依頼も、そのまま全件通知しません。同じ質問をまとめ、価値・期限・本人の上限を適用します。'],
       ['人が必要なところでWorld。その先に決済と財務。','朝に{cap}束を提示し、残り{deferred}束は保留。承認する人をWorldで確認し、条件成立後の決済はx402へ。NEOへの財務連携は提案段階です。']
@@ -50,6 +52,8 @@ window.TRAFFIC_COPY = {
     productPromise:'Keep opportunity open. Make space for people.',
     productNote:'The boundary groups YOHAKU’s capabilities. Its risk screening uses Intercepta; its unmatched-request classification uses Jev.',
     engineTitle:'Policy engine',
+    ensRole:'Scoped delegation',ensTitle:'Delegate the work. Keep the policy.',ensBody:'ENSv2 grants the agent write access to one text key: its proposal. A write to the owner’s policy is refused by the contract.',
+    ensProposal:'yh:proposal ✓ Write succeeded ↗',ensPolicy:'yh:policy ✕ Write refused ↗',ensNote:'Separate transactions on Ethereum Sepolia. This diagram is an explanation; the mobile /experience run does not read or write ENS. The ENSv2 feature highlighted here is per-key delegation, not a claim that revocation itself is new.',
     badge:'Decision replay · no API calls or payments', open:'Present', close:'Close · Esc',
     play:'Play the flow', pause:'Pause', restart:'Replay', result:'Show result',
     loop:'Loop', timeline:'Playback position', cap:'Morning attention cap', unit:'bundles',
@@ -65,10 +69,10 @@ window.TRAFFIC_COPY = {
     notify:'bundles surfaced', wait:'The rest wait until their deadlines',
     gate:'CAP', humanLink:'World ID · verify at approval', capNote:'The cap counts notification bundles, not requests. Deferred requests remain unapproved; unanswered deadlines refuse.',
     legend:['Delegate','Stop','Human judgment'],
-    steps:['Screen risk','Route by rules','Unknown → Jev','Bundle and cap','Human judgment'],
+    steps:['Screen risk','ENSv2 + policy','Unknown → Jev','Bundle and cap','Human judgment'],
     captions:[
       ['YOHAKU receives the request and checks payment risk inside.','Each particle is a request. YOHAKU’s screening capability uses Intercepta for the declared address’s verdict and reason. Flagged or unavailable results inform refusal.'],
-      ['Yohaku enforces rules. A prompt is not the boundary.','Route by price, counterparty and policy. ENSv2 limits the delegate’s ability to rewrite that policy. Delegate allowed requests; hold new or sensitive ones for a person.'],
+      ['ENSv2 scopes the delegation. YOHAKU applies the policy.','The agent can write yh:proposal, but the contract refuses its write to yh:policy. Within that authority, YOHAKU checks price, counterparty and policy, then delegates, asks or refuses.'],
       ['YOHAKU’s decision support handles only the two unknowns.','This internal capability uses Jev. Ask stays held; drop is refused. AI has no route to auto, and YOHAKU still controls notification limits. Model choices here are illustrative.'],
       ['{held} requests. {bundles} bundles. Then the owner’s cap.','AI asks and new-counterparty requests do not all become notifications. Group the same question, rank by value and deadline, and apply the owner’s attention limit.'],
       ['World at human approval. Payment and treasury beyond.','Surface {cap} bundles; defer {deferred}. World checks the person at approval. x402 settles after the conditions are met. NEO treasury integration is proposed.']
