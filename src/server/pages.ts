@@ -705,32 +705,32 @@ export function resultPage(p: {
   if (p.outcome === 'approved') {
     const t = p.verifiedAt ? ago(p.verifiedAt) : undefined;
     /*
-     * `pop` means a held credential was presented, not that anyone approved a prompt.
+     * ⚠️ **This inference was wrong, and it is corrected here.**
      *
-     * The difference is the whole claim of this screen, so it changes the words on it. We ask
-     * for a fresh authentication with both `prompt=login` and `max_age=0`; when the issuer
-     * answers `pop` anyway, saying "you proved you are a person" would be us overstating what
-     * we were given.
+     * We read `amr: ["pop"]` as "a held credential was presented, nobody approved anything".
+     * World's own guide specifies `amr` as `["pop"]` for every World ID authentication, so it
+     * says nothing about whether a re-authentication happened. What we actually observed is
+     * narrower: **the World App handoff did not appear on our devices** in the sandbox agents
+     * flow. That observation stands; the explanation did not.
+     *
+     * So the screen no longer claims anything about *how* the person authenticated. It states
+     * the observation, and nothing more.
      */
     const possession = Boolean(p.amr?.length) && p.amr!.every((m) => m === 'pop');
     return shell(
       'yohaku',
       `<main>
 <div class="big ok" id="b">${TICK}</div>
-<h1 style="text-align:center"><span class="sm">${
-        possession ? 'YOUR CREDENTIAL, PRESENTED NOW' : 'IT WAS YOU'
-      }</span>${p.what ? esc(p.what) : 'Approved'}</h1>
+<h1 style="text-align:center"><span class="sm">VERIFIED JUST NOW</span>${
+        p.what ? esc(p.what) : 'Approved'
+      }</h1>
 ${
   t
-    ? `<div class="when"><div class="n">${t.n}</div><div class="u">${t.u} · ${
-        possession ? 'the credential was presented' : 'you proved it'
-      }</div></div>`
+    ? `<div class="when"><div class="n">${t.n}</div><div class="u">${t.u} · World ID checked</div></div>`
     : ''
 }
 <div class="trio">
-  <div><div class="s on">✓</div><div class="l">${
-      possession ? 'credential<br>presented' : 'person<br>verified'
-    }</div></div>
+  <div><div class="s on">✓</div><div class="l">person<br>verified</div></div>
   <div><div class="s on">✓</div><div class="l">answer<br>kept</div></div>
   <div><div class="s${p.settled ? ' on' : ''}">${p.settled ? '✓' : '—'}</div><div class="l">${
       p.settled ? 'money<br>arrived' : 'payment<br>not wired'
@@ -738,10 +738,10 @@ ${
 </div>
 ${
   possession
-    ? `<div class="cav"><b>What that number is, exactly.</b> The issuer reported
-<code>amr: pop</code> &mdash; a credential <b>bound to an orb-verified person</b>, presented
-just now. <b>It is not a fresh approval in the World ID app.</b> We asked for one with
-<code>prompt=login</code> and <code>max_age=0</code>; this is what came back.</div>`
+    ? `<div class="cav"><b>One thing we can see, and one we cannot.</b> The issuer signed this
+moment: <code>acr</code> is the orb level and <code>auth_time</code> is seconds old, checked
+against this server&rsquo;s clock. <b>What we could not get was the World App handoff</b> &mdash;
+it did not appear on our devices in this sandbox flow, and the token does not say why.</div>`
     : ''
 }
 ${
@@ -771,7 +771,7 @@ Look at it on the explorer &rarr;</a>`
             'It is how long ago the issuer says the authentication happened — <b>seconds, not days.</b>',
             '<b>It did not come from us.</b> It is a signed claim, checked against this server\u2019s clock. We cannot make it smaller than it is.',
             possession
-              ? '<b>But freshness is not the same as being asked.</b> This issuer stamped it one second before it issued the token while reporting <code>amr: pop</code> — so what is fresh is the <b>presentation</b> of a credential, not an approval by a person.'
+              ? '<b>What we could not verify:</b> whether the World App was involved. It never opened on our devices in this sandbox flow. <code>amr: pop</code> is what World returns for every authentication, so it does not settle the question either way — we thought it did, and we were wrong.'
               : '',
           ].filter(Boolean),
         },
@@ -780,7 +780,7 @@ Look at it on the explorer &rarr;</a>`
           lines: [
             'Proving personhood at signup says a person opened the account once. <b>Checking it here binds it to the moment money would move.</b>',
             possession
-              ? '<b>How much that is worth depends on the issuer.</b> Here it means a credential only an orb-verified person holds was presented at this instant — which is real, and is less than a person pressing approve. <b>We would rather say the smaller true thing.</b>'
+              ? 'Here it means a credential only an orb-verified person holds was checked at this instant, against the issuer. <b>We state that, and stop</b> — because what we could not observe, we should not describe.'
               : 'That is the difference the whole flow exists for.',
           ],
         },
