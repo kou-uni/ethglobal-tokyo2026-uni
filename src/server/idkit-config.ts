@@ -8,7 +8,10 @@ import type { IdkitApprovalOptions } from './idkit-approval.js';
 /** Explicit opt-in; a broken production configuration never falls back to the sandbox. */
 export async function idkitApprovalFromEnv(env: NodeJS.ProcessEnv): Promise<IdkitApprovalOptions | undefined> {
   if (env.WORLD_IDKIT_DEMO_ENABLED !== 'true') return undefined;
-  const config = JSON.parse(readFileSync(new URL('../../config/world-idkit.json', import.meta.url), 'utf8'));
+  const deployment = env.WORLD_IDKIT_DEPLOYMENT ?? 'local';
+  if (deployment !== 'local' && deployment !== 'public') throw new Error('Unknown IDKit deployment');
+  const file = deployment === 'public' ? 'world-idkit-public.json' : 'world-idkit.json';
+  const config = JSON.parse(readFileSync(new URL(`../../config/${file}`, import.meta.url), 'utf8'));
   const key = env.WORLD_IDKIT_SIGNING_KEY;
   const origin = env.WORLD_IDKIT_ORIGIN;
   if (!key || !/^0x[0-9a-f]{64}$/i.test(key)
