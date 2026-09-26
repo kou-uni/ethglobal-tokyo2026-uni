@@ -96,6 +96,10 @@ step-up  e8e22ed9f13f9a3e3b42a1548b68341c3e22a5ffa5ecb0f6d8ef143af41c9d75
 後者でWorldによるログイン、Yohakuアプリの作成、署名者の登録が完了した。
 公開RP status APIでも `production_status: registered` を確認した。
 登録だけで本人の実機証明の成功とはしない。
+その後、12:46:23 JSTに本番verify APIが今回の証明を成功と判定した
+（protocol 3.0、credential orb）。証跡は
+[world-idkit.json](../build/evidence/world-idkit.json)。
+スマホの具体的な操作内容は本人の観測確認待ち。
 
 公式IDKitガイドに沿い、秘密鍵はサーバーに置き、認証依頼に署名する。
 ブラウザーでQRを表示し、返った証明をサーバーから本番verify APIへ送って検証する。

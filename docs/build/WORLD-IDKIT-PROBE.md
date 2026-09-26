@@ -5,8 +5,11 @@ YohakuのIDKitアプリと署名者をDeveloper Portalで登録した。
 画面の署名者とローカル鍵の公開アドレスが一致し、公式RP status APIは
 本番・stagingともに `registered` を返した。公開設定は `config/world-idkit.json`。
 
-ChromeでQRの生成・表示まで確認済み。**実機の証明成功はまだ未確認。**
-246件の自動テストと10件のclaim検証は通過したが、本番の証明成功の代わりにはしない。
+ChromeでQRを生成し、**2026-09-26 12:46:23 JSTに本番verify APIで証明の成功を確認した。**
+結果は `verified: true / environment: production / protocolVersion: 3.0 / credential: orb`。
+記録は [evidence/world-idkit.json](evidence/world-idkit.json)。
+スマホでアプリが開いたか、具体的にどの操作をしたかは本人の観測確認待ち。
+246件の自動テストと10件のclaim検証も通過した。これらと本番証明の結果は区別している。
 
 ## 起動とスマホ操作
 

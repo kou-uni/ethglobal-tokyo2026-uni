@@ -11,5 +11,5 @@
   "verifySource": "https://docs.world.org/api-reference/developer-portal/verify",
   "source": "2026-09-26: Developer Portal showed App configured successfully and the matching signer address. GET /api/v4/rp-status/rp_b14f684c8aeb60f0 returned production_status=registered and staging_status=registered.",
   "documentation": "https://docs.world.org/world-id/idkit/integrate",
-  "note": "Public configuration only. This IDKit app is separate from the blocked Agents OIDC client and is not evidence of a successful production proof."
+  "note": "Public configuration only. This IDKit app is separate from the blocked Agents OIDC client. Registration is not proof verification; see docs/build/evidence/world-idkit.json for the separately verified production proof."
 }
