@@ -104,8 +104,12 @@ cannot be synthesised is what a person went through and concluded.**
 | *What happened in your first five minutes with it?* | *Why did you stop using it?* |
 | *What did you expect that it turned out not to be?* | *Your own writing, in your own words — to train on.* |
 
-And two she has decided not to sell at all — *who do you live with*, *what do you earn* —
-which is rule 2 doing its job rather than an omission.
+And the ones she has decided not to sell at all — ***what is your home address***,
+***which wallet address is yours***, *who do you live with*, *what do you earn*.
+**They are not deleted from the demo, they are refused in it** — and she can go and look at
+what they wanted, with the rule that stopped each one, at `/dropped`.
+
+> **A refusal nobody can inspect is the same as never having been asked.**
 
 **A model can invent an answer to any of these. It cannot invent a true one.**
 
@@ -241,12 +245,12 @@ Independent sellers must not be pooled into one resolver instance without scopin
 ## 8. Demo walkthrough
 
 ```
-02:00   agent requests keep arriving           51 tonight
+02:00   agent requests keep arriving           52 tonight
 
         Yohaku handles them
-          auto   33   settle immediately, executed under constraints
-          deny   11   revoked / out of scope — never reaches her
-          human   7   bundled — 2 will surface, her daily cap
+          auto   32   settle immediately, executed under constraints
+          deny   12   revoked / out of scope — never reaches her
+          human   8   bundled — 2 will surface, her daily cap
 
         she is asleep
 
@@ -256,7 +260,7 @@ Independent sellers must not be pooled into one resolver instance without scopin
           1 approved  → fresh proof of personhood → payment executes
           1 ignored   → deadline passes → auto-denied
 
-        ledger:  2,361 JPYC arrived overnight
+        ledger:  3,322 JPYC arrived overnight
         spared:  never had to ask — 0.1/day in week 1, 6.3/day by week 4
 ```
 

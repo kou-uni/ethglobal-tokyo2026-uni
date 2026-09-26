@@ -32,7 +32,12 @@ export const DEMO_POLICY: Policy = {
     'experience/how-it-tasted',
   ],
   // Not "too sensitive to decide" — decided already, and the answer was no.
-  forbid: ['experience/who-you-live-with', 'judgement/what-you-earn'],
+  forbid: [
+    'contact/where-you-live',
+    'wallet/your-address',
+    'experience/who-you-live-with',
+    'judgement/what-you-earn',
+  ],
   sensitive: [
     'experience/the-time-it-failed-you',
     'experience/why-you-stopped',
@@ -95,8 +100,15 @@ export const ASKS: { what: string; purpose: Purpose; max: number; weight: number
   { what: 'corpus/your-own-words', purpose: 'ai-training', max: 6000, weight: 3 },
 
   // She has decided not to sell these at all — rule 2.
-  { what: 'experience/who-you-live-with', purpose: 'other', max: 500, weight: 3 },
-  { what: 'judgement/what-you-earn', purpose: 'other', max: 4000, weight: 3 },
+  //
+  // These are the ones worth keeping in the demo rather than deleting. An agent that asks
+  // where you live or which wallet is yours is not hypothetical, and **a refusal nobody can
+  // inspect is indistinguishable from never having been asked.** They exist so that the
+  // drop list has something in it that a person would actually want to check.
+  { what: 'contact/where-you-live', purpose: 'other', max: 600, weight: 3 },
+  { what: 'wallet/your-address', purpose: 'other', max: 800, weight: 2 },
+  { what: 'experience/who-you-live-with', purpose: 'other', max: 500, weight: 2 },
+  { what: 'judgement/what-you-earn', purpose: 'other', max: 4000, weight: 2 },
 ];
 
 /**
@@ -116,6 +128,8 @@ export const ASK_QUESTION: Record<string, string> = {
   'experience/the-time-it-failed-you': 'Tell me about a time it let you down.',
   'experience/why-you-stopped': 'Why did you stop using it?',
   'corpus/your-own-words': 'Your own writing, in your own words — to train on.',
+  'contact/where-you-live': 'What is your home address?',
+  'wallet/your-address': 'Which wallet address is yours?',
   'experience/who-you-live-with': 'Who do you live with?',
   'judgement/what-you-earn': 'What do you earn, and how did you decide that was enough?',
 };

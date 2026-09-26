@@ -23,7 +23,7 @@ stops in the first twenty seconds*, then the reason, then proof anyone can check
 
 *(screen: the fifty dots resolve — most fade to green, some dim out, three stay lit)*
 
-> Thirty-three settled while she slept. Eleven never reached her at all.
+> Thirty-two settled while she slept. **Twelve never reached her at all — and she can go and see what they wanted.**
 > **Two were worth her attention — the cap she set herself.**
 
 ### 0:45 — The name

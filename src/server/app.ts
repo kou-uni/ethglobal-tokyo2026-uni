@@ -24,7 +24,7 @@ import { mayProceed, type IdentityPort, type VerificationOutcome } from '../port
 import { mayMoveMoney, type ScreeningPort } from '../ports/screening.js';
 import { Store, verdictBody, type Entry } from './state.js';
 import { PendingVerifications } from './pending.js';
-import { approvalPage, invitePage, resultPage, type TodaySummary } from './pages.js';
+import { approvalPage, droppedPage, invitePage, resultPage, type TodaySummary } from './pages.js';
 import { pastNights, type NightSummary } from '../core/history.js';
 import { asQuestion } from '../core/night.js';
 import {
@@ -687,6 +687,33 @@ export function createApp(deps: AppDeps): Server {
         return res.end();
       }
 
+      /*
+       * What was refused on her behalf.
+       *
+       * Reachable from the fold on the approval screen, and on its own so it can be linked to.
+       * It reads the store rather than a log, so it cannot drift from what actually happened.
+       */
+      if (req.method === 'GET' && path === '/dropped') {
+        const denied = deps.store.byVerdict('deny');
+        return html(
+          res,
+          200,
+          droppedPage({
+            arrived: deps.store.all().length,
+            items: denied.map((e) => ({
+              who: e.request.who,
+              what: e.request.what,
+              question: asQuestion(e.request.what),
+              amount: e.request.price.amount,
+              currency: e.request.price.currency,
+              rule: e.decision.rule,
+              reason: e.decision.reason,
+              at: e.receivedAt,
+            })),
+          }),
+        );
+      }
+
       /* ── the page she opens ─────────────────────────────────────────────── */
       if (req.method === 'GET' && /^\/approve\/[^/]+$/.test(path)) {
         const id = decodeURIComponent(path.slice('/approve/'.length));
@@ -826,6 +853,7 @@ export function createApp(deps: AppDeps): Server {
         'POST /approvals/:id',
         'GET /ledger/:name',
         'GET /try',
+        'GET /dropped',
         'GET /approve/:id',
         'GET /auth/world/callback',
       ] });

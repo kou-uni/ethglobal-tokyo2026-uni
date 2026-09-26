@@ -53,10 +53,10 @@ flowchart LR
 flowchart TB
   IN["一晩の依頼<br/>約50件"]
   IN --> A["auto ≈33<br/>自動で通る"]
-  IN --> D["deny ≈10<br/>本人に届かない"]
+  IN --> D["deny ≈10<br/>本人に届かない<br/><small>あとで確認できる</small>"]
   IN --> H["human = 2<br/>本人が見る"]
   A --> SA["余白を<b>生む</b><br/>聞かれずに済んだ"]
-  D --> SD["余白を<b>守る</b><br/>届く前に消えた"]
+  D --> SD["余白を<b>守る</b><br/>届く前に消えた<br/><b>——そして後から確認できる</b>"]
   H --> SH["余白を<b>使う</b><br/>上限は本人が決めた数"]
   classDef g fill:#F2FBD9,stroke:#7FA326,color:#2F3D09
   classDef r fill:#EFEDE6,stroke:#A6A3B4,color:#5F5D6B
@@ -520,7 +520,7 @@ AP2 は Trusted Surface に **MUST be non-agentic** を課しました。理由�
 ```bash
 npm test          # 133 tests
 npm run verify    # 10 claims — ドキュメントの数字をコードから再導出する
-npm run seed -- 1    # 一晩を生成して route() に通す。seed を変えれば入力は動く
+npm run seed -- 2    # 一晩を生成して route() に通す。seed を変えれば入力は動く
 ```
 
 **「入力は 46〜54 で揺れる。本人に届く数は、20回とも 2 だった」は主張ではなく出力です。**

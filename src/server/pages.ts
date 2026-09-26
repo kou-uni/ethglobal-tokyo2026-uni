@@ -92,6 +92,9 @@ details.roll summary b{background:var(--lime);color:#3F5413;border-radius:99px;
 .row i.d{background:#EFEDE6;color:var(--ink3)}
 .row i.w{background:var(--lilacL);color:var(--lilacD)}
 .row b{font-size:19px;font-weight:900;color:var(--ink)}
+.row .see{margin-left:auto;font-size:13px;font-weight:900;color:#fff;background:var(--ink);
+  padding:5px 13px;border-radius:99px;text-decoration:none;white-space:nowrap}
+.row .see:active{transform:translateY(2px)}
 .row .amt{margin-left:auto;font-weight:900;color:var(--limeD);white-space:nowrap}
 .nights{width:100%;border-collapse:collapse;font-size:14px;font-weight:800;
   font-variant-numeric:tabular-nums}
@@ -155,6 +158,20 @@ a.b:active,button.b:active{transform:translateY(5px);box-shadow:0 1px 0 #0F0E14,
 a.g,button.g{background:var(--card);color:var(--ink2);box-shadow:0 6px 0 var(--grey),0 10px 20px rgba(36,35,41,.12)}
 a.g:active,button.g:active{box-shadow:0 1px 0 var(--grey),0 3px 8px rgba(36,35,41,.12)}
 form{margin:0}
+
+/* the drop list */
+.rgrp{margin-bottom:18px;animation:bg .5s cubic-bezier(.2,1.6,.4,1) both}
+.rhd{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:900;color:var(--ink2);
+  margin-bottom:9px;line-height:1.4}
+.rno{background:var(--ink);color:#fff;font-size:11px;letter-spacing:.09em;padding:3px 11px;
+  border-radius:99px;flex:0 0 auto}
+.drop{background:var(--card);border-radius:20px;padding:15px 17px;box-shadow:var(--shS);
+  margin-bottom:9px;border-left:6px solid var(--grey)}
+.dq{font-size:17px;font-weight:900;line-height:1.4;color:var(--ink2)}
+.dm{font-size:14px;font-weight:800;color:var(--ink3);margin-top:6px}
+.dm b{color:var(--ink2)}
+.dslug{font-size:11.5px;font-weight:800;color:var(--ink3);margin-top:5px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 
 /* the receipt — only ever rendered when a transfer really happened */
 .paid{margin-top:20px;background:var(--lime);border-radius:26px;padding:18px 20px;
@@ -396,7 +413,8 @@ ${nights
         ? `<span class="amt">${num(today.worth)} ${esc(today.currency)}${today.settlementWired ? '' : ' worth'}</span>`
         : ''
     }</div>
-  <div class="row"><i class="d">✕</i><b>${today.deny}</b> dropped before they reached you</div>
+  <div class="row"><i class="d">✕</i><b>${today.deny}</b> dropped before they reached you
+    ${today.deny > 0 ? '<a class="see" href="/dropped">see what they wanted &rarr;</a>' : ''}</div>
   <div class="row"><i class="w">⏳</i><b>${today.waiting}</b> still waiting for you</div>
   ${
     today.settlementWired
@@ -573,6 +591,95 @@ ${fold(p.today, nights)}
         lines: [
           'Press <b>No</b> and look at what the next screen lists. Absence is invisible, so it names each thing that did not happen.',
           'Then come back and press <b>Yes</b> on another one.',
+        ],
+      },
+    ],
+  );
+}
+
+/**
+ * What was refused on her behalf.
+ *
+ * A count is not accountability. "Eleven were dropped" is indistinguishable from "eleven were
+ * never asked", and the whole claim of this product is that **something stood between an
+ * agent and a person and decided** — which only means anything if she can go and look at what
+ * it decided, and under which rule.
+ *
+ * So this is not a log. It is the receipt for a promise: *these people asked you for these
+ * things, and here is the rule of yours that stopped each one.*
+ */
+export function droppedPage(p: {
+  items: {
+    who: string;
+    what: string;
+    question: string;
+    amount: number;
+    currency: string;
+    rule: number;
+    reason: string;
+    at: string;
+  }[];
+  arrived: number;
+}): string {
+  const byRule = new Map<number, typeof p.items>();
+  for (const it of p.items) byRule.set(it.rule, [...(byRule.get(it.rule) ?? []), it]);
+  const rules = [...byRule.entries()].sort((a, b) => a[0] - b[0]);
+
+  return shell(
+    'yohaku',
+    `<main>
+<div class="lede">
+  <div class="pill">REFUSED ON YOUR BEHALF</div>
+  <div class="count">${p.items.length}</div>
+  <div class="sub">of ${p.arrived} never reached you.<br>Here is what they wanted.</div>
+</div>
+
+${
+  p.items.length === 0
+    ? `<div class="card"><div class="v">Nothing was refused yet.</div>
+<div class="why">When something is, it appears here with the rule that stopped it —
+so &ldquo;we protected you&rdquo; is something you can check rather than take our word for.</div></div>`
+    : rules
+        .map(
+          ([rule, items]) => `<div class="rgrp">
+  <div class="rhd"><span class="rno">RULE ${rule}</span>${esc(items[0]!.reason.replace(/^"[^"]*"\s*/, ''))}</div>
+  ${items
+    .map(
+      (it) => `<div class="drop">
+    <div class="dq">${esc(it.question)}</div>
+    <div class="dm"><b>${esc(it.who)}</b> offered ${num(it.amount)} ${esc(it.currency)}</div>
+    <div class="dslug">${esc(it.what)}</div>
+  </div>`,
+    )
+    .join('')}
+</div>`,
+        )
+        .join('')
+}
+</main>
+<footer><b>None of these were shown to you at the time.</b> That was the point &mdash; but a
+refusal you cannot inspect is the same as never having been asked.<br>
+Every one was stopped by a rule you set, and the rule is named next to it.</footer>`,
+    [
+      {
+        tag: 'WHY THIS PAGE EXISTS',
+        lines: [
+          '<b>A count is not accountability.</b> "Eleven dropped" reads the same whether a system protected her or simply lost them.',
+          'Naming the rule is what makes the refusal checkable. If a rule here is wrong, <b>it is wrong in her policy</b>, and she can see exactly which line to change.',
+        ],
+      },
+      {
+        tag: 'THE ONES WORTH LOOKING AT',
+        lines: [
+          'Agents do ask for a home address and for a wallet. <b>Those are in here, refused under rule 2</b> — a category she decided not to sell.',
+          'They are not hypothetical, and deleting them from the demo would have made the product look tidier than the world is.',
+        ],
+      },
+      {
+        tag: 'WHAT IS NOT HERE',
+        lines: [
+          'Requests that settled automatically, and the ones still waiting for her. This page is only the refusals.',
+          '<b>Nothing here cost her anything</b> — no money moved, and no permission was recorded.',
         ],
       },
     ],
