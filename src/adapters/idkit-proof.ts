@@ -3,6 +3,7 @@ import type { IDKitResult } from '@worldcoin/idkit-core';
 
 export interface IdkitChallenge { nonce: string; action: string; signal: string; expiresAt: number }
 export interface IdkitVerificationConfig { rpId: string; verifyBaseUrl: string }
+export type IdkitProofSummary = Awaited<ReturnType<typeof verifyIdkitProof>>;
 const sameHex = (a: unknown, b: string) => typeof a === 'string' && /^0x[0-9a-f]+$/i.test(a) && BigInt(a) === BigInt(b);
 
 /** No payment, user account, token persistence, or uniqueness/reward grant. */

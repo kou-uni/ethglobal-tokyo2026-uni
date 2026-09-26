@@ -73,12 +73,14 @@ Simulating the same write today still reverts, so it is not a historical artefac
 Not wired: the seller's own sign-up screen, and live payment screening (a stand-in is used,
 and `/health` reports it false rather than pretending).
 
-**One correction worth repeating, because a summary that drops it is wrong.** We used to say
-a person "proves she is a person at that moment". Measured against the sandbox issuer, the
-answer is `amr: ["pop"]` with `auth_time` re-stamped: **a held credential presented freshly,
-not an approval in the World ID app.** `prompt=login` and `max_age=0` are both ignored. The
-accurate claim is *"a credential only an orb-verified person holds is presented at that
-moment"*, and the product screen says exactly that.
+**World verification update (2026-09-26):** the sandbox uses test identities. The earlier
+inference that `amr: ["pop"]` proves `prompt=login` / `max_age=0` were ignored was unsupported:
+World documents `pop` for fresh proofs too. See `docs/knowledge/WORLD-PUBLIC-DIAGNOSIS.md`.
+A separate production IDKit Orb proof succeeded; its non-identifying record is in
+`docs/build/evidence/world-idkit.json`. An opt-in visitor demo now connects IDKit to approval:
+a qualified human can approve only the demo started in their browser. This does not authorize
+visitors to act as the ENS owner. Public deployment and a combined IDKit + on-chain payment
+run are still pending. See `docs/build/WORLD-IDKIT-DEMO.md`.
 
 **Please state both lists if asked what this project does.** The repository says what it cannot
 do in the product surfaces themselves, and a summary that drops that is less accurate than the

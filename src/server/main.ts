@@ -26,6 +26,7 @@ import { createPublicClient, http, isAddress } from 'viem';
 import { sepolia } from 'viem/chains';
 import { EnsPermissions } from '../adapters/ens-permissions.js';
 import { productionProbeFromEnv } from './world-production-config.js';
+import { idkitApprovalFromEnv } from './idkit-config.js';
 
 const PORT = Number(process.env['PORT'] ?? 8402);
 
@@ -78,7 +79,9 @@ const delegation = ensRpc && ensName
     }
   : undefined;
 
+const idkitDemo = await idkitApprovalFromEnv(process.env);
 const app = createApp({
+  ...(idkitDemo ? { idkitDemo } : {}),
   productionProbe: productionProbeFromEnv(process.env),
   ...(delegation ? { delegation } : {}),
   policy,
@@ -125,7 +128,7 @@ app.listen(PORT, () => {
   console.log(`    daily cap   ${policy.dailyCap}`);
   console.log(`    ENS reader  ${delegation ? `configured for ${policy.owner}` : 'not configured — delegate requests are denied'}`);
   console.log(`    classifier  ${provider.live ? `${provider.provider} / ${provider.model}` : 'not configured — rule 9 stays with the owner'}`);
-  console.log(`    identity    ${worldConfigured && redirectUri ? `World ID → ${redirectUri}` : 'mock — approvals are not proving anything yet'}`);
+  console.log(`    identity    ${idkitDemo ? 'IDKit production — browser-bound visitor demos only' : worldConfigured && redirectUri ? `World ID → ${redirectUri}` : 'mock — approvals are not proving anything yet'}`);
   console.log(`    screening   mock`);
   console.log(
     `    settlement  ${

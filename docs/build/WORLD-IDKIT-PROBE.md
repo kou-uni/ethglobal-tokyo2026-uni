@@ -1,5 +1,8 @@
 # World Appを使うIDKit本番認証テスト
 
+審査員向けにYohakuの依頼承認へつなぐ手順は
+[WORLD-IDKIT-DEMO.md](WORLD-IDKIT-DEMO.md)。この文書は認証単体のテスト。
+
 確認日：2026-09-26。
 YohakuのIDKitアプリと署名者をDeveloper Portalで登録した。
 画面の署名者とローカル鍵の公開アドレスが一致し、公式RP status APIは
