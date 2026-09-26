@@ -66,7 +66,7 @@ or push notifications, or claim A2A 1.0 conformance. See `config/a2a.json` and
 
 ```
 npm install
-npm test                     # 405 tests
+npm test                     # 409 tests
 npm run verify               # 12 claims, each re-derived by running the code
 npm run verify -- --json     # the same, machine-readable
 npm run seed -- 18           # generate one night and run it through the real router

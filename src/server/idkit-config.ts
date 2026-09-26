@@ -46,7 +46,8 @@ export async function idkitApprovalFromEnv(env: NodeJS.ProcessEnv): Promise<Idki
       koePage: readFileSync(new URL('../../setup/koe-registration.html', import.meta.url), 'utf8'),
       koeJs: koeBundle.outputFiles[0]!.contents,
       ...(experienceBundle ? {
-        experiencePage: readFileSync(new URL('../../setup/experience.html', import.meta.url), 'utf8'),
+        experiencePage: readFileSync(new URL('../../setup/experience.html', import.meta.url), 'utf8')
+          .replace('<!--APP_STYLE-->', `<style>${readFileSync(new URL('../../setup/experience.css', import.meta.url), 'utf8')}</style>`),
         experienceJs: experienceBundle.outputFiles[0]!.contents,
       } : {}),
     },

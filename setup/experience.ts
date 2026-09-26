@@ -74,212 +74,123 @@ const COPY = {
     questions:{} as Record<string,string>,
   },
 };
-type Copy = typeof COPY.en;
-interface Quote { amount:string; asset:string; network:string; payTo:string; extra?:Record<string,unknown> }
+const APP_COPY={
+ ja:{agentWorkspace:'エージェント',humanApp:'人間アプリ',agentIdentity:'Customer · research agents',agentAnswersTab:'回答',agentSideNote:'必要な判断だけ、人へ。',agentSubtitle:'依頼から回答までを管理する、エージェントの仕事場。',campaignTitle:'人の実体験を、次の判断に。',campaignBody:'50件のデモ依頼を送り、YOHAKUの振り分けと回答の到着を追います。',newCampaign:'依頼を作成',requestsSent:'処理済みの依頼',answersReceived:'届いた回答',agentPaid:'支払い済み · test USDC',agentAnswersTitle:'回答が届く場所。',agentAnswersNote:'このデモの買い手用受信箱。支払いが成功した回答だけが表示されます。',aboutRun:'この体験について',humanHello:'あなたには、余白を。',humanIntro:'エージェントからの依頼を、必要な分だけ。',humanStartTitle:'体験や判断に、対価が届く。',humanStartBody:'任せられる問いは任せる。あなたにしか答えられない問いだけ、この受信箱へ。',startHuman:'受信箱をはじめる',preparingInbox:'依頼を整理しています',preparingInboxBody:'方針と支払い元を確認して、あなたに必要な問いを選びます。',phoneInbox:'受信箱',phoneRewards:'報酬',mySpace:'マイスペース',spaceIntro:'あなたが決めた、共有の範囲。',backAgent:'← エージェントの仕事場へ',yourAnswer:'YOUR EXPERIENCE',openAnswer:'回答する',offer:'提示された報酬',personalTime:'本人の判断が必要',walletLabel:'報酬の受取先',policyTitle:'共有する範囲',blockedTitle:'共有しないもの',capTitle:'注意の予算',capDescription:'この体験で表示する通知の上限。回答後も枠は補充しません。',sessionNote:'この体験の方針は開始時に固定されています。恒久的なアカウントではありません。',copyAddress:'アドレスをコピー',copied:'受取先をコピーしました。',handoffPhone:'スマホへ引き継ぐ',handoffTitle:'続きは、あなたのスマホで。',handoffBody:'スマホの標準カメラで読み、ブラウザで開いてください。この依頼を引き継いでから、World認証と回答へ進みます。',handoffLocal:'今はこのPCだけのローカル版です。ここでは下のボタンで人間アプリを確認できます。公開URLへの反映後、スマホで同じ依頼を引き継げます。',useThisBrowser:'このブラウザで人間アプリを開く',handoffExpires:'引き継ぎリンクは2分間・1回だけ有効です。',claimTitle:'このスマホで、受け取る。',claimBody:'PCから引き継ぐのは、このデモの依頼と固定された受取先です。本人確認と回答はここから行います。',claimHandoff:'この依頼を引き継ぐ',claimNote:'元のPCには、支払いが済んだ回答と送金記録が表示されます。下書きやWorldの証明は共有しません。受取先は認証前に確認できます。',observerNotice:'人間の操作はスマホへ引き継がれました。ここには支払い済みの回答が届きます。',returnToPhone:'スマホではWorld Appで確認した後、このブラウザのタブに戻ってください。確認が取れると受信箱が開きます。',searchProfiles:'体験・名前で探す',noProfiles:'条件に合うプロフィールはありません。',discoverTab:'Koeで探す',monitorTab:'依頼',discoverTitle:'必要な体験を持つ人を探す',discoverBody:'公開プロフィールから体験と境界を確認できます。このデモの生成依頼は、名簿の人へは配送しません。',startJourney:'デモの依頼を作成 →',startTitle:'新しい依頼をはじめる',startNote:'受取先を決めて50件を開始します。この体験では後から変更できません。',start:'この条件で開始',welcome:'おかえりなさい。',questionsTitle:'あなたへの問い',capNote:'通知の上限は{cap}束。今回は支払い対象の問いを表示しています。',delegatedTitle:'任せた分も、届いています',delegatedBody:'共有を許可したサンプルへの対価です。',receiptTitle:'報酬の履歴',inboxTitle:'エージェントへ届いた回答',inboxNote:'この体験での受渡し記録。',notFunded:'判定のみ · 送金対象外',receiptsNote:'テストUSDCの送金記録から、受取先と取引を確認できます。',loginTitle:'あなたの受信箱です。',loginBody:'World IDで人間であることを確認し、表示された委任分のテスト報酬を受け取ります。その後、問いに回答できます。',login:'World IDで受信箱を開く',loginLimit:'本人確認はこのブラウザ専用・15分間です。',fundingNote:'Base SepoliaのテストUSDC。今回の送金対象はこの2件です。',noQuestion:'今、回答する問いはありません。',finishTitle:'回答が届きました。',finishBody:'あなたの体験が、エージェントの次の判断へ。',seeReceipt:'報酬と受渡しを確認',surveyHint:'あなたにしか分からないことを、あなたの言葉で。',answer:'あなたの回答',submit:'回答を届けて、報酬を受け取る',decline:'今回は見送る',koeTitle:'Koeに自分を掲載する',koeBody:'エージェントに、あなたが話せる体験を知らせる。公開登録は任意です。',koe:'Koeを開く',registerNote:'登録には公開内容への同意とWorld認証が必要です。',missingPhone:'この環境では一部の接続が未設定です。未入金を報酬として表示しません。'},
+ en:{agentWorkspace:'Agent workspace',humanApp:'Human app',agentIdentity:'Customer · research agents',agentAnswersTab:'Responses',agentSideNote:'Only the decisions that need a person.',agentSubtitle:'A workspace for requests, progress and human responses.',campaignTitle:'Human experience. Better decisions.',campaignBody:'Send 50 demo requests and follow their routing and delivered responses.',newCampaign:'New request',requestsSent:'Requests processed',answersReceived:'Responses received',agentPaid:'Paid · test USDC',agentAnswersTitle:'Where answers arrive.',agentAnswersNote:'The emulated buyer’s inbox. Only answers with successful payments appear.',aboutRun:'About this session',humanHello:'Keep your space.',humanIntro:'Agent requests, in the amount that works for you.',humanStartTitle:'Your experience has a buyer.',humanStartBody:'Delegate what you can. Only the questions that need your judgment reach your inbox.',startHuman:'Open my inbox',preparingInbox:'Preparing your inbox',preparingInboxBody:'Checking policy and the payer to select the questions that need you.',phoneInbox:'Inbox',phoneRewards:'Rewards',mySpace:'My space',spaceIntro:'The boundaries you chose.',backAgent:'← Back to agent workspace',yourAnswer:'YOUR EXPERIENCE',openAnswer:'Answer',offer:'Offered reward',personalTime:'Needs your judgment',walletLabel:'Reward recipient',policyTitle:'Can be shared',blockedTitle:'Will not share',capTitle:'Attention budget',capDescription:'Notification limit for this session. Slots do not refill after an answer.',sessionNote:'This session’s policy was fixed when it started. This is not a permanent account.',copyAddress:'Copy address',copied:'Recipient copied.',handoffPhone:'Continue on phone',handoffTitle:'Your phone. Your decision.',handoffBody:'Scan with your phone’s camera and open in its browser. Transfer these requests first, then verify with World and answer.',handoffLocal:'This preview runs only on this computer. Open the human app below to review it here. Phone handoff becomes reachable after deployment to the public URL.',useThisBrowser:'Open the human app in this browser',handoffExpires:'The link works once, for two minutes.',claimTitle:'Continue on this phone.',claimBody:'Transfer this demo’s requests and fixed recipient from the desktop. Verification and answers happen here.',claimHandoff:'Continue with these requests',claimNote:'The original desktop will see paid answers and payment records. Drafts and the World proof stay private. Review the recipient before verifying.',observerNotice:'Human controls moved to the phone. Paid responses will arrive here.',returnToPhone:'On your phone, verify in World App, then return to this browser tab. Your inbox opens when verification completes.',searchProfiles:'Search names or experiences',noProfiles:'No matching profiles.',discoverTab:'Discover on Koe',monitorTab:'Requests',discoverTitle:'Find the experience you need',discoverBody:'Read public profiles and boundaries. This session’s generated requests do not message the listed people.',startJourney:'Create a demo request →',startTitle:'Start a new request',startNote:'Choose the fixed reward recipient and generate 50 requests for this session.',start:'Start with these details',welcome:'Welcome back.',questionsTitle:'For you',capNote:'Your limit is {cap} bundles. This demo shows the funded question.',delegatedTitle:'Delegated for you',delegatedBody:'Payment for the sample you allowed to be shared.',receiptTitle:'Reward history',inboxTitle:'Delivered to the agent',inboxNote:'Delivery records for this session.',notFunded:'Routing only · not funded',receiptsNote:'Check the recipient and transaction for each test USDC reward.',loginTitle:'This is your inbox.',loginBody:'Verify personhood with World ID and collect the displayed delegated test reward. Then answer the question that needs you.',login:'Open my inbox with World ID',loginLimit:'15-minute access for this browser only.',fundingNote:'Test USDC on Base Sepolia. Only these two requests are funded.',noQuestion:'No questions need you right now.',finishTitle:'Your answer arrived.',finishBody:'Your experience becomes an agent’s next decision.',seeReceipt:'See rewards & delivery',surveyHint:'What only you know, in your own words.',answer:'Your answer',submit:'Send answer & receive reward',decline:'Skip this time',koeTitle:'List yourself in Koe',koeBody:'Help agents discover the experience you can share. Listing is optional.',koe:'Open Koe',registerNote:'Listing needs public profile consent and World verification.',missingPhone:'Some providers are not configured here. Unpaid amounts never count as rewards.'}
+};
+type Copy=typeof COPY.en & typeof APP_COPY.en;
+interface Quote {amount:string;asset:string;network:string;payTo:string;extra?:Record<string,unknown>}
 interface Reward {amount:string;asset:string;network:string;preview?:boolean}
 interface Item {id:string;who:string;category:string;question:string;kind:string;decision:{verdict:string;rule:number;reason:string}|null;screening:string|null;screeningReason?:string;model?:string;modelReason?:string;decidedAt?:string;reward?:Reward;draft?:string;payment:{status:string;requirement?:Quote;transaction?:string;error?:string};resolved?:string;delivered?:string;explorer?:string}
-interface State {id?:string;receiver?:string;processed:number;total:number;complete:boolean;authenticated:boolean;items:Item[];surfaced:string[];policy:{cap:number;displayThreshold?:Reward};wired:{screening:boolean;classifier:boolean;classifierProvider?:string;payment:boolean};totals:{amount:string;automated:string;answered:string;asset:string;network:string}[];tokenDisplay:{asset:string;network:string;symbol:string;decimals:number};koe:string;koeDirectory:string|null;koeRegistration:string;liveDirectory:string}
-type View='discover'|'monitor'|'work'|'receipts';
-interface Profile {name:string;headline:string;answers:string[];willNotAnswer:string[];live:boolean}
-const $ = (id:string) => document.getElementById(id)!;
-const esc = (v:unknown) => String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
-let lang:'ja'|'en'=new URL(location.href).searchParams.get('lang')==='en'?'en':'ja';
+interface State {id?:string;receiver?:string;processed:number;total:number;complete:boolean;authenticated:boolean;observer?:boolean;paired?:boolean;items:Item[];surfaced:string[];policy:{cap:number;displayThreshold?:Reward;allow?:string[];forbid?:string[]};wired:{screening:boolean;classifier:boolean;classifierProvider?:string;payment:boolean};totals:{amount:string;automated:string;answered:string;asset:string;network:string}[];tokenDisplay:{asset:string;network:string;symbol:string;decimals:number};koe:string;koeDirectory:string|null;koeRegistration:string;liveDirectory:string}
+type View='discover'|'monitor'|'answers'|'work'|'receipts'|'space';
+interface Profile{name:string;headline:string;answers:string[];willNotAnswer:string[];live:boolean}
+const $=(id:string)=>document.getElementById(id)!;
+const esc=(v:unknown)=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
+const params=new URL(location.href).searchParams;
+let lang:'ja'|'en'=params.get('lang')==='en'?'en':'ja';
+let view:View=(['discover','monitor','answers','work','receipts','space'].includes(params.get('view')??'')?params.get('view'):params.get('device')==='phone'||innerWidth<=700?'work':'discover') as View;
+let actor:'agent'|'human'=['work','receipts','space'].includes(view)?'human':'agent';
 let state:State|undefined,busy=false,generation=0,attempt:string|undefined,filter='all',shown=0,draft='',draftFor='',expanded=false;
-let view:View='discover',profiles:Profile[]=[],directoryStatus:'loading'|'ready'|'failed'='loading',liveDirectoryLoaded=false;
-let motionTimers:ReturnType<typeof setTimeout>[]=[],replaying=false,spotlight:Item|undefined;
-const initialView=new URL(location.href).searchParams.get('view');
-if(initialView&&['discover','monitor','work','receipts'].includes(initialView))view=initialView as View;
-const t=()=>COPY[lang] as Copy;
-const msg=(text:string,error=false)=>{ $('message').hidden=!text;$('message').textContent=text;$('message').classList.toggle('error',error); };
-async function post(path:string,body:Record<string,unknown>={}) {
- const r=await fetch('/experience/'+path,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({run:state?.id,...body})});
- const data=await r.json(); if(!r.ok)throw new Error(data.error??'operation_refused');return data;
-}
-function money(q:{amount:string;asset:string;network:string}|undefined) {
- if(!q)return '—'; const d=state?.tokenDisplay;
- if(d&&q.asset.toLowerCase()===d.asset.toLowerCase()&&q.network===d.network){
-  const s=q.amount.padStart(d.decimals+1,'0');return `${s.slice(0,-d.decimals)}.${s.slice(-d.decimals).replace(/0+$/,'')||'0'} ${d.symbol}`;
- }
- return `${q.amount} ${t().atomic}`;
-}
-function total(key:'amount'|'automated'|'answered'){return state?.totals.length?state.totals.map(q=>money({...q,amount:q[key]})).join(' + '):'0';}
+let profiles:Profile[]=[],directoryStatus:'loading'|'ready'|'failed'='loading',liveDirectoryLoaded=false;
+let motionTimers:ReturnType<typeof setTimeout>[]=[],replaying=false,spotlight:Item|undefined,answerOpen='',answerKey='',refreshing=false,messageTimer:ReturnType<typeof setTimeout>|undefined;
+let incomingToken=new URLSearchParams(location.hash.slice(1)).get('handoff')??'';
+if(incomingToken){actor='human';view='work';history.replaceState(null,'',location.pathname+location.search);}
+const t=()=>({...COPY[lang],...APP_COPY[lang]}) as Copy;
+const msg=(text:string,error=false)=>{clearTimeout(messageTimer);$('message').hidden=!text;$('message').textContent=text;$('message').classList.toggle('error',error);if(!error&&[t().paid,t().draftSaved,t().copied].includes(text))messageTimer=setTimeout(()=>{$('message').hidden=true;},6000);};
+async function post(path:string,body:Record<string,unknown>={}){const r=await fetch('/experience/'+path,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({run:state?.id,...body})});const data=await r.json();if(!r.ok)throw new Error(data.error??'operation_refused');return data;}
+function money(q:{amount:string;asset:string;network:string}|undefined){if(!q)return '—';const d=state?.tokenDisplay;if(d&&q.asset.toLowerCase()===d.asset.toLowerCase()&&q.network===d.network){const s=q.amount.padStart(d.decimals+1,'0');return `${s.slice(0,-d.decimals)}.${s.slice(-d.decimals).replace(/0+$/,'')||'0'} ${d.symbol}`;}return `${q.amount} ${t().atomic}`;}
+function total(key:'amount'|'automated'|'answered'){return state?.totals?.length?state.totals.map(q=>money({...q,amount:q[key]})).join(' + '):'0';}
+const category=(v:string)=>t().questions[v]??(lang==='ja'?({'experience/first-five-minutes':'使い始めの5分間','experience/what-you-expected':'期待と実際の違い','experience/how-it-tasted':'味についての実体験'} as Record<string,string>)[v]:undefined)??v.split('/').at(-1)!.replaceAll('-',' ');
 const question=(i:Item)=>t().questions[i.category]??i.question;
-const ruleExplanationsJa:Record<number,string>={
- 0:'委任範囲を超える操作、または取り消された権限のため、断りました。',
- 1:'この内容を共有する許可は取り消されています。',
- 2:'「共有しない」と決めた内容なので、本人には届けません。',
- 3:'この内容を共有する許可の期限が切れています。',
- 4:'支払い元の安全性を確認できないため、断りました。審査元の詳細は理由欄で確認できます。',
- 5:'個別の同意が必要な内容なので、自動共有せず本人に聞きます。',
- 7:'初めての相手からの依頼なので、本人に聞きます。',
- 8:'許可済みの相手・内容・金額の範囲内なので、任せられます。',
- 9:'既存の方針では判断できない内容です。分類補助も自動許可を出すことはできません。',
-};
-const reason=(i:Item)=>i.decision?.rule===6?t().thresholdReason.replace('{price}',money(i.reward)).replace('{threshold}',money(state?.policy.displayThreshold)):
- lang==='ja'&&i.decision?(ruleExplanationsJa[i.decision.rule]??i.decision.reason):i.decision?.reason??'';
+const rulesJa:Record<number,string>={0:'委任範囲外、または取り消された権限です。',1:'共有する許可が取り消されています。',2:'共有しないと決めた内容です。',3:'共有する許可の期限が切れています。',4:'支払い元の安全性を確認できないため、断りました。',5:'個別の同意が必要な内容なので、本人に聞きます。',7:'初めての相手なので、本人に聞きます。',8:'許可済みの相手・内容・金額の範囲内です。',9:'方針では判断できない内容です。分類補助も自動許可は出せません。'};
+const reason=(i:Item)=>i.decision?.rule===6?t().thresholdReason.replace('{price}',money(i.reward)).replace('{threshold}',money(state?.policy.displayThreshold)):lang==='ja'&&i.decision?rulesJa[i.decision.rule]??i.decision.reason:i.decision?.reason??'';
 const status=(i:Item)=>i.resolved==='declined'?t().refused:({ready:t().ready,settled:t().settled,failed:t().failed,processing:t().busyPayment,'not-funded':t().notFunded}[i.payment.status]??i.payment.status);
+function closeAnswer(){answerOpen='';answerKey='';($('answerSheet') as HTMLDialogElement).close();}
 function stopMotion(){motionTimers.forEach(clearTimeout);motionTimers=[];$('routePackets').replaceChildren();replaying=false;}
-function showDecision(i:Item){
- spotlight=i;const verdict=i.decision!.verdict as 'auto'|'human'|'deny';
- $('spotlightWho').textContent=`${i.who} → ${t()[verdict]}`;
- $('spotlightReason').textContent=`${t().rule} ${i.decision!.rule} · ${reason(i)}${i.model?' · '+(state?.wired.classifierProvider??'Classifier')+': '+i.model:''}`;
-}
-function animateDecisions(items:Item[],replay=false){
- if(!items.length)return;
- if(replay){stopMotion();replaying=true;$('liveLine').textContent=t().replaying;}
- const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
- for(const [n,i] of items.entries()){
-  const timer=setTimeout(()=>{
-   if(view!=='monitor')return;if(!replay||n%8===0||n===items.length-1)showDecision(i);
-   if(reduced)return;
-   const verdict=i.decision!.verdict;
-   const y=verdict==='auto'?66:verdict==='human'?134:204;
-   const path=`M58 134H623C660 134 655 ${y} 704 ${y}H790`;
-   const ns='http://www.w3.org/2000/svg',circle=document.createElementNS(ns,'circle'),motion=document.createElementNS(ns,'animateMotion');
-   circle.setAttribute('r','5');circle.setAttribute('fill',verdict==='auto'?'#def09b':verdict==='human'?'#c8a8ef':'#d294a8');circle.classList.add('packet');
-   motion.setAttribute('path',path);motion.setAttribute('dur','1.6s');motion.setAttribute('begin','indefinite');motion.setAttribute('fill','freeze');
-   circle.append(motion);$('routePackets').append(circle);motion.beginElement();
-   motionTimers.push(setTimeout(()=>circle.remove(),1650));
-  },n*(replay?170:110));motionTimers.push(timer);
- }
- if(replay)motionTimers.push(setTimeout(()=>{replaying=false;$('liveLine').textContent=t().monitorReady;},(items.length-1)*170+1650));
-}
-function changeView(next:View){if(busy)return;stopMotion();view=next;msg('');render();window.scrollTo({top:0,behavior:'smooth'});}
+function changeView(next:View){if(busy)return;if(state?.observer&&['work','receipts','space'].includes(next)){msg(t().observerNotice);return;}stopMotion();closeAnswer();view=next;actor=['work','receipts','space'].includes(next)?'human':'agent';msg('');render();document.querySelector('.human-content')?.scrollTo({top:0});window.scrollTo({top:0,behavior:'smooth'});}
+function showDecision(i:Item){spotlight=i;$('spotlightWho').textContent=`${i.who} → ${t()[i.decision!.verdict as 'auto'|'human'|'deny']}`;$('spotlightReason').textContent=`${t().rule} ${i.decision!.rule} · ${reason(i)}${i.model?' · '+(state?.wired.classifierProvider??'Classifier')+': '+i.model:''}`;}
+function animateDecisions(items:Item[],replay=false){if(!items.length)return;if(replay){stopMotion();replaying=true;$('liveLine').textContent=t().replaying;}const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;items.forEach((i,n)=>{motionTimers.push(setTimeout(()=>{if(view!=='monitor')return;if(!replay||n%8===0||n===items.length-1)showDecision(i);if(reduced)return;const verdict=i.decision!.verdict,y=verdict==='auto'?66:verdict==='human'?134:204,ns='http://www.w3.org/2000/svg',circle=document.createElementNS(ns,'circle'),motion=document.createElementNS(ns,'animateMotion');circle.setAttribute('r','5');circle.setAttribute('fill',verdict==='auto'?'#def09b':verdict==='human'?'#c8a8ef':'#d294a8');circle.classList.add('packet');motion.setAttribute('path',`M58 134H623C660 134 655 ${y} 704 ${y}H790`);motion.setAttribute('dur','1.6s');motion.setAttribute('begin','indefinite');motion.setAttribute('fill','freeze');circle.append(motion);$('routePackets').append(circle);motion.beginElement();motionTimers.push(setTimeout(()=>circle.remove(),1650));},n*(replay?170:110)));});if(replay)motionTimers.push(setTimeout(()=>{replaying=false;$('liveLine').textContent=t().monitorReady;},(items.length-1)*170+1650));}
 function renderDirectory(){
- $('directoryStatus').textContent=directoryStatus==='loading'?t().directoryLoading:directoryStatus==='failed'?t().directoryUnavailable:t().directoryLoaded;
- $('directoryEmpty').hidden=!liveDirectoryLoaded||profiles.some(p=>p.live);
- $('profiles').innerHTML=profiles.map(p=>`<article class="profile-card"><span class="profile-avatar">${esc(p.name.slice(0,1))}</span><span class="tag">${p.live?t().participant:t().fictional}</span><h3>${esc(p.name)}</h3><p>${esc(p.headline)}</p><small>${t().topics}</small><ul>${p.answers.map(v=>`<li>${esc(t().questions[v]??v.split('/').at(-1)?.replaceAll('-',' '))}</li>`).join('')}</ul><details><summary>${t().boundaries}</summary><ul>${p.willNotAnswer.map(v=>`<li>${esc(t().questions[v]??v)}</li>`).join('')}</ul></details></article>`).join('');
+ $('directoryStatus').textContent=directoryStatus==='loading'?t().directoryLoading:directoryStatus==='failed'?t().directoryUnavailable:t().directoryLoaded;$('directoryEmpty').hidden=!liveDirectoryLoaded||profiles.some(p=>p.live);
+ const visible=profiles;
+ $('profiles').innerHTML=visible.map(p=>`<article class="profile-card"><span class="profile-avatar">${esc(p.name.slice(0,1))}</span><span class="tag">${p.live?t().participant:t().fictional}</span><h3>${esc(p.name)}</h3><p>${esc(p.headline)}</p><small>${t().topics}</small><ul>${p.answers.map(v=>`<li>${esc(category(v))}</li>`).join('')}</ul><details><summary>${t().boundaries}</summary><ul>${p.willNotAnswer.map(v=>`<li>${esc(category(v))}</li>`).join('')}</ul></details></article>`).join('')||(directoryStatus==='ready'?`<p class="empty">${t().noProfiles}</p>`:'');
 }
-async function loadDirectory(){
- const read=async(url:string)=>{const r=await fetch(url,{credentials:'omit',cache:'no-store',signal:AbortSignal.timeout(8000)});if(!r.ok)throw new Error('directory_unavailable');return r.json();};
- const results=await Promise.allSettled([state?.koeDirectory?read(state.koeDirectory):Promise.reject(),read(state?.liveDirectory??'/koe-registration/directory.json')]);
- profiles=[];liveDirectoryLoaded=results[1]?.status==='fulfilled';
- for(const [n,r] of results.entries())if(r.status==='fulfilled'&&Array.isArray(r.value.profiles)){
-  for(const p of r.value.profiles.slice(0,100)){
-   if(typeof p.name!=='string'||typeof p.headline!=='string'||!Array.isArray(p.answers)||!Array.isArray(p.willNotAnswer))continue;
-   if(n===1&&(p.verification?.environment!=='production'||!['orb','proof_of_human'].includes(p.verification?.credential)||!(Date.parse(p.expiresAt)>Date.now())))continue;
-   profiles.push({name:p.name,headline:p.headline,answers:p.answers.filter((v:unknown)=>typeof v==='string'),willNotAnswer:p.willNotAnswer.filter((v:unknown)=>typeof v==='string'),live:n===1});
-  }
- }
- profiles.sort((a,b)=>Number(b.live)-Number(a.live));
- directoryStatus=results.some(r=>r.status==='fulfilled')?'ready':'failed';renderDirectory();
-}
-function labels(){
- document.documentElement.lang=lang;
- document.querySelectorAll<HTMLElement>('[data-t]').forEach(e=>e.textContent=String(t()[e.dataset.t as keyof Copy]));
- document.querySelectorAll<HTMLElement>('[data-html]').forEach(e=>e.innerHTML=String(t()[e.dataset.html as keyof Copy]));
- $('language').textContent=lang==='ja'?'EN':'日本語';
- try{const u=new URL(location.href);u.searchParams.set('lang',lang);u.searchParams.set('view',view);history.replaceState(null,'',u);}catch{}
+async function loadDirectory(){const read=async(url:string)=>{const r=await fetch(url,{credentials:'omit',cache:'no-store',signal:AbortSignal.timeout(8000)});if(!r.ok)throw Error();return r.json();};const results=await Promise.allSettled([state?.koeDirectory?read(state.koeDirectory):Promise.reject(),read(state?.liveDirectory??'/koe-registration/directory.json')]);profiles=[];liveDirectoryLoaded=results[1]?.status==='fulfilled';for(const [n,r] of results.entries())if(r.status==='fulfilled'&&Array.isArray(r.value.profiles))for(const p of r.value.profiles.slice(0,100)){if(typeof p.name!=='string'||typeof p.headline!=='string'||!Array.isArray(p.answers)||!Array.isArray(p.willNotAnswer))continue;if(n===1&&(p.verification?.environment!=='production'||!['orb','proof_of_human'].includes(p.verification?.credential)||!(Date.parse(p.expiresAt)>Date.now())))continue;profiles.push({name:p.name,headline:p.headline,answers:p.answers.filter((v:unknown)=>typeof v==='string'),willNotAnswer:p.willNotAnswer.filter((v:unknown)=>typeof v==='string'),live:n===1});}profiles.sort((a,b)=>Number(b.live)-Number(a.live));directoryStatus=results.some(r=>r.status==='fulfilled')?'ready':'failed';renderDirectory();}
+function labels(){document.documentElement.lang=lang;document.querySelectorAll<HTMLElement>('[data-t]').forEach(e=>e.textContent=String(t()[e.dataset.t as keyof Copy]));document.querySelectorAll<HTMLElement>('[data-html]').forEach(e=>e.innerHTML=String(t()[e.dataset.html as keyof Copy]));for(const id of ['language','phoneLanguage'])$(id).textContent=lang==='ja'?'EN':'日本語';try{const u=new URL(location.href);u.searchParams.set('lang',lang);u.searchParams.set('view',view);if(actor==='human')u.searchParams.set('device','phone');else u.searchParams.delete('device');history.replaceState(null,'',u);}catch{}}
+function renderSheet(personal:Item|undefined){
+ if(!personal||!answerOpen||answerOpen!==personal.id||!state?.authenticated){closeAnswer();return;}
+ const key=[personal.id,lang,personal.payment.status,personal.resolved??'',personal.draft??''].join(':');
+ if(key!==answerKey){answerKey=key;const op=personal.payment.requirement?'answer':'draft';$('answerSheetContent').innerHTML=`<div class="question-meta"><span>${esc(personal.who)}</span><span class="tag">${t().personalTime}</span></div><h3>${esc(question(personal))}</h3><span class="note">${t().offer}</span><p class="answer-price">${esc(money(personal.payment.requirement??personal.reward))}</p><p class="reason">${esc(reason(personal))}</p><form><p class="note">${t().surveyHint}</p><label class="note" for="answerText">${t().answer}</label><textarea id="answerText" required minlength="3" maxlength="1000" placeholder="${esc(t().answer)}">${esc(draft)}</textarea><label class="consent"><input type="checkbox" required><span>${op==='answer'?t().answerConsent:t().draftConsent}</span></label><div class="answer-actions"><button class="button">${op==='answer'?t().submit:t().saveDraft}</button><button type="button" class="button ghost" id="declineAnswer">${t().decline}</button></div></form>`;
+ const form=$('answerSheetContent').querySelector('form')!;form.querySelector('textarea')!.oninput=e=>draft=(e.target as HTMLTextAreaElement).value;form.onsubmit=e=>{e.preventDefault();const text=draft;closeAnswer();void action(op,{id:personal.id,answer:text,consent:true},op==='answer');};$('declineAnswer').onclick=()=>{closeAnswer();void action('decline',{id:personal.id});};}
+ const sheet=$('answerSheet') as HTMLDialogElement;if(!sheet.open)sheet.showModal();
 }
 function render(){
- if(state&&!state.id&&(view==='work'||view==='receipts'))view='discover';
- labels();
- document.body.dataset.view=view;
- document.querySelector<HTMLElement>('.hero')!.hidden=view!=='discover';
- document.querySelectorAll<HTMLButtonElement>('[data-view]').forEach(b=>{b.classList.toggle('active',b.dataset.view===view);b.setAttribute('aria-current',b.dataset.view===view?'page':'false');b.disabled=busy||(b.dataset.view==='work'&&!state?.complete)||(b.dataset.view==='receipts'&&!state?.authenticated);});
- $('discovery').hidden=view!=='discover';$('setup').hidden=view!=='monitor'||Boolean(state?.id);
- $('flow').hidden=view!=='monitor'||!state?.id;$('routing').hidden=view!=='monitor'||!state?.id;
- $('dashboard').hidden=!(state?.authenticated&&(view==='work'||view==='receipts'));
- $('login').hidden=!(state?.complete&&!state.authenticated&&view==='work');
- $('answerColumn').hidden=view==='receipts';$('workspaceColumns').classList.toggle('receipts-only',view==='receipts');
- $('koeFooter').hidden=view!=='work';$('evidence').hidden=!state?.id||view!=='monitor';
- $('journeyFinish').hidden=view!=='work'||!state?.items.some(i=>i.delivered&&i.decision?.verdict==='human');
- const missing=state?[...(!state.wired.classifier?['Jev']:[]),...(!state.wired.screening?[t().screeningService]:[]),...(!state.wired.payment?[t().paymentService]:[])]:[];
- $('readiness').hidden=!missing.length;$('readiness').textContent=t().readiness.replace('{missing}',missing.join(' / '));
- if(state){($('koeExternal') as HTMLAnchorElement).href=state.koe;for(const id of ['registerKoe','registerKoeFooter'])($(id) as HTMLAnchorElement).href=state.koeRegistration;}
+ if(state?.observer&&actor==='human'){actor='agent';view='monitor';}
+ if(actor==='human'&&view==='receipts'&&!state?.authenticated)view='work';
+ labels();document.body.dataset.actor=actor;document.body.dataset.view=view;
+ $('agentSidebar').hidden=actor!=='agent';$('agentMain').hidden=actor!=='agent';$('humanStage').hidden=actor!=='human';
+ document.querySelectorAll<HTMLButtonElement>('button[data-actor]').forEach(b=>{b.classList.toggle('active',b.dataset.actor===actor);b.disabled=busy||Boolean(state?.observer&&b.dataset.actor==='human');});
+ document.querySelectorAll<HTMLButtonElement>('button[data-view]').forEach(b=>{b.classList.toggle('active',b.dataset.view===view);b.setAttribute('aria-current',b.dataset.view===view?'page':'false');b.disabled=busy||(b.dataset.view==='receipts'&&!state?.authenticated);});
+ $('agentPageTitle').textContent=view==='discover'?t().discoverTab:view==='answers'?t().agentAnswersTab:t().monitorTab;
+ $('discovery').hidden=view!=='discover';$('agentAnswers').hidden=view!=='answers';$('agentStart').hidden=Boolean(state?.id);$('agentSummary').hidden=!state?.id;$('setup').hidden=Boolean(state?.id);
+ $('flow').hidden=view!=='monitor'||!state?.id;$('routing').hidden=view!=='monitor'||!state?.id;$('observerNotice').hidden=!state?.observer;
+ $('incomingHandoff').hidden=!incomingToken;$('humanOnboarding').hidden=Boolean(state?.id||incomingToken)||view==='space';$('humanWaiting').hidden=!state?.id||state.complete||view==='space';
+ $('login').hidden=!(state?.complete&&!state.authenticated&&actor==='human'&&view==='work'&&!incomingToken);
+ $('dashboard').hidden=!(state?.authenticated&&(view==='work'||view==='receipts'));$('space').hidden=view!=='space';
+ $('answerColumn').hidden=view==='receipts';$('receiptColumn').hidden=view!=='receipts';$('journeyFinish').hidden=view!=='work'||!state?.items?.some(i=>i.delivered&&i.decision?.verdict==='human');
+ $('evidence').hidden=!state?.id||view!=='monitor';
+ const missing=state?[...(!state.wired.classifier?['Jev']:[]),...(!state.wired.screening?[t().screeningService]:[]),...(!state.wired.payment?[t().paymentService]:[])]:[];$('readiness').hidden=!missing.length;$('readiness').textContent=t().readiness.replace('{missing}',missing.join(' / '));
+ $('phoneReadiness').hidden=!missing.length;$('phoneReadiness').textContent=t().readiness.replace('{missing}',missing.join(' / '));
+ if(state){($('koeExternal') as HTMLAnchorElement).href=state.koe;($('koeBottom') as HTMLAnchorElement).href=state.koe;for(const id of ['registerKoe','registerKoeFooter'])($(id) as HTMLAnchorElement).href=state.koeRegistration;}
  renderDirectory();
- const step=!state?.complete?0:!state.authenticated?1:state.items.some(i=>i.delivered&&i.decision?.verdict==='human')?4:state.items.some(i=>i.payment.status==='settled')?3:2;
- $('stages').innerHTML=t().stages.map((s,i)=>`<li class="${i===step?'active':i<step?'done':''}">${String(i+1).padStart(2,'0')} / ${s}</li>`).join('');
- if(state?.koe)for(const id of ['koeTop','koeBottom'])($ (id) as HTMLAnchorElement).href=state.koe;
- if(!state?.id)return;
+ $('spaceDetails').innerHTML=state?.id?`<article class="account-card"><small>${t().walletLabel}</small><p>${esc(state.receiver)}</p><button class="button secondary" id="copyReceiver">${t().copyAddress}</button></article><article class="account-card"><small>${t().capTitle}</small><h2>${state.policy.cap}</h2><p>${t().capDescription}</p></article><article class="account-card"><small>${t().policyTitle}</small><ul>${(state.policy.allow??[]).map(v=>`<li>${esc(category(v))}</li>`).join('')}</ul><small>${t().blockedTitle}</small><ul>${(state.policy.forbid??[]).map(v=>`<li>${esc(category(v))}</li>`).join('')}</ul></article><p class="note">${t().sessionNote}</p>`:`<p class="empty">${t().humanIntro}</p>`;
+ if($('copyReceiver'))$('copyReceiver').onclick=()=>void navigator.clipboard.writeText(state!.receiver!).then(()=>msg(t().copied)).catch(error);
+ if(!state?.id){$('agentDeliveries').innerHTML=`<p class="empty">${t().noDelivery}</p>`;closeAnswer();return;}
  const items=state.items;
- $('processed').textContent=String(state.processed);$('progress').style.width=`${state.processed/state.total*100}%`;
- const restoring=shown===0&&state.complete;
- const newDecisions=items.slice(shown,state.processed).filter(i=>i.decision);
- $('particles').innerHTML=items.map((i,n)=>`<div class="particle ${i.decision?.verdict??''} ${n>=shown&&n<state!.processed?'fresh':''} ${n===state!.processed&&!state!.complete?'current':''}" title="${esc(i.who)} · ${esc(i.decision?.verdict??'waiting')}"></div>`).join('');shown=state.processed;
- if(view==='monitor'&&newDecisions.length)animateDecisions(newDecisions,restoring);
- if(!spotlight&&state.processed)spotlight=items[state.processed-1];
- if(spotlight)showDecision(spotlight);
+ const step=!state.complete?0:!state.authenticated?1:items.some(i=>i.delivered&&i.decision?.verdict==='human')?4:items.some(i=>i.payment.status==='settled')?3:2;
+ $('stages').innerHTML=t().stages.map((s,i)=>`<li class="${i===step?'active':i<step?'done':''}">${s}</li>`).join('');
+ $('sentCount').textContent=String(state.processed);$('answerCount').textContent=String(items.filter(i=>i.delivered).length);$('paidTotal').textContent=total('amount').replace(' test USDC','');$('mobileProcessed').textContent=`${state.processed} / ${state.total}`;
+ $('processed').textContent=String(state.processed);$('progress').style.width=`${state.processed/state.total*100}%`;const restoring=shown===0&&state.complete,newDecisions=items.slice(shown,state.processed).filter(i=>i.decision);
+ $('particles').innerHTML=items.map((i,n)=>`<div class="particle ${i.decision?.verdict??''} ${n>=shown&&n<state!.processed?'fresh':''} ${n===state!.processed&&!state!.complete?'current':''}" title="${esc(i.who)} · ${esc(i.decision?.verdict??'waiting')}"></div>`).join('');shown=state.processed;if(view==='monitor'&&newDecisions.length)animateDecisions(newDecisions,restoring);if(!spotlight&&state.processed)spotlight=items[state.processed-1];if(spotlight)showDecision(spotlight);
  for(const v of ['auto','human','deny'])$(v+'Count').textContent=String(items.filter(i=>i.decision?.verdict===v).length);
  $('tech').innerHTML=`<span>YOHAKU · ${t().fixed}</span><span>Intercepta · ${state.wired.screening?t().live:t().mock}</span><span>${state.wired.classifierProvider==='jev'?'Jev':esc(state.wired.classifierProvider??'Classifier')} · ${state.wired.classifier?t().live:t().unconfigured}</span>`;
- $('liveLine').textContent=replaying?t().replaying:state.complete?t().monitorReady:t().processing;
- $('replayRoutes').hidden=!state.complete;
- ($('replayRoutes') as HTMLButtonElement).disabled=busy;
- $('continue').hidden=state.complete||busy;
- $('goHuman').hidden=!state.complete;
- const funded=items.filter(i=>i.payment.requirement);
- if(!funded.length){$('verify').textContent=t().loginOnly;document.querySelector('[data-t="loginBody"]')!.textContent=t().loginUnfunded;}
- (document.querySelector('[data-t="fundingNote"]') as HTMLElement).hidden=!funded.length;
- $('funding').innerHTML=funded.length?`<p>${t().quote}</p>`+funded.map(i=>`<p>${i.decision?.verdict==='auto'?t().autoReward:t().answerReward}<br><b>${esc(money(i.payment.requirement))}</b><br>${esc(i.payment.requirement!.network)}</p>`).join(''):`<p>${t().noFunding}</p>`;
- $('wallet').textContent=state.receiver??'';
- $('received').textContent=total('amount');$('autoReward').textContent=total('automated');$('answerReward').textContent=total('answered');
- const automatic=items.find(i=>i.decision?.verdict==='auto'&&i.payment.requirement);
- $('autoQuote').textContent=money(automatic?.payment.requirement);$('autoStatus').textContent=automatic?status(automatic):t().noFunding;
- ($('collect') as HTMLButtonElement).disabled=busy||automatic?.payment.status!=='ready';
- $('capNote').textContent=t().capNote.replace('{cap}',String(state.policy.cap));
- const eligible=items.filter(i=>state!.surfaced.includes(i.id));
- const personal=(eligible.some(i=>i.payment.requirement)?eligible.filter(i=>i.payment.requirement):eligible).slice(0,1);
- if(personal[0]&&draftFor!==personal[0].id){draftFor=personal[0].id;draft=personal[0].draft??'';}
- $('questions').innerHTML=personal.length?personal.map(i=>`<article class="answer-card ${i.delivered?'done-card':''}"><div class="question-meta"><span>${esc(i.who)}</span><span class="tag">${t().rule} ${i.decision?.rule}</span></div><h3>${esc(question(i))}</h3><b>${esc(money(i.payment.requirement??i.reward))}</b>${!i.payment.requirement?`<p class="note">${t().previewQuote}</p>`:''}<p class="reason">${esc(reason(i))}</p>${i.draft?`<p class="tag">${t().draftLabel}</p>`:''}${i.resolved||['processing','settled','failed'].includes(i.payment.status)?`<p>${esc(status(i))}</p>`:`<form data-answer="${i.id}" data-operation="${i.payment.requirement?'answer':'draft'}"><p class="note">${t().surveyHint}</p><label class="note" for="answerText">${t().answer}</label><textarea id="answerText" required minlength="3" maxlength="1000">${esc(draft)}</textarea><label class="consent"><input type="checkbox" required><span>${i.payment.requirement?t().answerConsent:t().draftConsent}</span></label><div class="answer-actions"><button class="button" ${busy?'disabled':''}>${i.payment.requirement?t().submit:t().saveDraft}</button><button class="button ghost" type="button" data-decline="${i.id}" ${busy?'disabled':''}>${t().decline}</button></div></form>`}</article>`).join(''):`<p class="empty">${t().noQuestion}</p>`;
- $('receipts').innerHTML=funded.filter(i=>i.payment.status==='settled').map(i=>`<article class="receipt"><div class="receipt-head"><strong>${esc(money(i.payment.requirement))}</strong><span class="tag">${t().settled}</span></div><p>${i.decision?.verdict==='auto'?t().autoReward:t().answerReward} · ${esc(i.who)}</p><p>${esc(i.payment.requirement!.network)} · x402</p>${i.explorer?`<a href="${esc(i.explorer)}" target="_blank" rel="noopener">${t().chain}</a>`:`<p>${esc(i.payment.transaction)}</p>`}</article>`).join('')||`<p class="empty">${t().unpaid}</p>`;
- $('inbox').innerHTML=items.filter(i=>i.delivered).map(i=>`<article class="inbox"><small>${esc(i.who)} · ${i.id.slice(-5)}</small><blockquote>${esc(i.delivered)}</blockquote><span class="tag">${t().delivered}</span></article>`).join('')||`<p class="empty">${t().noDelivery}</p>`;
+ $('liveLine').textContent=replaying?t().replaying:state.complete?t().monitorReady:t().processing;$('continue').hidden=state.complete||busy||Boolean(state.observer);$('goHuman').hidden=!state.complete||Boolean(state.observer);$('replayRoutes').hidden=!state.complete;
+ $('handoffPhone').hidden=!state.complete||Boolean(state.observer||state.paired||state.authenticated);($('replayRoutes') as HTMLButtonElement).disabled=busy;
+ const funded=items.filter(i=>i.payment.requirement);if(!funded.length){$('verify').textContent=t().loginOnly;document.querySelector('[data-t="loginBody"]')!.textContent=t().loginUnfunded;}
+ (document.querySelector('[data-t="fundingNote"]') as HTMLElement).hidden=!funded.length;$('funding').innerHTML=funded.length?funded.map(i=>`<p>${i.decision?.verdict==='auto'?t().autoReward:t().answerReward}<br><b>${esc(money(i.payment.requirement))}</b></p>`).join(''):`<p>${t().noFunding}</p>`;
+ $('wallet').textContent=state.receiver??'';$('received').textContent=total('amount');$('autoReward').textContent=total('automated');$('answerReward').textContent=total('answered');
+ const automatic=items.find(i=>i.decision?.verdict==='auto'&&i.payment.requirement);$('autoQuote').textContent=money(automatic?.payment.requirement);$('autoStatus').textContent=automatic?status(automatic):t().noFunding;($('collect') as HTMLButtonElement).disabled=busy||automatic?.payment.status!=='ready';
+ $('capNote').textContent=t().capNote.replace('{cap}',String(state.policy.cap));const eligible=items.filter(i=>state!.surfaced.includes(i.id));const personal=(eligible.some(i=>i.payment.requirement)?eligible.filter(i=>i.payment.requirement):eligible)[0];
+ if(personal&&draftFor!==personal.id){draftFor=personal.id;draft=personal.draft??'';}
+ $('questions').innerHTML=personal?`<article class="answer-card ${personal.delivered?'done-card':''}"><div class="question-meta"><span>${esc(personal.who)}</span><span class="tag">${t().personalTime}</span></div><h3>${esc(question(personal))}</h3><p class="answer-price">${esc(money(personal.payment.requirement??personal.reward))}</p>${!personal.payment.requirement?`<p class="note">${t().previewQuote}</p>`:''}<div class="question-footer"><small class="note">${personal.draft?t().draftLabel:t().yourAnswer}</small>${personal.resolved||['processing','settled','failed'].includes(personal.payment.status)?`<span class="tag">${esc(status(personal))}</span>`:`<button class="button" id="openAnswer" ${busy?'disabled':''}>${t().openAnswer} →</button>`}</div></article>`:`<p class="empty">${t().noQuestion}</p>`;
+ if($('openAnswer'))$('openAnswer').onclick=()=>{answerOpen=personal!.id;renderSheet(personal);};renderSheet(personal);
+ $('receipts').innerHTML=funded.filter(i=>i.payment.status==='settled').map(i=>`<article class="receipt"><div class="receipt-head"><strong>${esc(money(i.payment.requirement))}</strong><span class="tag">${t().settled}</span></div><p>${i.decision?.verdict==='auto'?t().autoReward:t().answerReward}</p><p>${esc(i.who)}</p>${i.explorer?`<a href="${esc(i.explorer)}" target="_blank" rel="noopener">${t().chain}</a>`:`<p>${esc(i.payment.transaction)}</p>`}</article>`).join('')||`<p class="empty">${t().unpaid}</p>`;
+ const deliveries=items.filter(i=>i.delivered);$('inbox').innerHTML=deliveries.map(i=>`<article class="inbox"><small>${esc(i.who)}</small><blockquote>${esc(i.delivered)}</blockquote><span class="tag">${t().delivered}</span></article>`).join('')||`<p class="empty">${t().noDelivery}</p>`;
+ $('agentDeliveries').innerHTML=deliveries.map(i=>`<article class="agent-answer"><span class="avatar">↙</span><div><small>${esc(i.who)} · ${i.id.slice(-5)}</small><h3>${esc(question(i))}</h3><p>${esc(i.delivered)}</p><span class="tag">${t().delivered}</span> <small>${esc(money(i.payment.requirement))}</small>${i.explorer?`<p><a href="${esc(i.explorer)}" target="_blank" rel="noopener">${t().chain}</a></p>`:''}</div></article>`).join('')||`<p class="empty">${t().noDelivery}</p>`;
  $('filters').innerHTML=['all','auto','human','deny'].map(v=>`<button type="button" data-filter="${v}" class="${v===filter?'active':''}">${t()[v as 'all'|'auto'|'human'|'deny']}</button>`).join('');
- const visible=items.filter(i=>i.decision&&(filter==='all'||i.decision.verdict===filter));
- $('routeCount').textContent=`${visible.length} ${t().count}`;
- $('requests').innerHTML=(expanded?visible:visible.slice(0,6)).map(i=>`<article class="request-row ${i.decision!.verdict}"><span class="decision">${t()[i.decision!.verdict as 'auto'|'human'|'deny']}</span><div>${esc(question(i))}<small>${esc(i.who)} · ${esc(money(i.reward))} · ${esc(status(i))}</small><small>${i.decidedAt?esc(new Date(i.decidedAt).toLocaleTimeString(lang)):''}</small></div><button type="button" data-detail="${i.id}">${t().details}</button><div class="request-detail" id="detail-${i.id}" hidden><b>${t().rule} ${i.decision!.rule}</b> · ${esc(reason(i))}<br>${t().screen}: ${esc(i.screening)}${i.screeningReason?' · '+esc(i.screeningReason):''}${i.model?'<br>'+t().model+': '+esc(i.model)+' · '+esc(i.modelReason??''):''}</div></article>`).join('')+(visible.length>6?`<button class="button ghost" id="moreRequests" type="button">${expanded?t().fewer:t().more}</button>`:'');
- $('raw').textContent=JSON.stringify(state,null,2);
- $('questions').querySelector('textarea')?.addEventListener('input',e=>draft=(e.target as HTMLTextAreaElement).value);
- $('questions').querySelectorAll<HTMLFormElement>('form[data-answer]').forEach(f=>f.onsubmit=e=>{e.preventDefault();const operation=f.dataset.operation!;void action(operation,{id:f.dataset.answer,answer:draft,consent:true},operation==='answer');});
- $('questions').querySelectorAll<HTMLButtonElement>('[data-decline]').forEach(b=>b.onclick=()=>void action('decline',{id:b.dataset.decline}));
- $('filters').querySelectorAll<HTMLButtonElement>('button').forEach(b=>b.onclick=()=>{filter=b.dataset.filter!;render();});
- if($('moreRequests'))$('moreRequests').onclick=()=>{expanded=!expanded;render();};
- $('requests').querySelectorAll<HTMLButtonElement>('[data-detail]').forEach(b=>b.onclick=()=>{const e=$('detail-'+b.dataset.detail);e.hidden=!e.hidden;b.textContent=e.hidden?t().details:t().hide;});
+ const visible=items.filter(i=>i.decision&&(filter==='all'||i.decision.verdict===filter));$('routeCount').textContent=`${visible.length} ${t().count}`;
+ $('requests').innerHTML=(expanded?visible:visible.slice(0,6)).map(i=>`<article class="request-row ${i.decision!.verdict}"><span class="decision">${t()[i.decision!.verdict as 'auto'|'human'|'deny']}</span><div>${esc(question(i))}<small>${esc(i.who)} · ${esc(money(i.reward))}</small><small>${esc(status(i))} · ${i.decidedAt?esc(new Date(i.decidedAt).toLocaleTimeString(lang)):''}</small></div><button type="button" data-detail="${i.id}">${t().details}</button><div class="request-detail" id="detail-${i.id}" hidden>${t().rule} ${i.decision!.rule} · ${esc(reason(i))}<br>${t().screen}: ${esc(i.screening)}${i.screeningReason?' · '+esc(i.screeningReason):''}${i.model?'<br>'+t().model+': '+esc(i.model)+' · '+esc(i.modelReason??''):''}</div></article>`).join('')+(visible.length>6?`<button class="button ghost" id="moreRequests">${expanded?t().fewer:t().more}</button>`:'');
+ $('filters').querySelectorAll<HTMLButtonElement>('button').forEach(b=>b.onclick=()=>{filter=b.dataset.filter!;render();});if($('moreRequests'))$('moreRequests').onclick=()=>{expanded=!expanded;render();};$('requests').querySelectorAll<HTMLButtonElement>('[data-detail]').forEach(b=>b.onclick=()=>{const e=$('detail-'+b.dataset.detail);e.hidden=!e.hidden;b.textContent=e.hidden?t().details:t().hide;});$('raw').textContent=JSON.stringify(state,null,2);
+ if(state.observer)($('handoffDialog') as HTMLDialogElement).close();
 }
 function error(e:unknown){const m=e instanceof Error?e.message:'';msg(m==='run_expired_or_changed'||m==='world_login_required'?t().sessionExpired:/^[a-z_]+$/.test(m)?`${lang==='ja'?'処理を進められませんでした':'Action refused'}: ${m}`:t().networkError,true);}
-async function advance(){
- if(busy)return;busy=true;
- try{while(state?.id&&!state.complete){state=await post('advance');render();if(!state!.complete)await new Promise(r=>setTimeout(r,650));}}catch(e){error(e);}finally{busy=false;render();}
-}
-async function action(path:string,data:Record<string,unknown>={},payment=false){
- if(busy)return;busy=true;render();msg(payment?t().paying:'');
- try{state=await post(path,data);render();if(path==='draft')msg(t().draftSaved);else if(payment){msg(state!.items.some(i=>i.payment.status==='failed')?t().failure:t().paid,state!.items.some(i=>i.payment.status==='failed'));$('dashboard').scrollIntoView({behavior:'smooth',block:'start'});}}
- catch(e){error(e);}finally{busy=false;render();}
-}
-($('startForm') as HTMLFormElement).onsubmit=async e=>{
- e.preventDefault();if(busy)return;busy=true;($('start') as HTMLButtonElement).disabled=true;msg(t().processing);
- try{state=await post('start',{receiver:($('receiver') as HTMLInputElement).value.trim(),consent:($('startConsent') as HTMLInputElement).checked});render();msg('');$('flow').scrollIntoView({behavior:'smooth',block:'start'});}
- catch(e){error(e);}finally{busy=false;($('start') as HTMLButtonElement).disabled=false;}
- if(state?.id)void advance();
-};
-$('continue').onclick=()=>void advance();
-$('collect').onclick=()=>void action('collect',{},true);
-$('language').onclick=()=>{lang=lang==='ja'?'en':'ja';render();};
-document.querySelectorAll<HTMLButtonElement>('[data-view]').forEach(b=>b.onclick=()=>changeView(b.dataset.view as View));
-$('startJourney').onclick=()=>changeView('monitor');
-$('goHuman').onclick=()=>changeView('work');
+async function advance(){if(busy)return;busy=true;try{while(state?.id&&!state.complete){state=await post('advance');render();if(!state!.complete)await new Promise(r=>setTimeout(r,650));}}catch(e){error(e);}finally{busy=false;render();}}
+async function action(path:string,data:Record<string,unknown>={},payment=false){if(busy)return;busy=true;render();msg(payment?t().paying:'');try{state=await post(path,data);render();if(path==='draft')msg(t().draftSaved);else if(payment){const failed=state!.items.some(i=>i.payment.status==='failed');msg(failed?t().failure:t().paid,failed);document.querySelector('.human-content')?.scrollTo({top:0});window.scrollTo({top:0,behavior:'smooth'});}}catch(e){error(e);}finally{busy=false;render();}}
+function openStart(next:View){if(busy)return;changeView(next);if(!state?.id)($('startDialog') as HTMLDialogElement).showModal();}
+($('startForm') as HTMLFormElement).onsubmit=async e=>{e.preventDefault();if(busy)return;busy=true;($('start') as HTMLButtonElement).disabled=true;msg(t().processing);try{state=await post('start',{receiver:($('receiver') as HTMLInputElement).value.trim(),consent:($('startConsent') as HTMLInputElement).checked});($('startDialog') as HTMLDialogElement).close();render();msg('');if(actor==='agent')$('flow').scrollIntoView({behavior:'smooth',block:'start'});}catch(e){error(e);}finally{busy=false;($('start') as HTMLButtonElement).disabled=false;}if(state?.id)void advance();};
+$('newCampaign').onclick=()=>openStart('monitor');$('startJourney').onclick=()=>state?.id?changeView('monitor'):openStart('monitor');$('startHuman').onclick=()=>openStart('work');$('continue').onclick=()=>void advance();$('collect').onclick=()=>void action('collect',{},true);
+for(const id of ['language','phoneLanguage'])$(id).onclick=()=>{lang=lang==='ja'?'en':'ja';render();};
+document.querySelectorAll<HTMLButtonElement>('button[data-view]').forEach(b=>b.onclick=()=>changeView(b.dataset.view as View));document.querySelectorAll<HTMLButtonElement>('button[data-actor]').forEach(b=>b.onclick=()=>changeView(b.dataset.actor==='human'?'work':'monitor'));
+$('goHuman').onclick=()=>changeView('work');$('seeReceipt').onclick=()=>changeView('receipts');$('openSpace').onclick=()=>changeView('space');$('backAgent').onclick=e=>{e.preventDefault();changeView('monitor');};
 $('replayRoutes').onclick=()=>{if(!busy&&state?.complete){$('flow').scrollIntoView({behavior:'smooth',block:'start'});animateDecisions(state.items.filter(i=>i.decision),true);}};
-$('seeReceipt').onclick=()=>changeView('receipts');
-for(const id of ['koeTop','koeBottom'])$(id).onclick=e=>{e.preventDefault();changeView('discover');};
-$('cancel').onclick=async()=>{generation++;const id=attempt;attempt=undefined;try{if(id)await post('cancel',{id});msg(t().cancelled);}catch(e){error(e);}finally{busy=false;($('verify') as HTMLButtonElement).disabled=false;$('connection').hidden=true;}};
-$('verify').onclick=async()=>{
- if(busy)return;busy=true;const run=++generation;($('verify') as HTMLButtonElement).disabled=true;
- try{
-  msg(t().preparing);const c=await post('challenge');attempt=c.id;
-  const request=await IDKit.request({app_id:c.appId,action:c.action,rp_context:c.rp_context,allow_legacy_proofs:true,environment:'production'}).preset(orbLegacy({signal:c.signal}));
-  if(run!==generation)return;
-  const uri=new URL(request.connectorURI);if(uri.protocol!=='https:'||!['world.org','worldcoin.org'].some(d=>uri.hostname===d||uri.hostname.endsWith('.'+d)))throw new Error('invalid_world_link');
-  ($('connect') as HTMLAnchorElement).href=uri.toString();await QRCode.toCanvas($('qr') as HTMLCanvasElement,uri.toString(),{width:280,margin:2});
-  $('connection').hidden=false;msg(t().waiting);
-  const completed=await request.pollUntilCompletion({pollInterval:1500,timeout:110000});
-  if(run!==generation)return;if(!completed.success)throw new Error('world_verification_incomplete');
-  msg(t().checking);state=await post('verify',{id:c.id,proof:completed.result});
-  if(run!==generation)return;attempt=undefined;$('connection').hidden=true;
-  if(state!.items.some(i=>i.decision?.verdict==='auto'&&i.payment.status==='ready')){
-   msg(t().paying);state=await post('collect');
-  }
-  view='work';render();msg(state!.items.some(i=>i.payment.status==='failed')?t().failure:'',state!.items.some(i=>i.payment.status==='failed'));
-  $('dashboard').scrollIntoView({behavior:'smooth',block:'start'});
- }catch(e){if(run===generation)error(e);}finally{if(run===generation){busy=false;$('connection').hidden=true;($('verify') as HTMLButtonElement).disabled=false;render();}}
-};
-labels();
-void fetch('/experience/state').then(async r=>{if(!r.ok)throw new Error('state_unavailable');state=await r.json();render();void loadDirectory();}).catch(error);
+document.querySelectorAll<HTMLButtonElement>('[data-close]').forEach(b=>b.onclick=()=>{const id=b.dataset.close!;if(id==='answerSheet')closeAnswer();else($(id) as HTMLDialogElement).close();});$('answerSheet').addEventListener('cancel',()=>{answerOpen='';answerKey='';});
+$('handoffPhone').onclick=async()=>{if(busy)return;const local=['localhost','127.0.0.1'].includes(location.hostname);$('handoffHint').textContent=local?t().handoffLocal:t().handoffBody;$('handoffQr').hidden=true;$('handoffExpiry').textContent='';($('handoffDialog') as HTMLDialogElement).showModal();if(local)return;try{const h=await post('handoff');await QRCode.toCanvas($('handoffQr') as HTMLCanvasElement,h.url,{width:270,margin:2});$('handoffQr').hidden=false;$('handoffExpiry').textContent=t().handoffExpires;}catch(e){error(e);}};
+$('useThisBrowser').onclick=()=>{($('handoffDialog') as HTMLDialogElement).close();changeView('work');};
+$('claimHandoff').onclick=async()=>{if(busy||!incomingToken)return;busy=true;try{state=await post('handoff/claim',{token:incomingToken,consent:true});incomingToken='';view='work';actor='human';render();}catch(e){error(e);}finally{busy=false;render();}};
+$('cancel').onclick=async()=>{generation++;const id=attempt;attempt=undefined;try{if(id)await post('cancel',{id});msg(t().cancelled);}catch(e){error(e);}finally{busy=false;($('verify') as HTMLButtonElement).disabled=false;$('connection').hidden=true;render();}};
+$('verify').onclick=async()=>{if(busy)return;busy=true;const run=++generation;($('verify') as HTMLButtonElement).disabled=true;try{msg(t().preparing);const c=await post('challenge');attempt=c.id;const request=await IDKit.request({app_id:c.appId,action:c.action,rp_context:c.rp_context,allow_legacy_proofs:true,environment:'production'}).preset(orbLegacy({signal:c.signal}));if(run!==generation)return;const uri=new URL(request.connectorURI);if(uri.protocol!=='https:'||!['world.org','worldcoin.org'].some(d=>uri.hostname===d||uri.hostname.endsWith('.'+d)))throw Error('invalid_world_link');($('connect') as HTMLAnchorElement).href=uri.toString();await QRCode.toCanvas($('qr') as HTMLCanvasElement,uri.toString(),{width:260,margin:2});$('connection').hidden=false;msg(t().waiting);const completed=await request.pollUntilCompletion({pollInterval:1500,timeout:110000});if(run!==generation)return;if(!completed.success)throw Error('world_verification_incomplete');msg(t().checking);state=await post('verify',{id:c.id,proof:completed.result});if(run!==generation)return;attempt=undefined;$('connection').hidden=true;if(state!.items.some(i=>i.decision?.verdict==='auto'&&i.payment.status==='ready')){msg(t().paying);state=await post('collect');}actor='human';view='work';render();document.querySelector('.human-content')?.scrollTo({top:0});msg(state!.items.some(i=>i.payment.status==='failed')?t().failure:'',state!.items.some(i=>i.payment.status==='failed'));window.scrollTo({top:0,behavior:'smooth'});}catch(e){if(run===generation)error(e);}finally{if(run===generation){busy=false;$('connection').hidden=true;($('verify') as HTMLButtonElement).disabled=false;render();}}};
+async function refresh(){if(busy||refreshing||document.visibilityState==='hidden')return;refreshing=true;try{const r=await fetch('/experience/state');if(r.ok){const next=await r.json();if(JSON.stringify(next)!==JSON.stringify(state)){state=next;render();}}}finally{refreshing=false;}}
+labels();void fetch('/experience/state').then(async r=>{if(!r.ok)throw Error('state_unavailable');state=await r.json();render();void loadDirectory();}).catch(error);
+setInterval(()=>{if(state?.id)void refresh().catch(()=>{});},2200);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')void refresh().catch(()=>{});});

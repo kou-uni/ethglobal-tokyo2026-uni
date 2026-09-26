@@ -42,6 +42,11 @@ async function boot(overrides: Partial<AppDeps> = {}) {
   const post = (path:string, body:unknown, cookie:string, origin=url) => fetch(url+'/experience/'+path, {
     method:'POST', headers:{ origin, cookie, 'content-type':'application/json' }, body:JSON.stringify(body),
   }) as Promise<JsonResponse>;
+  async function device() {
+    const page=await fetch(url+'/experience'),cookie=page.headers.get('set-cookie')!.split(';')[0]!;
+    return {cookie,call:(path:string,body:unknown)=>post(path,body,cookie),
+      get:async():Promise<any>=>(await fetch(url+'/experience/state',{headers:{cookie}})).json()};
+  }
   async function visit() {
     const page = await fetch(url+'/experience'), cookie = page.headers.get('set-cookie')!.split(';')[0]!;
     const first = await post('start', { receiver, consent:true }, cookie);
@@ -56,11 +61,74 @@ async function boot(overrides: Partial<AppDeps> = {}) {
     }
     return {cookie,run,state,call,get,login};
   }
-  return {url,post,visit,verify,settle,check,scan,classify,payer:privateKeyToAccount(key).address,
+  return {url,post,visit,device,verify,settle,check,scan,classify,payer:privateKeyToAccount(key).address,
     advance:(ms:number)=>{time+=ms;},risk:(value:ScreeningResult)=>{risk=value;}};
 }
 
 describe('browser-owned live journey',()=>{
+  it('moves the run to the phone without granting World access or payment, and exposes only paid answers to the desktop',async()=>{
+    const b=await boot(),pc=await b.visit(),phone=await b.device();
+    const handoff=await (await pc.call('handoff')).json(),url=new URL(handoff.url);
+    expect(url.searchParams.has('handoff')).toBe(false);
+    const token=url.hash.slice('#handoff='.length);
+    const moved=await (await phone.call('handoff/claim',{token,consent:true})).json();
+    expect(moved).toMatchObject({id:pc.run,receiver:pc.state.receiver,authenticated:false,paired:true,observer:false});
+    expect(moved.policy).toEqual(pc.state.policy);
+    expect(moved.expires).toBe(pc.state.expires);
+    expect(b.verify).not.toHaveBeenCalled();expect(b.settle).not.toHaveBeenCalled();
+    expect(await pc.get()).toMatchObject({observer:true,authenticated:false,identity:null,surfaced:[]});
+    for(const action of ['challenge','collect','answer','handoff'])expect((await pc.call(action)).status).toBe(409);
+    expect((await phone.call('collect',{run:pc.run})).status).toBe(403);
+    const c=await (await phone.call('challenge',{run:pc.run})).json();
+    const logged=await (await phone.call('verify',{run:pc.run,id:c.id,proof:{test:true}})).json();
+    const id=logged.surfaced[0];
+    expect((await phone.call('draft',{run:pc.run,id,answer:'private phone draft',consent:true})).status).toBe(200);
+    expect(JSON.stringify(await pc.get())).not.toContain('private phone draft');
+    const personal=await phone.get();
+    expect(personal.items.find((i:any)=>i.id===id).draft).toBe('private phone draft');
+    await phone.call('answer',{run:pc.run,id,answer:'Paid answer for the buyer',consent:true});
+    const observed=await pc.get();
+    expect(observed).toMatchObject({observer:true,authenticated:false,identity:null,surfaced:[]});
+    expect(observed.items.find((i:any)=>i.id===id)).toMatchObject({delivered:'Paid answer for the buyer',payment:{status:'settled'}});
+    expect(observed.items.find((i:any)=>i.id===id).explorer).toContain('test-receipt');
+    expect(observed.totals[0].answered).toBe('1001');
+    expect(b.settle).toHaveBeenCalledOnce();
+  });
+  it('consumes a phone handoff only once, even with concurrent claims',async()=>{
+    const b=await boot(),pc=await b.visit(),a=await b.device(),other=await b.device();
+    const h=await (await pc.call('handoff')).json(),token=new URL(h.url).hash.slice(9);
+    const responses=await Promise.all([a.call('handoff/claim',{token,consent:true}),other.call('handoff/claim',{token,consent:true})]);
+    expect(responses.map(r=>r.status).sort()).toEqual([200,400]);
+    const third=await b.device();
+    expect((await third.call('handoff/claim',{token,consent:true})).status).toBe(400);
+    expect(b.settle).not.toHaveBeenCalled();
+  });
+  it('expires and rotates handoff tokens, requires consent and origin, and does not replace a browser run',async()=>{
+    const b=await boot(),pc=await b.visit(),phone=await b.device(),occupied=await b.visit();
+    const first=await (await pc.call('handoff')).json(),second=await (await pc.call('handoff')).json();
+    const old=new URL(first.url).hash.slice(9),token=new URL(second.url).hash.slice(9);
+    expect((await phone.call('handoff/claim',{token:old,consent:true})).status).toBe(400);
+    expect((await phone.call('handoff/claim',{token})).status).toBe(400);
+    expect((await b.post('handoff/claim',{token,consent:true},phone.cookie,'https://other.example')).status).toBe(403);
+    expect((await occupied.call('handoff/claim',{token,consent:true})).status).toBe(400);
+    expect((await occupied.get()).id).toBe(occupied.run);
+    b.advance(120001);
+    expect((await phone.call('handoff/claim',{token,consent:true})).status).toBe(400);
+    expect((await pc.get()).observer).toBe(false);
+    expect(b.settle).not.toHaveBeenCalled();
+  });
+  it('refuses transfer after World verification starts, including a token created before the challenge',async()=>{
+    const b=await boot(),pc=await b.visit(),phone=await b.device();
+    const h=await (await pc.call('handoff')).json(),token=new URL(h.url).hash.slice(9);
+    const c=await (await pc.call('challenge')).json();
+    expect((await pc.call('handoff')).status).toBe(400);
+    expect((await phone.call('handoff/claim',{token,consent:true})).status).toBe(400);
+    await pc.call('verify',{id:c.id,proof:{}});
+    expect((await pc.call('handoff')).status).toBe(400);
+    expect((await phone.call('handoff/claim',{token,consent:true})).status).toBe(400);
+    expect((await pc.get()).authenticated).toBe(true);
+    expect(b.settle).not.toHaveBeenCalled();
+  });
   it('routes 50 real inputs, calls the model only on rule 9, and funds only two examples',async()=>{
     const b=await boot(),v=await b.visit();
     expect(v.state.processed).toBe(50);expect(v.state.complete).toBe(true);

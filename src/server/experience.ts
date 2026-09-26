@@ -35,6 +35,7 @@ interface Run {
   items: Item[]; processing: boolean; complete: boolean; surfaced: string[];
   proof?: IdkitProofSummary; proofExpires?: number; challenge?: Attempt;
   verifiedAttempt?: string;
+  paired?: boolean;
 }
 interface Attempt extends IdkitChallenge { id: string; run: Run; browser: string; verifying?: boolean }
 const digest = (text: string) => createHash('sha256').update(text).digest('hex');
@@ -47,6 +48,9 @@ export function createExperience(deps: AppDeps, allowSignature: () => boolean) {
   const identity = deps.idkitDemo, assets = deps.experience;
   const now = () => (deps.now?.() ?? new Date()).getTime();
   const runs = new Map<string, Run>();
+  // The desktop sees paid deliveries after handoff, never the phone's proof or drafts.
+  const observers = new Map<string, Run>();
+  const handoffs = new Map<string, { run: Run; expires: number }>();
   const payer = assets && deps.demoBuyerKey ? privateKeyToAccount(deps.demoBuyerKey as `0x${string}`).address : undefined;
   const authenticated = (run: Run) => Boolean(run.proof && run.proofExpires! > now() && run.expires > now());
   const supported = (q: PaymentRequirement) => q.network === tokenConfig.values.X402_NETWORK.value
@@ -95,8 +99,9 @@ export function createExperience(deps: AppDeps, allowSignature: () => boolean) {
       };
     });
   }
-  function publicState(run: Run) {
-    const unlocked = authenticated(run);
+  function publicState(run: Run, observer = false) {
+    const unlocked = !observer && authenticated(run);
+    const buyerVisible = unlocked || observer;
     const totals = new Map<string, { amount: bigint; automated: bigint; answered: bigint; asset: string; network: string; name: string }>();
     for (const item of run.items) {
       const p = item.payment, q = p.requirement;
@@ -110,14 +115,14 @@ export function createExperience(deps: AppDeps, allowSignature: () => boolean) {
     return {
       id: run.id, expires: new Date(run.expires).toISOString(), receiver: run.receiver,
       complete: run.complete, processed: run.items.filter(i => i.decision).length, total: run.items.length,
-      authenticated: unlocked, identity: unlocked ? run.proof : null,
+      authenticated: unlocked, identity: unlocked ? run.proof : null, observer, paired: Boolean(run.paired),
       policy: { cap: run.policy.dailyCap, threshold: run.policy.amountThreshold,
         displayThreshold: displayReward(run.policy.amountThreshold, run.receiver), allow: run.policy.allow, forbid: run.policy.forbid },
       surfaced: unlocked ? run.surfaced : [],
       wired: configuration(),
       tokenDisplay: { asset: tokenConfig.values.X402_ASSET.value, network: tokenConfig.values.X402_NETWORK.value,
         symbol: 'test USDC', decimals: 6 },
-      totals: unlocked ? [...totals.values()].map(t => ({ ...t, amount: String(t.amount), automated: String(t.automated), answered: String(t.answered) })) : [],
+      totals: buyerVisible ? [...totals.values()].map(t => ({ ...t, amount: String(t.amount), automated: String(t.automated), answered: String(t.answered) })) : [],
       ...links(),
       items: run.items.map(i => ({
         id: i.request.id, who: i.request.who, category: i.request.what, question: asQuestion(i.request.what),
@@ -125,10 +130,11 @@ export function createExperience(deps: AppDeps, allowSignature: () => boolean) {
         decision: i.decision ?? null, screening: i.screening ?? null,
         screeningReason: i.screeningReason, model: i.model, modelReason: i.modelReason, decidedAt: i.decidedAt,
         reward: displayReward(i.request.price.amount, run.receiver),
-        payment: unlocked ? i.payment : { status: i.payment.status, requirement: i.payment.requirement },
+        payment: unlocked ? i.payment : { status: i.payment.status, requirement: i.payment.requirement,
+          ...(observer && i.payment.status === 'settled' ? { transaction: i.payment.transaction } : {}) },
         ...(unlocked && i.draft ? { draft: i.draft } : {}),
-        resolved: i.resolved, ...(unlocked && i.delivered ? { delivered: i.delivered } : {}),
-        ...(unlocked && i.payment.transaction ? {
+        resolved: i.resolved, ...(buyerVisible && i.delivered ? { delivered: i.delivered } : {}),
+        ...(buyerVisible && i.payment.transaction ? {
           explorer: (deps.explorerUrl ?? tokenConfig.values.X402_EXPLORER_URL.value) + encodeURIComponent(i.payment.transaction),
         } : {}),
       })),
@@ -194,6 +200,8 @@ export function createExperience(deps: AppDeps, allowSignature: () => boolean) {
     }
     if (req.headers.host !== new URL(identity.origin).host) { json(403, { error: 'wrong_host' }); return true; }
     for (const [key, r] of runs) if (r.expires <= now() && !r.processing && !r.items.some(i => i.payment.status === 'processing')) runs.delete(key);
+    for (const [key, h] of handoffs) if (h.expires <= now() || h.run.expires <= now()) handoffs.delete(key);
+    for (const [key, r] of observers) if (r.expires <= now()) observers.delete(key);
     if (req.method === 'GET' && url.pathname === base + '/app.js') { res.setHeader('Content-Type', 'text/javascript'); res.end(assets.js); return true; }
     if (req.method === 'GET' && url.pathname === base + '/idkit_wasm_bg.wasm') { res.setHeader('Content-Type', 'application/wasm'); res.end(identity.assets.wasm); return true; }
     if (req.method === 'GET' && url.pathname === base) {
@@ -203,7 +211,9 @@ export function createExperience(deps: AppDeps, allowSignature: () => boolean) {
     if (!browser) { json(403, { error: 'open_demo_first' }); return true; }
     let run = runs.get(browser);
     if (req.method === 'GET' && url.pathname === base + '/state') {
-      json(200, run ? publicState(run) : { started: false, wired: configuration(), ...links() }); return true;
+      const observed = observers.get(browser);
+      json(200, run ? publicState(run) : observed ? publicState(observed, true)
+        : { started: false, wired: configuration(), ...links() }); return true;
     }
     if (req.method !== 'POST' || req.headers.origin !== identity.origin) { json(403, { error: 'wrong_origin' }); return true; }
     try {
@@ -211,6 +221,18 @@ export function createExperience(deps: AppDeps, allowSignature: () => boolean) {
       for await (const chunk of req) { text += chunk; if (text.length > 65536) throw new Error('too_large'); }
       const body = JSON.parse(text || '{}') as Record<string, unknown>;
       if (!body || Array.isArray(body) || typeof body !== 'object') throw new Error('invalid_body');
+      if (url.pathname === base + '/handoff/claim') {
+        if (run || observers.has(browser)) throw new Error('browser_already_has_a_run');
+        if (typeof body.token !== 'string' || !/^[a-f0-9]{64}$/.test(body.token) || body.consent !== true) throw new Error('handoff_consent_required');
+        const key = digest(body.token), h = handoffs.get(key);
+        if (!h || h.expires <= now() || h.run.expires <= now() || runs.get(h.run.browser) !== h.run) throw new Error('handoff_expired');
+        const r = h.run;
+        if (r.proof || r.challenge || r.processing || r.items.some(i => i.draft || i.resolved || ['processing','settled','failed'].includes(i.payment.status))) throw new Error('handoff_not_available');
+        handoffs.delete(key);
+        runs.delete(r.browser); observers.set(r.browser, r);
+        r.browser = browser; r.paired = true; runs.set(browser, r);
+        json(200, publicState(r)); return true;
+      }
       if (url.pathname === base + '/start') {
         if (run) { json(200, publicState(run)); return true; }
         if (runs.size >= 100) { json(429, { error: 'demo_full' }); return true; }
@@ -219,9 +241,17 @@ export function createExperience(deps: AppDeps, allowSignature: () => boolean) {
         const policy = structuredClone(deps.policy), id = randomBytes(16).toString('hex');
         run = { id, browser, receiver: body.receiver.trim(), policy, expires: now() + ttl,
           items: seeds(id, policy), complete: false, processing: false, surfaced: [] };
-        runs.set(browser, run); json(200, publicState(run)); return true;
+        observers.delete(browser); runs.set(browser, run); json(200, publicState(run)); return true;
       }
       if (!run || body.run !== run.id || run.expires <= now()) { json(409, { error: 'run_expired_or_changed' }); return true; }
+      if (url.pathname === base + '/handoff') {
+        if (!run.complete || run.paired || run.proof || run.challenge || run.processing
+          || run.items.some(i => i.draft || i.resolved || ['processing','settled','failed'].includes(i.payment.status))) throw new Error('handoff_not_available');
+        for (const [key, h] of handoffs) if (h.run === run) handoffs.delete(key);
+        const token = randomBytes(32).toString('hex'), expires = Math.min(run.expires, now() + 2 * 60 * 1000);
+        handoffs.set(digest(token), { run, expires });
+        json(200, { url: `${identity.origin}${base}?view=work&device=phone#handoff=${token}`, expires: new Date(expires).toISOString() }); return true;
+      }
       if (url.pathname === base + '/advance') {
         if (run.processing) { json(409, { error: 'processing' }); return true; }
         run.processing = true;
