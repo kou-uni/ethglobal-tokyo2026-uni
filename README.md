@@ -10,7 +10,7 @@ proves anybody was there.
 
 | | |
 |---|---|
-| 🎬 **20 seconds** | [Watch one night](https://kou-uni.github.io/ethglobal-tokyo2026-uni/flow.html) — no reading |
+| 🎬 **35 seconds** | [Watch one night](https://kou-uni.github.io/ethglobal-tokyo2026-uni/flow.html) — no reading |
 | 🗺️ **The whole picture** | [What it plugs into](https://kou-uni.github.io/ethglobal-tokyo2026-uni/stack.html) · [Where the requests come from](https://kou-uni.github.io/ethglobal-tokyo2026-uni/inflow.html) |
 | 🧪 **Touch it** | [The running product](https://kou-uni.github.io/ethglobal-tokyo2026-uni/product.html) — it settles real money on Base Sepolia |
 | 📖 **Unfamiliar terms?** | [Glossary](https://kou-uni.github.io/ethglobal-tokyo2026-uni/glossary.html) — one line each |

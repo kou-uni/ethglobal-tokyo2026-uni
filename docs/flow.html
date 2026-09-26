@@ -64,6 +64,9 @@ i.d.hold{background:var(--lilacD)}
 i.d.up{width:19px;height:19px;background:var(--lilacD);
 box-shadow:0 0 0 6px var(--lilacL),0 4px 10px rgba(107,91,214,.4);opacity:1}
 i.d.gone{opacity:0;transform:scale(.2)}
+/* The one refusal that is not about permission — see the screening beat. */
+i.d.screened{width:19px;height:19px;background:var(--redD);opacity:1;
+box-shadow:0 0 0 6px #FBF0EF,0 4px 10px rgba(196,80,74,.35)}
 i.d.coin{background:var(--limeD);width:17px;height:17px;box-shadow:0 0 0 6px var(--limeL)}
 
 /* ── controls ────────────────────────────────────────── */
@@ -210,6 +213,19 @@ var beats = [
         setTimeout(function(){ e.style.transform = 'scale(1.7)';
           setTimeout(function(){ e.style.transform = ''; }, 500); }, i * 70);
       });
+    }},
+  /*
+   * One of the twelve, and why it is not like the other eleven.
+   *
+   * Every other refusal here is about permission — a category she does not sell, a grant that
+   * expired. This one is about the money itself, and it is the only beat in the reel where an
+   * outside service, called live, decides what happens next.
+   */
+  { ms: 4000, go: function(){
+      var one = dots[AUTO];
+      set(one, 'deny screened');
+      say('', 'One of them was refused<br>for <em>where the money came from.</em>',
+          'The grant was valid and the price was fine. <b>A live check answered, and the payment stopped</b> — in that service&rsquo;s own words. If it cannot answer, the money still does not move.');
     }},
   { ms: 3600, go: function(){
       var held = dots.slice(AUTO+DENY);

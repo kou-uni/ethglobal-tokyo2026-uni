@@ -78,13 +78,14 @@
 <text class="t2" x="380" y="604">settle, and the morning ledger</text>
 <text class="lnm" x="744" y="50">WHAT IT PLUGS INTO</text>
 
-<rect x="744" y="96" width="256" height="98" rx="18" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
-<path d="M744 114 a18 18 0 0 1 18 -18 h220 a18 18 0 0 1 18 18 z" fill="#A6A3B4"/>
-<text class="t3" x="758" y="110">SCREENING &#183; STAND-IN</text>
+<rect x="744" y="96" width="256" height="116" rx="18" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
+<path d="M744 114 a18 18 0 0 1 18 -18 h220 a18 18 0 0 1 18 18 z" fill="#6B5BD6"/>
+<text class="t3" x="758" y="110">LIVE</text>
 <text class="t3" x="986" y="110" text-anchor="end">STEP 2</text>
-<text class="t1" x="758" y="144">&#128737; intercepta</text>
+<text class="t1" x="758" y="144">&#128737; Intercepta</text>
 <text class="t2" x="758" y="168">may this money move?</text>
 <text class="t2" x="758" y="188">unreachable &#8594; refuse</text>
+<text class="ev" x="758" y="206">rule 4 &#183; refused, in its words</text>
 
 <path class="hook" d="M744 148 L704 148"/>
 

@@ -162,13 +162,14 @@ a{cursor:pointer} a:hover rect{stroke:#6B5BD6;stroke-width:3}
 <text class="t2" x="380" y="604">settle, and the morning ledger</text>
 <text class="lnm" x="744" y="50">WHAT IT PLUGS INTO</text>
 <a href="https://mac-studio.taila649e1.ts.net/health" target="_blank">
-<rect x="744" y="96" width="256" height="98" rx="18" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
-<path d="M744 114 a18 18 0 0 1 18 -18 h220 a18 18 0 0 1 18 18 z" fill="#A6A3B4"/>
-<text class="t3" x="758" y="110">SCREENING &#183; STAND-IN</text>
+<rect x="744" y="96" width="256" height="116" rx="18" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
+<path d="M744 114 a18 18 0 0 1 18 -18 h220 a18 18 0 0 1 18 18 z" fill="#6B5BD6"/>
+<text class="t3" x="758" y="110">LIVE</text>
 <text class="t3" x="986" y="110" text-anchor="end">STEP 2</text>
-<text class="t1" x="758" y="144">&#128737; intercepta</text>
+<text class="t1" x="758" y="144">&#128737; Intercepta</text>
 <text class="t2" x="758" y="168">may this money move?</text>
 <text class="t2" x="758" y="188">unreachable &#8594; refuse</text>
+<text class="ev" x="758" y="206">rule 4 &#183; refused, in its words</text>
 </a>
 <path class="hook" d="M744 148 L704 148"/>
 <a href="https://sepolia.etherscan.io/tx/0xb459618bfdd9d0ab78cf34ee64723e04ef227546208d6502b23cf6e72e73ce4f" target="_blank">
@@ -263,12 +264,20 @@ transaction or the live endpoint, not to a description of it. The dashed lines s
       <a href="https://sepolia.basescan.org/tx/0x5c79fddfc8d6e6f64c1dd23752fae688a9b94ec5bc770f24fd1c2595b00d1d88">after her yes &#183; 4,200</a>
     </div></div>
 
-  <div class="lay"><div class="top"><span class="ic">&#128737;</span><span class="nm">intercepta &#183; step 2</span></div>
-    <div class="q">Is this money allowed to move? The shape is wired and tested; <b>an unreachable
-    screening call refuses rather than passes</b>.</div>
-    <div class="ev warn"><b>Key requested, not yet live.</b> <code>/health</code> reports it false
-    rather than pretending.</div>
-    <div class="go"><a href="https://mac-studio.taila649e1.ts.net/health">/health</a></div></div>
+  <div class="lay"><div class="top"><span class="ic">&#128737;</span><span class="nm">Intercepta &#183; step 2</span></div>
+    <div class="q">Is this money allowed to move? <b>A licence and a payment are different layers</b>
+    &mdash; the grant can be valid, the category allowed, the amount fine, and the payment still
+    does not go, because of <b>where the money would come from</b>.</div>
+    <div class="ev"><b>Live, and it decides.</b> The same request, same grant, same price: from a
+    cleared payment source it settled <code>120</code> on Base Sepolia; from a refused one it
+    stopped on <b>rule 4</b> &mdash; shown in <b>the provider's own sentence</b>, not ours.
+    <b>Unreachable refuses rather than passes</b>, and a sanctioned contract the API answers
+    <code>404</code> about is treated as unchecked, never as clean.</div>
+    <div class="go">
+      <a class="g" href="https://sepolia.basescan.org/tx/0xa6b97b7c07716a8456c9f6b78157366e3ac760f2be3dfbb77b63eedcbb8d0087">cleared &#183; settled 120</a>
+      <a href="https://mac-studio.taila649e1.ts.net/dropped">refused &#183; with its reason</a>
+      <a href="https://mac-studio.taila649e1.ts.net/health">/health</a>
+    </div></div>
 
   <div class="lay"><div class="top"><span class="ic">&#128202;</span><span class="nm">Curvegrid NEO &#183; downstream</span></div>
     <div class="q"><b>Where the money lives once it has moved.</b> Yohaku draws the line at one
