@@ -16,6 +16,9 @@ padding:6vmin 8vmin;opacity:0;pointer-events:none;transition:opacity .22s;
 background:linear-gradient(160deg,#E9F0FF 0%,#F4EDFF 48%,#FFEAF6 100%)}
 section.on{opacity:1;pointer-events:auto}
 section.inv{background:#5B4BE0;color:#fff;align-items:center;text-align:center}
+section.lime{background:#DDF691;color:#242329;align-items:center;text-align:center;justify-content:center;gap:5vmin}
+section.lime h2{font-size:clamp(40px,9vmin,120px);color:#242329;line-height:1.14}
+.mark{width:min(30vmin,34vh);height:auto;display:block}
 h2{font-size:clamp(34px,7.6vmin,104px);font-weight:900;line-height:1.1;letter-spacing:-.025em}
 h2 em{font-style:normal;color:var(--violet)}
 section.inv h2{font-size:clamp(70px,20vmin,260px);letter-spacing:.04em}
@@ -84,8 +87,12 @@ body.inv #dots i.on{background:#fff}
 <h2>Two taps.<br>She kept the rest of the night.</h2>
 <div class="notes"><p><b>one unit per decision we handled</b> — never a share of what she earned</p><p>what agents spend has to be governed somewhere → <b>Curvegrid</b></p></div>
 </section>
+<section class="s lime" data-i="8">
+<img class="mark" src="launch/mark.svg" alt="yohaku">
+<h2>AI works.<br>You breathe.</h2>
+</section>
 </div>
-<div id="dots"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div id="dots"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
 <script>
 var S=document.querySelectorAll('section'), D=document.querySelectorAll('#dots i'), i=0;
 function go(n){i=Math.max(0,Math.min(S.length-1,n));

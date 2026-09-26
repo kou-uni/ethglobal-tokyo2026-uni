@@ -1,7 +1,7 @@
 /* Presentation only: no credentials, provider calls, payment signing or settlement. */
 (()=>{
 const COPY=window.LAUNCH_COPY,fixture=window.YOHAKU_REPLAY;
-let lang=new URLSearchParams(location.search).get('lang')==='en'?'en':'ja';
+let lang=new URLSearchParams(location.search).get('lang')==='ja'?'ja':'en';
 let scenario='human',phase=0,playing=false,timer=null,focusMode=false;
 const $=id=>document.getElementById(id);
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
