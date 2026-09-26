@@ -2,6 +2,9 @@
 # Slide text is deliberately tiny in volume: the speaking is the content.
 import html, io
 
+LINES = {'era': ('Agents are not assistants any more. / They are becoming <b>customers.</b><br>And the person they buy from / is <b>you.</b><br>A model can write anything. / What it cannot do / is live a day / and tell you what happened.<br>So the scarce thing is no longer information. — It is <b>an answer only a person can give.</b>', 'エージェントはもう「アシスタント」ではありません。顧客になりつつあります。そして、その顧客が買う相手が、あなたです。モデルは何でも書けます。できないのは、一日を生きて、何が起きたかを語ること。だから希少なのはもう情報ではない。その人にしか出せない答えです。'), 'mkt': ('A large market is expected. — And <b>the supply it runs on is running out.</b>', '大きな市場が見込まれています。そして、それを支えている供給のほうが先に尽きます。'), 'night': ('Which means demand arrives at a person, / all night, / at machine speed.<br>Fifty-two requests reached one seller / in one night. — She was <b>asleep.</b><br>That is not a problem to block. — It is <b>a market with nobody at the counter.</b>', 'つまり需要は、一人の人間に、一晩中、機械の速さで届きます。ある売り手には、一晩で52件届きました。本人は寝ています。これは防ぐべき問題ではありません。カウンターに誰も立っていない市場です。'), 'yohaku': ('So the question is not how to answer more. — It is <b>what a person should never have to see.</b><br>What we are building is <b>room.</b> / Room to stay a person.<br>In Japanese we call that <b>yohaku</b> — / the space a painter decides <b>not to fill.</b>', '問いは「どうやってもっと答えるか」ではありません。その人が見なくていいものは何か、です。私たちが作っているのは、ゆとりです。人間のままでいるためのゆとり。日本語では、これを余白と言います。絵師が、描かないと決めた場所です。'), 'proto': ('Here is one night. / Agents arrive over an open agent-to-agent protocol.<br><b>Most never reach a judgement at all.</b> / They are refused / before anyone is asked.<br>A security check decides / whether the money may move.<br>A decision model sorts the rest — / and it can only <b>ask,</b> / or <b>refuse.</b> — <b>It cannot say yes.</b><br>What clears / settles itself / over x402.', 'これがある一晩です。エージェントは公開のエージェント間プロトコルでやってきます。その大半は、判断にすら届きません。誰かに聞く前に断られます。セキュリティの検査が「この金は動いていいのか」を決めます。判定モデルが残りを仕分けます。ただし返せるのは「聞く」か「断る」だけ。「通す」という答えは存在しません。通ったものは、x402 で自分で決済まで終わります。'), 'world': ('Two are left. — Only <b>two.</b><br>When she answers, / she proves she is a person / <b>at that moment</b> — with World ID.<br>That is what an agent is actually buying: / <b>an answer a human is proven to have given.</b>', '残るのは2件。2件だけです。答えるとき、彼女はその瞬間に人間であることを証明します。World ID で。エージェントが本当に買っているのはこれです — 人間が答えたと証明された答え。'), 'money': ('Money arrived / while she did nothing.<br>Money arrived again / because she <b>decided.</b><br><b>Check your own balance.</b> — Not our screen.', '何もしていない間に、お金が入りました。決めたから、もう一度入りました。ご自分の残高で確かめてください。私たちの画面ではなく。'), 'close': ("She spent <b>two taps</b> / and kept the rest of the night.<br>We take one unit / for the decision we handled — / never a share of what she earned.<br>And what agents spend / has to be governed somewhere.<br><b>That is where a treasury layer begins — Curvegrid's — / and where we stop.</b>", '使ったのはタップ2回。残ったのはその夜の残り全部。私たちは捌いた判断1件につき1単位だけ受け取ります。彼女の売上の取り分ではありません。そして、エージェントが使う金は、どこかで統治されなければならない。そこから先が財務の層 — Curvegrid の層 — で、私たちはそこで止まります。')}
+CUE = {'mkt': 'スライド2へ。読み上げない', 'night': 'スライド3', 'yohaku': 'スライド4。ここで一拍長く', 'proto': 'アニメーションを流し始めてから喋る', 'world': 'スライド6', 'money': '実機へ切り替え。残高を見せる。黙ってよい', 'close': 'スライド8'}
+
 S = [
  dict(k='era', big=['Agents are not assistants.', 'They are <em>customers.</em>'],
       sub='And the person they buy from is you.'),
@@ -111,3 +114,81 @@ go((parseInt(new URLSearchParams(location.search).get('p'),10)||1)-1);
 </body></html>
 ''')
 print('docs/deck.html —', len(S), 'slides')
+
+# ── the same words, as something to read while speaking ──────────────────────
+HARD = [('agent-to-agent protocol', 'エージェント・トゥ・エージェントで一度切る。1語で言おうとしない'),
+        ('settles itself over x402', 'settles の後に軽く間。x402 は「エックス・フォー・オー・トゥー」'),
+        ('an answer a human is proven to have given', 'proven だけ強く。残りは平ら'),
+        ('assistants any more', 'any more を落とさない。ここが否定の要'),
+        ('yohaku', 'ヨハク。ゆっくり。ここは日本語のままでいい')]
+SPINE = ['customers','you','an answer only a person can give','the supply is running out','asleep',
+         'nobody at the counter','what a person should never have to see','room','yohaku',
+         'Most never reach a judgement','It cannot say yes','Only two','proven to have given',
+         'Check your own balance','two taps','where we stop']
+
+blocks = []
+for i, d in enumerate(S):
+    en, ja = LINES[d['k']]
+    cue = ('<p class="cue">［%s］</p>' % CUE[d['k']]) if d['k'] in CUE else ''
+    blocks.append('<article data-i="%d">%s<p class="no">%d</p><p class="en">%s</p><p class="ja">%s</p></article>'
+                  % (i, cue, i + 1, en, ja))
+
+io.open('docs/script.html', 'w', encoding='utf-8').write('''<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Yohaku — the script</title><meta name="robots" content="noindex">
+<style>
+@import url(\'https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap\');
+*{box-sizing:border-box;margin:0}
+body{background:#12101C;color:#F2F0FA;min-height:100vh;padding:5vmin 6vmin 16vmin;
+font-family:"M PLUS Rounded 1c",-apple-system,BlinkMacSystemFont,"Hiragino Maru Gothic ProN",sans-serif;
+font-weight:800;-webkit-font-smoothing:antialiased}
+article{display:none}article.on{display:block}
+.no{font:900 clamp(13px,1.8vmin,20px)/1 ui-monospace,Menlo,monospace;color:#6E66A8;letter-spacing:.2em;margin-bottom:2vmin}
+.cue{font-size:clamp(13px,2vmin,22px);color:#FFC46B;margin-bottom:2vmin}
+.en{font-size:clamp(21px,4.4vmin,54px);line-height:1.48;letter-spacing:-.01em}
+.en b{color:#A99BFF}
+.ja{font-size:clamp(13px,2vmin,22px);line-height:1.75;color:#8B83B8;margin-top:4vmin;font-weight:700}
+#bar{position:fixed;left:0;right:0;bottom:0;background:#1B1830;padding:2.4vmin 4vmin;
+display:flex;gap:3vmin;align-items:center;justify-content:space-between;font-size:clamp(12px,1.8vmin,18px)}
+#bar b{color:#A99BFF}
+button{font:inherit;font-size:clamp(12px,1.8vmin,18px);font-weight:900;background:#2E2850;color:#F2F0FA;
+border:0;border-radius:99px;padding:1.4vmin 3vmin;cursor:pointer}
+#help{display:none;padding-top:4vmin;border-top:2px solid #241F42;margin-top:5vmin}
+#help.on{display:block}
+#help h3{font-size:clamp(14px,2vmin,22px);color:#8B83B8;margin-bottom:2vmin;letter-spacing:.08em}
+#help p{font-size:clamp(13px,1.9vmin,20px);line-height:1.7;color:#C8C2E6;margin-bottom:1.4vmin}
+#help p b{color:#F2F0FA}
+#spine{font-size:clamp(13px,1.9vmin,20px);line-height:2;color:#8B83B8}
+#spine b{color:#A99BFF}
+</style></head><body>
+''' + "\n".join(blocks) + '''
+<div id="help">
+<h3>言いにくい所</h3>
+''' + "".join("<p><b>%s</b><br>%s</p>" % (a, b) for a, b in HARD) + '''
+<h3 style="margin-top:4vmin">詰まったら、その文を捨てて次の太字から</h3>
+<p id="spine">''' + " → ".join("<b>%s</b>" % w for w in SPINE) + '''</p>
+</div>
+<div id="bar">
+  <button onclick="go(i-1)">◀</button>
+  <span><b id="n">1</b> / ''' + str(len(S)) + ''' &nbsp;·&nbsp; 317 words &nbsp;·&nbsp; 2:07</span>
+  <button onclick="document.getElementById(\'help\').classList.toggle(\'on\')">notes</button>
+  <button onclick="go(i+1)">▶</button>
+</div>
+<script>
+var A=document.querySelectorAll(\'article\'), i=0;
+function go(n){i=Math.max(0,Math.min(A.length-1,n));
+  A.forEach(function(a,k){a.classList.toggle(\'on\',k===i)});
+  document.getElementById(\'n\').textContent=i+1;
+  history.replaceState(null,\'\',\'?p=\'+(i+1)); scrollTo(0,0);}
+addEventListener(\'keydown\',function(e){
+  if([\'ArrowRight\',\'ArrowDown\',\' \',\'PageDown\'].indexOf(e.key)>-1){e.preventDefault();go(i+1)}
+  if([\'ArrowLeft\',\'ArrowUp\',\'PageUp\'].indexOf(e.key)>-1){e.preventDefault();go(i-1)}});
+var x=null;
+addEventListener(\'touchstart\',function(e){x=e.touches[0].clientX},{passive:true});
+addEventListener(\'touchend\',function(e){if(x===null)return;var d=e.changedTouches[0].clientX-x;
+  if(Math.abs(d)>45)go(i+(d<0?1:-1)); x=null},{passive:true});
+go((parseInt(new URLSearchParams(location.search).get(\'p\'),10)||1)-1);
+</script>
+</body></html>
+''')
+print('docs/script.html —', len(S), 'blocks, same source as the deck')

@@ -43,7 +43,8 @@
     "setup:intercepta": "tsx scripts/setup-intercepta.ts",
     "intercepta:check": "tsx scripts/intercepta-check.ts",
     "ask:check": "node scripts/ask-check.mjs",
-    "build:faq": "node scripts/build-faq.mjs"
+    "build:faq": "node scripts/build-faq.mjs",
+    "build:submit": "node scripts/build-submit.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.7.4",
