@@ -20,6 +20,7 @@ $('prizeCards').innerHTML=t.prizes.map(c=>`<article class="prize"><div><span cla
 $('evidenceCards').innerHTML=t.evidence.map(c=>`<article class="evidence"><span class="status">${c[0]}</span><h3>${c[1]}</h3><p>${c[2]}</p><a href="${c[3]}">${t.proofLink}</a></article>`).join('');
 document.querySelectorAll('[data-case]').forEach(b=>b.addEventListener('click',()=>{scenario=b.dataset.case;phase=0;stop();document.querySelectorAll('[data-case]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();}));
 updateCap();draw();try{const url=new URL(location.href);url.searchParams.set('lang',lang);history.replaceState(null,'',url);}catch{}
+document.dispatchEvent(new CustomEvent('launch-language',{detail:lang}));
 }
 function draw(){const t=COPY[lang],d=chosenDecision();
 let cap=t.phaseText[phase];if(scenario==='risk'&&phase>=2)cap=t.riskCaption;else if(scenario==='silence'&&phase>=4)cap=t.silenceCaption;else if(scenario==='auto'&&phase===3)cap=t.autoCaption;
@@ -44,7 +45,8 @@ $('playerLang').onclick=()=>{lang=lang==='ja'?'en':'ja';render();if(focusMode)do
 document.addEventListener('keydown',e=>{if(!focusMode)return;if(e.key==='Escape'){e.preventDefault();setFocus(false);}if(e.key==='Tab'){const items=[...document.querySelector('.player').querySelectorAll('button:not([disabled]), summary, a[href]')];const first=items[0],last=items.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
 $('cap').addEventListener('input',updateCap);
 $('back').onclick=()=>{stop();phase=Math.max(0,phase-1);draw();};$('next').onclick=()=>{stop();phase=Math.min(5,phase+1);draw();};
-$('play').onclick=()=>{if(playing)stop();else{if(phase===5)phase=0;playing=true;}draw();schedule();};
+$('play').onclick=()=>{if(playing)stop();else{document.dispatchEvent(new CustomEvent('launch-playback',{detail:'single'}));if(phase===5)phase=0;playing=true;}draw();schedule();};
+document.addEventListener('launch-playback',e=>{if(e.detail!=='single'){stop();draw();}});
 document.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{lang=b.dataset.lang;render();schedule();});
 document.addEventListener('visibilitychange',()=>{if(document.hidden){stop();draw();}});
 matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',()=>{stop();draw();});
