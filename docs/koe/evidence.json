@@ -1,0 +1,39 @@
+{
+  "checkedAt": "2026-09-26T04:52:54.218Z",
+  "endpoint": "https://mac-studio.taila649e1.ts.net/requests",
+  "unsigned": true,
+  "paymentsSent": false,
+  "note": "Three actual HTTP requests. No PAYMENT-SIGNATURE supplied. Category matching does not prove screening, personhood, content delivery or payment. Results are point-in-time observations.",
+  "results": [
+    {
+      "topic": "experience/why-you-put-it-back",
+      "expected": "auto",
+      "status": 402,
+      "verdict": "auto",
+      "rule": null,
+      "reason": "within the standing grant for \"experience/why-you-put-it-back\"",
+      "id": "77d8371d-0065-4aec-82c1-85581d20b99a",
+      "settlement": null
+    },
+    {
+      "topic": "experience/the-time-it-failed-you",
+      "expected": "human",
+      "status": 202,
+      "verdict": "human",
+      "rule": 5,
+      "reason": "\"experience/the-time-it-failed-you\" is a sensitive domain",
+      "id": "9010c130-15ef-4eac-87cd-09c3fb479886",
+      "settlement": null
+    },
+    {
+      "topic": "contact/where-you-live",
+      "expected": "deny",
+      "status": 200,
+      "verdict": "deny",
+      "rule": 2,
+      "reason": "\"contact/where-you-live\" is never offered",
+      "id": "065cd2f7-b2cf-4c22-be4a-62642da68448",
+      "settlement": null
+    }
+  ]
+}

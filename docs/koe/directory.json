@@ -1,31 +1,54 @@
 {
-  "_what": "Koe's machine-readable directory. Agents do not browse HTML — this is the file they read. Each entry is a verified person, the topics they will answer about, what they charge, and the endpoint that decides whether they are asked at all.",
-  "_note": "A demo directory for ETHGlobal Tokyo 2026. The people are fictional; the routing endpoint is real.",
+  "_what": "An agent-readable directory of people and topics. Read this JSON, choose a topic, then send the five request fields to the profile router. Koe never authorizes a request.",
+  "_note": "Illustrative demo: all six people are fictional and have NOT been World ID verified. All profiles share one real Yohaku demo router and policy; requests do not reach these fictional individuals. No personal answers are delivered.",
   "service": "koe",
   "version": 1,
   "updated": "2026-09-26",
   "personhood": {
     "required": true,
     "method": "World ID",
-    "note": "Only verified humans can be listed. A listing can be revoked — that is what keeps the well clean."
+    "note": "The static profiles below are fictional and unverified. The separate liveDirectory endpoint lists temporary participants only after production World proof verification. Listings last up to one hour or server restart and can be removed from the originating browser. No one-person-one-profile enforcement or profile-truth guarantee."
   },
   "howToAsk": {
     "endpoint": "POST <profile.router>/requests",
-    "fields": ["who", "what", "purpose", "price", "deadline"],
+    "fields": [
+      "who",
+      "what",
+      "purpose",
+      "price",
+      "deadline"
+    ],
     "answers": {
-      "200": "settled automatically under the seller's standing rules",
-      "202": "held for the person, with the deadline it will be judged against",
-      "402": "payment required — sign the authorization in PAYMENT-REQUIRED and retry",
-      "deny": "refused by one of the seller's rules, with the rule named"
+      "200": "Inspect verdict: deny means refused; auto is not proof of payment. Inspect settlement separately.",
+      "202": "human: held for a human decision, not approved or paid.",
+      "402": "Inspect verdict and payment details: eligible auto requests require a payment authorization. This example does not sign or pay.",
+      "deny": "A routing verdict, not an HTTP status. Do not retry with payment to override refusal."
     },
-    "note": "Koe does not decide. Each seller's own router does, and it answers synchronously so you are never left holding a connection."
+    "note": "The shared demo router is authoritative. Listing a topic is not permission. Earlier rules, grant expiry, price, counterparty history and current configuration can change the response. No distinct recipient field or personal policy exists for these demo profiles.",
+    "exampleWho": "market-research.acme.eth",
+    "preconditions": "Examples use a counterparty preloaded in the demo, a future deadline and prices within the shared threshold for auto topics. who is a caller-supplied demo label, not verified agent identity. A new counterparty may require human review.",
+    "paymentNote": "JPYC is the request model currency. The deployed demo payment rail uses testnet USDC; read the returned asset, network and atomic amount. A listed JPYC amount is not a claim of JPYC settlement.",
+    "purposeByTopic": {
+      "contact/where-you-live": "other",
+      "corpus/your-own-words": "ai-training",
+      "experience/first-five-minutes": "market-research",
+      "experience/how-it-tasted": "market-research",
+      "experience/the-time-it-failed-you": "other",
+      "experience/what-you-expected": "personalisation",
+      "experience/who-you-live-with": "other",
+      "experience/why-you-put-it-back": "demand-estimation",
+      "experience/why-you-stopped": "other",
+      "judgement/what-you-earn": "other",
+      "wallet/your-address": "other"
+    },
+    "liveDirectory": "https://mac-studio.taila649e1.ts.net/koe-registration/directory.json",
+    "registrationUrl": "https://mac-studio.taila649e1.ts.net/koe-registration"
   },
   "profiles": [
     {
       "handle": "alice",
       "name": "Alice",
-      "ens": "yohaku-minta-2026.eth",
-      "verified": "World ID · orb",
+      "verified": "Illustrative profile · not verified",
       "headline": "Buys groceries for four. Notices packaging.",
       "about": "I do the weekly shop for a household of four and I read labels properly. If something goes back on the shelf, I can tell you exactly why.",
       "answers": [
@@ -34,75 +57,137 @@
         "experience/what-you-expected",
         "experience/how-it-tasted"
       ],
-      "willNotAnswer": ["contact/where-you-live", "wallet/your-address", "experience/who-you-live-with", "judgement/what-you-earn"],
-      "needsToBeAsked": ["experience/the-time-it-failed-you", "experience/why-you-stopped", "corpus/your-own-words"],
-      "priceFrom": { "amount": 80, "currency": "JPYC" },
+      "willNotAnswer": [
+        "contact/where-you-live",
+        "wallet/your-address",
+        "experience/who-you-live-with",
+        "judgement/what-you-earn"
+      ],
+      "needsToBeAsked": [
+        "experience/the-time-it-failed-you",
+        "experience/why-you-stopped",
+        "corpus/your-own-words"
+      ],
+      "priceFrom": {
+        "amount": 80,
+        "currency": "JPYC"
+      },
       "interruptionsPerDay": 2,
       "router": "https://mac-studio.taila649e1.ts.net"
     },
     {
       "handle": "kenji",
       "name": "Kenji",
-      "verified": "World ID · orb",
+      "verified": "Illustrative profile · not verified",
       "headline": "Commutes 90 minutes each way. Has opinions about timetables.",
       "about": "Two trains and a bus, twice a day, for six years. I can tell you what a delay actually costs a person.",
-      "answers": ["experience/the-time-it-failed-you", "judgement/what-youd-warn-a-friend-about"],
-      "willNotAnswer": ["contact/where-you-live", "wallet/your-address"],
-      "needsToBeAsked": ["experience/why-you-stopped"],
-      "priceFrom": { "amount": 150, "currency": "JPYC" },
-      "interruptionsPerDay": 1,
+      "answers": [
+        "experience/what-you-expected"
+      ],
+      "willNotAnswer": [
+        "contact/where-you-live",
+        "wallet/your-address"
+      ],
+      "needsToBeAsked": [
+        "experience/the-time-it-failed-you",
+        "experience/why-you-stopped"
+      ],
+      "priceFrom": {
+        "amount": 150,
+        "currency": "JPYC"
+      },
+      "interruptionsPerDay": 2,
       "router": "https://mac-studio.taila649e1.ts.net"
     },
     {
       "handle": "mei",
       "name": "Mei",
-      "verified": "World ID · orb",
+      "verified": "Illustrative profile · not verified",
       "headline": "Quit three fitness apps in a year. Can say exactly when.",
       "about": "I start things. I also stop them, and I remember the moment I stopped caring.",
-      "answers": ["experience/first-five-minutes", "experience/what-you-expected"],
-      "willNotAnswer": ["judgement/what-you-earn", "experience/who-you-live-with"],
-      "needsToBeAsked": ["experience/why-you-stopped", "experience/the-time-it-failed-you"],
-      "priceFrom": { "amount": 120, "currency": "JPYC" },
-      "interruptionsPerDay": 3,
+      "answers": [
+        "experience/first-five-minutes",
+        "experience/what-you-expected"
+      ],
+      "willNotAnswer": [
+        "judgement/what-you-earn",
+        "experience/who-you-live-with"
+      ],
+      "needsToBeAsked": [
+        "experience/why-you-stopped",
+        "experience/the-time-it-failed-you"
+      ],
+      "priceFrom": {
+        "amount": 120,
+        "currency": "JPYC"
+      },
+      "interruptionsPerDay": 2,
       "router": "https://mac-studio.taila649e1.ts.net"
     },
     {
       "handle": "tomas",
       "name": "Tomás",
-      "verified": "World ID · orb",
+      "verified": "Illustrative profile · not verified",
       "headline": "Assembles furniture badly. Reads the manual afterwards.",
       "about": "If an instruction can be misread, I have misread it. Useful, apparently.",
-      "answers": ["experience/where-you-got-stuck", "judgement/what-youd-warn-a-friend-about"],
-      "willNotAnswer": ["contact/where-you-live"],
-      "needsToBeAsked": ["experience/the-time-it-failed-you"],
-      "priceFrom": { "amount": 100, "currency": "JPYC" },
+      "answers": [
+        "experience/first-five-minutes",
+        "experience/what-you-expected"
+      ],
+      "willNotAnswer": [
+        "contact/where-you-live"
+      ],
+      "needsToBeAsked": [
+        "experience/the-time-it-failed-you"
+      ],
+      "priceFrom": {
+        "amount": 100,
+        "currency": "JPYC"
+      },
       "interruptionsPerDay": 2,
       "router": "https://mac-studio.taila649e1.ts.net"
     },
     {
       "handle": "yuki",
       "name": "Yuki",
-      "verified": "World ID · orb",
+      "verified": "Illustrative profile · not verified",
       "headline": "Writes a paper diary every night. Has never posted it anywhere.",
       "about": "Twelve years of handwriting that has never been scraped, because it has never been online.",
       "answers": [],
-      "willNotAnswer": ["contact/where-you-live", "wallet/your-address", "judgement/what-you-earn"],
-      "needsToBeAsked": ["corpus/your-own-words"],
-      "priceFrom": { "amount": 3000, "currency": "JPYC" },
-      "interruptionsPerDay": 1,
+      "willNotAnswer": [
+        "contact/where-you-live",
+        "wallet/your-address",
+        "judgement/what-you-earn"
+      ],
+      "needsToBeAsked": [
+        "corpus/your-own-words"
+      ],
+      "priceFrom": {
+        "amount": 3000,
+        "currency": "JPYC"
+      },
+      "interruptionsPerDay": 2,
       "router": "https://mac-studio.taila649e1.ts.net"
     },
     {
       "handle": "sam",
       "name": "Sam",
-      "verified": "World ID · orb",
+      "verified": "Illustrative profile · not verified",
       "headline": "Drinks coffee they cannot afford. Tastes the difference.",
       "about": "I will tell you what it actually tasted like, not what the packaging said it would.",
-      "answers": ["experience/how-it-tasted", "experience/what-you-expected"],
-      "willNotAnswer": ["experience/who-you-live-with"],
+      "answers": [
+        "experience/how-it-tasted",
+        "experience/what-you-expected"
+      ],
+      "willNotAnswer": [
+        "experience/who-you-live-with"
+      ],
       "needsToBeAsked": [],
-      "priceFrom": { "amount": 90, "currency": "JPYC" },
-      "interruptionsPerDay": 4,
+      "priceFrom": {
+        "amount": 90,
+        "currency": "JPYC"
+      },
+      "interruptionsPerDay": 2,
       "router": "https://mac-studio.taila649e1.ts.net"
     }
   ]

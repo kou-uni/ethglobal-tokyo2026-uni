@@ -1,0 +1,15 @@
+{
+  "checked": "2026-09-26",
+  "appName": "Yohaku Public Demo",
+  "appId": "app_879e657604c235d07f9fb0d4c293eff1",
+  "rpId": "rp_7d1746ab95ff804c",
+  "environment": "production",
+  "rpRegistrationVerified": true,
+  "signerAddress": "0x04991e8195205D570624fDB2731315B8723Bed32",
+  "action": "yohaku-live-check",
+  "verifyBaseUrl": "https://developer.world.org/api/v4/verify",
+  "verifySource": "https://docs.world.org/api-reference/developer-portal/verify",
+  "source": "2026-09-26: Developer Portal displayed App configured successfully with this appId, rpId and signer. GET https://developer.world.org/api/v4/rp-status/rp_7d1746ab95ff804c returned production_status=registered and staging_status=registered. Signer supplied by kou in issue #4.",
+  "documentation": "https://docs.world.org/world-id/idkit/integrate",
+  "note": "Public server configuration only. Select with WORLD_IDKIT_DEPLOYMENT=public. The signing key stays on kou's server. The separate local app remains unchanged. Registration does not establish a successful proof or payment on the public server."
+}

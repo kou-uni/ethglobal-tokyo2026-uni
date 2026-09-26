@@ -27,12 +27,18 @@ PR #7のこの実装を取り込み、通常のサーバーと同じディレク
 
 ```dotenv
 WORLD_IDKIT_DEMO_ENABLED=true
+WORLD_IDKIT_DEPLOYMENT=public
 WORLD_IDKIT_ORIGIN=https://mac-studio.taila649e1.ts.net
-WORLD_IDKIT_SIGNING_KEY=<登録済みYohaku署名者の秘密鍵・非公開設定>
+WORLD_IDKIT_SIGNING_KEY=<kouの公開サーバーで生成済みの専用秘密鍵・非公開設定>
 ```
 
-- 鍵はmintaのMacのgitignore対象 `.env` にある専用鍵。GitHub、Issue、PR、ログに貼らない。
-  公開サーバーへの鍵の安全な引き渡しは別途必要。公開アドレスから秘密鍵は復元できない。
+- 公開専用アプリ `Yohaku Public Demo` の登録を確認済み。
+  公開IDと出典は `config/world-idkit-public.json` にある。
+  kouの署名者 `0x04991e8195205D570624fDB2731315B8723Bed32` を登録したので、
+  サーバーに生成済みの鍵をそのまま使う。秘密鍵の引き渡しは不要。
+- `WORLD_IDKIT_DEPLOYMENT=public` が公開アプリを選ぶ。省略時は従来のローカルアプリ。
+  mintaのローカル設定 `config/world-idkit.json` とその鍵は変更しない。
+  どちらの鍵もGitHub、Issue、PR、ログに貼らない。
 - `npm run setup:idkit-key` はそのサーバーで新しい鍵を作るので、
   登録済みRPを使う目的で安易に実行しない。署名者が違えば起動を拒否する。
 - 既存の `WORLD_*`、x402、ENS、エージェント署名鍵の設定は残す。
@@ -73,4 +79,25 @@ WORLD_IDKIT_SIGNING_KEY=<登録済みYohaku署名者の秘密鍵・非公開設�
   [world-idkit-approval.json](evidence/world-idkit-approval.json)。
 - このMacの承認テストでは送金を無効にしている。
   x402の既存オンチェーン証跡と、今回のIDKit＋送金一体の実証を混同しない。
-- 公開サーバーへの配置は未実施。World ID for Agents賞の適合性は別途確認する。
+- 公開専用RPの登録は公式status APIで確認済み。公開サーバーでの設定切替・再起動と、
+  その新しいアプリでの実機認証・送金一体試験は未確認。World ID for Agents賞の適合性は別途確認する。
+
+## Koeへの登録（追加）
+
+同じ本番IDKit設定で `/koe-registration` が使える。既存の `/try` の承認とは別操作で、
+今回入力されたプロフィール・ブラウザー・試行IDを `koe-publish` signalに束縛する。
+秘密鍵・署名・本番proof verifierは既存のものを再利用する。
+
+1. 公開内容を入力し、掲載同意をチェックして `Verify & publish with World ID`。
+2. World Appで認証し、元のタブへ戻る。
+3. 本番証明をサーバーで検証したときだけ、1時間限定のメモリー内プロフィールができる。
+4. `/koe-registration/directory.json` から公開プロフィールを取得できる。Koeの静的画面もここを読む。
+5. 同じブラウザーの `Remove my listing` で削除可能。サーバー再起動でも消える。
+
+Koe登録ハンドラーには依頼台帳も決済アダプターも渡さない。認証でYohakuの依頼が承認されたり、
+送金されたりすることはない。静的な6人は架空・未認証のまま、実参加者と別表示する。
+公開プロフィールを取り下げても、第三者が取得済みのコピーまでは削除できない。
+Worldはpersonhoodだけを確認し、プロフィール記述の真偽・一人一件・回答配信は保証しない。
+
+公開確認: `/health` の `wired.koeRegistration=true`、新規登録→JSON掲載→削除、
+別の試行の取消→未掲載を実機で確認する。本番無効なら503を返し、mockへは退避しない。
