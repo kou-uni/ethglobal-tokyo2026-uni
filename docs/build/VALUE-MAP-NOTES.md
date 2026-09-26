@@ -1,50 +1,62 @@
-# Value map — 2026-09-26
+# Agent-customer presentation — 2026-09-26
 
-`../value-map.html` is a separate Japanese one-pager for explaining who benefits, who might
-pay, and how the implementation supports that value. It supplements the existing diagrams;
-it does not replace the English product hub, business page or PR #19.
+`../value-map.html` supplements the existing product hub, `stack.html` and `flow.html`.
+It now has three views: **concept, alternative technical map, presentation**. Every view has
+Japanese and English copy. The previous static Japanese sheet is superseded in this file.
 
-## Basis
+## Positioning, clarified by the user
 
-Reviewed main `32300f5`, the body of PR #19 (screening in the diagrams), and open Issues #17
-and #18. Main now contains the business/cash-flow diagrams and explanation chatbot.
-PR #13 and #15 are merged; PR #19 was open when reviewed.
+**The agent is the customer.** The human is the participant whose attention and authority
+are protected. Developers and marketplaces are potential collaborators, not additional
+customers in this narrative. Operators supply the agent's funds.
 
-- `../product/CONCEPT.md` and `JOURNEY.md`: buyer / seller problems, routing and attention cap.
-- `../product/ECONOMICS.md`: separate per-decision fee; collection remains unimplemented.
-- `../../src/adapters/jev.ts`: typed ask/drop outputs, no grant option.
-- `evidence/world-public-payment.json`: production Orb proof and paid approval, same request.
-- `evidence/screening-with-settlement.json`: actual API verdict plus settlement in Kou's local
-  environment. Its scope explicitly says the service stops receiving/settling, not buyer signing.
-- Existing ENS delegation evidence and `../stack.html`: key-scoped delegation boundary.
+Agents hiring people is our future-market thesis, not a claim of established traction.
+The closing invitation is to build the MIT-licensed OSS together: connect an agent, add an
+adapter, contribute adversarial requests, or describe boundaries people need to preserve.
+Fee accounting and optional separate authorizations exist; collection and willingness to pay
+remain unvalidated. Personal question/answer delivery is not connected.
 
-The payment source in the screening evidence is declared input; this page does not claim it
-is cryptographically bound to the actual payment signer. World verifies personhood, not truth
-or authorship. Customers, willingness to pay and marketplace adoption are hypotheses.
+## Basis and boundaries
 
-## What this adds
+Reviewed main `32300f5` and PR #19 (screening in the diagrams). Existing diagrams are kept for
+comparison; this PR does not replace their files or Kou's pitch and submission copy.
 
-The existing overview explains layers, the stack explains integration evidence, and the
-business page explains fees. This sheet joins those into one reading order:
+- `../product/CONCEPT.md`, `JOURNEY.md`: requests, rules and attention cap.
+- `../product/ECONOMICS.md`: separate per-decision fee, not a share of the person's payment.
+- `../../src/adapters/jev.ts`: ask/drop outputs, with no option that grants access.
+- `evidence/world-public-payment.json`: production Orb proof and payment in one request.
+- `evidence/screening-with-settlement.json`: live screening plus settlement on Kou's machine.
+  The source is declared input; we do not claim it is cryptographically bound to the payer.
+  Screening stopped the service receiving/settling, not the buyer signing beforehand.
+- Existing ENS evidence: proposal writes allowed, policy writes refused, revocation enforced.
+- `../../LICENSE`: MIT.
 
-1. Buyer, seller and potential integration partner: problem → benefit.
-2. One concrete request through Yohaku to auto / human / deny.
-3. Direct payment shown separately from request routing.
-4. Each technology attached to a specific boundary and benefit.
-5. Business hypothesis and missing implementation, visible without opening a disclosure.
+World proves personhood, not the truth or authorship of an answer. MultiBaas / NEO are not in
+the current payment path. Live public backend availability was not established during the
+initial audit: the product page was readable but health returned a TLS connection error.
+Dated transaction evidence is distinct from current deployment health.
 
-Three illustrative buttons highlight the relevant technologies. They make no network calls
-and never create requests, verify identities or send payments.
+## Presentation implementation
 
-## Validation and public state
+A single scene state drives captions, highlights and payment status. Seven scenes use fixed
+CSS-grid boxes, not moving particles with computed screen coordinates. Each scene lasts eight
+seconds in autoplay. Play/pause, back/next, restart and direct scene selection are available.
+It stops after the final scene and pauses when the document becomes hidden. Reduced-motion
+preferences disable visual transitions; playback starts only at the user's request.
 
-- Opened the public product hub and the local value map in Chrome.
-- Visually checked upper and lower layouts and the risky-payment example switch.
-- `npm run check` passed before and after the addition.
-- Print CSS targets A3 landscape; exact pagination depends on browser print settings.
-- The public product hub was readable. Its backend status fetch was unavailable, and a direct
-  health request failed with a TLS connection error. Current public backend availability was
-  therefore **not confirmed**. This does not invalidate the dated transaction evidence.
+Language switching preserves the view and current scene. Language and view persist in the
+URL across reload; a reloaded presentation starts at the first scene. No browser storage,
+external font, tracking, identity operation, request creation or payment is used.
 
-The logo is copied from the already adopted `design/yohaku-v3/mark.svg` so the published page
-does not depend on a path outside the GitHub Pages `docs/` root.
+## Validation
+
+- `node --check docs/value-map/app.js` succeeded.
+- `npm run check` passed before and after the changes.
+- Chrome: English map layout, Japanese presentation layout, scene selection, mid-scene
+  language switching and autoplay progression from request to settlement were observed.
+- The map labels auto/human/deny as request outcomes; only the human branch uses World.
+- Presentation desktop layout keeps the caption, diagram, payment state and controls compact;
+  narrow screens stack boxes without coordinate-based overlaps. Mobile geometry has not been
+  independently measured on a phone.
+
+The logo is copied from the adopted `design/yohaku-v3/mark.svg` into the Pages docs root.
