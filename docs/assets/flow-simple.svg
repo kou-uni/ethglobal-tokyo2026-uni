@@ -16,7 +16,7 @@
 .fs-pill{font:900 12px "M PLUS Rounded 1c",sans-serif;fill:#fff;letter-spacing:.06em}
 .fs-cap{font:800 14px "M PLUS Rounded 1c",sans-serif;fill:#8C8998}
 </style>
-<text class="fs-lnm" x="20" y="36">REQUESTS GO THROUGH. MONEY GOES AROUND.</text>
+<text class="fs-lnm" x="20" y="36">THROUGH US. AROUND US.</text>
 <rect x="20" y="66" width="250" height="74" rx="20" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
 <text class="fs-t" x="44" y="112">&#129302; Agents</text>
 <rect x="385" y="66" width="250" height="74" rx="20" fill="#EDE9FF" stroke="#6B5BD6" stroke-width="3"/>
@@ -36,5 +36,5 @@
 <text class="fs-pill" x="62" y="305">120 &#183; HERS</text>
 <rect x="46" y="324" width="5" height="28" rx="2" fill="#6B5BD6"/>
 <text class="fs-mf" x="64" y="344">1 &#183; ours</text>
-<text class="fs-cap" x="160" y="344">and nothing until it passes 10,000</text>
+<text class="fs-cap" x="160" y="344">nothing until 10,000</text>
 </svg>

@@ -4,7 +4,7 @@
 # below is a hard limit rather than a guideline: a diagram that has to be read is not a diagram.
 W = 1020
 problems = []
-BUDGET = 46          # characters, for anything that is not the one footnote line
+BUDGET = 30          # characters, for anything that is not the one footnote line
 
 import re as _re
 
@@ -41,7 +41,7 @@ def simple():
     a('</defs>')
     a(HEAD % {'p': 'fs'})
 
-    a('<text class="fs-lnm" x="20" y="36">%s</text>' % fits('REQUESTS GO THROUGH. MONEY GOES AROUND.', 13, 600, 'A-hdr'))
+    a('<text class="fs-lnm" x="20" y="36">%s</text>' % fits('THROUGH US. AROUND US.', 13, 600, 'A-hdr'))
 
     for x, label in [(20, '&#129302; Agents'), (385, 'Yohaku'), (750, '&#128100; A person')]:
         hi = label == 'Yohaku'
@@ -66,7 +66,7 @@ def simple():
     a('<text class="fs-pill" x="62" y="305">%s</text>' % fits('120 &#183; HERS', 12, 260, 'A-s1'))
     a('<rect x="46" y="324" width="5" height="28" rx="2" fill="#6B5BD6"/>')
     a('<text class="fs-mf" x="64" y="344">%s</text>' % fits('1 &#183; ours', 14, 200, 'A-s2'))
-    a('<text class="fs-cap" x="160" y="344">%s</text>' % fits('and nothing until it passes 10,000', 14, 420, 'A-s3'))
+    a('<text class="fs-cap" x="160" y="344">%s</text>' % fits('nothing until 10,000', 14, 420, 'A-s3'))
     a('</svg>')
     return '\n'.join(o)
 
@@ -96,7 +96,7 @@ def loop():
 
     a('<rect x="612" y="62" width="388" height="224" rx="26" fill="#EDE9FF" stroke="#C9BFFF" stroke-width="2"/>')
     a('<text class="vl-h" x="640" y="104">%s</text>' % fits('A market has a shape', 27, 350, 'B-h2'))
-    for i, ln in enumerate(['what agents pay for', 'what gets refused', 'which prices clear', 'how often a person was needed']):
+    for i, ln in enumerate(['what agents pay for', 'what gets refused', 'which prices clear', 'how often a person is needed']):
         a('<text class="vl-mf" x="640" y="%d">&#183; %s</text>' % (140 + i * 26, fits(ln, 14, 330, 'B-i')))
     a('<text class="vl-b" x="640" y="264">%s</text>' % fits('Her answers are not in it.', 16, 350, 'B-g'))
 
@@ -106,8 +106,8 @@ def loop():
     a('<rect x="46" y="338" width="106" height="26" rx="13" fill="#B08900"/>')
     a('<text class="vl-pill" x="62" y="356">%s</text>' % fits('NOT BUILT', 12, 200, 'B-pill'))
     a('<text class="vl-h" x="174" y="360">%s</text>' % fits('Where it could go', 27, 420, 'B-h3'))
-    a('<text class="vl-b" x="46" y="396">%s</text>' % fits('An agent treasury needs exactly this.', 16, W - 92, 'B-f'))
-    a('<text class="vl-b" x="46" y="418">%s</text>' % fits('Curvegrid, for instance. Nothing shared today.', 16, W - 92, 'B-f2'))
+    a('<text class="vl-b" x="46" y="396">%s</text>' % fits('An agent treasury needs this.', 16, W - 92, 'B-f'))
+    a('<text class="vl-b" x="46" y="418">%s</text>' % fits('Curvegrid, for one. Nothing shared.', 16, W - 92, 'B-f2', budget=False))
     a('</svg>')
     return '\n'.join(o)
 

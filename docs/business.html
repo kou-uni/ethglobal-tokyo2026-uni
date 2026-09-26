@@ -24,6 +24,14 @@ line-height:1.65;margin:18px 0}
 .flowbox{background:var(--card);border-radius:26px;padding:22px;box-shadow:var(--sh);margin:6px 0 18px}
 figure.dia{margin:6px 0 10px;background:var(--card);border-radius:26px;padding:14px;box-shadow:var(--sh)}
 figure.dia svg{width:100%;height:auto;display:block;border-radius:14px}
+details{background:var(--card);border-radius:20px;box-shadow:var(--shS);margin:12px 0;overflow:hidden}
+details summary{cursor:pointer;list-style:none;padding:16px 20px;font-size:15.5px;font-weight:900;
+color:var(--ink);display:flex;align-items:center;gap:10px}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:"+";color:var(--lilacD);font-size:19px;line-height:1}
+details[open] summary::before{content:"\2212"}
+details > *:not(summary){padding:0 20px;margin-top:0}
+details > *:not(summary):last-child{padding-bottom:18px}
 figure.dia figcaption{font-size:14px;color:var(--ink2);padding:12px 8px 2px;line-height:1.6}
 .row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px}
 .n{width:34px;height:34px;border-radius:50%;background:var(--lilacD);color:#fff;display:flex;
@@ -51,14 +59,10 @@ footer a{color:var(--lilacD)}
 </style></head><body>
 <a class="back" href="./">&larr; Yohaku</a>
 <h1>We are never paid out of<br>the <em>seller&rsquo;s money.</em></h1>
-<p class="sub">Their payment is a direct transfer to them. We are not a destination on it and we
-never hold it. What we charge for is the work we did &mdash; and it is charged the way the
-protocol says to charge something smaller than gas.</p>
+<p class="sub">We charge for the decision, never for a share of the sale.</p>
 
-<div class="warn"><b>&#9888; Vouchers accrue. Nothing has ever been broadcast.</b> Yohaku has
-collected <b>nothing</b>, and <a href="https://mac-studio.taila649e1.ts.net/fees">/fees</a> says so
-in the response rather than leaving a rising number to imply otherwise.
-<a href="https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/product/ECONOMICS.md"><b>The full version, including where it rubs against our own principles &rarr;</b></a></div>
+<div class="warn"><b>&#9888; Collected so far: nothing.</b>
+<a href="https://mac-studio.taila649e1.ts.net/fees">/fees</a> says so itself.</div>
 
 <h2>IN ONE LOOK</h2>
 <figure class="dia">
@@ -79,7 +83,7 @@ in the response rather than leaving a rising number to imply otherwise.
   .fs-pill{font:900 12px "M PLUS Rounded 1c",sans-serif;fill:#fff;letter-spacing:.06em}
   .fs-cap{font:800 14px "M PLUS Rounded 1c",sans-serif;fill:#8C8998}
   </style>
-  <text class="fs-lnm" x="20" y="36">REQUESTS GO THROUGH. MONEY GOES AROUND.</text>
+  <text class="fs-lnm" x="20" y="36">THROUGH US. AROUND US.</text>
   <rect x="20" y="66" width="250" height="74" rx="20" fill="#fff" stroke="#E8E5DC" stroke-width="2"/>
   <text class="fs-t" x="44" y="112">&#129302; Agents</text>
   <rect x="385" y="66" width="250" height="74" rx="20" fill="#EDE9FF" stroke="#6B5BD6" stroke-width="3"/>
@@ -99,13 +103,13 @@ in the response rather than leaving a rising number to imply otherwise.
   <text class="fs-pill" x="62" y="305">120 &#183; HERS</text>
   <rect x="46" y="324" width="5" height="28" rx="2" fill="#6B5BD6"/>
   <text class="fs-mf" x="64" y="344">1 &#183; ours</text>
-  <text class="fs-cap" x="160" y="344">and nothing until it passes 10,000</text>
+  <text class="fs-cap" x="160" y="344">nothing until 10,000</text>
   </svg>
   <figcaption>Her money never passes through us.
   <a href="assets/cashflow.svg">The same thing with the mechanism &rarr;</a></figcaption>
 </figure>
 
-<h2>WHERE THE MONEY GOES</h2>
+<details><summary>Where the money goes, step by step</summary>
 <div class="flowbox">
   <div class="row"><div class="n">1</div>
     <div class="txt"><b>The agent pays the person. Directly.</b> An <code>exact</code> transfer to
@@ -118,9 +122,9 @@ in the response rather than leaving a rising number to imply otherwise.
     <div class="txt"><b>Redeemed later, in one transaction.</b> Which is what
     <code>batch-settlement</code> exists for: <i>&ldquo;gas fees exceed the value of individual
     requests.&rdquo;</i></div><span class="tag n">DESIGNED</span></div>
-</div>
+</div></details>
 
-<h2>WHY PER DECISION, AND NOT A SHARE</h2>
+<details><summary>Why per decision, and not a share</summary>
 <div class="grid">
   <div class="c"><span class="k p">THE INCENTIVE</span><b class="t">A share would grow when we
   interrupt her</b><span>Take a percentage and an expensive request becomes worth escalating.
@@ -131,15 +135,15 @@ in the response rather than leaving a rising number to imply otherwise.
   <div class="c"><span class="k g">THE ALIGNMENT</span><b class="t">A fee she notices closes the
   counter</b><span>And a closed counter pays us nothing. <b>Keeping it invisible is not
   generosity — it is the only version that works.</b></span></div>
-</div>
+</div></details>
 
-<h2>HOW IT GROWS</h2>
+<details><summary>How it grows</summary>
 <table>
 <tr><th>Stage</th><th>Charged</th><th>Why</th></tr>
 <tr><td>Small</td><td><b>Nothing</b></td><td>Charging for something nobody uses teaches you nothing</td></tr>
 <tr><td>Traffic</td><td>Per decision handled</td><td>Priced against the thing being bought: <b>how many times she was not asked</b></td></tr>
 <tr><td>Learned filtering</td><td>A little more</td><td>Fewer interruptions, and a share of what that saved. <b>Not on day one</b> — we measured thirty nights and the mornings only got quieter in week four</td></tr>
-</table>
+</table></details>
 
 <h2>AND THE PART THAT COMPOUNDS</h2>
 <figure class="dia">
@@ -177,19 +181,19 @@ in the response rather than leaving a rising number to imply otherwise.
   <text class="vl-mf" x="640" y="140">&#183; what agents pay for</text>
   <text class="vl-mf" x="640" y="166">&#183; what gets refused</text>
   <text class="vl-mf" x="640" y="192">&#183; which prices clear</text>
-  <text class="vl-mf" x="640" y="218">&#183; how often a person was needed</text>
+  <text class="vl-mf" x="640" y="218">&#183; how often a person is needed</text>
   <text class="vl-b" x="640" y="264">Her answers are not in it.</text>
   <path d="M584 174 L606 174" stroke="#242329" stroke-width="3" fill="none" marker-end="url(#vl-k)"/>
   <rect x="20" y="312" width="980" height="120" rx="26" fill="#FFF6DC" stroke="#F0DFA8" stroke-width="2"/>
   <rect x="46" y="338" width="106" height="26" rx="13" fill="#B08900"/>
   <text class="vl-pill" x="62" y="356">NOT BUILT</text>
   <text class="vl-h" x="174" y="360">Where it could go</text>
-  <text class="vl-b" x="46" y="396">An agent treasury needs exactly this.</text>
-  <text class="vl-b" x="46" y="418">Curvegrid, for instance. Nothing shared today.</text>
+  <text class="vl-b" x="46" y="396">An agent treasury needs this.</text>
+  <text class="vl-b" x="46" y="418">Curvegrid, for one. Nothing shared.</text>
   </svg>
   <figcaption>The amber panel is a direction, not a product.</figcaption>
 </figure>
-
+<details><summary>What the loop is worth, in words</summary>
 <div class="grid">
   <div class="c"><span class="k p">CONTRIBUTE</span><b class="t">The shape of your refusals</b>
   <span>Not what you refused. <b>What kind of asking you tend to refuse.</b> Opt-in, and you can
@@ -206,15 +210,15 @@ in the response rather than leaving a rising number to imply otherwise.
 a person&rsquo;s judgement &mdash; so asking for it back needs conditions, set before the money:
 <b>opt-in only, patterns not contents, leavable, and never a summarised portrait of a person.</b>
 <b>If that stays vague, this section should not ship at all.</b></div>
-
-<h2>WHAT WE WILL NOT SAY</h2>
+</details>
+<details><summary>What we will not say</summary>
 <table>
 <tr><th>We say</th><th>We do not say</th></tr>
 <tr><td>&ldquo;Vouchers accrue per decision&rdquo;</td><td class="no"><b>&ldquo;We take a fee&rdquo;</b> &mdash; nothing has been collected</td></tr>
 <tr><td>&ldquo;Free while small, traffic-priced later&rdquo;</td><td class="no">&ldquo;It costs this much&rdquo; &mdash; not decided</td></tr>
 <tr><td>&ldquo;The design keeps their money off our books&rdquo;</td><td class="no">&ldquo;It works that way today&rdquo; &mdash; <b><code>batch-settlement</code> has never been called</b></td></tr>
 <tr><td>&ldquo;Being asked less is what we sell&rdquo;</td><td class="no">&ldquo;It learns and your mornings shrink&rdquo; &mdash; week four, measured</td></tr>
-</table>
+</table></details>
 
 <footer><b>Yohaku</b> &mdash; <a href="./">overview</a> &middot;
 <a href="stack.html">the layer map</a> &middot; <a href="product.html">the running product</a> &middot;
