@@ -77,7 +77,7 @@ personal data.** That is the gap.
 | **Refusals are inspectable** | ✅ a count is not accountability | [what never reached her](https://mac-studio.taila649e1.ts.net/dropped) |
 | **A counter for people to be found at** | ✅ **Koe — *not our product.*** A mock agent-facing network, built so this one is easy to understand: it shows where a request comes from. World ID listing, and a JSON feed agents read | [Koe](https://kou-uni.github.io/ethglobal-tokyo2026-uni/koe.html) |
 | Live payment screening | ⚠️ a stand-in. `/health` reports it **false** rather than pretending | — |
-| Fees | ⚠️ **designed, not wired. We take nothing today** | [the model](docs/product/ECONOMICS.md) |
+| **Fees** | ✅ a voucher per decision, and the 402 offers an **optional** second authorization. ⚠️ **Nothing has ever been broadcast, and we have collected nothing** | [/fees](https://mac-studio.taila649e1.ts.net/fees) · [the model](docs/product/ECONOMICS.md) |
 
 **Every number in this repository is re-derived by running the code.** `npm run verify` checks
 ten claims and refuses any hardcoded model id, endpoint or contract address. **It has caught us
@@ -91,8 +91,14 @@ are not a destination on it and never hold it.
 
 **We charge for the work: one voucher per decision, not a share of the amount.** A share would
 grow when we escalate an expensive request to a person — we would rather not have that
-incentive than promise to resist it. Vouchers are redeemed later in one transaction, which is
-what `batch-settlement` exists for: *"gas fees exceed the value of individual requests."*
+incentive than promise to resist it. A refusal costs the same as an approval, because it was
+the same work.
+
+**That part runs.** Every decision accrues a voucher, and the `402` offers an **optional**
+second authorization — the request goes through whether or not the agent signs it, because a
+fee must never be a hostage. **Redemption does not run, and nothing has ever been broadcast:**
+the facilitator advertises `batch-settlement`, but the published spec does not pin the EVM
+voucher format, and we will not claim a scheme we have not read.
 
 Free while it is small. **Traffic-priced once it is not** — and priced against the thing being
 bought, which is *how many times she was not asked.* Then the part that compounds: **contribute
