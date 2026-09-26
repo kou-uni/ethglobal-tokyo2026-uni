@@ -1,0 +1,35 @@
+{
+  "observedOn": "2026-09-26",
+  "source": "Public Chrome /world-approval result, independently checked with Base Sepolia RPC eth_getTransactionReceipt",
+  "requestId": "try-e30e5ea1",
+  "verdict": "approved",
+  "identity": {
+    "verified": true,
+    "environment": "production",
+    "protocolVersion": "3.0",
+    "credential": "orb",
+    "checkedAt": "2026-09-26T05:43:04.000Z"
+  },
+  "receipt": {
+    "transaction": "0xa87231ba7d9a46c15764f1f875aa9619f060101fb49e369e67f896e8741df8c4",
+    "status": "success",
+    "blockNumber": "47316550",
+    "network": "eip155:84532",
+    "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+    "transfers": [
+      {
+        "from": "0xCD6071453028bfB2510EcD575a2B431488fBE0F7",
+        "to": "0x5f52FA3c5DF22d8c89fA6c2221E2aeBd6FE722bD",
+        "value": "4200"
+      }
+    ],
+    "checkedAt": "2026-09-26T05:43:46.082Z"
+  },
+  "receivedTokenAmount": "0.0042",
+  "tokenDecimals": 6,
+  "limitations": [
+    "Testnet USDC, not JPYC or real-money revenue.",
+    "Personhood verified; no personal answer delivered.",
+    "No raw proof, nullifier, browser cookie or private key included."
+  ]
+}

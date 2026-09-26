@@ -20,11 +20,21 @@ rollout status in `DEMO-REMAINING.md`; that older document is retained as histor
 - Public Koe registration also succeeded at **14:36:56 JST**, production protocol 3.0 / Orb.
   The public registration page, public JSON feed and GitHub Pages participant card were all
   checked. See `evidence/koe-registration-public.json`. No payment occurred.
+- Public Yohaku approval **and payment in the same run** succeeded at **14:43:04 JST**:
+  request `try-e30e5ea1`, production World / protocol 3.0 / Orb, followed by a successful
+  Base Sepolia transaction. An independent RPC receipt confirmed the configured USDC asset's
+  Transfer event sent **4,200 atomic units (0.0042 testnet USDC)** to the participant's receiver.
+  See `evidence/world-public-payment.json`. No personal answer was delivered.
 - PR #12 is merged and enabled publicly. An observed `/fees` response reported 9 unsigned
   vouchers, zero signed authorizations, zero redeemed and `broadcast=false`. This is accounting,
   not revenue. Counts are point-in-time observations.
 
 ## Fixed here
+
+The `/try` page previously claimed the quoted 4,200 JPYC would arrive in the wallet.
+It now distinguishes demo pricing from scaled token settlement; the World approval page
+shows the actual held amount in atomic units, asset, network and receiver before approval.
+This display fix needs deployment; the successful run above used the previous wording.
 
 The public health response lacked `Access-Control-Allow-Origin`, while `product.html` fetched
 it from GitHub Pages. A browser could report the service as down even when direct HTTP returned
@@ -42,8 +52,8 @@ it as a supporting discovery demo, not the submitted product.
 | --- | --- |
 | Public Koe registration | **Confirmed** with public app/RP, JSON feed and GitHub Pages participant card. |
 | Real-device removal/cancellation | Not yet observed for the new Koe registration. Keep the original browser. Removal deletes its temporary listing; do not claim it reverses copies already read by others. |
-| Public visitor approval with production World | Start a new `/try`; use Skip first. Verify the request becomes approved. A Koe listing does not authorize this different operation. |
-| Public proof plus testnet payment | Only if the participant chooses the payment demo: enter their own Base Sepolia receiver, approve with World App, then inspect the actual receipt and received amount. Never count proof success alone as payment success. |
+| Public visitor approval with production World | **Confirmed**, in the paid run below. A Koe listing does not authorize this different operation. |
+| Public proof plus testnet payment | **Confirmed** with production Orb proof, approved request, successful receipt and matching USDC Transfer event to the participant. |
 | Cancellation alternative | New request, app Cancel verification, confirm still unapproved. This is distinct from rejection inside World App. |
 | PR #12 routing fees | **Merged and enabled publicly.** Unsigned vouchers observed in `/fees`; C/collection remains unimplemented. No fee collected. |
 | This handoff/CORS PR | Merge and restart backend for the header fix; Pages deploys the static guide. Confirm `/health` has the CORS header and the product status renders. |
