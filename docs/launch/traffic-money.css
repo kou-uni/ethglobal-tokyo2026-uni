@@ -1,0 +1,16 @@
+.traffic-money-hint{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;padding:10px 13px;border:1px solid #655475;border-radius:12px;color:#c6b2dc;font-size:11px}
+.traffic-money-hint button{font:inherit;color:#dcf58e;background:transparent;border:1px solid #738054;border-radius:20px;padding:7px 11px;white-space:nowrap}
+.traffic-money-hint>div{display:flex;gap:6px;flex-shrink:0}.traffic-with-money .traffic-map svg{overflow:hidden}
+.traffic-with-money #trafficFlowPanel{display:flex;flex-direction:column}
+.traffic-with-money .traffic-caption{order:0}.traffic-with-money .traffic-control-row{order:1;padding-top:10px}.traffic-with-money .traffic-timeline{order:2;margin:10px 0 14px}.traffic-with-money .traffic-map{order:3}.traffic-with-money .traffic-pan{order:4}.traffic-with-money .traffic-legend{order:5}.traffic-with-money .traffic-steps{order:6}.traffic-with-money .traffic-note{order:7}
+.traffic-map .money-condition{fill:none;stroke:#baa0d8;stroke-width:1.4;stroke-dasharray:4 6;opacity:.55}
+.traffic-map .money-cash{fill:none;stroke:#dcf58e;stroke-width:5}
+.traffic-map .money-fee-path{fill:none;stroke:#c59cec;stroke-width:1.5;stroke-dasharray:4 6;opacity:.55}
+.traffic-map .money-price{fill:#dcf58e;font-size:13px;font-weight:650}
+.traffic-map .money-wallet-title{font-size:12px;font-weight:700}
+.traffic-map .money-wallet-note{font-size:9px;fill:#c8b9d8}
+.traffic-map .money-ready{stroke:#dcf58e;stroke-width:2;fill:#35402e}
+.traffic-map .money-retained{stroke:#cfa9f1;stroke-width:2;fill:#443451}
+.traffic-money-foot{padding-top:10px;border-top:1px solid #564761}
+@media(min-width:701px){.traffic-with-money.is-focused{padding:16px}.traffic-with-money.is-focused .traffic-caption{min-height:0;padding:12px 3px 10px}.traffic-with-money.is-focused .traffic-caption h3{font-size:22px;margin-bottom:5px}.traffic-with-money.is-focused .traffic-caption p{font-size:11px}.traffic-with-money.is-focused .traffic-modes{margin-top:8px}.traffic-with-money.is-focused .traffic-money-hint{margin-top:8px;padding:6px 10px}.traffic-with-money.is-focused .traffic-map svg{min-width:0;height:max(280px,calc(100dvh - 330px))}}
+@media(max-width:700px){.traffic-modes{flex-wrap:wrap}.traffic-money-hint{align-items:flex-start;font-size:10px;flex-wrap:wrap}.traffic-with-money .traffic-caption{min-height:160px}.traffic-money-hint button{font-size:10px}}

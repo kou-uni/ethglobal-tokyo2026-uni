@@ -91,6 +91,45 @@ The download feature emits a proposed handoff format marked `simulation: true`, 
 false`, `signed: false` and `neoIntegration: false`. It contains no signature, private key,
 nullifier, real profile or settlement payload. It is not a NEO API contract or authorization.
 
+## Follow the money
+
+The original player also offers **+ Follow the payment**. Open
+`../launch.html?lang=ja&view=flow&money=1#traffic` for the integrated version.
+`traffic-money.js` appends an optional SVG layer beneath the existing diagram. All original
+request paths, particles, timing and fixture outcomes stay in place; the YOHAKU boundary
+extends to include payment conditions and the separate fee ledger. Selecting **Watch 50
+requests** restores the original geometry.
+
+The same 40-second clock drives the added layer. After notifications arrive, it illustrates
+one World-verified answer, a direct payment to the person and a separate retained fee
+authorization. This does not turn the 50 fixture outcomes into approvals or transfers.
+With the attention cap at zero, the human-answer/payment example does not proceed.
+Payment and fee-signature particles use the same SVG coordinate system as the original.
+At 33.5–35 seconds, the view pans down to the payment lane; **Show whole diagram** displays
+both layers together. Original mode never pans. The integrated mode and language are
+preserved in the URL.
+
+`payments.js` and `payments.css` add a separate, bilingual player immediately after the
+existing traffic section. The original traffic geometry, timing, particles, fixtures and
+criteria code are unchanged. The new “Next: follow the money” link sits outside that player.
+
+Open `../launch.html?lang=ja&view=flow#payments`. Green funds move directly from the agent
+wallet to the person. Purple paper symbols are authorizations, not money. YOHAKU checks the
+conditions and the facilitator executes the signed transfer. Switching between delegated,
+human and refused requests shows whether payment proceeds. A refusal pays the person zero.
+
+An optional second signature goes to the separate routing-fee ledger; the person keeps the
+full reward. Turning that signature off does not change the person’s payment. Fee collection
+stays zero in every scenario. The dashed future collection path never animates funds.
+This explains the ordinary `/requests` fee design, not an implemented fee flow in the new
+mobile `/experience` demo. Pricing is illustrative.
+
+The player has play/pause, scrubbing, six chapter buttons, result view and presentation mode.
+It shares the page language and playback coordination events, pauses when hidden, and shows
+a static result under reduced motion. It makes no network, wallet, signing or settlement call.
+Official protocol sources and the implementation boundaries are in
+[`X402-PAYMENT-FLOW.md`](../knowledge/X402-PAYMENT-FLOW.md).
+
 ## Copy and sources
 
 Main through `ebbce5e`, Kou's product / architecture / Curvegrid discussion and numbered journey, actual core and adapters,
@@ -105,6 +144,12 @@ sample, not observed customer usage. No live backend availability is asserted by
 
 ## Validation
 
+- Payment additions: Chrome review covered the separate Japanese payment diagram, the
+  integrated 50-request replay and final payment example, whole-diagram view, presentation
+  view, Japanese/English switching, and the cap-zero case refusing the illustrated human
+  payment. Translation keys and markup references match in both languages. Original
+  traffic/criteria source files and replay fixtures have no changes. This is desktop
+  illustration QA, not a new live payment test or real-device mobile test.
 - Initial many-request flow: Chrome review at the observed 917×768 window covered ongoing
   particles, the earlier 52-request result and 2 surfaced bundles, presentation mode, English
   switching, caps 0 and 4, and the separate `ask → human` / `drop → deny` controls.
