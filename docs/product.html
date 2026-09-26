@@ -32,6 +32,9 @@ padding:7px 17px 7px 12px;box-shadow:var(--shS);font-size:20px;font-weight:900;m
 .try a.go{display:inline-block;background:var(--ink);color:#fff;text-decoration:none;font-weight:900;
 font-size:26.5px;padding:15px 26px;border-radius:99px;box-shadow:0 6px 0 #0F0E14}
 .try a.go:active{transform:translateY(5px);box-shadow:0 1px 0 #0F0E14}
+.try a.go.second{background:transparent;color:#2F3D09;box-shadow:inset 0 0 0 3px #2F3D09;font-size:22px;padding:12px 22px}
+.try a.go.second:active{transform:translateY(3px);box-shadow:inset 0 0 0 3px #2F3D09}
+.try p.alt{font-size:20px;margin:22px 0 12px;color:#41530F}
 ol.steps{counter-reset:s;list-style:none;padding:0;margin:20px 0 0;display:grid;gap:11px}
 ol.steps li{counter-increment:s;background:var(--card);border-radius:20px;padding:15px 18px 15px 56px;
 box-shadow:var(--shS);position:relative;font-size:22.5px;line-height:1.6}
@@ -190,13 +193,19 @@ the console, the diagrams, the code — works without it.</div>
 <h2>TRY IT — ONE LINK, NO SETUP</h2>
 <div class="try">
   <b>An agent is researching. It needs a person.</b>
+  <p><b>The whole night, end to end.</b> An agent finds someone in the directory, the requests
+  meet the live router, and only what needs a person gets through. World ID proves personhood
+  <b>at the moment of consent</b>, and the payment settles to the wallet you named. The last
+  screen is a block explorer, <b>which is not ours.</b></p>
+  <a class="go" id="experienceLink" href="https://mac-studio.taila649e1.ts.net/experience?lang=en&amp;view=discover">Open the full experience →</a>
+  <p class="alt">Or take the short path — <b>one question instead of a night.</b></p>
   <p><b>Open it on your phone.</b> An agent asks you something it cannot answer without you —
   <i>&ldquo;tell me about a time it let you down&rdquo;</i>. Press <b>Yes</b> and you prove you
   are a person <b>at that moment</b>; the payment settles to the wallet you named, so
   <b>you check your own balance, not our word for it</b>.<br><br>
   Press <b>No</b>, or just close the tab, and the next screen names each thing that did
   <i>not</i> happen. No wallet? There is a skip button — the decision is the part worth seeing.</p>
-  <a class="go" id="tryLink" href="https://mac-studio.taila649e1.ts.net/try">Start — an agent is asking →</a>
+  <a class="go second" id="tryLink" href="https://mac-studio.taila649e1.ts.net/try">Start — an agent is asking →</a>
 </div>
 
 <ol class="steps">
