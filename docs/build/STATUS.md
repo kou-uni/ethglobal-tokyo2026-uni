@@ -31,7 +31,8 @@ production-IDKit + on-chain settlement has been demonstrated yet.
 | External judge-device success and cancellation | After deployment, start from `/try` in that browser |
 | IDKit + Base Sepolia payment in one run | Only after the no-payment path passes on the public instance |
 | Final live demo URL and video | Use [PITCH](../product/PITCH.md); don't substitute static screenshots for the ENS live-demo requirement |
-| Live screening, seller signup, actual content delivery | Not implemented; not prerequisites for the current limited demonstration |
+| Live screening | Delegated to minta with the delivered key — [Issue #14](https://github.com/kou-uni/ethglobal-tokyo2026-uni/issues/14) |
+| Seller signup, actual content delivery | Not implemented; not prerequisites for the current limited demonstration |
 
 A qualified visitor may approve their own browser's demo. This does not authenticate them
 as the ENS owner. Repeat visits are allowed; this is not one payment per unique person.
@@ -88,7 +89,7 @@ npm run check
 |---|---|---|
 | **ENSv2 public app integration** | Registration and all six delegation-proof transactions verified. Local server now uses the registered owner and reads live Sepolia permissions. Left: deploy/configure the public server and run the integrated demo | **minta / spark** — [ENS-DELEGATION-DEMO.md](ENS-DELEGATION-DEMO.md) |
 | **World ID: a real app approval** | The sandbox never hands off to World ID app. It answers `amr: ["pop"]` with `auth_time` re-stamped, through Safari, Safari private and Chrome alike, with `prompt=login` **and** `max_age=0` sent. **Production `auth.world.org` exists and has the same shape** — three `.env` values would switch it — but its portal sign-in is gated. **Ask at the booth**; the claim on screen has already been corrected to what we can prove | **spark** — booth |
-| **Payment screening, live** | The API key (requested 2026-09-26, arrives by email) | **spark** — check inbox |
+| **Payment screening, live** | Key delivered 2026-09-26 and handed to minta. Rule 4, its 9 tests and the `/health` flag are already in place; the adapter, the setup page and the two confirmed addresses are not | **minta** — [Issue #14](https://github.com/kou-uni/ethglobal-tokyo2026-uni/issues/14) |
 
 
 ## The one thing that would embarrass us
