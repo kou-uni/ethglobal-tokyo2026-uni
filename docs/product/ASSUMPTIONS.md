@@ -38,18 +38,18 @@ not the input.** If A2–A4 are wrong, the product's argument does not change.
 them through the real `route()`. The split is whatever the rules produce.
 
 ```
-npm run seed -- 18
+npm run seed -- 2
 
-  arrived            49
-    auto             33   settled while she slept
-    deny              8   never reached her
+  arrived            52
+    auto             32   settled while she slept
+    deny             12   never reached her — reviewable at /dropped
     human             8   held
   07:00 — daily cap 2
     surfaced          2
-  settled            2,291 JPYC
+  settled            3,322 JPYC
 ```
 
-**`npm run seed -- 18` is the night quoted in the pitch.** It was chosen as *the run closest
+**`npm run seed -- 2` is the night quoted in the pitch.** It was chosen as *the run closest
 to the 20-seed mean* — not as the prettiest set of numbers. Any other seed gives a different
 night, which is the point.
 
@@ -58,11 +58,11 @@ night, which is the point.
 | | mean | range |
 |---|---|---|
 | arrived | **49.9** | 46–54 |
-| auto | 32.5 | 26–37 |
-| deny | 9.8 | 5–14 |
-| human (held) | 7.5 | 4–11 |
+| auto | 32.0 | 26–37 |
+| deny | 10.5 | 3–16 |
+| human (held) | 7.4 | 4–11 |
 | **surfaced at 07:00** | **2.00** | **2 — in all twenty runs** |
-| settled | 2,617 JPYC | 1,445–4,324 |
+| settled | 2,664 JPYC | 1,541–4,451 |
 
 **"About fifty arrive; she sees two" held in twenty runs out of twenty.** Arrivals wander by
 ±8 and settlements by ±6; **what reaches her does not move at all**, because the cap is what
@@ -75,7 +75,7 @@ What it establishes is that *the router behaves as claimed*, which is the part w
 | # | Value | Basis | Confidence |
 |---|---|---|---|
 | B1 | ~50 requests in one night | Generator output; 20 runs, mean 49.9 (46–54) | 🟡 |
-| B2 | auto ~33 / deny ~8 / **2 reach her** | **`npm run seed -- 18`**, chosen as closest to the mean. Reproducible | 🟡 |
+| B2 | auto ~32 / deny ~11 / **2 reach her** | **`npm run seed -- 2`**, chosen as closest to the mean by the same rule as before — when the categories changed, the rule re-picked the seed. Reproducible | 🟡 |
 | B3 | **Spared** (never had to be asked) rises **0.1 → 2.6 → 4.3 → 6.3** a day; mornings themselves only fall in week four (**2.0 → 2.0 → 1.9 → 0.9**) | **Measured.** `runWeek()` replays 30 nights, feeding each morning's answers back in. **The cap binds before learning does**, so what moves first is how much she is spared — not what she sees. The earlier "12 → 5 → 2 in a week" was wrong and has been withdrawn | 🟡 |
 | B4 | Amount received overnight | **Not a figure any more — the console sums what actually settled.** Any stated number must come from a run | 🟡 |
 | B5 | "Rejected by 87 of 100 people" | Illustrative reputation signal | 🔴 |
@@ -95,8 +95,10 @@ run the seed again with a different number and watch the input move while the ou
 | C3 | Request deadline = 12h | Long enough for a night to pass, short enough that an agent is not stuck |
 | C4 | Prices: routine asks 80–200 JPYC, sensitive 3,000–6,000, occasional bulk ×12 | **Anchored to real survey incentives** (a respondent is typically paid ¥100–1,000). At 0.5 JPYC the ledger came to ¥17 a night, which is not a business and would not have survived a judge opening the console |
 | C5 | **Everything fails to `deny`** | Safety choice, not a measurement. Silence is not consent |
-| C6 | Sensitive domains = health / finance / employment | Chosen as domains where a wrong automatic answer is hard to undo |
-| C7 | One category only: **purchase intent** | Scope control for 36 hours |
+| C6 | Sensitive asks = **a time it failed you / why you stopped / your own writing** | Chosen as questions a person may not want answered on their behalf. **They are experiences, not records** — see C8 |
+| C7 | One category family only: **lived experience** | Scope control for 36 hours |
+| C8b | **A refusal has to be inspectable** | A count is not accountability: "twelve dropped" reads the same whether a system protected her or lost them. Agents really do ask for a home address and a wallet, so those stayed in the demo **as refusals under rule 2**, and `/dropped` shows each one with the rule that stopped it |
+| C8 | **The agent asks questions, it does not pull records** | The first version asked for bank activity, checkup results and a coarse location. That made the product a data-extraction pipe and **contradicted its own premise**: those are scarce because they are locked up, not because a human made them. What cannot be synthesised is what a person went through and concluded — so every ask is now a question only someone who lived it can answer truthfully |
 
 ## 4. Technical assumptions
 

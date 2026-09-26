@@ -23,7 +23,7 @@ nothing here is inferred from the code looking right.
 Reproduce all of it with one command:
 
 ```bash
-npm install && npm run check      # typecheck + 192 tests + 10 verified claims
+npm install && npm run check      # typecheck + 198 tests + 10 verified claims
 ```
 
 ---
@@ -45,18 +45,19 @@ npm install && npm run check      # typecheck + 192 tests + 10 verified claims
 | **World ID, end to end** ⭐ | `src/adapters/world-oidc.ts` | **A person pressed it on a phone and it came back.** Discovery read live, ID token verified against the issuer's JWKS with `jose`, `acr = orb-v3` required, `auth_time` ≤ 120s checked against the server clock. **PKCE turned out to be mandatory and undocumented** — found by probing 8 combinations ([knowledge/WORLD-SANDBOX.md](../knowledge/WORLD-SANDBOX.md)) |
 | **The two screens a person sees** | `src/server/pages.ts` | Today's offer count, the one being asked about, and a fold with what was handled without her. Service copy and demo tutorial are **separate surfaces** |
 | **Past nights, replayed not typed** | `src/core/history.ts` | 8 tests. Each night runs through the real `route()` + `surface()`. **Across 14 nights arrivals move and what reaches her is the cap, every time** |
-| **x402 settlement, against the live facilitator** ⭐ | `src/ports/settlement.ts`, `src/adapters/x402.ts` | 17 tests. **Run for real:** the facilitator confirms `exact` on the configured network at startup, and a signed EIP-3009 authorization is refused with `invalid_exact_evm_insufficient_balance` — meaning **the requirements and the signature were both accepted and only the balance is missing.** Two bugs were found by running it, not by testing it ([knowledge/X402-ONCHAIN.md](../knowledge/X402-ONCHAIN.md) §6) |
+| **x402 settlement — money actually moved** ⭐⭐ | `src/ports/settlement.ts`, `src/adapters/x402.ts` | **Two transfers on Base Sepolia, both verified from the chain rather than from the facilitator's word.** `auto`: [`0x79c1e323…`](https://sepolia.basescan.org/tx/0x79c1e3239ef89cdc1b8a5fc14321093b06504a3c68a24644ba6390caf90393fa) — 120 atomic, settled inside the request. Held: [`0x5c79fddf…`](https://sepolia.basescan.org/tx/0x5c79fddfc8d6e6f64c1dd23752fae688a9b94ec5bc770f24fd1c2595b00d1d88) — **4,200 atomic, and it moved only when a person pressed Yes.** Before that press the seller's balance was 120; after it, 4,320. **The buyer's ETH balance is still 0** — 102,844 gas was paid by the facilitator, so "the buyer needs no ETH" is measured, not quoted |
 | **The server, on the public internet** | `src/server/` | `POST /requests`, `POST /approvals/:id`, `GET /ledger/:name`, `GET /approve/:id`, `GET /auth/world/callback`. 12 tests, including **HTTP and in-process agreeing about the same night** |
 
-**3,960 lines of source, 133 tests, 38 commits.**
+**5,438 lines of source, 156 tests, 55 commits.**
 
 ## ❌ Not running
 
 | | Blocked on | Who |
 |---|---|---|
-| **ENSv2 delegated writes** | Name and seller resolver **registered and verified**. Left: delegate account/gas, proposal grant/write, policy refusal, revocation and refusal, server configuration | **minta / spark** — [ENS-REGISTERED.md](ENS-REGISTERED.md) |
+| **ENSv2 public app integration** | Registration and all six delegation-proof transactions verified. Left: align policy.owner with the registered name, configure the public server, and run the integrated demo | **minta / spark** — [ENS-DELEGATION-DEMO.md](ENS-DELEGATION-DEMO.md) |
+| **World ID: a real app approval** | The sandbox never hands off to World ID app. It answers `amr: ["pop"]` with `auth_time` re-stamped, through Safari, Safari private and Chrome alike, with `prompt=login` **and** `max_age=0` sent. **Production `auth.world.org` exists and has the same shape** — three `.env` values would switch it — but its portal sign-in is gated. **Ask at the booth**; the claim on screen has already been corrected to what we can prove | **spark** — booth |
 | **Payment screening, live** | The API key (requested 2026-09-26, arrives by email) | **spark** — check inbox |
-| **Settlement, actually landing** | ~~the protocol~~ ~~the signing~~ ~~the facilitator~~ **all proven**. Left: **testnet USDC in the buyer's wallet** | **minta** — issue #2 |
+
 
 ## The one thing that would embarrass us
 
@@ -64,20 +65,16 @@ npm install && npm run check      # typecheck + 192 tests + 10 verified claims
 Say it out loud at the booth before a judge finds it. Every other claim on the screen is
 checkable, and volunteering the two that are not is what buys them.
 
-## Next, in order — 2026-09-26 08:00 時点、締切まで約25時間
+## Next, in order — 2026-09-26 11:40 JST、締切まで約21時間
 
-1. **ENSv2 を Sepolia に乗せる。** 未確認4点は潰れた。**着手前に決めるのは1つだけ:
-   testnet USDC/DAI をどう手に入れるか**（ENSv2 の登録は ETH では払えない。金額が未確認）。
-   付与は `@ensdomains/ensjs@5.0.0-sepolia-fix.1` の `grantResolverRoles`。
-   **検証は `hasRoles` でガス無しに読める**
-2. **ブース巡回。** 各スポンサーに「何を探しているか」を聞く。気に入ったかではない。
-   **この1問が Curvegrid に対する我々の枠組みを丸ごと変えた。**答えは逐語で記録する
-3. **intercepta を叩く。** ENS が落ちたときの差し替え先。鍵待ち（kou@texx.io）
-4. **足すのをやめる。** 製品の主張は揃っている。足りないのはチェーンの証拠で、
-   画面の数ではない
+**ENSの登録・委任境界は実チェーンで検証済み。残るENS作業は公開アプリへの接続です。**
 
-**World は終わった。** 実機で人が押して往復し、`auth_time` が返った。残りは本番 issuer に
-するかどうかだけで、sandbox でも賞の要件は満たす。
+1. **minta / spark — ENSの証拠を取り込み、公開アプリへ接続する。** Issue #5の4件は
+   [実証JSON](evidence/ens-delegation.json)で完了。PR #3を取り込み、policy.ownerとENS設定を
+   登録名に合わせて、公開デモを一周確認する。追加のfaucet・登録・実証用署名は不要。
+2. **spark — ブース巡回。** 各スポンサーに「何を探しているか」を逐語で。World には
+   **`amr: pop` の件**を持っていく（再現手順つきの実測なので、これが一番強い）
+3. **両方 — 足すのをやめる。** 製品の主張は揃い、金も動いた
 
 ## What changed today, and why it is written down
 

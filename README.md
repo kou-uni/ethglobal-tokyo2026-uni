@@ -146,7 +146,7 @@ curl -s localhost:8402/requests -X POST -H 'content-type: application/json' -d '
 against — an agent left holding a connection while a person sleeps is an agent that is stuck.
 
 `npm run night` posts an entire generated night over HTTP and prints what came back. **It
-produces the same 33 / 8 / 8 that `npm run seed -- 18` produces in process** — and a test
+produces the same 32 / 12 / 8 that `npm run seed -- 2` produces in process** — and a test
 asserts that, because a server and a script disagreeing about the same night would mean one
 of them is lying.
 
@@ -327,7 +327,7 @@ npm install
 npm start          # the server — agents post here
 npm run night      # throw a whole night at it, over HTTP
 npm run check      # typecheck + tests + verify
-npm run seed -- 18 # one night, run through the real router
+npm run seed -- 2  # one night, run through the real router
 npm run models     # what your key can actually use
 npm run setup      # a local page for putting a key in
 ```
@@ -348,7 +348,7 @@ that thirty replayed nights disproved.
 `npm run verify`, which was itself checked by breaking each one on purpose and watching it
 fail.
 
-**`npm run seed -- 18` is the night used in the pitch** — 49 arrive, 33 settle, 8 are dropped,
+**`npm run seed -- 2` is the night used in the pitch** — 52 arrive, 32 settle, 12 are dropped,
 **2 reach her**. Change the seed and the arrivals wander between 46 and 54; **across all 20 runs,
 the number that reaches her is 2. Every time.** That is her cap, not our claim.
 See [ASSUMPTIONS.md §2](docs/product/ASSUMPTIONS.md).

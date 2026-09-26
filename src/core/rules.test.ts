@@ -6,15 +6,15 @@ const NOW = new Date('2026-09-26T02:00:00+09:00');
 
 const policy = (over: Partial<Policy> = {}): Policy => ({
   owner: 'alice.yohaku.eth',
-  allow: ['purchase-intent/groceries', 'purchase-intent/cosmetics'],
-  forbid: ['finance/bank-activity'],
-  sensitive: ['health/symptoms'],
+  allow: ['experience/why-you-put-it-back', 'experience/first-five-minutes'],
+  forbid: ['experience/who-you-live-with'],
+  sensitive: ['experience/why-you-stopped'],
   amountThreshold: 1000,
   dailyCap: 2,
   notifyHour: 7,
   grants: [
-    { category: 'purchase-intent/groceries', expiresAt: '2026-12-31T00:00:00Z', revoked: false },
-    { category: 'purchase-intent/cosmetics', expiresAt: '2026-12-31T00:00:00Z', revoked: false },
+    { category: 'experience/why-you-put-it-back', expiresAt: '2026-12-31T00:00:00Z', revoked: false },
+    { category: 'experience/first-five-minutes', expiresAt: '2026-12-31T00:00:00Z', revoked: false },
   ],
   ...over,
 });
@@ -22,7 +22,7 @@ const policy = (over: Partial<Policy> = {}): Policy => ({
 const req = (over: Partial<AgentRequest> = {}): AgentRequest => ({
   id: 'req-1',
   who: 'market-research-agent.acme.eth',
-  what: 'purchase-intent/groceries',
+  what: 'experience/why-you-put-it-back',
   purpose: 'demand-estimation',
   price: { amount: 0.5, currency: 'JPYC' },
   deadline: '2026-09-26T14:00:00+09:00',
@@ -72,21 +72,21 @@ describe('rules 1–4 — deny', () => {
   it('1: revoked grant', () => {
     const p = policy({
       grants: [
-        { category: 'purchase-intent/groceries', expiresAt: '2026-12-31T00:00:00Z', revoked: true },
+        { category: 'experience/why-you-put-it-back', expiresAt: '2026-12-31T00:00:00Z', revoked: true },
       ],
     });
     expect(route(req(), p, ctx())).toMatchObject({ verdict: 'deny', rule: 1 });
   });
 
   it('2: forbidden category', () => {
-    const d = route(req({ what: 'finance/bank-activity' }), policy(), ctx());
+    const d = route(req({ what: 'experience/who-you-live-with' }), policy(), ctx());
     expect(d).toMatchObject({ verdict: 'deny', rule: 2 });
   });
 
   it('3: expired grant', () => {
     const p = policy({
       grants: [
-        { category: 'purchase-intent/groceries', expiresAt: '2025-01-01T00:00:00Z', revoked: false },
+        { category: 'experience/why-you-put-it-back', expiresAt: '2025-01-01T00:00:00Z', revoked: false },
       ],
     });
     expect(route(req(), p, ctx())).toMatchObject({ verdict: 'deny', rule: 3 });
@@ -106,7 +106,7 @@ describe('rules 1–4 — deny', () => {
 describe('rules 5–7, 9 — human', () => {
   it('5: sensitive domain, even when cheap', () => {
     const d = route(
-      req({ what: 'health/symptoms', price: { amount: 0.1, currency: 'JPYC' } }),
+      req({ what: 'experience/why-you-stopped', price: { amount: 0.1, currency: 'JPYC' } }),
       policy(),
       ctx(),
     );
@@ -143,7 +143,7 @@ describe('rule 8 — auto', () => {
 describe('ordering — the first match decides', () => {
   it('a forbidden category is denied even when the amount is tiny and the party is known', () => {
     const d = route(
-      req({ what: 'finance/bank-activity', price: { amount: 0.01, currency: 'JPYC' } }),
+      req({ what: 'experience/who-you-live-with', price: { amount: 0.01, currency: 'JPYC' } }),
       policy(),
       ctx(),
     );
@@ -160,7 +160,7 @@ describe('ordering — the first match decides', () => {
   });
 
   it('a sensitive domain is asked about, not denied, when nothing earlier fired', () => {
-    const d = route(req({ what: 'health/symptoms' }), policy(), ctx());
+    const d = route(req({ what: 'experience/why-you-stopped' }), policy(), ctx());
     expect(d.verdict).toBe('human');
   });
 

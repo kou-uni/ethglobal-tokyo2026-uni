@@ -80,7 +80,7 @@ The value is not what you did. It is **what you never had to look at.**
 |---|---|---|
 | **`auto`** | ~33 pass automatically | **Creates space** — she is never asked |
 | **`human`** | **2 are raised** — her daily cap | **Occupies space** — worth her attention |
-| **`deny`** | ~8 are dropped | **Protects space** — never reaches her |
+| **`deny`** | ~10 are dropped | **Protects space** — never reaches her |
 
 The rest of the design says the same thing in other words:
 
@@ -91,15 +91,37 @@ The rest of the design says the same thing in other words:
   0.1 a day in week one, **6.3 a day by week four**. Only then do the mornings themselves
   get quieter *(2.0 → 2.0 → 1.9 → 0.9)*
 
+### What an agent actually asks for
+
+**Not records — answers.** The first version of this listed bank activity, checkup results and
+a coarse location, and that was wrong on its own terms: those are scarce because they are
+locked up, not because a human produced them. **Scraped text is free and contaminated; what
+cannot be synthesised is what a person went through and concluded.**
+
+| Asked constantly, settles automatically | Held for her |
+|---|---|
+| *What made you put it back on the shelf?* | *Tell me about a time it let you down.* |
+| *What happened in your first five minutes with it?* | *Why did you stop using it?* |
+| *What did you expect that it turned out not to be?* | *Your own writing, in your own words — to train on.* |
+
+And the ones she has decided not to sell at all — ***what is your home address***,
+***which wallet address is yours***, *who do you live with*, *what do you earn*.
+**They are not deleted from the demo, they are refused in it** — and she can go and look at
+what they wanted, with the rule that stopped each one, at `/dropped`.
+
+> **A refusal nobody can inspect is the same as never having been asked.**
+
+**A model can invent an answer to any of these. It cannot invent a true one.**
+
 ## 3. Request schema
 
 Every agent request carries exactly five things.
 
 ```
   who       market-research-agent.acme.eth     ENS name — it identifies itself
-  what      "purchase intent, cosmetics, age 30s"
+  what      experience/why-you-put-it-back      "What made you put it back on the shelf?"
   purpose   demand estimation for a new product (not AI training)
-  price     0.5 JPYC per record
+  price     120 JPYC for one answer
   deadline  withdrawn if unanswered within 12h
 ```
 
@@ -223,11 +245,11 @@ Independent sellers must not be pooled into one resolver instance without scopin
 ## 8. Demo walkthrough
 
 ```
-02:00   agent requests keep arriving           49 tonight
+02:00   agent requests keep arriving           52 tonight
 
         Yohaku handles them
-          auto   33   settle immediately, executed under constraints
-          deny    8   revoked / out of scope — never reaches her
+          auto   32   settle immediately, executed under constraints
+          deny   12   revoked / out of scope — never reaches her
           human   8   bundled — 2 will surface, her daily cap
 
         she is asleep
@@ -238,7 +260,7 @@ Independent sellers must not be pooled into one resolver instance without scopin
           1 approved  → fresh proof of personhood → payment executes
           1 ignored   → deadline passes → auto-denied
 
-        ledger:  2,291 JPYC arrived overnight
+        ledger:  3,322 JPYC arrived overnight
         spared:  never had to ask — 0.1/day in week 1, 6.3/day by week 4
 ```
 

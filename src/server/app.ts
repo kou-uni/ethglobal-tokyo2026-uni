@@ -24,8 +24,9 @@ import { mayProceed, type IdentityPort, type VerificationOutcome } from '../port
 import { mayMoveMoney, type ScreeningPort } from '../ports/screening.js';
 import { Store, verdictBody, type Entry } from './state.js';
 import { PendingVerifications } from './pending.js';
-import { approvalPage, invitePage, resultPage, type TodaySummary } from './pages.js';
+import { approvalPage, droppedPage, invitePage, resultPage, type TodaySummary } from './pages.js';
 import { pastNights, type NightSummary } from '../core/history.js';
+import { asQuestion } from '../core/night.js';
 import {
   outlivesDeadline,
   type PaymentRequirement,
@@ -189,7 +190,7 @@ async function readText(req: IncomingMessage): Promise<string> {
 /** The one request `/try` stages. Ordinary enough to be believable, sensitive enough to escalate. */
 const DEMO_ASK = {
   who: 'nozomi-labs.eth',
-  what: 'health/sleep-quality',
+  what: 'experience/the-time-it-failed-you',
   purpose: 'market-research' as const,
   price: { amount: 4200, currency: 'JPYC' as const },
 };
@@ -514,7 +515,11 @@ export function createApp(deps: AppDeps): Server {
           id,
           verdict: 'approved',
           identity: verification?.status === 'verified'
-            ? { verifiedAt: verification.identity.authTime.toISOString(), acr: verification.identity.acr }
+            ? {
+                verifiedAt: verification.identity.authTime.toISOString(),
+                acr: verification.identity.acr,
+                ...(verification.identity.amr ? { amr: verification.identity.amr } : {}),
+              }
             : 'not wired',
           settlement: paid,
         });
@@ -697,6 +702,33 @@ export function createApp(deps: AppDeps): Server {
         return res.end();
       }
 
+      /*
+       * What was refused on her behalf.
+       *
+       * Reachable from the fold on the approval screen, and on its own so it can be linked to.
+       * It reads the store rather than a log, so it cannot drift from what actually happened.
+       */
+      if (req.method === 'GET' && path === '/dropped') {
+        const denied = deps.store.byVerdict('deny');
+        return html(
+          res,
+          200,
+          droppedPage({
+            arrived: deps.store.all().length,
+            items: denied.map((e) => ({
+              who: e.request.who,
+              what: e.request.what,
+              question: asQuestion(e.request.what),
+              amount: e.request.price.amount,
+              currency: e.request.price.currency,
+              rule: e.decision.rule,
+              reason: e.decision.reason,
+              at: e.receivedAt,
+            })),
+          }),
+        );
+      }
+
       /* ── the page she opens ─────────────────────────────────────────────── */
       if (req.method === 'GET' && /^\/approve\/[^/]+$/.test(path)) {
         const id = decodeURIComponent(path.slice('/approve/'.length));
@@ -721,6 +753,7 @@ export function createApp(deps: AppDeps): Server {
           handledWithoutYou,
           who: entry.request.who,
           what: entry.request.what,
+          question: asQuestion(entry.request.what),
           purpose: entry.request.purpose,
           amount: entry.request.price.amount,
           currency: entry.request.price.currency,
@@ -819,6 +852,7 @@ export function createApp(deps: AppDeps): Server {
           amount: `${entry.request.price.amount} ${entry.request.price.currency}`,
           verifiedAt: outcome.identity.authTime,
           acr: outcome.identity.acr,
+          ...(outcome.identity.amr ? { amr: outcome.identity.amr } : {}),
           ...(paid.settled
             ? {
                 settled: { transaction: paid.transaction, network: paid.network },
@@ -835,6 +869,7 @@ export function createApp(deps: AppDeps): Server {
         'POST /approvals/:id',
         'GET /ledger/:name',
         'GET /try',
+        'GET /dropped',
         'GET /approve/:id',
         'GET /auth/world/callback',
       ] });

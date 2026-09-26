@@ -92,6 +92,9 @@ details.roll summary b{background:var(--lime);color:#3F5413;border-radius:99px;
 .row i.d{background:#EFEDE6;color:var(--ink3)}
 .row i.w{background:var(--lilacL);color:var(--lilacD)}
 .row b{font-size:19px;font-weight:900;color:var(--ink)}
+.row .see{margin-left:auto;font-size:13px;font-weight:900;color:#fff;background:var(--ink);
+  padding:5px 13px;border-radius:99px;text-decoration:none;white-space:nowrap}
+.row .see:active{transform:translateY(2px)}
 .row .amt{margin-left:auto;font-weight:900;color:var(--limeD);white-space:nowrap}
 .nights{width:100%;border-collapse:collapse;font-size:14px;font-weight:800;
   font-variant-numeric:tabular-nums}
@@ -137,6 +140,8 @@ h1 .sm{display:block;font-size:13px;font-weight:900;letter-spacing:.16em;color:v
 .card .v{font-weight:900;font-size:24px;line-height:1.3;letter-spacing:-.3px;word-break:break-word}
 .card .p{font-weight:900;font-size:34px;letter-spacing:-.8px;margin-top:10px;color:var(--lilacD)}
 .card .p span{font-size:15px;color:var(--ink3)}
+.slug{margin-top:7px;font-size:12px;font-weight:800;color:var(--ink3);
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:-.2px}
 .pay{margin-top:11px;background:var(--limeL);border-radius:14px;padding:10px 14px;font-size:14px;
   font-weight:800;color:#41530F}
 .pay b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#2F3D09;font-weight:900}
@@ -153,6 +158,20 @@ a.b:active,button.b:active{transform:translateY(5px);box-shadow:0 1px 0 #0F0E14,
 a.g,button.g{background:var(--card);color:var(--ink2);box-shadow:0 6px 0 var(--grey),0 10px 20px rgba(36,35,41,.12)}
 a.g:active,button.g:active{box-shadow:0 1px 0 var(--grey),0 3px 8px rgba(36,35,41,.12)}
 form{margin:0}
+
+/* the drop list */
+.rgrp{margin-bottom:18px;animation:bg .5s cubic-bezier(.2,1.6,.4,1) both}
+.rhd{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:900;color:var(--ink2);
+  margin-bottom:9px;line-height:1.4}
+.rno{background:var(--ink);color:#fff;font-size:11px;letter-spacing:.09em;padding:3px 11px;
+  border-radius:99px;flex:0 0 auto}
+.drop{background:var(--card);border-radius:20px;padding:15px 17px;box-shadow:var(--shS);
+  margin-bottom:9px;border-left:6px solid var(--grey)}
+.dq{font-size:17px;font-weight:900;line-height:1.4;color:var(--ink2)}
+.dm{font-size:14px;font-weight:800;color:var(--ink3);margin-top:6px}
+.dm b{color:var(--ink2)}
+.dslug{font-size:11.5px;font-weight:800;color:var(--ink3);margin-top:5px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 
 /* the receipt — only ever rendered when a transfer really happened */
 .paid{margin-top:20px;background:var(--lime);border-radius:26px;padding:18px 20px;
@@ -394,7 +413,8 @@ ${nights
         ? `<span class="amt">${num(today.worth)} ${esc(today.currency)}${today.settlementWired ? '' : ' worth'}</span>`
         : ''
     }</div>
-  <div class="row"><i class="d">✕</i><b>${today.deny}</b> dropped before they reached you</div>
+  <div class="row"><i class="d">✕</i><b>${today.deny}</b> dropped before they reached you
+    ${today.deny > 0 ? '<a class="see" href="/dropped">see what they wanted &rarr;</a>' : ''}</div>
   <div class="row"><i class="w">⏳</i><b>${today.waiting}</b> still waiting for you</div>
   ${
     today.settlementWired
@@ -421,12 +441,12 @@ export function invitePage(p: {
     'yohaku',
     `<main>
 <div class="lede">
-  <div class="pill">AN AGENT WANTS TO BUY FROM YOU</div>
+  <div class="pill">AN AGENT IS RESEARCHING</div>
   <div class="count">1</div>
-  <div class="sub">request, waiting<br>for a person to answer.</div>
+  <div class="sub">question it cannot answer<br>without asking a person.</div>
 </div>
 
-<h1 style="text-align:center">Where should<br>we <em>pay you?</em></h1>
+<h1 style="text-align:center">It wants to ask<br>you <em>one thing.</em></h1>
 
 <form method="post" action="/try">
   <div class="card">
@@ -482,6 +502,14 @@ export function approvalPage(p: {
   amount: number;
   currency: string;
   deadline: string;
+  /**
+   * The question as a person reads it.
+   *
+   * The wire carries a slug because agents match on it. **Showing a person a slug is showing
+   * them the plumbing** — and what is being sold here is an answer only they can give, so the
+   * screen has to ask it in words.
+   */
+  question?: string;
   reason: string;
   identityWired: boolean;
   handledWithoutYou?: number;
@@ -506,7 +534,8 @@ ${dots(handled)}
 
 <div class="card">
   <div class="k">${esc(p.who)}</div>
-  <div class="v">${esc(p.what)}</div>
+  <div class="v">${esc(p.question ?? p.what)}</div>
+  ${p.question ? `<div class="slug">${esc(p.what)}</div>` : ''}
   <div class="p">${num(p.amount)} <span>${esc(p.currency)} · ${hoursLeft(p.deadline)} left</span></div>
   <div class="why">${esc(p.reason)}</div>
   ${
@@ -568,11 +597,102 @@ ${fold(p.today, nights)}
   );
 }
 
+/**
+ * What was refused on her behalf.
+ *
+ * A count is not accountability. "Eleven were dropped" is indistinguishable from "eleven were
+ * never asked", and the whole claim of this product is that **something stood between an
+ * agent and a person and decided** — which only means anything if she can go and look at what
+ * it decided, and under which rule.
+ *
+ * So this is not a log. It is the receipt for a promise: *these people asked you for these
+ * things, and here is the rule of yours that stopped each one.*
+ */
+export function droppedPage(p: {
+  items: {
+    who: string;
+    what: string;
+    question: string;
+    amount: number;
+    currency: string;
+    rule: number;
+    reason: string;
+    at: string;
+  }[];
+  arrived: number;
+}): string {
+  const byRule = new Map<number, typeof p.items>();
+  for (const it of p.items) byRule.set(it.rule, [...(byRule.get(it.rule) ?? []), it]);
+  const rules = [...byRule.entries()].sort((a, b) => a[0] - b[0]);
+
+  return shell(
+    'yohaku',
+    `<main>
+<div class="lede">
+  <div class="pill">REFUSED ON YOUR BEHALF</div>
+  <div class="count">${p.items.length}</div>
+  <div class="sub">of ${p.arrived} never reached you.<br>Here is what they wanted.</div>
+</div>
+
+${
+  p.items.length === 0
+    ? `<div class="card"><div class="v">Nothing was refused yet.</div>
+<div class="why">When something is, it appears here with the rule that stopped it —
+so &ldquo;we protected you&rdquo; is something you can check rather than take our word for.</div></div>`
+    : rules
+        .map(
+          ([rule, items]) => `<div class="rgrp">
+  <div class="rhd"><span class="rno">RULE ${rule}</span>${esc(items[0]!.reason.replace(/^"[^"]*"\s*/, ''))}</div>
+  ${items
+    .map(
+      (it) => `<div class="drop">
+    <div class="dq">${esc(it.question)}</div>
+    <div class="dm"><b>${esc(it.who)}</b> offered ${num(it.amount)} ${esc(it.currency)}</div>
+    <div class="dslug">${esc(it.what)}</div>
+  </div>`,
+    )
+    .join('')}
+</div>`,
+        )
+        .join('')
+}
+</main>
+<footer><b>None of these were shown to you at the time.</b> That was the point &mdash; but a
+refusal you cannot inspect is the same as never having been asked.<br>
+Every one was stopped by a rule you set, and the rule is named next to it.</footer>`,
+    [
+      {
+        tag: 'WHY THIS PAGE EXISTS',
+        lines: [
+          '<b>A count is not accountability.</b> "Eleven dropped" reads the same whether a system protected her or simply lost them.',
+          'Naming the rule is what makes the refusal checkable. If a rule here is wrong, <b>it is wrong in her policy</b>, and she can see exactly which line to change.',
+        ],
+      },
+      {
+        tag: 'THE ONES WORTH LOOKING AT',
+        lines: [
+          'Agents do ask for a home address and for a wallet. <b>Those are in here, refused under rule 2</b> — a category she decided not to sell.',
+          'They are not hypothetical, and deleting them from the demo would have made the product look tidier than the world is.',
+        ],
+      },
+      {
+        tag: 'WHAT IS NOT HERE',
+        lines: [
+          'Requests that settled automatically, and the ones still waiting for her. This page is only the refusals.',
+          '<b>Nothing here cost her anything</b> — no money moved, and no permission was recorded.',
+        ],
+      },
+    ],
+  );
+}
+
 export function resultPage(p: {
   outcome: 'approved' | 'declined' | 'expired' | 'refused';
   detail: string;
   verifiedAt?: Date;
   acr?: string;
+  /** How the issuer says they were authenticated. `pop` is a held credential, not an approval. */
+  amr?: string[];
   what?: string;
   amount?: string;
   /** Set only when money actually moved. The page must never imply this without it. */
@@ -584,25 +704,46 @@ export function resultPage(p: {
 }): string {
   if (p.outcome === 'approved') {
     const t = p.verifiedAt ? ago(p.verifiedAt) : undefined;
+    /*
+     * `pop` means a held credential was presented, not that anyone approved a prompt.
+     *
+     * The difference is the whole claim of this screen, so it changes the words on it. We ask
+     * for a fresh authentication with both `prompt=login` and `max_age=0`; when the issuer
+     * answers `pop` anyway, saying "you proved you are a person" would be us overstating what
+     * we were given.
+     */
+    const possession = Boolean(p.amr?.length) && p.amr!.every((m) => m === 'pop');
     return shell(
       'yohaku',
       `<main>
 <div class="big ok" id="b">${TICK}</div>
-<h1 style="text-align:center"><span class="sm">IT WAS YOU</span>${
-        p.what ? esc(p.what) : 'Approved'
-      }</h1>
+<h1 style="text-align:center"><span class="sm">${
+        possession ? 'YOUR CREDENTIAL, PRESENTED NOW' : 'IT WAS YOU'
+      }</span>${p.what ? esc(p.what) : 'Approved'}</h1>
 ${
   t
-    ? `<div class="when"><div class="n">${t.n}</div><div class="u">${t.u} · you proved it</div></div>`
+    ? `<div class="when"><div class="n">${t.n}</div><div class="u">${t.u} · ${
+        possession ? 'the credential was presented' : 'you proved it'
+      }</div></div>`
     : ''
 }
 <div class="trio">
-  <div><div class="s on">✓</div><div class="l">person<br>verified</div></div>
+  <div><div class="s on">✓</div><div class="l">${
+      possession ? 'credential<br>presented' : 'person<br>verified'
+    }</div></div>
   <div><div class="s on">✓</div><div class="l">answer<br>kept</div></div>
   <div><div class="s${p.settled ? ' on' : ''}">${p.settled ? '✓' : '—'}</div><div class="l">${
       p.settled ? 'money<br>arrived' : 'payment<br>not wired'
     }</div></div>
 </div>
+${
+  possession
+    ? `<div class="cav"><b>What that number is, exactly.</b> The issuer reported
+<code>amr: pop</code> &mdash; a credential <b>bound to an orb-verified person</b>, presented
+just now. <b>It is not a fresh approval in the World ID app.</b> We asked for one with
+<code>prompt=login</code> and <code>max_age=0</code>; this is what came back.</div>`
+    : ''
+}
 ${
   p.settled
     ? `<div class="paid"><div class="pk">PAID · ${esc(p.settled.network)}</div>
@@ -627,15 +768,20 @@ Look at it on the explorer &rarr;</a>`
         {
           tag: 'THAT NUMBER',
           lines: [
-            'It is how long ago she authenticated — <b>seconds, not days.</b>',
-            '<b>It did not come from us.</b> It is a signed claim from the identity provider, checked against this server\u2019s clock. We cannot make it smaller than it is.',
-          ],
+            'It is how long ago the issuer says the authentication happened — <b>seconds, not days.</b>',
+            '<b>It did not come from us.</b> It is a signed claim, checked against this server\u2019s clock. We cannot make it smaller than it is.',
+            possession
+              ? '<b>But freshness is not the same as being asked.</b> This issuer stamped it one second before it issued the token while reporting <code>amr: pop</code> — so what is fresh is the <b>presentation</b> of a credential, not an approval by a person.'
+              : '',
+          ].filter(Boolean),
         },
         {
           tag: 'WHY IT MATTERS',
           lines: [
-            'Proving personhood at signup says a person opened the account once.',
-            '<b>Proving it here says a person is present now</b> — at the moment money would move. That is the difference the whole flow exists for.',
+            'Proving personhood at signup says a person opened the account once. <b>Checking it here binds it to the moment money would move.</b>',
+            possession
+              ? '<b>How much that is worth depends on the issuer.</b> Here it means a credential only an orb-verified person holds was presented at this instant — which is real, and is less than a person pressing approve. <b>We would rather say the smaller true thing.</b>'
+              : 'That is the difference the whole flow exists for.',
           ],
         },
         {
@@ -654,8 +800,15 @@ Look at it on the explorer &rarr;</a>`
     );
   }
 
+  /*
+   * Say which of these happened, and never leave the screen without a way forward.
+   *
+   * `refused` covers a request that is simply gone — most often because the server was
+   * restarted while someone had the page open. That is our doing, not theirs, and a dead end
+   * that only says "nothing happened" reads exactly like a product that is broken.
+   */
   const lede =
-    p.outcome === 'expired' ? 'TIME RAN OUT' : p.outcome === 'declined' ? 'YOU SAID NO' : 'NOT COMPLETED';
+    p.outcome === 'expired' ? 'TIME RAN OUT' : p.outcome === 'declined' ? 'YOU SAID NO' : 'THIS ONE IS GONE';
 
   return shell(
     'yohaku',
@@ -667,9 +820,13 @@ Look at it on the explorer &rarr;</a>`
   <div><div class="s">—</div><div class="l">no money<br>moved</div></div>
   <div><div class="s">—</div><div class="l">no consent<br>recorded</div></div>
 </div>
+<div class="btns"><a class="b g" href="/try">Start again</a></div>
 </main>
-<footer><b>Your answer was kept.</b> You will be asked about this kind of thing less
-often, not more.</footer>`,
+<footer>${
+      p.outcome === 'refused'
+        ? `<b>${esc(p.detail)}</b> If the page had been open a while, the request may have already been cleared &mdash; nothing was lost, and starting again takes a second.`
+        : '<b>Your answer was kept.</b> You will be asked about this kind of thing less often, not more.'
+    }</footer>`,
     [
       {
         tag: 'SHOWING AN ABSENCE',

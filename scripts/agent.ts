@@ -40,14 +40,14 @@ const request =
     ? {
         id: `agent-${Date.now()}`,
         who: 'nozomi-labs.eth',
-        what: 'health/sleep-quality',
+        what: 'experience/the-time-it-failed-you',
         purpose: 'market-research',
         price: { amount: 4200, currency: 'JPYC' },
       }
     : {
         id: `agent-${Date.now()}`,
         who: 'market-research.acme.eth',
-        what: 'purchase-intent/groceries',
+        what: 'experience/why-you-put-it-back',
         purpose: 'demand-estimation',
         price: { amount: 120, currency: 'JPYC' },
       };

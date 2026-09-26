@@ -22,6 +22,20 @@ export interface FreshnessPolicy {
   maxAgeSeconds: number;
   /** The assurance level that means "a verified person". */
   requiredAcr: string;
+  /**
+   * Which authentication methods count, if we insist on any.
+   *
+   * **Added because the answer was not what we assumed.** Sending both `prompt=login` and
+   * `max_age=0`, the sandbox issuer returned `amr: ["pop"]` with an `auth_time` stamped a
+   * second earlier: a session presenting a key it already held, not a person approving
+   * anything in an app. `auth_time` being fresh therefore does **not** mean somebody was
+   * asked — so if a deployment needs an actual re-authentication, it has to say which method
+   * counts, and this is where.
+   *
+   * Left unset in the demo, because setting it would refuse every login this issuer issues.
+   * **The screen says what actually happened instead of hiding it.**
+   */
+  acceptedAmr?: string[];
 }
 
 /** What we learn when someone completes a verification. */
@@ -29,9 +43,17 @@ export interface Verified {
   /** Pairwise subject — stable for us, and useless to anyone else. */
   subject: string;
   issuer: string;
-  /** When the person actually authenticated. */
+  /** When the issuer says the authentication happened. */
   authTime: Date;
   acr: string;
+  /**
+   * How they were authenticated, as the issuer describes it.
+   *
+   * `pop` means proof of possession — a held credential was presented. That is a real and
+   * useful thing, but **it is not a person approving a prompt**, and the two must not be
+   * described with the same sentence.
+   */
+  amr?: string[];
 }
 
 export type VerificationOutcome =
@@ -71,6 +93,29 @@ export function mayProceed(outcome: VerificationOutcome): boolean {
 }
 
 /** Is this verification recent enough to stand for "she is here right now"? */
+/**
+ * Did the authentication use a method this deployment accepts?
+ *
+ * Unset means "any" — and that is a deliberate default, not an oversight: refusing `pop`
+ * today would refuse every login this issuer produces. What the product must not do is
+ * *claim* more than `pop` supports, which is a wording problem, not a policy one.
+ */
+export function methodAccepted(amr: string[] | undefined, policy: FreshnessPolicy): boolean {
+  if (!policy.acceptedAmr?.length) return true;
+  if (!amr?.length) return false;
+  return amr.some((m) => policy.acceptedAmr!.includes(m));
+}
+
+/**
+ * Was a held credential presented, rather than a person re-authenticating?
+ *
+ * Used by the screen, not by the gate. The distinction is worth showing even when it is not
+ * worth refusing.
+ */
+export function isPossessionOnly(amr: string[] | undefined): boolean {
+  return Boolean(amr?.length) && amr!.every((m) => m === 'pop');
+}
+
 export function isFresh(authTime: Date, policy: FreshnessPolicy, now: Date): boolean {
   const age = (now.getTime() - authTime.getTime()) / 1000;
   return age >= 0 && age <= policy.maxAgeSeconds;
