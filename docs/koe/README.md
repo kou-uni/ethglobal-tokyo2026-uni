@@ -108,7 +108,10 @@ answers are accurate, human-authored or delivered.
 
 ## Real-device verification status
 
-The registration form and real IDKit bundle are running locally for an end-to-end World App
-check. Automated registration tests use a mocked proof-verification boundary; they are **not**
-evidence of a real new registration. The earlier Yohaku production approval proof is separate.
-A real Koe registration is recorded only after the new form, World App and server finish successfully.
+Real Koe registration on the local server succeeded with a production Orb proof at
+14:24:39 JST on 2026-09-26. Chrome and the local directory feed were both checked.
+See `../build/evidence/koe-registration-local.json` (no profile text, proof or nullifier).
+The separate public app also succeeded at 14:36:56 JST. The public registration page,
+JSON feed and GitHub Pages participant card were checked. See
+`../build/evidence/koe-registration-public.json`. No payment occurred. See
+`../build/PUBLIC-DEMO-HANDOFF.md` for the current rollout and remaining steps.

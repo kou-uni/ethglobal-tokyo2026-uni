@@ -1,0 +1,23 @@
+{
+  "observedAt": "2026-09-26T05:35:36.065912+00:00",
+  "verified": true,
+  "scope": "Koe registration on local server, using real production World proof. Not the public server app.",
+  "verification": {
+    "environment": "production",
+    "protocolVersion": "3.0",
+    "credential": "orb",
+    "checkedAt": "2026-09-26T05:24:39.000Z"
+  },
+  "expiresAt": "2026-09-26T06:24:40.672Z",
+  "observations": [
+    "Chrome showed You are listed for this demo.",
+    "Local directory endpoint independently included the same profile and verification summary."
+  ],
+  "payment": "none; local server had no settlement adapter",
+  "notVerified": [
+    "public deployment registration",
+    "removal on real device",
+    "proof plus payment"
+  ],
+  "privacy": "Profile name, text, identifier, raw proof, nullifier and browser cookie omitted."
+}

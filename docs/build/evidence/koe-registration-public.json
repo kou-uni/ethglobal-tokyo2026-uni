@@ -1,0 +1,25 @@
+{
+  "observedAt": "2026-09-26T05:38:39.916395+00:00",
+  "verified": true,
+  "scope": "Koe registration on the public server, using the dedicated public production World app.",
+  "verification": {
+    "environment": "production",
+    "protocolVersion": "3.0",
+    "credential": "orb",
+    "checkedAt": "2026-09-26T05:36:56.000Z"
+  },
+  "appId": "app_879e657604c235d07f9fb0d4c293eff1",
+  "rpId": "rp_7d1746ab95ff804c",
+  "expiresAt": "2026-09-26T06:36:57.491Z",
+  "observations": [
+    "Public registration page showed World ID verified your personhood and You are listed for this demo.",
+    "Public directory endpoint independently contained the same profile and proof summary.",
+    "GitHub Pages Koe displayed one temporary World-verified participant with the matching test profile."
+  ],
+  "payment": "none; Koe registration has no settlement access",
+  "notVerified": [
+    "removal on real device",
+    "Yohaku public proof plus payment"
+  ],
+  "privacy": "Profile name, text, identifier, raw proof, nullifier and browser cookie omitted."
+}

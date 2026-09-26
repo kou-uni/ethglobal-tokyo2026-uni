@@ -313,6 +313,9 @@ export function createApp(deps: AppDeps): Server {
       if (deps.productionProbe && await deps.productionProbe(req, res)) return;
       /* ── health ─────────────────────────────────────────────────────────── */
       if (req.method === 'GET' && path === '/health') {
+        // Public status only: static demo pages may read it without cookies.
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Cache-Control', 'no-store');
         return json(res, 200, {
           ok: true,
           owner: deps.policy.owner,
