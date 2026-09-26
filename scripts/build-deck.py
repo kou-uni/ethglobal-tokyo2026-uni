@@ -1,9 +1,9 @@
 # docs/deck.html — the 2:30 deck. Eight slides, one file, arrow keys.
 # Slide text is deliberately tiny in volume: the speaking is the content.
-import html, io
+import html, io, subprocess, json
 
 LINES = {'era': ('Agents are not assistants any more. / They are becoming <b>customers.</b><br>And the person they buy from / is <b>you.</b><br>A model can write anything. / What it cannot do / is live a day / and tell you what happened.<br>So the scarce thing is no longer information. — It is <b>an answer only a person can give.</b>', 'エージェントはもう「アシスタント」ではありません。顧客になりつつあります。そして、その顧客が買う相手が、あなたです。モデルは何でも書けます。できないのは、一日を生きて、何が起きたかを語ること。だから希少なのはもう情報ではない。その人にしか出せない答えです。'), 'mkt': ('A large market is expected. — And <b>the supply it runs on is running out.</b>', '大きな市場が見込まれています。そして、それを支えている供給のほうが先に尽きます。'), 'night': ('Which means demand arrives at a person, / all night, / at machine speed.<br>Fifty-two requests reached one seller / in one night. — She was <b>asleep.</b><br>That is not a problem to block. — It is <b>a market with nobody at the counter.</b>', 'つまり需要は、一人の人間に、一晩中、機械の速さで届きます。ある売り手には、一晩で52件届きました。本人は寝ています。これは防ぐべき問題ではありません。カウンターに誰も立っていない市場です。'), 'yohaku': ('So the question is not how to answer more. — It is <b>what a person should never have to see.</b><br>What we are building is <b>room.</b> / Room to stay a person.<br>In Japanese we call that <b>yohaku</b> — / the space a painter decides <b>not to fill.</b>', '問いは「どうやってもっと答えるか」ではありません。その人が見なくていいものは何か、です。私たちが作っているのは、ゆとりです。人間のままでいるためのゆとり。日本語では、これを余白と言います。絵師が、描かないと決めた場所です。'), 'proto': ('Here is one night. / Agents arrive over an open agent-to-agent protocol.<br><b>Most never reach a judgement at all.</b> / They are refused / before anyone is asked.<br>A security check decides / whether the money may move.<br>A decision model sorts the rest — / and it can only <b>ask,</b> / or <b>refuse.</b> — <b>It cannot say yes.</b><br>What clears / settles itself / over x402.', 'これがある一晩です。エージェントは公開のエージェント間プロトコルでやってきます。その大半は、判断にすら届きません。誰かに聞く前に断られます。セキュリティの検査が「この金は動いていいのか」を決めます。判定モデルが残りを仕分けます。ただし返せるのは「聞く」か「断る」だけ。「通す」という答えは存在しません。通ったものは、x402 で自分で決済まで終わります。'), 'world': ('Two are left. — Only <b>two.</b><br>When she answers, / she proves she is a person / <b>at that moment</b> — with World ID.<br>That is what an agent is actually buying: / <b>an answer a human is proven to have given.</b>', '残るのは2件。2件だけです。答えるとき、彼女はその瞬間に人間であることを証明します。World ID で。エージェントが本当に買っているのはこれです — 人間が答えたと証明された答え。'), 'money': ('Money arrived / while she did nothing.<br>Money arrived again / because she <b>decided.</b><br><b>Check your own balance.</b> — Not our screen.', '何もしていない間に、お金が入りました。決めたから、もう一度入りました。ご自分の残高で確かめてください。私たちの画面ではなく。'), 'close': ("She spent <b>two taps</b> / and kept the rest of the night.<br>We take one unit / for the decision we handled — / never a share of what she earned.<br>And what agents spend / has to be governed somewhere.<br><b>That is where a treasury layer begins — Curvegrid's — / and where we stop.</b>", '使ったのはタップ2回。残ったのはその夜の残り全部。私たちは捌いた判断1件につき1単位だけ受け取ります。彼女の売上の取り分ではありません。そして、エージェントが使う金は、どこかで統治されなければならない。そこから先が財務の層 — Curvegrid の層 — で、私たちはそこで止まります。')}
-CUE = {'mkt': 'スライド2へ。読み上げない', 'night': 'スライド3', 'yohaku': 'スライド4。ここで一拍長く', 'proto': 'アニメーションを流し始めてから喋る', 'world': 'スライド6', 'money': '実機へ切り替え。残高を見せる。黙ってよい', 'close': 'スライド8'}
+CUE = {'mkt': 'スライド2へ。読み上げない', 'night': 'スライド3', 'yohaku': 'スライド4。ここで一拍長く', 'proto': 'アニメーションを流し始めてから喋る', 'world': 'スライド6', 'money': '事前に用意したスマホへ。読み取り操作はしない', 'close': 'スライド8'}
 
 S = [
  dict(k='era', big=['Agents are not assistants.', 'They are <em>customers.</em>'],
@@ -11,15 +11,13 @@ S = [
  dict(k='mkt', big=['It gets bigger.', 'The supply <em>runs out</em> first.'],
       notes=['<b>2026–2032</b> the stock of public human text is used up — Epoch AI',
              '<b>$60M / year</b> Google → Reddit, for what people wrote. None of it reaches them']),
- dict(k='night', big=['<em>52</em> requests.', 'One night.', 'She was asleep.'],
+ dict(k='night', huge='52', big=['requests. One night.', 'She was <em>asleep.</em>'],
       sub='A market with nobody at the counter.'),
  dict(k='yohaku', invert=True, big=['余白'], roman='yohaku',
       sub='the space a painter decides not to fill'),
  dict(k='proto', label='ONE NIGHT', big=['Refused', 'before anyone <em>is asked.</em>'],
-      chips=[('Intercepta', 'may this money move?'),
-             ('Jev', 'ask or drop — never yes'),
-             ('ENSv2', 'the delegate cannot widen its own rights'),
-             ('x402', 'what clears, settles itself')]),
+      embed='launch.html#trafficPlayer',
+      ),
  dict(k='world', big=['Two are left.'],
       sub='What an agent is buying:',
       punch='an answer a human is <em>proven</em> to have given',
@@ -34,10 +32,22 @@ def slide(i, d):
     c = ['<section class="s%s"%s>' % (' inv' if d.get('invert') else '',
          ' data-i="%d"' % i)]
     if d.get('label'): c.append('<p class="lbl">%s</p>' % d['label'])
+    if d.get('huge'): c.append('<p class="huge">%s</p>' % d['huge'])
     c.append('<h2>%s</h2>' % '<br>'.join(d['big']))
     if d.get('roman'): c.append('<p class="rom">%s</p>' % d['roman'])
+    if d.get('qr'):
+        svg = subprocess.run(['node','-e',
+            "require('qrcode').toString(process.argv[1],{type:'svg',errorCorrectionLevel:'M',margin:1})"
+            ".then(s=>process.stdout.write(s))", d['qr']],
+            capture_output=True, text=True, check=True).stdout
+        svg = svg.replace('<svg ', '<svg class="qr" ', 1)
+        c.append('<div class="qrbox">%s<p class="qurl">%s</p></div>' % (svg, d['qr'].replace('https://','')))
     if d.get('sub'): c.append('<p class="sub">%s</p>' % d['sub'])
     if d.get('punch'): c.append('<p class="punch">%s</p>' % d['punch'])
+    if d.get('embed'):
+        c.append('<div class="embed"><iframe src="%s" title="one night" loading="lazy"></iframe>'
+                 '<a class="full" href="%s" target="_blank" rel="noopener">open it full &rarr;</a></div>'
+                 % (d['embed'], d['embed']))
     if d.get('chips'):
         c.append('<div class="chips">' + ''.join(
             '<div class="chip"><b>%s</b><span>%s</span></div>' % (n, t) for n, t in d['chips']) + '</div>')
@@ -78,6 +88,12 @@ section.inv .sub{color:#CFC6FF;max-width:30ch;margin-top:4vmin}
 .notes{margin-top:5vmin;display:flex;flex-direction:column;gap:1.6vmin}
 .notes p{font-size:clamp(14px,2.2vmin,30px);color:var(--ink2);line-height:1.4}
 .notes b{color:var(--ink)}
+.huge{font:900 clamp(78px,26vmin,300px)/0.86 "M PLUS Rounded 1c",sans-serif;color:#5B4BE0;letter-spacing:-.04em}
+section:has(.embed) h2{font-size:clamp(24px,4.6vmin,58px)}
+section:has(.embed) .lbl{margin-bottom:1.4vmin}
+.embed{margin-top:1.8vmin;flex:1;min-height:0;display:flex;flex-direction:column;gap:1vmin}
+.embed iframe{flex:1;width:100%;border:0;border-radius:2.4vmin;background:#12101C;min-height:44vh}
+.full{align-self:flex-end;font-size:clamp(13px,2vmin,24px);font-weight:900;color:var(--violet);text-decoration:none}
 .chips{margin-top:5vmin;display:grid;gap:1.6vmin;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
 .chip{background:rgba(255,255,255,.7);border-radius:3vmin;padding:2.4vmin 3vmin}
 .chip b{display:block;font-size:clamp(18px,3vmin,38px);font-weight:900}
