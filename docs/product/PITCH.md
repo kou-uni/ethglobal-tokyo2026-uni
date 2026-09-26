@@ -82,8 +82,12 @@ Then it writes to a permission key — **rejected**)*
 
 > Morning. **One notification.** Not fifty. **Two — the cap she set.**
 >
-> She approves one. **And right there, at that moment, she proves she is a person.**
-> Not at signup. **Now.** Then it settles.
+> She approves one. **And right there, at that moment, a credential only an orb-verified
+> person holds is presented.** Not at signup. **Now.** Then it settles.
+>
+> *(Say it that way, not "she proves she is a person." The sandbox answers `amr: pop` —
+> a held credential, freshly presented. **We measured it, and the screen says so.**
+> Offering the smaller true claim is what makes the rest believable.)*
 >
 > The other one she ignores. The deadline passes. **It is denied.**
 > *(screen: the protected action does not happen)*
@@ -132,6 +136,7 @@ record the real count. **If we ask 11 people, we say 11.** See
 |---|---|
 | "A delegate can propose but cannot rewrite its own permissions" | "Revocation is unique to ENSv2" — it is not |
 | "Curvegrid described this missing layer on stage; we built it" | "Curvegrid NEO already ships this" |
+| "A credential bound to an orb-verified person is presented at the moment of approval" | **"She re-proves personhood in the app at that moment"** — the sandbox returns `amr: pop` and never opens World App |
 | "Tonight there were about fifty" | "Sellers receive 50 requests per day" — nothing real was measured |
 | "These are demo figures" | Presenting any count as a finding |
 

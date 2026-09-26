@@ -125,3 +125,28 @@ may write a proposal key but not a permission key. Two notes worth reporting eit
 **Specific to our use:** the call must run **before signing** and its result must decide what
 happens next. Getting a real flagged mainnet address and a clean one, and confirming both
 return what we expected, is the part worth timing.
+
+## World ID — `prompt=login` も `max_age=0` も効かず、`auth_time` だけが新しくなる
+
+**2026-09-26 実測。sandbox issuer。3回再現。**
+
+```
+送信: prompt=login, max_age=0, acr_values=https://world.org/oidc/acr/orb-v3
+応答: amr=["pop"], auth_time=iat-2  （World App は開かない）
+```
+
+`prompt_values_supported` に `login` が載っているのに、**再認証は起きません。**
+それ自体より重いのは、**`auth_time` が押し直されること**です。
+
+> **`auth_time` を「人がいま承認した証拠」として使う実装は、そう作れてしまいます。**
+> 我々も一度そう書きました。`amr` を見るまで気づきませんでした。
+
+**提案。** どれか1つで十分です。
+
+1. `prompt=login` / `max_age` を尊重する。無理なら
+2. **セッション再利用時に `auth_time` を押し直さない**（OIDC Core の本来の意味に戻す）。それも無理なら
+3. **ドキュメントに「`auth_time` は再認証を意味しない。方法は `amr` を見よ」と1行書く**
+
+3 が一番安く、一番多くの実装を救います。**PKCE 必須が書かれていない件と同じ質の穴**で、
+どちらも「エラーにならないまま、間違った実装ができあがる」種類です。
+

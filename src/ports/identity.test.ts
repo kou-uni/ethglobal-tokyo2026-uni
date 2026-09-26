@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MockIdentity, isFresh, mayProceed, type FreshnessPolicy } from './identity.js';
+import { MockIdentity, isFresh, isPossessionOnly, mayProceed, methodAccepted, type FreshnessPolicy } from './identity.js';
 import { WorldIdentity } from '../adapters/world-oidc.js';
 
 const POLICY: FreshnessPolicy = {
@@ -173,5 +173,55 @@ describe('the mock refuses in the same cases', () => {
   it('passes an upstream error straight through as denied', async () => {
     const out = await new MockIdentity(POLICY).complete({ error: 'access_denied', at: NOW });
     expect(out).toMatchObject({ status: 'denied', reason: 'access_denied' });
+  });
+});
+
+/**
+ * What the issuer actually answers, and what we are therefore allowed to say.
+ *
+ * Measured 2026-09-26 against `sandbox.auth.world.org`: sending both `prompt=login` and
+ * `max_age=0`, it returned `amr: ["pop"]` with `auth_time` stamped one second before `iat`.
+ * **A fresh `auth_time` is not evidence that anybody was asked** — these lock the distinction
+ * so that a later change cannot quietly restore the stronger claim.
+ */
+describe('proof of possession is not an approval', () => {
+  const policy = { maxAgeSeconds: 120, requiredAcr: 'orb-v3' };
+
+  it('recognises a pop-only authentication', () => {
+    expect(isPossessionOnly(['pop'])).toBe(true);
+  });
+
+  it('does not call it possession-only when another method is present', () => {
+    expect(isPossessionOnly(['pop', 'user'])).toBe(false);
+    expect(isPossessionOnly(['mfa'])).toBe(false);
+  });
+
+  it('treats a missing amr as not provably possession-only', () => {
+    expect(isPossessionOnly(undefined)).toBe(false);
+    expect(isPossessionOnly([])).toBe(false);
+  });
+
+  it('accepts any method when a deployment names none', () => {
+    expect(methodAccepted(['pop'], policy)).toBe(true);
+    expect(methodAccepted(undefined, policy)).toBe(true);
+  });
+
+  /** A deployment that needs a real re-authentication can demand it, and this issuer fails it. */
+  it('refuses pop when a deployment insists on something stronger', () => {
+    const strict = { ...policy, acceptedAmr: ['mfa', 'user'] };
+    expect(methodAccepted(['pop'], strict)).toBe(false);
+    expect(methodAccepted(['user'], strict)).toBe(true);
+    expect(methodAccepted(undefined, strict)).toBe(false);
+  });
+
+  /**
+   * The trap this whole section exists for: freshness and method are independent, and
+   * conflating them is how "she proved she is a person just now" got written down.
+   */
+  it('is fresh and still only possession', () => {
+    const now = new Date('2026-09-26T12:00:00Z');
+    const authTime = new Date(now.getTime() - 1000);
+    expect(isFresh(authTime, policy, now)).toBe(true);
+    expect(isPossessionOnly(['pop'])).toBe(true);
   });
 });

@@ -507,7 +507,11 @@ export function createApp(deps: AppDeps): Server {
           id,
           verdict: 'approved',
           identity: verification?.status === 'verified'
-            ? { verifiedAt: verification.identity.authTime.toISOString(), acr: verification.identity.acr }
+            ? {
+                verifiedAt: verification.identity.authTime.toISOString(),
+                acr: verification.identity.acr,
+                ...(verification.identity.amr ? { amr: verification.identity.amr } : {}),
+              }
             : 'not wired',
           settlement: paid,
         });
@@ -837,6 +841,7 @@ export function createApp(deps: AppDeps): Server {
           amount: `${entry.request.price.amount} ${entry.request.price.currency}`,
           verifiedAt: outcome.identity.authTime,
           acr: outcome.identity.acr,
+          ...(outcome.identity.amr ? { amr: outcome.identity.amr } : {}),
           ...(paid.settled
             ? {
                 settled: { transaction: paid.transaction, network: paid.network },

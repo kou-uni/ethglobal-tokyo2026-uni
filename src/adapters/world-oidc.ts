@@ -7,9 +7,10 @@
  *
  * The freshness requirement is enforced twice on purpose:
  *
- *   - **asking**: `prompt=login` tells the issuer to re-authenticate rather than reuse a
- *     session. (`max_age` is the other way to ask, but this issuer does not advertise it —
- *     `prompt_values_supported` does list `login`, so that is what we send.)
+ *   - **asking**: `prompt=login` and `max_age=0` both tell the issuer to re-authenticate
+ *     rather than reuse a session. We send both, and we **check the answer** rather than
+ *     assuming either worked: `amr` says how the person was authenticated, and a value of
+ *     `pop` means a key was presented, not that anybody approved anything.
  *   - **checking**: `auth_time` on the returned token is compared against the clock here
  *
  * Asking alone would be trusting the issuer to have honoured a parameter. Checking alone
@@ -28,7 +29,7 @@ import type {
   IdentityPort,
   VerificationOutcome,
 } from '../ports/identity.js';
-import { isFresh } from '../ports/identity.js';
+import { isFresh, methodAccepted } from '../ports/identity.js';
 
 interface Discovery {
   issuer: string;
@@ -108,6 +109,21 @@ export class WorldIdentity implements IdentityPort {
     url.searchParams.set('nonce', p.nonce);
     url.searchParams.set('code_challenge', codeChallenge(p.codeVerifier));
     url.searchParams.set('code_challenge_method', 'S256');
+
+    /*
+     * `max_age=0` — the spec's own way to demand a fresh authentication.
+     *
+     * `prompt=login` alone was not enough here: the issuer answered with `amr: ["pop"]` and an
+     * `auth_time` stamped one second earlier, which is a session presenting a key it already
+     * held rather than a person approving anything. OIDC Core says an OP **MUST** attempt to
+     * actively re-authenticate when the elapsed time exceeds `max_age`, so zero is the
+     * strongest ask available.
+     *
+     * The discovery document does not advertise `max_age`, and an OP is allowed to ignore a
+     * parameter it does not implement — so **this is an ask, not a guarantee.** What decides
+     * whether it worked is `amr` on the way back, which is why we print it.
+     */
+    url.searchParams.set('max_age', '0');
     // Re-authenticate rather than reuse a session: this is the "at the moment" part.
     if ((d.prompt_values_supported ?? []).includes('login')) {
       url.searchParams.set('prompt', 'login');
@@ -178,6 +194,29 @@ export class WorldIdentity implements IdentityPort {
         audience: this.config.clientId,
       });
       claims = payload as Record<string, unknown>;
+
+      /*
+       * What the issuer actually said, minus who it said it about.
+       *
+       * The product's central claim is that a person proved they were present **at that
+       * moment**. That is only true if `auth_time` reflects a real authentication rather than
+       * a session being re-stamped, and `amr` is the claim that says which. Printing it is
+       * the only way to find out, and `sub` is deliberately not printed — we do not keep it,
+       * so we should not log it either.
+       */
+      console.log(
+        '  identity claims:',
+        JSON.stringify({
+          acr: claims['acr'],
+          amr: claims['amr'],
+          auth_time: claims['auth_time'],
+          iat: claims['iat'],
+          age_seconds:
+            typeof claims['auth_time'] === 'number' && typeof claims['iat'] === 'number'
+              ? (claims['iat'] as number) - (claims['auth_time'] as number)
+              : undefined,
+        }),
+      );
     } catch (e) {
       return { status: 'denied', reason: `token did not verify: ${e instanceof Error ? e.message : e}` };
     }
@@ -208,6 +247,22 @@ export class WorldIdentity implements IdentityPort {
       };
     }
 
+    const amr = Array.isArray(claims['amr'])
+      ? (claims['amr'] as unknown[]).map(String)
+      : undefined;
+
+    /*
+     * If a deployment named the methods it accepts, honour it here rather than on the screen.
+     *
+     * The demo names none, because this issuer only ever answers `pop` — see `FreshnessPolicy`.
+     */
+    if (!methodAccepted(amr, this.config.policy)) {
+      return {
+        status: 'denied',
+        reason: `authenticated by ${amr?.join(', ') ?? 'an unstated method'}, which this deployment does not accept`,
+      };
+    }
+
     return {
       status: 'verified',
       identity: {
@@ -215,6 +270,7 @@ export class WorldIdentity implements IdentityPort {
         issuer: d.issuer,
         authTime,
         acr,
+        ...(amr ? { amr } : {}),
       },
     };
   }
