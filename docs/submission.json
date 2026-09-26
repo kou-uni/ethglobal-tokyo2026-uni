@@ -99,6 +99,102 @@
       "label": "How AI tools were used",
       "text": "Claude Code wrote most of this repository, with the two of us reviewing and deciding. It was also used for something less obvious: after we found three numbers in our own documents that had been true when written and false by the time anyone read them, we had it build the checks that now fail the build on that — npm run verify re-derives every quoted figure by running the code, refuses any hardcoded model id, endpoint or contract address, and rejects any document quoting a test or claim count the run did not produce. Those checks have since caught their own author several times.\n\nInside the product, three models are called for real rather than mocked. Jev, a decision model from TypeSafe AI, is consulted on rule 9 — the one case no rule settled — and Claude and GPT sit behind the same port as alternates. We ran the same request through Claude and GPT and they disagreed, which is the point: the guarantee cannot depend on having picked a good model.\n\nSo the model is deliberately boxed. It is asked one typed question whose only options are ask and drop. There is no value meaning pass, so a request that talks a model into approving it still cannot be approved — we measured that with a prompt injection, which moved the verdict from ask 0.99 to drop 0.89 and could not move it any further.",
       "chars": 1302
+    },
+    {
+      "id": "prize-ens-why",
+      "label": "ENS — $10,000 — How are you using this API?",
+      "text": "You can delegate to an AI without letting the AI rewrite what it is allowed to do. The owner's policy lives under text keys on a permissioned ENSv2 resolver, and a delegated agent holds the setter role for exactly one key — it can propose, and it cannot widen its own authority. That boundary is rule 0 of our router, and it is the contract that refuses the write, not our server. Six transactions on Ethereum Sepolia show it: a proposal that succeeded, a policy write that reverted with EACUnauthorizedAccountRoles, and a proposal that reverted after revocation. Simulating the same write today still reverts, so it is not a historical artefact.",
+      "chars": 646
+    },
+    {
+      "id": "prize-ens-code",
+      "label": "ENS — $10,000 — Link to the line of code",
+      "text": "https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/f95bab53ec3b7efbef6500142da7d8795891affb/src/core/rules.ts#L43-L52",
+      "chars": 122
+    },
+    {
+      "id": "prize-ens-stars",
+      "label": "ENS — $10,000 — Ease of use (1-10)",
+      "text": "5 / 10",
+      "chars": 6
+    },
+    {
+      "id": "prize-ens-feedback",
+      "label": "ENS — $10,000 — Additional feedback",
+      "text": "It works, and getting there cost more than it should have.\n\nThe published SDK's authorizeTextRoles and the deployed contract's grantSetterRoles are different APIs, and neither the mismatch nor which package version can write is reachable from the documentation — only @ensdomains/ensjs@5.0.0-sepolia-fix.1 writes at all; latest has no v2 and alpha is read-only. We lost hours to that before finding the fix branch.\n\nReading the role bits was the other one. eth_call against the implementation reverts for every selector, so decodeSetter was the only way to confirm what we had granted.\n\nThe one line of documentation that would have saved the most: the per-key grant carries the role implicitly and takes no bitmap.\n\nWhat we would not claim, and would ask you not to let teams claim: revocation is not new to v2. The thing that is genuinely v2 is the delegation boundary, and it is a better story than the one people reach for.",
+      "chars": 927
+    },
+    {
+      "id": "prize-curvegrid-why",
+      "label": "Curvegrid — $3,000 — How are you using this API?",
+      "text": "An agent that works around the clock spends around the clock, and the question that decides whether a team can live with that is not how much — it is which movements a person has to see at all. We built that half-step: ten ordered rules run before any payment, and only a request that came out as auto settles without a person. The agent never signs on the owner's behalf, and the owner's constraints are read from a permissioned ENSv2 resolver rather than from our database. We do not use MultiBaas and are not claiming we do — execution and record-keeping are your layer, and we stop cleanly at it.",
+      "chars": 600
+    },
+    {
+      "id": "prize-curvegrid-code",
+      "label": "Curvegrid — $3,000 — Link to the line of code",
+      "text": "https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/f95bab53ec3b7efbef6500142da7d8795891affb/src/server/app.ts#L431",
+      "chars": 119
+    },
+    {
+      "id": "prize-curvegrid-stars",
+      "label": "Curvegrid — $3,000 — Ease of use (1-10)",
+      "text": "（下のフィードバック参照）",
+      "chars": 13
+    },
+    {
+      "id": "prize-curvegrid-feedback",
+      "label": "Curvegrid — $3,000 — Additional feedback",
+      "text": "⚠️ 星は「使ったAPI」への評価欄です。**MultiBaas を使っていないので、正直に評価できません。** フォームが必須なら、下の一文を先頭に置いて、中央値を入れてください。\n\n(貼る文の先頭) We did not use MultiBaas, so we cannot rate it honestly — this rating is not a judgement of the product.\n\n(以下、本文)\nWe applied under the AI-agent category rather than the MultiBaas one, because the honest answer is that our work sits in front of your layer rather than on it.\n\nWhat we would most like from you is the opposite of feedback: a correction. We wrote down where we think the boundary between a decision layer and a treasury layer sits, what we think should cross it in each direction, and four questions we could not answer ourselves — synchronous or after the fact, whether you want the refusals as well as the approvals, how much identity a movement needs attached, and whose policy wins when a treasury limit and a person's own rule disagree.\n\nhttps://kou-uni.github.io/ethglobal-tokyo2026-uni/curvegrid.html",
+      "chars": 922
+    },
+    {
+      "id": "prize-intercepta-why",
+      "label": "Intercepta — $2,500 — How are you using this API?",
+      "text": "Rule 4 is the only refusal in our router that is not about permission: the grant is valid, the category is allowed, the amount is fine, and the payment still does not go because of where the money would come from. A live Quick Scan runs on the declared payment source before we settle or deliver, and its result decides the branch — clean settles, flagged refuses in your own words, and unavailable refuses too, because if we cannot check we do not move money. Same grant, same category, same price, two payment sources: one settled 120 atomic USDC on Base Sepolia, the other stopped on rule 4.",
+      "chars": 594
+    },
+    {
+      "id": "prize-intercepta-code",
+      "label": "Intercepta — $2,500 — Link to the line of code",
+      "text": "https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/f95bab53ec3b7efbef6500142da7d8795891affb/src/adapters/intercepta.ts#L130",
+      "chars": 128
+    },
+    {
+      "id": "prize-intercepta-stars",
+      "label": "Intercepta — $2,500 — Ease of use (1-10)",
+      "text": "7 / 10",
+      "chars": 6
+    },
+    {
+      "id": "prize-intercepta-feedback",
+      "label": "Intercepta — $2,500 — Additional feedback",
+      "text": "Fast to integrate — we went from key to a live branch in an afternoon. Three things we found that you may want to know.\n\nThe auth header is not in the material we had. x-api-key works; authorization: Bearer, apikey and api-key all return 403 with the same message as no header at all. We found it by trying six.\n\nThe endpoint is account-scoped, and that surprises you in the worst direction. A sanctioned *contract* — 0x722122dF12D4e14e13Ac3b6895a86e84145b6967, on OFAC's list — answers 404 with \"An Externally Owned Account with this address doesn't exist\". That is the response that most looks like \"nothing wrong here\". We map 404 to unavailable, which refuses.\n\nAnd one worth checking on your side: 0x8589427373D6D84E98730D7795D8f6f8731FDA16, also OFAC-listed, comes back toxicScore 0 on both quick-scan and toxic-score. We are not treating your API as a sanctions oracle because of it, and we would suggest you do not let integrators treat it as one either.\n\nThe best part of the API is the one we did not expect: every trait carries a human-readable description, so the sentence we show the person whose payment stopped is yours and not an accusation we wrote.",
+      "chars": 1166
+    },
+    {
+      "id": "prize-world-why",
+      "label": "World — (該当枠) — How are you using this API?",
+      "text": "We use World ID at the moment of consent, not at signup. A request arrives, ten ordered rules decide it, and the ones no rule settles wait for a person. When she presses yes, that is when the proof is verified — bound to that request and that browser by a signal hashed from both, so it cannot be replayed on another request. Everything fails to deny: a refusal, a stale authentication, an unreachable issuer and silence all end the same way. We store verifiedAt and the assurance level, and never the subject.",
+      "chars": 510
+    },
+    {
+      "id": "prize-world-code",
+      "label": "World — (該当枠) — Link to the line of code",
+      "text": "https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/f95bab53ec3b7efbef6500142da7d8795891affb/src/adapters/idkit-proof.ts#L10",
+      "chars": 128
+    },
+    {
+      "id": "prize-world-stars",
+      "label": "World — (該当枠) — Ease of use (1-10)",
+      "text": "6 / 10",
+      "chars": 6
+    },
+    {
+      "id": "prize-world-feedback",
+      "label": "World — (該当枠) — Additional feedback",
+      "text": "The production IDKit path worked the same day. The Agents dev environment took much longer, and almost all of that was one undocumented requirement.\n\nPKCE is mandatory at the sandbox and is not documented. Every authorization request without code_challenge returns a bare invalid_request with no error_description, which is indistinguishable from a dozen other mistakes. We identified it by probing eight parameter combinations. One sentence in the guide would have saved a working day.\n\nThe one that matters more: there is no way to ask for, or to detect, a fresh in-app approval. Sending both prompt=login and max_age=0, the sandbox answers amr: [\"pop\"] with auth_time stamped one second before iat, and never hands off to the World ID app — Safari, Safari private and Chrome alike. We read auth_time as evidence that a person had just approved something. That was wrong, and nothing in the response says so; your own guide specifies amr as [\"pop\"] for every authentication, so amr cannot separate the two either.\n\nSo what we claim on screen is the smaller true thing: a credential only an orb-verified person holds was presented at that moment.\n\nTop improvement: give integrators a way to require a fresh in-app approval and a way to tell that it happened. Until then, one line — \"auth_time does not imply re-authentication\" — would stop the next team shipping the claim we nearly did.",
+      "chars": 1388
     }
   ]
 }
