@@ -1,0 +1,129 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Yohaku — submission copy</title><meta name="robots" content="noindex">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap');
+*{box-sizing:border-box;margin:0}
+body{background:#12101C;color:#EDEAF8;padding:20px 16px 60px;
+font-family:"M PLUS Rounded 1c",-apple-system,BlinkMacSystemFont,"Hiragino Maru Gothic ProN",sans-serif;
+font-weight:700;-webkit-font-smoothing:antialiased}
+h1{font-size:26px;font-weight:900;margin-bottom:6px}
+p.s{font-size:15px;color:#8B83B8;margin-bottom:22px;line-height:1.6}
+section{background:#1B1830;border-radius:20px;padding:16px 16px 14px;margin-bottom:14px}
+.h{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+h2{font-size:17px;font-weight:900;flex:1;min-width:150px}
+.n{font:900 12px ui-monospace,Menlo,monospace;color:#8B83B8}
+.n.bad{color:#FF8A8A}
+button{font:inherit;font-size:14px;font-weight:900;background:#5B4BE0;color:#fff;border:0;
+border-radius:99px;padding:9px 20px;cursor:pointer}
+button.done{background:#57A80A}
+pre{white-space:pre-wrap;word-break:break-word;font-family:inherit;font-weight:700;
+font-size:15px;line-height:1.65;color:#C8C2E6;max-height:230px;overflow:auto;
+background:#12101C;border-radius:14px;padding:13px 14px}
+</style></head><body>
+<h1>Submission copy</h1>
+<p class="s">Tap <b>copy</b>, then paste into the form. Plain text — no markdown left in it.</p>
+<section>
+  <div class="h"><h2>Project name</h2>
+    <span class="n ">6 chars</span>
+    <button data-for="name">copy</button></div>
+  <pre id="name">Yohaku</pre>
+</section>
+<section>
+  <div class="h"><h2>Tagline</h2>
+    <span class="n ">63 chars</span>
+    <button data-for="tagline">copy</button></div>
+  <pre id="tagline">Agents never sleep. People do. Yohaku is the router in between.</pre>
+</section>
+<section>
+  <div class="h"><h2>Short description</h2>
+    <span class="n ">100 / 100</span>
+    <button data-for="short">copy</button></div>
+  <pre id="short">Agents never sleep. People do. Yohaku routes their requests, so only what needs a human reaches one.</pre>
+</section>
+<section>
+  <div class="h"><h2>Description</h2>
+    <span class="n ">3627 chars · min 280</span>
+    <button data-for="desc">copy</button></div>
+  <pre id="desc">Scraping the open web is free and contaminated. An agent cannot tell what a human wrote, because synthetic text is free, abundant and indistinguishable at scale. So the scarce thing is no longer information — it is an answer only a person who lived it can give truthfully. A model can invent an answer to "what made you put it back on the shelf." It cannot invent a true one.
+
+That is a market, and it has a problem: the buyer never sleeps and the seller does. Open a counter in the agent economy and some fifty requests arrive overnight. Answer them all by hand and it does not scale; approve them all automatically and you have lost control of your own data.
+
+Yohaku is the layer in between. Ten ordered rules decide every incoming request — first match wins — into auto, human or deny. What reaches the person is bundled, ranked and held to a daily cap she sets. We generate a night, run it through the real router twenty times, and the arrivals wander between 46 and 54 while the number reaching her is 2 in every single run. That sentence is the output of npm run verify, not a claim.
+
+Three properties are the product:
+
+1. Everything fails to deny. Engine down, screening unreachable, identity check failed,
+deadline passed with no answer — all of them refuse. Silence is not consent.
+
+2. The guarantee lives in the schema. A model is consulted on exactly one rule, and the
+values it can return are 'ask' and 'drop'. There is no value meaning "pass". A prompt
+injection that fully convinces the model still cannot widen access, because widening is
+not expressible.
+
+3. A refusal you cannot inspect is the same as never having been asked. Agents really do
+ask for a home address and for a wallet. Those requests are in the demo, refused under a
+rule the owner set, and she can open /dropped and see what each one wanted with the rule
+that stopped it named beside it.
+
+We did not invent a protocol for the arriving side. Requests reach Yohaku over A2A, whose v1.0 specification moved to the Linux Foundation, and payment rides the x402 transport that A2A already defines — the agent is told payment is required through the task state the specification provides, rather than through anything of ours. Discovery is an Agent Card at a well-known path. That matters for the shape of the market: many agent-facing directories can exist, and a person still needs exactly one router in front of their own attention.
+
+In the language of Google's AP2, Yohaku is a Trusted Surface: the non-agentic surface that obtains informed human consent before a mandate is signed. AP2 puts a MUST on exactly that role, because "the Agent itself is a potential attacker". We had already built it that way.
+
+What none of the existing protocols cover: AP2, UCP and ACP all assume the counterparty is a merchant. MCP's elicitation — the one standard place an agent asks a human for something — explicitly forbids requesting personal data. And nobody has defined how many times a day an agent economy may interrupt one person. That last number is what Yohaku holds.
+
+How it stays alive: Yohaku charges for a decision, never a share of what the seller earns. One atomic unit per request routed, offered as an optional extension on the payment the buyer was already making, and the seller's proceeds never enter that ledger at all. The accounting is deliberately built so it cannot report collected money — the summary field is typed as broadcast: false — because a router that could quietly take custody is a router you would be right not to install.
+
+MIT licensed, because a surface that decides what a person never sees has to be one they can read.</pre>
+</section>
+<section>
+  <div class="h"><h2>How it's made</h2>
+    <span class="n ">4554 chars · min 280</span>
+    <button data-for="made">copy</button></div>
+  <pre id="made">TypeScript, no framework. src/core is pure — the router takes a request, a policy and a clock and returns a verdict; no I/O, so the same code runs in the tests, in the server and in a single-file console that opens from a USB stick with no network.
+
+Ports and adapters: ClassifierPort, IdentityPort, ScreeningPort, PermissionsPort, SettlementPort. The guarantee is in the port's schema, not in the adapter, so swapping an implementation cannot weaken it.
+
+World ID (OIDC). Discovery read at run time — no endpoint is written in our source. PKCE with S256, which turned out to be mandatory and undocumented in the sandbox; we found it by probing eight parameter combinations against a bare invalid_request with no error_description. The ID token is verified against the issuer's JWKS with jose, acr is required to be the orb level, and auth_time is checked against this server's clock with a 120-second ceiling. We store only verifiedAt and acr — never the subject identifier.
+
+Measured caveat, stated because a summary that omits it is wrong: sending both prompt=login and max_age=0, the sandbox answers amr: ["pop"] with auth_time re-stamped one second before iat, and never hands off to the World ID app — through Safari, Safari private and Chrome alike. So what is true is "a credential only an orb-verified person holds is presented at that moment", not "she re-proves personhood in the app". The product screen says exactly that, and FreshnessPolicy.acceptedAmr exists so a deployment that needs more can refuse pop.
+
+x402 (protocol v2, Base Sepolia). The published x402 npm package still speaks v1 (X-PAYMENT); the deployed facilitator answers x402Version 2 (PAYMENT-SIGNATURE). We build on @x402/core, whose only dependency is zod, and accept both header names. The server confirms at startup that the facilitator actually supports the configured scheme and network.
+
+The design decision worth pointing at: an EIP-3009 authorization carries validBefore, and we set it to the request's deadline. The agent signs before she wakes up; the authorization moves nothing while it waits; settlement runs from exactly one place in the code, after a verified yes. If she never answers, the authorization expires and nobody can settle it — not the agent, not us. "Silence is not consent" stops being a server behaviour and becomes a property of the money.
+
+Two transfers on Base Sepolia, verified by reading the chain rather than trusting the facilitator's response: 0x79c1e323… (120 atomic, settled inside the request) and 0x5c79fddf… (4,200 atomic, which moved only when a person pressed Yes — the seller's balance was 120 before and 4,320 after). The buyer's ETH balance is still zero; the facilitator paid 102,844 gas.
+
+ENSv2 (Ethereum Sepolia — a different chain from the settlement, which costs an hour if you confuse them). A name is registered and resolved through a permissioned resolver: yohaku-minta-2026.eth, receipt 0x8e13e0ad…, resolver a proxy of PermissionedResolverImpl, paid 8.000021 MockUSDC for 365 days. Role bits confirmed from the chain via decodeSetter — all five text keys at role 16 — after direct eth_call to the implementation reverted for every selector.
+
+The delegate boundary runs on chain, not against a mock. A delegated account was granted the setter role for yh:proposal only; it wrote yh:proposal and succeeded (0x16873dfa…), wrote yh:policy and reverted with EACUnauthorizedAccountRoles (0xb459618b…), and after the owner revoked, the proposal write reverted too (0x2380d0fe…). Six receipts, in order, on Ethereum Sepolia. Simulating the same write today still reverts with the same error, so it is not a historical artefact — the contract refuses it right now.
+
+Anti-guessing is enforced rather than remembered. npm run verify re-derives every number in the documents by running the code, and refuses any hardcoded model id, API endpoint or contract address in src/ or scripts/. It also fails if any published page quotes a test or claim count the test run did not produce. We added that last check today and it immediately found seventeen stale counts, three of them on our own published site. It then caught its own author: adding an eleventh claim made the count in eight other files wrong, and the check failed until those were fixed too. The claims are published as machine-readable JSON, because the reviewer we are most likely to get is an agent.
+
+343 tests. 12 verified claims. Two numbers in these documents were measured, found false, and withdrawn in place — the retraction is still visible in ASSUMPTIONS.md.</pre>
+</section>
+<section>
+  <div class="h"><h2>Demonstration link</h2>
+    <span class="n ">62 chars</span>
+    <button data-for="demo">copy</button></div>
+  <pre id="demo">https://kou-uni.github.io/ethglobal-tokyo2026-uni/product.html</pre>
+</section>
+<section>
+  <div class="h"><h2>GitHub repository</h2>
+    <span class="n ">50 chars</span>
+    <button data-for="repo">copy</button></div>
+  <pre id="repo">https://github.com/kou-uni/ethglobal-tokyo2026-uni</pre>
+</section>
+<script>
+document.addEventListener('click', async e => {
+  const b = e.target.closest('button[data-for]');
+  if (!b) return;
+  const t = document.getElementById(b.dataset.for).textContent;
+  try { await navigator.clipboard.writeText(t); }
+  catch { const r = document.createRange(); r.selectNode(document.getElementById(b.dataset.for));
+          getSelection().removeAllRanges(); getSelection().addRange(r); document.execCommand('copy'); }
+  b.textContent = 'copied'; b.classList.add('done');
+  setTimeout(() => { b.textContent = 'copy'; b.classList.remove('done'); }, 1600);
+});
+</script>
+</body></html>
