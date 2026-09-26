@@ -1,5 +1,13 @@
 # Yohaku — an escalation router for the agent economy
 
+> **Short on time?** &nbsp;**[30 seconds — touch it](https://kou-uni.github.io/ethglobal-tokyo2026-uni/console.html)**
+> &nbsp;·&nbsp; **[3 minutes — the whole story in 16 diagrams](docs/product/STORY.md)**
+> &nbsp;·&nbsp; **[30 minutes — check the claims instead of trusting them](#verify-it-yourself)**
+>
+> **Reading this as an agent?** Start with **[llms.txt](llms.txt)**. Changing the code?
+> **[AGENTS.md](AGENTS.md)**. Want the claims as data? **[docs/claims.json](docs/claims.json)**
+> — the output of `npm run verify -- --json`, not a hand-written list.
+
 > In Japanese painting, *yohaku* — the empty space — is not what's left over.
 > **It is what the painter decided not to draw.**
 
@@ -103,6 +111,10 @@ Kept deliberately, so that the method stays visible and not only the result.
 | `docs/assets/overview.svg` | Hand-written SVG, rendered and inspected three times — an arrow was crossing a box, and two labels overlapped |
 
 ## Running it
+
+**The service describes itself.** `GET /` answers what it is, what it does with a request,
+**what it refuses**, and what is honestly not wired on that instance — because the customer
+here is an agent, and an agent should not have to guess any of those.
 
 ```bash
 npm start
@@ -319,6 +331,8 @@ npm run seed -- 18 # one night, run through the real router
 npm run models     # what your key can actually use
 npm run setup      # a local page for putting a key in
 ```
+
+<a id="verify-it-yourself"></a>
 
 ### `npm run verify` — the documents are checked against the code
 

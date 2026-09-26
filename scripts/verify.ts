@@ -24,7 +24,17 @@ import type { HeldRequest } from '../src/core/types.js';
 const failures: string[] = [];
 const checks: string[] = [];
 
+/**
+ * Every claim, in a shape a machine can read.
+ *
+ * `npm run verify -- --json` prints this, and `docs/claims.json` is that output committed.
+ * It exists because the reviewer we are most likely to get is an agent, and an agent asking
+ * "is this true?" deserves the answer the code gives rather than the answer the README gives.
+ */
+const results: { claim: string; ok: boolean; detail: string }[] = [];
+
 function check(name: string, ok: boolean, detail: string): void {
+  results.push({ claim: name, ok, detail });
   if (ok) checks.push(`  ok    ${name}`);
   else failures.push(`  FAIL  ${name}\n        ${detail}`);
 }
@@ -191,6 +201,23 @@ check(
 );
 
 /* ── report ───────────────────────────────────────────────────────────────── */
+
+if (process.argv.includes('--json')) {
+  console.log(
+    JSON.stringify(
+      {
+        generatedBy: 'npm run verify -- --json',
+        generatedAt: new Date().toISOString(),
+        note: 'Each claim is re-derived by running the code. Nothing here is asserted by hand. Re-run the command to check it yourself.',
+        passed: results.every((r) => r.ok),
+        claims: results,
+      },
+      null,
+      2,
+    ),
+  );
+  process.exit(results.every((r) => r.ok) ? 0 : 1);
+}
 
 console.log('');
 for (const c of checks) console.log(c);

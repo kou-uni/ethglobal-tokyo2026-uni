@@ -456,6 +456,51 @@ export function createApp(deps: AppDeps): Server {
         });
       }
 
+      /*
+       * The service, describing itself.
+       *
+       * The customer here is an agent, so the root of the API answers the questions an agent
+       * would have to guess otherwise: what this is, what it will do with a request, what is
+       * really wired, and — the one nobody publishes — **what it refuses to do**.
+       */
+      if (req.method === 'GET' && (path === '/' || path === '/.well-known/yohaku')) {
+        return json(res, 200, {
+          service: 'yohaku',
+          what: 'An escalation router. Post a request to buy information from a person; it is answered synchronously as auto, human or deny.',
+          owner: deps.policy.owner,
+          docs: 'https://github.com/kou-uni/ethglobal-tokyo2026-uni',
+          forAgents: 'https://kou-uni.github.io/ethglobal-tokyo2026-uni/llms.txt',
+          request: {
+            endpoint: 'POST /requests',
+            fields: FIVE_FIELDS,
+            answers: {
+              200: 'auto — settled. With x402 wired, a 200 means the transfer really happened.',
+              202: 'human — held for the owner, with the deadline it will be judged against. You are not kept waiting on this connection.',
+              402: 'payment required. Sign the authorization in PAYMENT-REQUIRED and retry.',
+            },
+          },
+          settlement: deps.settlement?.live
+            ? {
+                protocol: 'x402',
+                version: 2,
+                header: 'PAYMENT-SIGNATURE (v1 X-PAYMENT also accepted)',
+                note: 'For a held request, sign an authorization whose validBefore outlives the deadline. It moves nothing while it waits, settles only if she approves, and expires if she never answers.',
+              }
+            : 'not wired',
+          refuses: [
+            'A delegated agent trying to widen its own permissions.',
+            'Anything the routing engine, the screening call or the identity check could not complete — all of them deny.',
+            'Silence. If the owner does not answer before the deadline, the request is denied, not queued.',
+          ],
+          cannotDo: [
+            ...(deps.identityWired ? [] : ['identity is mocked on this instance']),
+            ...(deps.settlement?.live ? [] : ['settlement is not wired on this instance']),
+            'the ENSv2 permission boundary runs against a mock, not a chain',
+          ],
+          dailyCapOnHumanAttention: deps.policy.dailyCap,
+        });
+      }
+
       /* ── what she wakes up to ───────────────────────────────────────────── */
       if (req.method === 'GET' && path.startsWith('/ledger/')) {
         const outstanding = deps.store.outstanding();
@@ -613,6 +658,7 @@ export function createApp(deps: AppDeps): Server {
       }
 
       json(res, 404, { error: 'not found', endpoints: [
+        'GET /',
         'GET /health',
         'POST /requests',
         'POST /approvals/:id',
