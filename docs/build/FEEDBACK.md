@@ -150,3 +150,46 @@ return what we expected, is the part worth timing.
 3 が一番安く、一番多くの実装を救います。**PKCE 必須が書かれていない件と同じ質の穴**で、
 どちらも「エラーにならないまま、間違った実装ができあがる」種類です。
 
+## x402 — 公開パッケージが v1 のまま、デプロイ済み facilitator は v2
+
+**2026-09-26 実測。**
+
+```
+npm   x402@1.2.0        → X-PAYMENT のみ（v1）
+live  x402.org/facilitator/supported → {"x402Version":2, ...}  ヘッダは PAYMENT-SIGNATURE
+```
+
+記事どおりに作ると噛み合いません。**`@x402/core@2.27.0` が v2 で依存が zod だけ**なので、
+そこに辿り着けば済みますが、**検索して最初に出るのは `x402` のほう**です。
+
+**提案。** `x402` の README 冒頭に「このパッケージは v1。v2 は `@x402/core`」と1行。
+
+### 拒否理由のフィールド名が verify と settle で違う
+
+```
+settle → errorReason
+verify → invalidReason
+```
+
+片方しか読まないと、原因が **`insufficient_balance` なのか payload の不正なのか**
+見分けられなくなります。我々は最初それで潰しました。**揃えるか、両方に別名で入れてほしい。**
+
+### 良かったところ
+
+- **`insufficient_balance` という拒否理由が返ること。** これがあったので「facilitator まで届いて、
+  要件も署名も受理され、残高だけが無い」と切り分けられました。理由が潰れていたら丸1日溶けていました
+- **EIP-3009 の gasless が本当に gasless。** 買い手の ETH 残高 0 のまま 102,844 gas を facilitator が
+  払い、着金しました。ブースで財布を出してもらうときに、これが効きます
+
+## ENSv2 — 配布 SDK と実デプロイで付与関数が違う
+
+**minta 調べ。** `@ensdomains/ensjs@5.0.0-sepolia-fix.1` の `authorizeTextRoles` と、
+実デプロイの `grantSetterRoles` が別物でした。**どちらを見て実装するかで詰まります。**
+
+また **`5.0.0-sepolia-fix.1` だけが書き込みを持ちます**（`latest` は v2 が無く、`alpha` は読み取りのみ）。
+dist-tag が `sepolia-fix` であることは、ドキュメントから辿れません。
+
+### 良かったところ
+
+- **`decodeSetter` が読み取りで role ビットマップを返すこと。** 実装コントラクトへの `eth_call` は
+  プロキシの裏で全部 revert しますが、これのおかげで**ガス無しにチェーンから確定**できました

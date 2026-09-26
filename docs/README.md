@@ -46,20 +46,20 @@ flowchart TB
   classDef live fill:#BCB2FA,stroke:#6B5BD6,stroke-width:2px,color:#241f3d
   classDef todo fill:#FFF0F0,stroke:#FF6B6B,stroke-width:2px,stroke-dasharray:5 4,color:#7a1f1f
   class R,R0,R15,R56,R8,R9,Q,Q1,Q2,Q3,S,D,X,L,P done
-  class W live
-  class M,E todo
+  class W,M live
+  class E todo
 ```
 
 | | 意味 | 中身 |
 |---|---|---|
 | 🟩 | **動いている・test がある** | ルーター10段、行列制御、承認画面、台帳、rule 9 の AI 判定 |
-| 🟪 | **実物と繋がっている** | **World ID。実機で人が押して往復した**（sandbox issuer、署名検証あり） |
-| 🟥 | **まだ無い** | **ENSv2 のオンチェーン**、決済 |
+| 🟪 | **実物と繋がっている** | **World ID**（実機で往復。ただし `amr: pop` — 下記）と **x402**（本当に着金した） |
+| 🟥 | **まだ無い** | **ENSv2 の委任境界のオンチェーン証拠**（名前と resolver は登録済み） |
 
 **`GET /health` が同じことを機械可読で返します。** ソースを読まずに、何が繋がっているか分かる。
 
 ```json
-{ "routing": true, "classifier": true, "identity": true, "screening": true, "settlement": false }
+{ "routing": true, "classifier": true, "identity": true, "screening": true, "settlement": true }
 ```
 
 ## 1.4 通しで読むなら
@@ -123,7 +123,7 @@ docs/
 | **rule 9 は human。auto ではない** | 未知を自動で通す設計は、事故の後に説明できなくなる |
 | **推測を構造で排除する** | `npm run verify` が**ドキュメントの数字をコードから再導出**し、モデルID・エンドポイント・アドレスのハードコードを落とす。10項目 |
 | **言う前に測る** | 「12→5→2に減る」は実際に30夜再生したら偽だった。**測り直して撤回を残した**（[product/ASSUMPTIONS.md](product/ASSUMPTIONS.md) B3） |
-| **できないことを画面に書く** | 決済が繋がっていない場所には、金額を「worth」と出し、同じ画面で「まだ動いていない」と書く |
+| **できないことを画面に書く** | 決済が繋がる前は金額を「worth」と出し「まだ動いていない」と書いていた。いまは動いたので tx を出す。**World が `amr: pop` を返す場面では、画面が自分から「アプリでの承認ではない」と書く** |
 
 ## 5. 検証のしかた（他人が確かめられる形）
 
@@ -144,7 +144,7 @@ npm start         # サーバ
 | **1** | **ENSv2 を Sepolia に乗せる** | rule 0 を「うちのサーバが拒否した」から**「コントラクトが拒否した」**に変える。ENS 賞は mock では要件を満たさない | 未確認4点は潰れた（[knowledge/ENSV2-ONCHAIN.md](knowledge/ENSV2-ONCHAIN.md)）。**残る壁は登録の支払い通貨と金額だけ** |
 | 2 | ブースで各スポンサーに「何を探しているか」を聞く | 推測で刺しに行かない。答えは逐語で記録する | 未 |
 | 3 | intercepta を実際に叩く | ENS が落ちたときの差し替え先 | 鍵待ち（kou@texx.io） |
-| 4 | 決済 | **意図的に最後**。ここが無くても製品の主張は立つ | 未 |
+| — | 決済 | ~~意図的に最後~~ **済み。**Base Sepolia で2件、チェーンで確認。[120 atomic](https://sepolia.basescan.org/tx/0x79c1e3239ef89cdc1b8a5fc14321093b06504a3c68a24644ba6390caf90393fa)（auto）と [4,200 atomic](https://sepolia.basescan.org/tx/0x5c79fddfc8d6e6f64c1dd23752fae688a9b94ec5bc770f24fd1c2595b00d1d88)（**人が Yes を押した瞬間にだけ**動いた） | ✅ |
 
 **ENS の着手前に決めること: Sepolia の資金（2アカウント）と testnet USDC/DAI を誰が用意するか。**
 

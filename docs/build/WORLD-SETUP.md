@@ -1,7 +1,7 @@
 # Wiring World ID — the browser round-trip
 
 **What this finishes:** the one part of the demo where a person is actually present.
-An agent asks, it is held, she opens a page, **proves she is a person at that moment**, and
+An agent asks, it is held, she opens a page, **presents a credential only an orb-verified person holds, at that moment**, and
 only then does anything happen. The refusal path is the same page doing nothing.
 
 That sequence is World's stated requirement, word for word:

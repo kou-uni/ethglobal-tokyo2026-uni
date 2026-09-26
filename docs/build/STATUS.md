@@ -44,9 +44,17 @@ npm install && npm run check      # typecheck + 133 tests + 10 verified claims
 
 ## The one thing that would embarrass us
 
-**The console says `identity: mocked · settlement: not wired` where those would happen.**
-Say it out loud at the booth before a judge finds it. Every other claim on the screen is
-checkable, and volunteering the two that are not is what buys them.
+**Two things, and both are better said first than found.**
+
+**1. `amr: pop`.** World ID answers with a held credential presented freshly, not an approval
+in the app — so what the screen can honestly claim is *"a credential only an orb-verified
+person holds was presented at that moment"*, and it says exactly that. We asked for more with
+`prompt=login` and `max_age=0` and were given this.
+
+**2. The ENSv2 delegate boundary is still against a mock**, and the mock says so. The name,
+the resolver and the role bits are on chain; the refusal is not yet.
+
+Everything else on the screen is checkable, and volunteering these two is what buys the rest.
 
 ## Next, in order — 2026-09-26 11:40 JST、締切まで約21時間
 

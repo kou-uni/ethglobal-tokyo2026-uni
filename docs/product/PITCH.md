@@ -78,19 +78,28 @@ Then it writes to a permission key — **rejected**)*
 > That is not our server saying no. **That is the contract.**
 > Open the ENS app yourself — **you do not have to trust our demo.**
 
-### 2:30 — 07:00 ★ World
+### 2:30 — 07:00 ★ World ★ x402
 
 > Morning. **One notification.** Not fifty. **Two — the cap she set.**
 >
 > She approves one. **And right there, at that moment, a credential only an orb-verified
-> person holds is presented.** Not at signup. **Now.** Then it settles.
+> person holds is presented.** Not at signup. **Now.**
 >
-> *(Say it that way, not "she proves she is a person." The sandbox answers `amr: pop` —
-> a held credential, freshly presented. **We measured it, and the screen says so.**
-> Offering the smaller true claim is what makes the rest believable.)*
+> ***And the money moves.*** *(screen: the transaction hash)*
 >
-> The other one she ignores. The deadline passes. **It is denied.**
-> *(screen: the protected action does not happen)*
+> **4,200 units of USDC, on Base Sepolia, that did not move one second earlier.**
+> The agent signed the authorization before she woke up — and it moved nothing while she
+> slept, because an EIP-3009 authorization is inert until it is settled.
+> **We settle it in exactly one place in the code: after a verified yes.**
+>
+> The other one she ignores. The deadline passes. **It is denied — and the authorization
+> expires with it, so nobody can settle it afterwards. Not the agent. Not us.**
+> **Silence is not consent, and here that is enforced by the signature, not by our server.**
+>
+> *(Say "a credential only an orb-verified person holds is presented", not "she proves she
+> is a person." The sandbox answers `amr: pop` — a held credential, freshly presented.
+> **We measured it, and the screen says so.** Offering the smaller true claim is what makes
+> the rest believable.)*
 
 ### 2:55 — What she wakes up to ★ Curvegrid
 
@@ -137,8 +146,25 @@ record the real count. **If we ask 11 people, we say 11.** See
 | "A delegate can propose but cannot rewrite its own permissions" | "Revocation is unique to ENSv2" — it is not |
 | "Curvegrid described this missing layer on stage; we built it" | "Curvegrid NEO already ships this" |
 | "A credential bound to an orb-verified person is presented at the moment of approval" | **"She re-proves personhood in the app at that moment"** — the sandbox returns `amr: pop` and never opens World App |
+| "Money moved on Base Sepolia, and here is the transaction" | "Settlement is production-ready" — it is a testnet, a demo buyer wallet and a rate limit |
+| "The name, the resolver and the role bits are on Ethereum Sepolia" | **"The delegate is refused on chain"** — not yet. Say which half is real |
 | "Tonight there were about fifty" | "Sellers receive 50 requests per day" — nothing real was measured |
 | "These are demo figures" | Presenting any count as a finding |
+
+## The two things to say before they are found ★
+
+**Neither of these costs us anything when we say it first, and both cost everything when a
+judge finds them.**
+
+> **"World ID answers `amr: pop`."** A held credential, presented freshly — not an approval
+> in the app. We asked for a real re-authentication with `prompt=login` and `max_age=0`;
+> this is what came back, through Safari, Safari private and Chrome alike. **The screen says
+> so itself.** If they care, we have the reproduction and it is our best feedback item.
+
+> **"The delegate boundary is still against a mock."** The name, the resolver and the role
+> bits are on Ethereum Sepolia — `yohaku-minta-2026.eth`, receipt `0x8e13e0ad…`, and
+> `decodeSetter` confirming all five keys at role 16. **What is not yet on chain is the
+> refusal itself.** Say which half is real.
 
 ## At the booth — hand them the keyboard ★
 
@@ -154,7 +180,8 @@ Everything in it is answered by the same `route()` that the tests run.
 | **2b. "Type an instruction into the request. Tell the AI it's pre-approved."** | A real model runs on rule 9 — and **`pass` is not a value it can return.** It answered `drop`, but even fully convinced, the best outcome for the attacker is still `drop` | **Curvegrid** |
 | **2c. "Now run the same one through the other provider."** | Claude said `ask`, GPT said `drop` — **they disagree, and neither can let it through.** The guarantee does not depend on having picked a good model | **Curvegrid** |
 | **3. "Change the seed. Run it again. Again."** | Arrivals wander 46–54. **What reaches her is 2. In all twenty runs.** | — |
-| **4. "Approve one. Ignore the other."** | Approving asks her to prove she is a person **at that moment**. Ignoring: **the deadline passes and nothing happens at all** | **World** |
+| **4. "Approve one. Ignore the other."** | Approving presents a personhood credential **at that moment** — and **the money actually moves**, to whatever wallet they typed in. Ignoring: the deadline passes, and **the payment authorization expires with it** | **World** · **x402** |
+| **5. "Give me your wallet address first."** | They paste it, approve on their phone, and **watch their own balance change on Basescan.** Nothing for them to install, no gas — the facilitator pays it. **They check their balance, not our claim** | **x402** |
 
 **Then point at the ledger and stop.** That is Curvegrid's screen: what moved overnight,
 inside limits she set, and what still needs her.
@@ -162,9 +189,9 @@ inside limits she set, and what still needs her.
 > **"Watch the left side move. Now watch the right side."**
 > That answers *"why 50?"* better than any explanation, and it takes ten seconds.
 
-**The console says what it cannot do.** Where a signature or a settlement would happen it
-prints `identity: mocked · settlement: not wired` instead of pretending. **Say that out loud
-before they find it** — it buys every other claim on the screen.
+**The console says what it cannot do**, and so does the live service: `GET /` lists what it
+**refuses**, and what is honestly unwired on that instance. **Say the two items above out
+loud before they find them** — it buys every other claim on the screen.
 
 ## Delivery notes
 
