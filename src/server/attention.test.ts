@@ -14,8 +14,7 @@ const held = (id: string, category = id): HeldRequest => ({
 });
 describe('daily attention budget', () => {
   it('waits for the notification hour then shows at most the daily cap', () => {
-    const budget = new AttentionBudget(), early = new Date(MORNING);
-    early.setHours(DEMO_POLICY.notifyHour - 1);
+    const budget = new AttentionBudget(), early = new Date(MORNING.getTime() - 3600000);
     const queue = ['a', 'b', 'c'].map(id => held(id));
     expect(budget.surface(queue, DEMO_POLICY, early).surfaced).toHaveLength(0);
     expect(budget.surface(queue, DEMO_POLICY, MORNING).surfaced).toHaveLength(2);
@@ -35,7 +34,7 @@ describe('daily attention budget', () => {
   });
   it('renews the allowance on the next day', () => {
     const budget = new AttentionBudget();
-    budget.surface([held('a'), held('b')], DEMO_POLICY, MORNING);
+    budget.surface([held('a'), held('b')], DEMO_POLICY, new Date(MORNING.getTime() + 16 * 3600000));
     expect(budget.surface([held('c')], DEMO_POLICY, new Date(MORNING.getTime() + 86400000)).surfaced).toHaveLength(1);
   });
   it('retains the daily budget across a restart and refuses corrupted state', () => {

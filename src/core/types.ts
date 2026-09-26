@@ -64,6 +64,8 @@ export interface Policy {
   dailyCap: number;
   /** Local hour at which held requests surface. */
   notifyHour: number;
+  /** IANA timezone for the owner's notification hour and daily budget. Default: Asia/Tokyo. */
+  timeZone?: string;
   grants: Grant[];
 }
 

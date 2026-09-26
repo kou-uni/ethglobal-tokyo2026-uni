@@ -119,7 +119,7 @@ export class OwnerAuth {
       if (!this.browser(req)) { res.writeHead(303, { location: '/owner/login' }); res.end(); return true; }
       if (!await this.authority() || !this.browser(req)) { json(403, { error: 'owner_authority_not_verified' }); return true; }
       const queue = store.surface(policy, new Date(this.now()));
-      html(`<p>${queue.deferred.length} categories waiting. New invitations appear from ${policy.notifyHour}:00 server time, up to ${policy.dailyCap} per day.</p>${queue.surfaced.map(b => `<section><h2>${esc(b.category)}</h2><ul>${b.requests.filter(h => !store.get(h.request.id)?.demoBrowser).map(h => `<li><a href="/approve/${encodeURIComponent(h.request.id)}">${esc(h.request.who)} · ${h.request.price.amount} ${esc(h.request.price.currency)}</a></li>`).join('')}</ul></section>`).join('') || '<p>No requests to answer now.</p>'}<form method="post" action="/owner/logout"><button>Sign out</button></form>`);
+      html(`<p>${queue.deferred.length} categories waiting. New invitations appear from ${policy.notifyHour}:00 ${esc(policy.timeZone ?? 'Asia/Tokyo')}, up to ${policy.dailyCap} per day.</p>${queue.surfaced.map(b => `<section><h2>${esc(b.category)}</h2><ul>${b.requests.filter(h => !store.get(h.request.id)?.demoBrowser).map(h => `<li><a href="/approve/${encodeURIComponent(h.request.id)}">${esc(h.request.who)} · ${h.request.price.amount} ${esc(h.request.price.currency)}</a></li>`).join('')}</ul></section>`).join('') || '<p>No requests to answer now.</p>'}<form method="post" action="/owner/logout"><button>Sign out</button></form>`);
       return true;
     }
     json(404, { error: 'not_found' }); return true;

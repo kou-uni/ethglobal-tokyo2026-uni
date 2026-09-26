@@ -1,6 +1,6 @@
 import { mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
-import { bundle, rank, type SurfaceResult } from '../core/queue.js';
+import { bundle, rank, policyClock, type SurfaceResult } from '../core/queue.js';
 import type { HeldRequest, Policy } from '../core/types.js';
 
 interface Day { day: string; used: number; groups: string[][] }
@@ -25,7 +25,7 @@ export class AttentionBudget {
     }
   }
   surface(held: HeldRequest[], policy: Policy, now: Date): SurfaceResult {
-    const day = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+    const { day, hour } = policyClock(policy, now);
     const previous = this.state[policy.owner];
     const record: Day = previous?.day === day
       ? { ...previous, groups: previous.groups.map(g => [...g]) }
@@ -34,7 +34,7 @@ export class AttentionBudget {
     const alive = held.filter(h => Date.parse(h.request.deadline) > now.getTime());
     const seen = new Set(record.groups.flat());
     const waiting = rank(bundle(alive.filter(h => !seen.has(h.request.id))), now);
-    const selected = now.getHours() >= policy.notifyHour
+    const selected = hour >= policy.notifyHour
       ? waiting.slice(0, Math.max(0, policy.dailyCap - record.used)) : [];
     for (const group of selected) {
       record.groups.push(group.requests.map(h => h.request.id));

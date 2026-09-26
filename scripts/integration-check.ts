@@ -17,7 +17,7 @@ import { sepolia, baseSepolia } from 'viem/chains';
 import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts';
 import { encodePaymentSignatureHeader } from '@x402/core/http';
 import { loadEnv } from '../src/core/env.js';
-import { DEMO_POLICY, KNOWN_PARTIES } from '../src/core/night.js';
+import { DEMO_POLICY, KNOWN_PARTIES, MORNING } from '../src/core/night.js';
 import { createApp } from '../src/server/app.js';
 import { Store } from '../src/server/state.js';
 import { RoutingFees } from '../src/server/routing-fees.js';
@@ -105,8 +105,7 @@ async function localAudit() {
   const flagged = privateKeyToAccount(generatePrivateKey()).address;
   const unavailable = privateKeyToAccount(generatePrivateKey()).address;
   const clean = privateKeyToAccount(buyerKey).address;
-  let scans = 0, settlements = 0, checks = 0, clock = Date.now(), worldAccepts = true;
-  const morning = new Date(clock); morning.setHours(9, 0, 0, 0); clock = morning.getTime();
+  let scans = 0, settlements = 0, checks = 0, clock = MORNING.getTime(), worldAccepts = true;
   const used = new Set<string>();
   const provider = await listen(createServer(async (req, res) => {
     try {

@@ -5,7 +5,7 @@ import { Store } from './state.js';
 import { DEMO_POLICY, KNOWN_PARTIES, NIGHT, generateNight } from '../core/night.js';
 import { MockScreening } from '../ports/screening.js';
 import { MockIdentity } from '../ports/identity.js';
-import { surface } from '../core/queue.js';
+import { policyClock } from '../core/queue.js';
 import { route } from '../core/rules.js';
 import { demoContext } from '../core/night.js';
 import type { HeldRequest } from '../core/types.js';
@@ -158,7 +158,7 @@ describe('the server and the seed script describe the same night', () => {
     const led = (await (await fetch(`${base}/ledger/alice.yohaku.eth`)).json()) as {
       needsYou: unknown[];
     };
-    expect(NIGHT.getHours()).toBeLessThan(DEMO_POLICY.notifyHour);
+    expect(policyClock(DEMO_POLICY, NIGHT).hour).toBeLessThan(DEMO_POLICY.notifyHour);
     expect(led.needsYou).toHaveLength(0);
   });
 });

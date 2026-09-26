@@ -38,11 +38,13 @@ flowchart LR
 
 所有者challengeはブラウザー・Origin・一回限りのnonceに束縛し、有効期間は5分。
 ログインは30分で失効し、World証明ごとに権限を再確認する。
+通知時刻と日付境界は`policy.timeZone`（既定`Asia/Tokyo`）で計算し、サーバーのTZに依存しない。
 権限失効、ログアウト、依頼変更、期限切れ、取消、別ブラウザー、再送では決済しない。
 
 ## 検証
 
 - `npm run check`：型検査、全体 **391 tests / 12 claims**。
+  最終コードは`TZ=UTC npm run check`でも成功。通知は所有者のタイムゾーンで判定する。
 - `npm run integration:check`：独立した17項目が成功。
   実HTTP、実EIP-191/EIP-712署名、実Intercepta/x402アダプターを使用。
   外部API応答・World verifier・ENS権限は試験側で制御する。
