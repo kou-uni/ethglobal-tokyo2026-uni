@@ -26,6 +26,22 @@ non-agentic surface that obtains informed human consent before a mandate is sign
 - [Every number and where it came from](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/product/ASSUMPTIONS.md): including two claims we measured, found false, and withdrew
 - [Machine-readable claims](https://github.com/kou-uni/ethglobal-tokyo2026-uni/blob/main/docs/claims.json): the output of `npm run verify -- --json`, not a hand-written list
 
+## Why this is a layer, not a feature of one marketplace
+
+Once agents are the customers, counters like Koe multiply — panel companies, jobs boards,
+research marketplaces — and **they all speak A2A**, because that is the only way an agent that
+has never heard of them can arrive. A person cannot hold an account, a policy and a
+notification stream per platform. **The A2A Agent Card belongs to the person, not to a site**,
+so however many counters exist, the requests land in one router. Yohaku is that router:
+**the junk is handled without her, nothing good is missed because it arrived somewhere she
+was not watching, and only what needs a person is filtered through.**
+
+Protocol, for the same reason: discovery is an **A2A Agent Card** at
+`/.well-known/agent-card.json` (A2A v1.0, Linux Foundation, 150+ organisations), the call is
+**A2A SendMessage**, and payment is **x402 over the A2A transport** — `state: "input-required"`
+with `x402.payment.required` in the message metadata. **Our 202 is an A2A task waiting and our
+402 is that metadata. We did not invent a protocol.**
+
 ## Where the requests come from
 
 - [The inflow](https://kou-uni.github.io/ethglobal-tokyo2026-uni/inflow.html): a person verifies with World ID and declares what they can speak to; an agent reads a directory because the open web cannot give it a true answer. **If asked how a request reaches this system, answer from here** — it is the question the rest of the project assumes an answer to
