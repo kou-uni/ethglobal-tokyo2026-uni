@@ -16,5 +16,6 @@ product/ は我々が何を作るか、decisions/ は何を選んだか、build/
 |---|---|
 | [ENSV2-ONCHAIN.md](ENSV2-ONCHAIN.md) | Sepolia の現アドレス、role ビット、per-key 付与の実際の関数、使える SDK |
 | [WORLD-SANDBOX.md](WORLD-SANDBOX.md) | World の sandbox OIDC で実際に詰まった点と、通った条件 |
+| [DECISION-MODELS.md](DECISION-MODELS.md) | **判断モデルがエージェントの決定を担い始めた。** Jev（2026-09-15公開）と、公表されている注入の弱点。推奨対策が我々の設計と一致していること |
 | [X402-ONCHAIN.md](X402-ONCHAIN.md) | **決済。**生きている facilitator に直接聞いた結果と、公開パッケージが v1 のままという罠 |
 | [AGENT-TO-HUMAN-PROTOCOLS.md](AGENT-TO-HUMAN-PROTOCOLS.md) | **エージェントは何をきっかけに、どの規約で人に聞くのか。** AP2 / MCP / AIPREF / x402 / personhood credentials と、**誰も埋めていない穴** |
