@@ -1,0 +1,35 @@
+{
+  "confirmed": "2026-09-26",
+  "registry": {
+    "value": "0x657ea849311d3d5823348dded7c2aaafb3ede09e",
+    "source": "https://github.com/ensdomains/contracts-v2/blob/71a3b7339dbc55ab47667abdfe8303bac4f4c24e/contracts/deployments/sepolia/ETHRegistry.json"
+  },
+  "factory": {
+    "value": "0x9e726eb570beb6bceb495ab8cda7df517d4e841c",
+    "source": "https://github.com/ensdomains/contracts-v2/blob/71a3b7339dbc55ab47667abdfe8303bac4f4c24e/contracts/deployments/sepolia/VerifiableFactory.json"
+  },
+  "registrar": {
+    "value": "0xabe76f6c8dfced81aa5a2bb8034202a7136b94ca",
+    "source": "https://docs.ens.domains/learn/deployments — Sepolia ENSv2 beta."
+  },
+  "paymentTokens": [
+    {
+      "value": "0x16f95d91dba7da3aca778ec053df0ff6c6a8aa8e",
+      "source": "https://github.com/ensdomains/contracts-v2/blob/71a3b7339dbc55ab47667abdfe8303bac4f4c24e/contracts/deployments/sepolia/MockUSDC.json"
+    },
+    {
+      "value": "0x278053acc97888e63ec81c80fec641bf0bf19664",
+      "source": "https://github.com/ensdomains/contracts-v2/blob/71a3b7339dbc55ab47667abdfe8303bac4f4c24e/contracts/deployments/sepolia/MockDAI.json"
+    }
+  ],
+  "resolverImplementation": {
+    "value": "0x14f09fd05d4585759e54844dc9b00147131cf243",
+    "source": "https://docs.ens.domains/learn/deployments — Sepolia ENSv2 beta. Implementation only, NOT a seller resolver."
+  },
+  "rpc": {
+    "value": "https://ethereum-sepolia-rpc.publicnode.com",
+    "source": "Publicnode public Ethereum Sepolia RPC. Chain ID checked on every probe."
+  },
+  "contractSource": "https://github.com/ensdomains/contracts-v2/blob/post-audit-2/contracts/src/resolver/PermissionedResolver.sol",
+  "roleSource": "https://github.com/ensdomains/contracts-v2/blob/post-audit-2/contracts/src/resolver/libraries/PermissionedResolverLib.sol"
+}

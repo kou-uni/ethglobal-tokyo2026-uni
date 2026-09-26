@@ -52,6 +52,8 @@ describe('an agent asks', () => {
   it('says what is wired, without being asked twice', async () => {
     const h = (await (await fetch(`${base}/health`)).json()) as { wired: Record<string, boolean> };
     expect(h.wired['routing']).toBe(true);
+    expect(h.wired['identity']).toBe(false); // MockIdentity is not a live integration.
+    expect(h.wired['screening']).toBe(false);
     expect(h.wired['settlement']).toBe(false); // never claimed
   });
 

@@ -1,12 +1,30 @@
 # Status — 2026-09-26
 
+> **ENS update:** the installed `5.0.0-sepolia-fix.1` SDK and the main-branch
+> source cited in our research have different permission interfaces and scopes.
+> The claim below that only registration payment remains is on hold.
+> See [ENS-SDK-COMPATIBILITY.md](ENS-SDK-COMPATIBILITY.md).
+> Follow-up: `decodeSetter` succeeded live for all five keys. Registration prices and
+> free mock-token minting were also checked; see [ENS-REGISTRATION.md](ENS-REGISTRATION.md).
+> **Registration completed:** `yohaku-minta-2026.eth` and its seller resolver were verified
+> on Sepolia. See [ENS-REGISTERED.md](ENS-REGISTERED.md).
+> The read-only port and optional server denial gate are now implemented:
+> [ENS-INTEGRATION.md](ENS-INTEGRATION.md). The adapter was exercised against the registered
+> seller resolver; the public server is not yet configured with this registration.
+> The browser-only delegate signer and receipt verifier are ready:
+> [ENS-DELEGATION-DEMO.md](ENS-DELEGATION-DEMO.md). **All six delegation transactions are now verified:**
+> proposal success, policy refusal, revocation, and proposal refusal after revocation.
+> [Evidence](evidence/ens-delegation.json), checked at block 11783370. Wallet-wrapped grant/revoke
+> calls required exact inner-call and resolver-event verification. Local HTTP integration also passes;
+> public deployment remains. See [PUBLIC-ENS-HANDOFF.md](PUBLIC-ENS-HANDOFF.md).
+
 **What runs, what does not, and what each of us does next.** Everything marked ✅ was run;
 nothing here is inferred from the code looking right.
 
 Reproduce all of it with one command:
 
 ```bash
-npm install && npm run check      # typecheck + 133 tests + 10 verified claims
+npm install && npm run check      # typecheck + 201 tests + 10 verified claims
 ```
 
 ---
@@ -37,7 +55,7 @@ npm install && npm run check      # typecheck + 133 tests + 10 verified claims
 
 | | Blocked on | Who |
 |---|---|---|
-| **ENSv2 on chain** | ~~Sepolia addresses~~ ~~role bits~~ ~~grant function~~ ~~resolver scoping~~ **all four resolved 9/26** ([knowledge/ENSV2-ONCHAIN.md](../knowledge/ENSV2-ONCHAIN.md)). Left: **testnet USDC/DAI and the registration price**, then the 90-minute spike | **minta / spark** — [ENSV2-SPIKE.md](ENSV2-SPIKE.md) |
+| **ENSv2 public app integration** | Registration and all six delegation-proof transactions verified. Local server now uses the registered owner and reads live Sepolia permissions. Left: deploy/configure the public server and run the integrated demo | **minta / spark** — [ENS-DELEGATION-DEMO.md](ENS-DELEGATION-DEMO.md) |
 | **World ID: a real app approval** | The sandbox never hands off to World ID app. It answers `amr: ["pop"]` with `auth_time` re-stamped, through Safari, Safari private and Chrome alike, with `prompt=login` **and** `max_age=0` sent. **Production `auth.world.org` exists and has the same shape** — three `.env` values would switch it — but its portal sign-in is gated. **Ask at the booth**; the claim on screen has already been corrected to what we can prove | **spark** — booth |
 | **Payment screening, live** | The API key (requested 2026-09-26, arrives by email) | **spark** — check inbox |
 
@@ -58,10 +76,11 @@ Everything else on the screen is checkable, and volunteering these two is what b
 
 ## Next, in order — 2026-09-26 11:40 JST、締切まで約21時間
 
-**残っている未接続は1つだけです: ENSv2 のオンチェーン。**
+**ENSの登録・委任境界は実チェーンで検証済み。残るENS作業は公開アプリへの接続です。**
 
-1. **minta — ENSv2 を Sepolia に載せる**（issue #1）。未確認4点は解決済み、残る壁は
-   **Ethereum Sepolia の登録の支払い通貨と金額**だけ。⚠️ x402 の Base Sepolia とは**別チェーン**
+1. **minta / spark — ENSの証拠を取り込み、公開アプリへ接続する。** Issue #5の4件は
+   [実証JSON](evidence/ens-delegation.json)で完了。PR #3を取り込み、policy.ownerとENS設定を
+   登録名に合わせて、公開デモを一周確認する。追加のfaucet・登録・実証用署名は不要。
 2. **spark — ブース巡回。** 各スポンサーに「何を探しているか」を逐語で。World には
    **`amr: pop` の件**を持っていく（再現手順つきの実測なので、これが一番強い）
 3. **両方 — 足すのをやめる。** 製品の主張は揃い、金も動いた

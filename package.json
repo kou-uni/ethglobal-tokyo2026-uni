@@ -9,9 +9,15 @@
     "node": ">=22"
   },
   "scripts": {
+    "ens:check": "tsx scripts/ens-check.ts",
+    "ens:probe": "tsx scripts/ens-probe.ts",
+    "ens:registration": "tsx scripts/ens-registration.ts",
+    "setup:ens": "tsx scripts/setup-ens.ts",
+    "setup:ens-delegation": "tsx scripts/setup-ens-delegate.ts",
+    "setup:ens-server": "tsx scripts/setup-ens-server.ts",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.setup.json --noEmit",
     "seed": "tsx scripts/seed.ts",
     "build:demo": "tsc -p tsconfig.build.json && node scripts/build-demo.mjs",
     "demo": "npm run build:demo && open demo/index.html",
@@ -31,12 +37,14 @@
   },
   "devDependencies": {
     "@types/node": "^22.7.4",
+    "esbuild": "0.28.2",
     "tsx": "^4.19.1",
     "typescript": "^5.6.2",
     "vitest": "^2.1.1"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.128.0",
+    "@ensdomains/ensjs": "5.0.0-sepolia-fix.1",
     "@x402/core": "^2.27.0",
     "jose": "^6.2.12",
     "openai": "^7.23.0",

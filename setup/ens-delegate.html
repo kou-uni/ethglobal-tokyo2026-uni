@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Yohaku — ENSの委任を検証</title>
+<style>
+body{max-width:760px;margin:40px auto;padding:0 24px;background:#f8f7f3;color:#242329;font:16px/1.8 system-ui,sans-serif}
+section{padding:24px;background:white;border-radius:20px;margin:20px 0}h1{font-size:30px}
+button{font:inherit;background:#bcb2fa;padding:12px 20px;border:0;border-radius:12px;cursor:pointer}
+button:disabled{opacity:.5;cursor:wait}li{margin:8px 0;overflow-wrap:anywhere}pre{white-space:pre-wrap;overflow-wrap:anywhere}
+#status{white-space:pre-wrap}.small{font-size:13px}#done{background:#ddf691}
+</style>
+<h1>提案だけを任せる。</h1>
+<p>登録済みのENSで、委任先が書ける範囲と、権限を取り消した結果を実際の取引で確かめます。</p>
+<section><pre id="summary">登録情報を確認しています…</pre>
+<p>所有者の署名は3回です。検証専用の委任先をこのブラウザーで作り、表示された少額のテストETHを送ります。</p>
+<p class="small">委任先の秘密鍵はこのタブのsessionStorageだけに保存し、サーバーへ送信しません。完了までタブを閉じないでください。実際に失敗する2件の取引にも、テストETHのガスを使います。</p>
+<button id="start">所有者ウォレットを接続して準備</button></section>
+<section id="workflow" hidden><ol id="steps"></ol><button id="next"></button>
+<details><summary>次の取引内容</summary><pre id="tx"></pre></details></section>
+<p id="status" role="status"></p><section id="done" hidden><h2>チェーン上の証拠を確認できました</h2><pre id="proof"></pre></section>
+<script type="module" src="/app.js"></script></html>

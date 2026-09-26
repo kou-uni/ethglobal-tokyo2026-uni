@@ -10,16 +10,10 @@
  * is `keccak256(bytes(key))`. So `ROLE_SET_TEXT` on `keccak256("yh:proposal")` lets an
  * account write that one key and no other.
  *
- * ⚠️ **Verify before relying on this.** Role bits, the setter-grant helper and the exact
- * ABI below are taken from the ENSv2 docs, not from a deployment we have called. Contracts
- * were redeployed on Sepolia 2026-09-15, so addresses from articles are stale. The first
- * thing to do at the ENS booth is confirm these four things:
- *
- *   1. current Sepolia addresses for the registry and the permissioned resolver
- *   2. that `ROLE_SET_TEXT` is `1 << 4` in the deployed version
- *   3. whether per-key grants go through `grantSetterRoles` or plain `grantRoles`
- *   4. how to scope a resolver instance per seller — key permissions apply to every
- *      name on the instance, so independent sellers must not share one
+ * The deployed implementation's text decoder was checked on Sepolia (see
+ * docs/build/ENS-SDK-COMPATIBILITY.md). Seller-specific grants and registration
+ * remain unverified. Use adapters/ens-resolver.ts for current calldata; the old
+ * plannedSetup below is historical model data, not an executable setup recipe.
  */
 
 import { keccak256, toBytes } from 'viem';

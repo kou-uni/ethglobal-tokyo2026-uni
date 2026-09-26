@@ -1,0 +1,39 @@
+{
+  "checkedAt": "2026-09-26T02:59:08.149Z",
+  "scope": "Local server with live Sepolia reads; World and settlement not configured",
+  "health": {
+    "ok": true,
+    "owner": "yohaku-minta-2026.eth",
+    "dailyCap": 2,
+    "wired": {
+      "routing": true,
+      "classifier": false,
+      "identity": false,
+      "screening": false,
+      "settlement": false,
+      "delegationReader": true
+    }
+  },
+  "replies": [
+    {
+      "writeTarget": "proposal",
+      "status": 200,
+      "result": {
+        "id": "715895a1-b3f1-4289-9caa-0a06ca798d1b",
+        "verdict": "deny",
+        "rule": 0,
+        "reason": "delegation has been revoked — even proposals stop"
+      }
+    },
+    {
+      "writeTarget": "permission",
+      "status": 200,
+      "result": {
+        "id": "2a0e37f6-db64-465f-9176-aa9e64cd87d0",
+        "verdict": "deny",
+        "rule": 0,
+        "reason": "delegation has been revoked — even proposals stop"
+      }
+    }
+  ]
+}
