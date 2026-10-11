@@ -73,21 +73,21 @@ sink() {
   take ENS_RESOLVER_ADDRESS
   take ENS_DELEGATE_ADDRESS
   echo
-  echo "# --- still on Kou's Mac Studio, intentionally absent here ---"
-  echo "# Settlement. Without AGENT_PRIVATE_KEY this host cannot sign, which is why it is"
-  echo "# safe to run alongside Studio (docs/build/HOSTING-MIGRATION.md:90). The buyer wallet"
-  echo "# for this host is 0x9b264Cf3F8f8B3616F20c257058914B8e68d9Bd6; its key is held at"
-  echo "# ~/.yohaku/buyer-key-yohaku-texx-io on the workstation, unfunded until kou sends USDC."
-  echo "# AGENT_PRIVATE_KEY="
-  echo "# X402_FACILITATOR_URL="
-  echo "# X402_NETWORK="
-  echo "# X402_ASSET="
-  echo "# X402_PAYOUT_ADDRESS="
-  echo "# X402_ASSET_NAME="
-  echo "# X402_ASSET_VERSION="
-  echo "# X402_ATOMIC_PER_UNIT="
-  echo "# X402_EXPLORER_URL="
-  echo "# DEMO_SIGNS_PER_HOUR="
+  echo "# x402 settlement. This host signs with its own buyer wallet, not the Mac Studio's —"
+  echo "# docs/build/HOSTING-MIGRATION.md:90 forbids two entry points sharing one payment key,"
+  echo "# and a separate wallet is what makes running both at once safe."
+  echo "# x402FromEnv names six as required; a seventh missing value would start the server"
+  echo "# with settlement silently off rather than failing."
+  take AGENT_PRIVATE_KEY
+  take X402_FACILITATOR_URL
+  take X402_NETWORK
+  take X402_ASSET
+  take X402_PAYOUT_ADDRESS
+  take X402_ASSET_NAME
+  take X402_ASSET_VERSION
+  take X402_ATOMIC_PER_UNIT
+  take X402_EXPLORER_URL
+  take DEMO_SIGNS_PER_HOUR
 } | sink
 
 [ -n "$DRY_RUN" ] && exit 0
