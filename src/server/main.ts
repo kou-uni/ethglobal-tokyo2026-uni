@@ -71,7 +71,10 @@ const fees = feePolicy ? new RoutingFees(feePolicy, settlement?.quote(1, 'JPYC')
 
 const resolverAddress = process.env.ENS_RESOLVER_ADDRESS;
 const delegateAddress = process.env.ENS_DELEGATE_ADDRESS;
-const policy = serverPolicy(process.env.ENS_NAME);
+const policy = serverPolicy(process.env.ENS_NAME, {
+  ...(process.env.YOHAKU_DAILY_CAP ? { dailyCap: process.env.YOHAKU_DAILY_CAP } : {}),
+  ...(process.env.YOHAKU_NOTIFY_HOUR ? { notifyHour: process.env.YOHAKU_NOTIFY_HOUR } : {}),
+});
 const ensName = process.env.ENS_NAME?.trim() ? policy.owner : undefined;
 const ensRpc = process.env.SEPOLIA_RPC_URL;
 const delegation = ensRpc && ensName
